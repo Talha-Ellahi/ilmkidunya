@@ -1,0 +1,429 @@
+﻿@using System.Globalization
+@model IKDFrontEnd.ViewModels.BookStoreDetailViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+
+<link href="https://www.ilmkidunya.com/css-files/common/style-min.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+
+@section innerbanner {
+    <div class="ss-banner-inner college-banner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="with-img">
+                        <div class="ss-text-holder">
+                            <h1>@Model.Book.Name</h1>
+                            <ul>
+                                <li><span>Author</span><em>@Model.AuthorName</em></li>
+
+                                @{
+                                    string starImageUrl;
+
+                                    if (Model.BooksReviews != null && Model.BooksReviews.Any())
+                                    {
+                                        int selectedStar = Model.BooksReviews.Sum(r => Convert.ToInt32(r.Review));
+                                        double average = (double)selectedStar / Model.BooksReviews.Count();
+                                        int averageStar = Convert.ToInt32(Math.Round(average, MidpointRounding.AwayFromZero));
+
+                                        // Clamp between 0–5 in case of bad data
+                                        averageStar = Math.Max(0, Math.Min(5, averageStar));
+
+                                        starImageUrl = $"http://resources.ilmkidunya.com/css/bookstore/images/star-{averageStar}.png";
+                                    }
+                                    else
+                                    {
+                                        // No reviews → show zero stars
+                                        starImageUrl = "https://images.ishallwin.com/star-0.png";
+                                    }
+                                }
+
+                                <li>
+                                    <span>Rating</span>
+                                    <em>
+                                        <img style="height:22px; vertical-align:top;" src="@starImageUrl" alt="rating" />
+                                    </em>
+                                </li>
+
+                                <li><span>Price</span><em>@Model.Book.NewPrice</em></li>
+                            </ul>
+                            @*                         <ul style="width: 65%; text-align: right;">
+                            <li><a href="#" class="btn-addcart"><img src="https://images.ishallwin.com/cart.png" alt=""> Add To Cart</a></li>
+                        </ul> *@
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product-box">
+                        <div class="img-holder">
+                            <figure><img src="@Model.Book.Image" alt=""></figure>
+                        </div>
+                        <div class="text-holder">
+                            <p>@Model.Book.Description</p>
+                            <ul class="prod-list">
+                                @if (Model.Publisher != null)
+                                {
+                                    <li><span>Publisher</span> @Model.Publisher.Name</li>
+                                }
+                                @if (Model.Book.PublicationDate != null)
+                                {
+                                    <li><span>Publication Date</span> @Model.Book.PublicationDate</li>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Book.NumofPages))
+                                {
+                                    <li><span>Number of Pages</span> @Model.Book.NumofPages</li>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Book.Binding))
+                                {
+                                    <li><span>Binding</span> @Model.Book.Binding</li>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.Book.Isbn))
+                                {
+                                    <li><span>ISBN</span> @Model.Book.Isbn</li>
+                                }
+                                @if (Model.BooksCategories != null && Model.BooksCategories.Any())
+                                {
+                                    <li>
+                                        <span>Category</span>
+                                        @for (int i = 0; i < Model.BooksCategories.Count; i++)
+                                        {
+                                            var categoryName = Model.BooksCategories[i].CategoryName.Trim().ToLower().Replace(" ", "-");
+                                            var category = Model.BooksCategories[i];
+                                            <a href="/store/category/@categoryName">@category.CategoryName</a>
+                                            @if (i < Model.BooksCategories.Count - 1)
+                                            {
+                                                @: ,
+                                            }
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                            @if (Model.RelatedStores != null && Model.RelatedStores.Any())
+                            {
+                                <h3>Price Offers From Different Stores</h3>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Store</th>
+                                            <th>Price</th>
+                                            @*   <th>Order</th> *@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var store in Model.RelatedStores)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="with-img">
+                                                        <figure>
+                                                            <img src="@store.Image" alt="@store.Name" style="max-height:40px; max-width:40px;" />
+                                                        </figure>
+                                                        @store.Name
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    Rs. @store.NewPrice
+                                                </td>
+                                                @*                                                 <td>
+                                                    <a href="/cart/add/@store.BookId">Add to Cart</a>
+                                                </td> *@
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                            <h3>Book Reviews</h3>
+                            @if (Model.BooksReviews != null && Model.BooksReviews.Any())
+                            {
+                                int totalStars = 0;
+                                foreach (var review in Model.BooksReviews)
+                                {
+                                    totalStars += (int)review.Review;
+                                }
+                                double avgStars = (double)totalStars / Model.BooksReviews.Count;
+
+                                <div class="review-box">
+                                    <div class="box-1">
+                                        <span>@avgStars.ToString("0.0")<em>@Model.BooksReviews.Count Review@(Model.BooksReviews.Count > 1 ? "s" : "")</em></span>
+                                        @foreach (var review in Model.BooksReviews.OrderByDescending(r => r.Id).Take(3))
+                                        {
+                                            <div class="single-review" style="padding: 0 10px;">
+                                                <strong>@review.Name</strong>
+                                                <div class="r-star">
+                                                    <img src="https://resources.ilmkidunya.com/icons/@review.Review-stars.png" alt="@review.Review stars" />
+                                                </div>
+                                                <p>@review.Message</p>
+                                            </div>
+                                        }
+                                    </div>
+                                    @*                                     <div class="box-2">
+                                        <a href="#">Post Reviews</a>
+                                    </div> *@
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="review-box">
+                                    <div class="box-1">
+                                        <span>0<em>0 Review</em></span>
+                                        <span>No review posted by any user for this @Model.Book.Name. Be the first to rate this Book</span>
+                                    </div>
+                                    @*                                     <div class="box-2">
+                                        <a href="#">Post Reviews</a>
+                                    </div> *@
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*     <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="my-ads">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Related Books</h2>
+                    @if (Model.RelatedBooks != null && Model.RelatedBooks.Any())
+                    {
+                        var featuredBook = Model.RelatedBooks.FirstOrDefault();
+                        <div class="row">
+                            @* Main featured related book (first one) *@
+
+                            @if (featuredBook != null)
+                            {
+                                <div class="col-lg-3">
+                                    <div class="main-book">
+                                        <a href="store/@featuredBook.Url">
+                                            <figure>
+                                                <img src="@featuredBook.Image" alt="@featuredBook.Name" />
+                                            </figure>
+                                            <strong>
+                                                @featuredBook.Name
+                                                <span>
+                                                    by: @Model.AuthorName
+                                                </span>
+                                            </strong>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                            @* Remaining related books in the list *@
+                            <div class="col-lg-9">
+                                <ul class="books-list">
+                                    @foreach (var book in Model.RelatedBooks.Skip(1))
+                                    {
+                                        <li>
+                                            <a href="/store/@book.Url">
+                                                <figure>
+                                                    <img src="@book.Image" alt="@book.Name" />
+                                                </figure>
+                                                <strong>
+                                                    @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(book.Name)
+                                                </strong>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No related books found.</p>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                @await Html.PartialAsync("_maincontenttopbanner")
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Book Categories</h2>
+                    <div class="tabs-holder">
+                        <!-- Vertical tabs -->
+                        <div class="vertical-tab">
+                            @foreach (var parent in Model.Categories
+                                                        .Where(c => c.ParentCategoryId == null) // Top-level categories
+                                                        .Select((cat, index) => new { cat, index }))
+                            {
+                                var tabId = "Tab" + parent.cat.Id;
+                                var activeClass = parent.index == 0 ? "each-tab active" : "each-tab";
+                                <div class="@activeClass" onclick="showCategory('@tabId', event)">
+                                    <div class="title">@parent.cat.CategoryName</div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Tab contents -->
+                        <div class="tabs-content">
+                            @foreach (var parent in Model.Categories
+                                                        .Where(c => c.ParentCategoryId == null)
+                                                        .Select((cat, index) => new { cat, index }))
+                            {
+                                var tabId = "Tab" + parent.cat.Id;
+                                var displayStyle = parent.index == 0 ? "display:block;" : "display:none;";
+
+                                <div id="@tabId" class="vertical-tab-content" style="@displayStyle">
+                                    <ul>
+                                        @foreach (var child in Model.Categories.Where(c => c.ParentCategoryId == parent.cat.Id))
+                                        {
+                                            var slug = child.CategoryName.Trim().Replace(" ", "-").ToLower();
+                                            <li><a href="/store/category/@slug">@child.CategoryName</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <script>
+                        function showCategory(tabId, event) {
+                            var contents = document.getElementsByClassName("vertical-tab-content");
+                            var tabs = document.getElementsByClassName("each-tab");
+
+                            // Hide all tab contents
+                            for (var i = 0; i < contents.length; i++) {
+                                contents[i].style.display = "none";
+                            }
+
+                            // Remove active class from all tabs
+                            for (var i = 0; i < tabs.length; i++) {
+                                tabs[i].classList.remove("active");
+                            }
+
+                            // Show selected tab content
+                            var selectedContent = document.getElementById(tabId);
+                            if (selectedContent) {
+                                selectedContent.style.display = "block";
+                            } else {
+                                console.error("No element found with id:", tabId);
+                            }
+
+                            // Mark this tab as active
+                            event.currentTarget.classList.add("active");
+                        }
+                    </script>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-sec" style="padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Featured Authors <a href="/store/allauthors">(View All Authors)</a> </h2>
+                    <ul class="writter-list">
+                        @foreach (var author in Model.Authors)
+                        {
+                            var authorName = author.Name.Trim().ToLower().Replace(" ", "-");
+                            <li>
+                                <a href="/store/author/@authorName">
+                                    <figure>
+                                        <img src="@author.Image"
+                                             alt="@author.Name" />
+                                    </figure>
+                                    <span>@author.Name</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

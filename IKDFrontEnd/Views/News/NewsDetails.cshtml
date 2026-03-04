@@ -1,0 +1,350 @@
+﻿	@using System.Net
+@using IKDFrontEnd.ViewModels
+@model NewsPageViewModel
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.news-feaurtred-img {
+	margin: 20px auto;
+	display: block;
+	}
+
+	.news-feaurtred-img img {
+	width: 100%;
+	}
+
+	.news-holder-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 30px 70px;
+	margin: 20px 0px;
+	}
+
+	.news-holder-wrapper .news-holder-bx {
+	width: calc(50% - 35px);
+	min-width: 300px;
+	}
+
+	.news-holder-wrapper .news-holder-bx a {
+	display: flex;
+	gap: 15px;
+	}
+
+	.news-holder-wrapper .img-holder {
+	width: 170px;
+	}
+
+	.news-holder-wrapper .img-holder img {
+	width: 100%;
+	height: 115px;
+	object-fit: cover;
+	}
+
+	.news-holder-wrapper .text-holder {
+	flex: 1;
+	align-content: center;
+	}
+
+	.news-holder-wrapper .text-holder span {
+	font-size: 14px;
+	color: black;
+	}
+
+	.news-holder-wrapper .text-holder h3 {
+	font-size: 18px;
+	line-height: 1.3;
+	margin: 6px 0px 0px;
+	color: #5AB8AB;
+	transition: all 0.3s ease;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	}
+
+	.news-holder-wrapper .news-holder-bx a:hover .text-holder h3 {
+	color: black;
+	}
+
+	@@media screen and (max-width: 980px) {
+	.news-holder-wrapper .img-holder img
+
+	{
+	height: 90px;
+	}
+
+	.news-holder-wrapper .img-holder {
+	width: 110px;
+	}
+
+	.news-holder-wrapper .news-holder-bx {
+	width: 100%;
+	}
+
+	.news-holder-wrapper .text-holder span {
+	font-size: 13px;
+	}
+
+	.news-holder-wrapper .text-holder h3 {
+	font-size: 17px;
+	margin-top: 3px;
+	}
+
+	}
+</style>
+@section header {
+
+<div class="col-lg-11">
+	<ul class="navigation">
+		<li>
+			<a aria-label="link" href="/edunews/">
+				<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+				Home
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/national-news.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+				National
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/international-news.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/icon-world.webp" alt="image" />
+				International
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/announcements.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+				Announcement
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/merit-lists.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/icon-meritlist.webp" alt="image" />
+				Merit list
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/date-sheets.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/icon-datesheet.webp" alt="image" />
+				Date Sheet
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/results.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/icon-result.webp" alt="image" />
+				Result
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/admissions.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/icon-admission.webp" alt="image" />
+				Admission
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/edunews/news-categories/study-abroad-events.aspx">
+				<img src="https://images.ishallwin.com/nav-icons/chem-nav-10.webp" alt="image" />
+				Study Abroad
+			</a>
+		</li>
+	</ul>
+</div>
+
+}
+@section MetaData
+{
+	@if (Model != null && !string.IsNullOrEmpty(Model.MetaTitle) && !string.IsNullOrEmpty(Model.MetaDescription))
+	{
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@Model.MetaTitle" />
+		<meta property="og:description" content="@Model.MetaDescription" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/{Model.MetaImage}" />
+		<meta name="description" content="@Model.MetaDescription">
+		<meta name="keywords" content="@Model.MetaKeywords">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@Model.MetaTitle</title>
+	}
+	else
+	{
+
+		<title>Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya</title>
+
+		<meta name="description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+		<meta name="keywords" content="ilmkidunya, education, educational, news, colleges, universities, result, admission, jobs, scholarship, visa, study, abroad, courses, pakistan, pakistani, information" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg" />
+		<meta property="og:image:width" content="200" />
+		<meta property="og:image:height" content="200" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	}
+}
+
+@section innerbanner{
+	<div class="ss-banner-inner college-banner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.MainHeading</h1>
+						<p>News Submitted By : <strong>Ilm Ki Dunya</strong>  |@Model.Dated?.ToString("dd-MMM-yyyy")| Views: <strong>@Model.NewsViews</strong></p>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		}
+
+<div id="main">
+	<div class="college-news-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="news-feaurtred-img">
+
+						@if (!string.IsNullOrWhiteSpace(Model.Picture1))
+						{
+							var year = Model.Dated?.Year.ToString();
+							var month = Model.Dated?.Month.ToString();
+
+							<figure>
+								<img src="https://cdn.ilmkidunya.com/news/newsImages/@year/@month/medium/@Model.Picture1"
+									 alt="ilmkidunya" />
+							</figure>
+						}
+
+
+                        <div class="share-sec">
+                            <div class="col-lg-12">
+                                <div class="share-box" style="float: left; padding-top: 30px;">
+                                    <!-- ShareThis BEGIN -->
+                                    <div class="sharethis-inline-share-buttons" style="margin-bottom: 20px;">
+                                    </div>
+                                    <!-- ShareThis END -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- News Content Section  -->
+    <div class="college-news-sec">
+        <div class="container">
+            <div class="row">
+                <!-- news page Content Start  -->
+                <div class="category-single-page">
+                    <div class="col-lg-12">
+                        <p>@Html.RenderWithAds(Model.NewsDetails)</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Share Buttons  -->
+    <div class="share-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="share-box" style="float: left; padding-top: 30px;">
+                        <!-- ShareThis BEGIN -->
+                        <div class="sharethis-inline-share-buttons" style="margin-bottom: 20px;"></div>
+                        <!-- ShareThis END -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Feed Back  -->
+   @*  <div class="feedback-sec">
+        <div class="container">
+            <div class="col-lg-12">
+                <div class="feed-box">
+                    <h3>Is this page helpful?</h3>
+                    <ul class="yes-no">
+                        <li><a href="javascript:void(0)" data-box="yes-box">Yes</a></li>
+                        <li><a href="javascript:void(0)" data-box="no-box">No</a></li>
+                    </ul>
+                    <div id="yes-box" class="yes-box" style="display: none;">
+                        <p>Thank you for your feedback. We are happy our work helped you.</p>
+                        <p>
+                            Now, please consider sharing this page to your friends/class-fellows. Thank you
+                        </p>
+                    </div>
+                    <div id="no-box" class="no-box" style="display: none;">
+                        <p>We are sorry to know you could not find your required information.</p>
+                        <p>Please take a moment to let us know about your feedback.</p>
+                        <textarea id="Comments"
+                                  placeholder="Please write your feedback about this page here."></textarea><br>
+                        <input type="hidden" id="PageUrl" value="/bs-english/">
+                        <input type="button" onclick="getfeedback()" value="Submit">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <!-- Add Banner  -->
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Related News  -->
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Related News</h2>
+                   <div class="news-holder-wrapper">
+									@foreach (var news in Model.RelatedNews)
+									{
+										
+											var modifiedSlug = news.NewsUrl;
+											if (modifiedSlug.Contains("-"))
+											{
+												modifiedSlug = modifiedSlug.Substring(0, modifiedSlug.LastIndexOf("-"));
+											}
+
+											var formattedDate = news.Dated?.ToString("MMMM dd, yyyy");
+										
+
+										<div class="news-holder-bx">
+											<a href="@Url.Action("NewsDetails", "News", new { newsslug = modifiedSlug })">
+												<div class="img-holder">
+													<img src="@news.PictureThumbnail"
+														 alt="@news.MainHeading"
+														 class="news-thumbnail">
+												</div>
+												<div class="text-holder">
+													<span>@formattedDate</span>
+													<h3>@news.MainHeading</h3>
+												</div>
+											</a>
+										</div>
+									}
+								</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

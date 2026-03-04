@@ -1,0 +1,31 @@
+﻿@using System.Net
+
+<div class="login-sigin-wraper">
+    <div class="log-pop-dilog">
+        <div id="pop-close-btn">✖</div>
+        <a href="#" class="pop-logo">
+            <img src="https://cdn.ilmkidunya.com/logo.svg" alt="ilmkidunya logo">
+        </a>
+        <div class="pop-text-holder">
+            <h2>Sign in</h2>
+            <p>to continue to ilmkidunya.com</p>
+        </div>
+
+
+        <div class="log-btns-bx">
+            <a class="login-google-btn pop-btns"
+               href="/account/google-login?returnUrl=@WebUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">
+                <img src="https://images.ishallwin.com/google-log.svg" alt="google">
+                <span>Sign in with Google</span>
+            </a>
+
+          @*   <a class="login-fb-btn pop-btns"
+               href="/account/facebook-login?returnUrl=@WebUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">
+                <img src="https://images.ishallwin.com/Facebook-log.png" alt="Facebook">
+                <span>Sign in with Facebook</span>
+            </a> *@
+        </div>
+    </div>
+
+</div>
+

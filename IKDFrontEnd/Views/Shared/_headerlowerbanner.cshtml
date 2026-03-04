@@ -1,0 +1,99 @@
+﻿@if (ViewBag.Banners != null)
+{
+
+    var banners = ViewBag.Banners as List<IKDFrontEnd.Models.Banner>;
+    var bannerSortOrder3 = banners?.FirstOrDefault(b => b.SortOrder == 3);
+    var bannerSortOrder4 = banners?.FirstOrDefault(b => b.SortOrder == 4);
+    var bannerSortOrder5 = banners?.FirstOrDefault(b => b.SortOrder == 5);
+
+    <div class="new-banners" style=" padding:15px 0 20px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    @if (bannerSortOrder3 != null)
+                    {
+                        var url3 = bannerSortOrder3.Url;
+
+                        <a aria-label="link"
+                        class="banner-link decode-banner-url"
+                        @if (url3.StartsWith("aHR0"))
+                        {
+                            <text>data-url='@url3'</text>
+                        }
+                        else
+                        {
+                            <text>href='@url3'</text>
+                        }>
+                            <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder3.Image"
+                            alt="image" />
+                        </a>
+                    }
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    @if (bannerSortOrder4 != null)
+                    {
+                        var url4 = bannerSortOrder4.Url;
+
+                        <a aria-label="link"
+                        class="banner-link decode-banner-url"
+                        @if (url4.StartsWith("aHR0"))
+                        {
+                            <text>data-url='@url4'</text>
+                        }
+                        else
+                        {
+                            <text>href='@url4'</text>
+                        }>
+                            <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder4.Image"
+                            alt="image" />
+                        </a>
+                    }
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    @if (bannerSortOrder5 != null)
+                    {
+                        var url5 = bannerSortOrder5.Url;
+
+                        <a aria-label="link"
+                        class="banner-link decode-banner-url"
+                        @if (url5.StartsWith("aHR0"))
+                        {
+                            <text>data-url='@url5'</text>
+                        }
+                        else
+                        {
+                            <text>href='@url5'</text>
+                        }>
+                            <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder5.Image"
+                            alt="image" />
+                        </a>
+                    }
+                </div>
+            </div>
+
+            @if (ViewBag.HideGoogleAds != true)
+            {
+                <div class="col-lg-12">
+                    <div class="google-ad-bx ad-slot">
+
+                        <!-- ikd25 -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-8866825487085085"
+                             data-ad-slot="9990874736"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+
+                    </div>
+                </div>
+            }
+
+		</div>
+	</div>
+
+
+
+}

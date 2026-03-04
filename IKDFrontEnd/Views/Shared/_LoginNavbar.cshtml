@@ -1,0 +1,40 @@
+﻿<li class="nav-item dropdown">
+    @if (User.Identity.IsAuthenticated)
+    {
+        var picture = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
+
+        <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @if (!string.IsNullOrEmpty(picture))
+            {
+                <img 
+                     src="@picture"
+                     alt="profile picture"
+                     width="32" 
+                     style="border-radius:50%;" />
+            }
+            else
+            {
+                <img
+                     src="https://images.ishallwin.com/nav-icons/user-icon.webp"
+                     alt="default profile"
+                     width="32" 
+                     style="border-radius:50%;" />
+            }
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li>
+                <button type="button" class="dropdown-item" onclick="logoutUser()">Logout</button>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <a href="/login" aria-label="Login" onclick="event.preventDefault(); showLoginPopup(window.location.href);">
+            <img src="https://images.ishallwin.com/nav-icons/user-icon.webp"
+                 alt="login"
+                 width="32"
+                 style="border-radius:50%;" />
+        </a>
+
+    }
+</li>

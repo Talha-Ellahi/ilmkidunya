@@ -1,0 +1,104 @@
+﻿@model List<IKDFrontEnd.Models.Company>
+
+
+
+
+@{
+    Layout = "~/Views/Shared/_Jobs.cshtml";
+
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+
+<div id="main">
+    <div class="main-content">
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h3 class="ss-profession">
+                            <img src="assets/images/icon-comp.png" alt="" />
+                            <span>Private Sector</span>
+                        </h3>
+                        <ul class="ss-company-list jb-comp">
+                            @foreach (var company in Model)
+                            {
+                                var companySlug = company.Name.ToLower().Replace(" ", "-");
+                                <li>
+                                    <a href="/jobs/@companySlug">
+                                        <span>@company.Name</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="https://js.ishallwin.com/jquery.min.js" defer></script>
+
+<!-- <script src="assets/scripts/bootstrap.min.js" defer></script> -->
+<script src="https://js.ishallwin.com/responsive.menu.js" defer></script>
+
+<!-- Put all Functions in functions.js -->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" defer></script>
+<script src="https://js.ishallwin.com/functions.js" defer></script>
+
+
+
+<style>
+    input {
+        color: red;
+    }
+</style>

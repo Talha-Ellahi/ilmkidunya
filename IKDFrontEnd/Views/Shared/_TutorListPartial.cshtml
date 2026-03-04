@@ -1,0 +1,19 @@
+﻿@model List<IKDFrontEnd.ViewModels.TutorCardViewModel>
+
+@foreach (var tutor in Model)
+{
+	var slug = tutor.TutorName.ToLower().Replace(" ", "-") + "-home-tutor-" + tutor.MemberId+".aspx";
+	<li>
+		<a aria-label="link" href="/tutors/@slug">
+			<div class="figure">
+				<img alt="@tutor.TutorName" src="@tutor.ProfileImage" />
+			</div>
+			<div class="author" style="height:200px">
+				<h4>@tutor.TutorName</h4>
+				<span>@tutor.CityName | @tutor.CourseName</span>
+				<p>Teaching</p>
+				<span>@string.Join(", ", tutor.Subjects)...</span>
+			</div>
+		</a>
+	</li>
+}

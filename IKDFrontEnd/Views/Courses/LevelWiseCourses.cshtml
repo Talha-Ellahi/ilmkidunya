@@ -1,0 +1,279 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	@{
+		var metaTitle = ViewBag.CmsData?.MetaTitle ?? "Default Title";
+		var metaDesc = ViewBag.CmsData?.MetaDesc ?? "Default description for this page.";
+		var metaKeys = ViewBag.CmsData?.MetaKeys ?? "default, keywords, here";
+		
+	}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@metaTitle" />
+	<meta property="og:description" content="@metaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@metaDesc">
+	<meta name="keywords" content="@metaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@metaTitle</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/courses/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/test-preparation.aspx">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/testprep.png" alt="image" />
+					Test Preparation
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/matric">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/matric.png" alt="image" />
+					Matric Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/intermediate">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/inter.png" alt="image" />
+					Inter Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/bachelors">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/bachelor.png" alt="image" />
+					Bachelor Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/masters">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/master.png" alt="image" />
+					Master Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/popular-courses.aspx">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/popular.png" alt="image" />
+					Most Popular
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@(ViewBag.CmsData?.Heading ?? "")</h1>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(@ViewBag.CmsData?.Desc1 ?? "")
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="news-ad-sec">
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					@Html.Raw(@ViewBag.CmsData?.Desc2 ?? "")
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="contact-sec level fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					<h2>
+						List of Institutions for @ViewBag.LevelName Level Programs in Pakistan
+					
+					</h2>
+					<div class="responsive-table desktop-view">
+						<table class="table mid">
+							<thead>
+								<tr>
+									<th><span>Institution Name</span></th>
+									<th><span>Location</span></th>
+									<th><span>Contact #</span></th>
+									<th><span>Total Courses</span></th>
+									<th><span>Sector</span></th>
+									<th><span>Popularity Score</span></th>
+									<th><span>Rating</span></th>
+								</tr>
+							</thead>
+							<tbody id="institutionList">
+								@await Html.PartialAsync("_CityInstitutionsTable")
+							</tbody>
+						</table>
+						<p style="text-align: center;">
+							<button type="button" class="load-more-button" id="loadMoreBtnDesktop">Load More Institutions</button>
+						</p>
+					</div>
+
+					<div class="admission-mobile">
+						<ul class="admission-list" id="mobileInstitutionList">
+							@foreach (var institution in Model.Colleges)
+							{
+								<li>
+									<figure>
+										<img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';">
+									</figure>
+									<div class="text-box">
+										<a href="/colleges/@(institution.College.Url).aspx" target="_blank">
+											@institution.College.Name
+										</a>
+										<span>
+											@{
+												var isGovt = institution.College.IsGovt?.ToLower();
+												string displayText = isGovt == null ? "N/A"
+												: (isGovt == "public" || isGovt == "government") ? "Public"
+												: isGovt == "private" ? "Private"
+												: isGovt;
+											}
+											Sector: @displayText
+										</span>
+									</div>
+								</li>
+							}
+						</ul>
+						<div class="load-more-container" style="text-align: center; margin-top: 20px;">
+							<button type="button" class="load-more-button" id="loadMoreBtnMobile">Load More Institutions</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+
+					@await Html.PartialAsync("_maincontentlowerbanner")
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="news-ad-sec">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+
+					@Html.Raw(@ViewBag.CmsData?.Desc3 ?? "")
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+</div>
+
+<script>
+	let currentPage = 1;
+	const levelUrl = "@ViewBag.LevelUrl";
+
+	function loadMoreInstitutions() {
+		currentPage++;
+
+		// Update all load more buttons
+		const buttons = document.querySelectorAll('.load-more-button');
+		buttons.forEach(btn => {
+			btn.innerHTML = 'Loading...';
+			btn.disabled = true;
+		});
+
+		// Load desktop view
+		fetch(`/courses/${levelUrl}?page=${currentPage}`, {
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		})
+		.then(response => response.text())
+		.then(data => {
+			const institutionList = document.getElementById('institutionList');
+			if (institutionList) {
+				institutionList.insertAdjacentHTML('beforeend', data);
+			}
+		})
+		.catch(error => {
+			console.error('Error loading desktop institutions:', error);
+		});
+
+		// Load mobile view
+		fetch(`/courses/${levelUrl}?page=${currentPage}&viewType=mobile`, {
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		})
+		.then(response => response.text())
+		.then(data => {
+			const mobileInstitutionList = document.getElementById('mobileInstitutionList');
+			if (mobileInstitutionList) {
+				mobileInstitutionList.insertAdjacentHTML('beforeend', data);
+			}
+		})
+		.then(() => {
+			// Reset all buttons after both requests complete
+			buttons.forEach(btn => {
+				btn.innerHTML = 'Load More Institutions';
+				btn.disabled = false;
+			});
+		})
+		.catch(error => {
+			console.error('Error loading mobile institutions:', error);
+			buttons.forEach(btn => {
+				btn.innerHTML = 'Error loading institutions';
+				btn.disabled = false;
+			});
+		});
+	}
+
+	// Add event listeners to all load more buttons
+	document.querySelectorAll('.load-more-button').forEach(btn => {
+		btn.addEventListener('click', loadMoreInstitutions);
+	});
+</script>
+

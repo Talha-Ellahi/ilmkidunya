@@ -1,0 +1,117 @@
+﻿@model List<IKDFrontEnd.ViewModels.CityJobViewModel>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+<!-- Main Start -->
+<div id="main">
+    <div class="main-content">
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <p>We have made your job hunt easy and approachable by designing this section. We are providing an updated and detailed online job search platform for Pakistani workers. The candidates in search of jobs in different professional fields can receive information about vacant positions with eligibility details posted by employees. We have exclusive sections for:.</p>
+                        <ul>
+                            <li><strong>Government Departments</strong></li>
+                            <li><strong>Private Companies</strong></li>
+                        </ul>
+                        <p>Welcome to the most comprehensive jobs database online. Here you can find jobs in any city of Pakistan. You can also search jobs of any category you like.</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    @*                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        <ul class="ss-company-list">
+                            @foreach (var city in Model)
+                            {
+                                <li>
+                                    <a href="/jobs/city-wise/jobs-in-@(@city.CityName.ToLower().Replace(" ", "-"))">
+                                        <span>@city.CityName</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        <div class="share-box" style="padding-top: 20px;">
+                        </div>
+                    </div> *@
+                    <div class="page-content pp-sec">
+                        <div class="flex-container job-pro">
+
+                            <div class="col-lg-12">
+                                <div class="table-of-content" style="margin-right:0; padding-bottom:15px; width:100%;">
+
+                                    <ul>
+                                        @foreach (var city in Model)
+                                        {
+
+                                            <li>
+                                                <a href="/jobs/city-wise/jobs-in-@(@city.CityName.ToLower().Replace(" ", "-"))">
+                                                    <span>@city.CityName</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

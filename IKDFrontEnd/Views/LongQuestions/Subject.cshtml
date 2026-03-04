@@ -1,0 +1,717 @@
+﻿@using System.Globalization
+@model IKDFrontEnd.ViewModels.ShortQuestionSubjectViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Online Long Questions Preparations</h1>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<style>
+    div#pol-answer-mode {
+        position: fixed;
+        right: -100%;
+        top: 0px;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 999;
+        transition: 0.3s ease-in-out;
+    }
+
+        div#pol-answer-mode.visible {
+            position: fixed;
+            right: 0px;
+            top: 0px;
+            opacity: 1;
+            visibility: visible;
+            z-index: 999;
+            transition: 0.3s ease-in-out;
+        }
+
+
+    #quest-holder {
+        min-height: 320px;
+        height: fit-content;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .letter-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #007bff;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .all-test-box {
+        padding: 20px 0 0;
+    }
+
+        .all-test-box ul {
+            margin: 0 -10px;
+            padding: 15px 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+            .all-test-box ul li {
+                padding: 15px;
+                background: rgba(54, 229, 124, 0.1);
+                border: 1px solid #36e57c;
+                border-radius: 10px;
+                width: 18.2%;
+                margin: 0 10px 20px;
+            }
+
+                .all-test-box ul li h3 {
+                    font-size: 20px;
+                }
+
+                .all-test-box ul li p {
+                    margin: 0 0 10px 0;
+                }
+
+                .all-test-box ul li a {
+                    display: inline-block;
+                    background: #36e57c;
+                    font-size: 16px;
+                    line-height: 22px;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    padding: 8px 30px;
+                    margin: 0;
+                    font-weight: 600;
+                    color: #000;
+                }
+
+    .correct .radio-container {
+        transform: scale(1.1);
+    }
+
+        .correct .radio-container .checkmark {
+            background-color: #36e57c;
+            ;
+        }
+</style>
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent otsckcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-sec level-wise">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <style>
+                        .shortquestion-box {
+                            position: fixed;
+                            right: -100%;
+                            top: 0px;
+                            opacity: 0;
+                            visibility: hidden;
+                            z-index: -999;
+                            transition: 0.3s ease-in-out;
+                        }
+
+                        .visible-pol {
+                            position: fixed;
+                            right: 0px;
+                            top: 0px;
+                            opacity: 1;
+                            visibility: visible;
+                            z-index: 9999;
+                            transition: 0.3s ease-in-out;
+                        }
+
+                        .shortquestion-box .short-qestion-holder {
+                            min-height: 250px;
+                        }
+
+                        #quest-holder {
+                            min-height: 320px;
+                            height: fit-content;
+                            padding-top: 20px;
+                            padding-bottom: 20px;
+                        }
+
+                        .short-qestion-holder ul li {
+                            margin-bottom: 12px !important;
+                            margin-right: 10px !important;
+                            padding: 15px !important;
+                            border: 1px solid #eaeaea;
+                            border-radius: 4px;
+                            line-height: 22px;
+                        }
+
+                            .short-qestion-holder ul li span {
+                                font-size: 17px;
+                                font-weight: 600;
+                                padding-right: 6px;
+                            }
+
+                        .short-qestion-holder .holder-question ul {
+                            min-height: 250px;
+                            padding-bottom: 30px;
+                        }
+
+                        .all-test-box {
+                            padding: 20px 0 0;
+                        }
+
+                            .all-test-box ul {
+                                margin: 0 -10px;
+                                padding: 15px 0 0 0;
+                                display: flex;
+                                flex-wrap: wrap;
+                                justify-content: flex-start;
+                            }
+
+                                .all-test-box ul li {
+                                    padding: 15px;
+                                    background: rgba(54, 229, 124, 0.1);
+                                    border: 1px solid #36e57c;
+                                    border-radius: 10px;
+                                    width: 18.2%;
+                                    margin: 0 10px 20px;
+                                }
+
+                                    .all-test-box ul li h3 {
+                                        font-size: 20px;
+                                    }
+
+                                    .all-test-box ul li p {
+                                        margin: 0 0 10px 0;
+                                    }
+
+                                    .all-test-box ul li a {
+                                        display: inline-block;
+                                        background: #36e57c;
+                                        font-size: 16px;
+                                        line-height: 22px;
+                                        text-decoration: none;
+                                        border-radius: 5px;
+                                        padding: 8px 30px;
+                                        margin: 0;
+                                        font-weight: 600;
+                                        color: #000;
+                                    }
+
+                        .disabled {
+                            pointer-events: none;
+                            background-color: #E7EDE9;
+                        }
+                    </style>
+                    <h2>@Model.OriginalCriteria.SubjectName @Model.OriginalCriteria.TestName</h2>
+                    <p>Try the @Model.OriginalCriteria.SubjectName @Model.OriginalCriteria.TestName.</p>
+                    <ul class="contact-detail">
+                        <li>
+                            <p><span>Total Questions</span>@Model.QuestionSet.TotalQuestions</p>
+                        </li>
+                        @*                      <li>
+                            <p><span>Time Allowed</span>@(Model.QuestionSet.TotalQuestions * 60) seconds</p>
+                        </li> *@
+                    </ul>
+                    <a href="javascript:void(0)" id="launch-test-btn" onclick="launchTest()" class="text-btn">Start Test</a>
+                    <a href="/questions/download-questions/@Model.OriginalCriteria.Url" class="text-btn">Download Pdf</a>
+
+
+
+
+
+
+                    <div class="question-side shortquestion-box" id="pol">
+                        <div class="question-box">
+                            <div class="top-box">
+                                <h2>@Model.OriginalCriteria.SubjectName @Model.OriginalCriteria.TestName</h2>
+
+                                <div class="close-btn">
+                                    <a href="javascript:void(0)" id="close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="holder-question short-qestion-holder">
+                                @for (int i = 0; i < Model.QuestionSet.Questions.Count; i++)
+                                {
+                                    var question = Model.QuestionSet.Questions[i];
+                                    <div class="mid-box" data-question-number="@(i + 1)" style="display: @(i == 0 ? "block" : "none");">
+                                        <strong>Question # @(i + 1)</strong>
+                                        <h3>@Html.Raw(question.QuestionDescription)</h3>
+                                        @if (!string.IsNullOrWhiteSpace(question.QuestionImage))
+                                        {
+                                            <img src="https://ikddata.ilmkidunya.com/@(question.QuestionImage)" alt="pic" />
+                                        }
+                                        <ul>
+                                            @for (int j = 0; j < question.Answers.Count; j++)
+                                            {
+                                                
+                                                    var answer = question.Answers[j];
+                                                
+                                                <li>
+                                                    <span>Ans @(j + 1):</span> @Html.Raw(answer.ChoiceDescription)
+                                                    @if (!string.IsNullOrWhiteSpace(answer.ChoiceImage))
+                                                    {
+                                                        <img src="https://ikddata.ilmkidunya.com/@(answer.ChoiceImage)" alt="pic" />
+                                                    }
+                                                </li>
+
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <div class="last-box">
+                                <a href="javascript:void(0)" class="prev" style="background-color: rgb(204, 204, 204);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                <a href="javascript:void(0)" class="next" style="background-color: rgb(111, 229, 125);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                            </div>
+
+                            <!-- Fake Submit -->
+                            <a href="javascript:void(0)" class="text-btn" style="margin: 30px 0 0 30px;">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ckeditorcontent otsckcontent">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h2>Here is List Of Chapter Wise Tests</h2>
+                    <div class="responsive-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th><span>Ch. #</span></th>
+                                    <th><span>Test Name</span></th>
+                                    <th><span>PDF File</span></th>
+                                    <th><span>Launch Test</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var criteria in Model.RelatedCriteria)
+                                {
+                                    var firstChapter = criteria.Chapters.FirstOrDefault();
+                                    <tr>
+                                        <td><span>@(firstChapter?.ChapterNumber ?? 0)</span></td>
+                                        <td><span>@criteria.TestName</span></td>
+                                        <td>
+                                            <span>
+                                                <a href="/questions/download-questions/@criteria.Url" class="simple-link" target="_blank">
+                                                    Download PDF
+                                                </a>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <a href="/questions/@criteria.Url" class="simple-link" target="_blank">
+                                                    Launch Test
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                {
+                    @Html.Raw(ViewBag.CmsData.Desc3)
+                }
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="question-side" id="pol-answer-mode">
+    <div class="question-box">
+        <div class="top-box">
+            <h2 id="test-title">Test Questions</h2>
+            <div class="close-btn">
+                <a href="#" id="close-ans">
+                    <img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="holder-question" id="quest-holder">
+            <!-- Questions will load here -->
+        </div>
+        <div class="last-box">
+            <a href="#" class="prev prev-ans"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+            <a href="#" class="next next-ans"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+            const closeBtn = document.getElementById("close-ans");
+            const targetBox = document.getElementById("pol-answer-mode");
+            const holder = document.getElementById("quest-holder");
+
+            function openAnsMode(apiUrl) {
+                targetBox.classList.add("visible");
+
+                fetch(apiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("Fetched Questions:", data);
+                        holder.innerHTML = "";
+
+                        const baseImgPath = "https://www.ilmkidunya.com/nadmin/images/";
+
+                        data.forEach((q, index) => {
+                            let correctIndex = q.correctAnswer - 1; // backend sends 1-based answer
+
+                            // ✅ Question image handle
+                            let questionImgHtml = q.questionImage
+                                ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+                                : "";
+
+                            // ✅ Choices handle (text + image if available)
+                            let choicesHtml = q.choices
+                                .filter(c => c.text || c.img)
+                                .map((c, i) => `
+            <li class="${i === correctIndex ? "correct" : ""}">
+                <label class="radio-container">
+                    <span class="q-detiel">
+                        ${c.text ? c.text : ""}
+                        ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+                    </span>
+                    <input type="radio" disabled
+                           value="${c.value}"
+                           data-correct="${i === correctIndex}">
+                    <span class="label">${c.value}</span>
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+        `).join("");
+
+                            holder.innerHTML += `
+        <div class="mid-box1 ans-bx-visible">
+            <strong>Question # ${index + 1}</strong>
+            <h3>${q.question}</h3>
+            ${questionImgHtml}
+            <ul>${choicesHtml}</ul>
+        </div>
+    `;
+                        });
+
+
+
+                        setupNavigation();
+                    });
+            }
+
+            closeBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                targetBox.classList.remove("visible");
+            });
+
+            function setupNavigation() {
+                let questions = document.querySelectorAll(".ans-bx-visible");
+                let currentIndex = 0;
+
+                const prevBtn = document.querySelector(".prev-ans");
+                const nextBtn = document.querySelector(".next-ans");
+
+                function showQuestion(index) {
+                    questions.forEach((q, i) => {
+                        q.style.display = (i === index) ? "block" : "none";
+                    });
+
+                    prevBtn.classList.toggle("active", index > 0);
+                    nextBtn.classList.toggle("active", index < questions.length - 1);
+                }
+
+                showQuestion(currentIndex);
+
+                nextBtn.onclick = function (e) {
+                    e.preventDefault();
+                    if (currentIndex < questions.length - 1) {
+                        currentIndex++;
+                        showQuestion(currentIndex);
+                    }
+                };
+
+                prevBtn.onclick = function (e) {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        showQuestion(currentIndex);
+                    }
+                };
+            }
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('close').addEventListener('click', function (event) {
+            closePoll();
+            event.preventDefault();
+        });
+
+        document.addEventListener('click', function (event) {
+            var pol = document.getElementById('pol');
+            if (!pol.contains(event.target) && event.target !== document.getElementById('launch-test-btn')) {
+                closePoll();
+            }
+        });
+    });
+
+    function closePoll() {
+        var pol = document.getElementById('pol');
+        pol.style.right = '-100%';
+        pol.style.opacity = '0';
+        pol.style.visibility = 'hidden';
+    }
+
+    function launchTest() {
+        var pol = document.getElementById('pol');
+        pol.style.right = '0';
+        pol.style.opacity = '1';
+        pol.style.visibility = 'visible';
+
+        // Uncheck all radio buttons to prevent preselection
+        document.querySelectorAll(".mid-box input[type='radio']").forEach(r => r.checked = false);
+
+
+    }
+
+
+
+    // CSS added
+    var pol = document.getElementById('pol');
+    pol.style.position = 'fixed';
+    pol.style.right = '-100%';
+    pol.style.top = '0';
+    pol.style.opacity = '0';
+    pol.style.visibility = 'hidden';
+    pol.style.zIndex = '999';
+    pol.style.transition = 'all 0.3s ease-in-out';
+
+    function launchTest() {
+        var pol = document.getElementById('pol');
+        pol.style.right = '0';
+        pol.style.opacity = '1';
+        pol.style.visibility = 'visible';
+
+
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let midBoxes = document.querySelectorAll(".mid-box");
+        let currentIndex = 0;
+
+        function showBox(index) {
+            midBoxes.forEach((box, i) => {
+                box.style.display = i === index ? "block" : "none";
+            });
+        }
+
+        showBox(currentIndex); // Show first box initially
+
+        document.querySelector(".next").addEventListener("click", function (e) {
+            e.preventDefault();
+            if (currentIndex < midBoxes.length - 1) {
+                currentIndex++;
+                showBox(currentIndex);
+            }
+        });
+
+        document.querySelector(".prev").addEventListener("click", function (e) {
+            e.preventDefault();
+            if (currentIndex > 0) {
+                currentIndex--;
+                showBox(currentIndex);
+            }
+        });
+
+        // Assign unique names to radio button groups inside each mid-box
+        midBoxes.forEach((box, index) => {
+            let radios = box.querySelectorAll('input[type="radio"]');
+            radios.forEach((radio, i) => {
+                radio.name = `radio-${index}`; // Unique name per mid-box
+            });
+        });
+    });
+
+
+
+    //  Question box for next and prev
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let midBoxes = document.querySelectorAll(".mid-box");
+        let nextBtn = document.querySelector(".next");
+        let prevBtn = document.querySelector(".prev");
+        let currentIndex = 0;
+
+        function showBox(index) {
+            midBoxes.forEach((box, i) => {
+                if (i === index) {
+                    box.style.display = "block";
+                    setTimeout(() => {
+                        box.style.opacity = "1";
+                    }, 200); // Small delay for smooth fade-in
+                } else {
+                    box.style.opacity = "0";
+                    setTimeout(() => {
+                        box.style.display = "none";
+                    }, 300); // Wait for fade-out before hiding
+                }
+            });
+
+            // Handle active class for navigation buttons
+            prevBtn.classList.toggle("active", index > 0);
+            nextBtn.classList.toggle("active", index < midBoxes.length - 1);
+        }
+
+        // Apply transition effect to all mid-box elements
+        midBoxes.forEach(box => {
+            box.style.transition = "opacity 0.3s ease-in-out";
+            box.style.opacity = "0";
+        });
+
+        showBox(currentIndex); // Show first box initially
+
+        nextBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (currentIndex < midBoxes.length - 1) {
+                currentIndex++;
+                showBox(currentIndex);
+            }
+        });
+
+        prevBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (currentIndex > 0) {
+                currentIndex--;
+                showBox(currentIndex);
+            }
+        });
+    });
+</script>
+
+<style>
+    .question-box .mid-box1 {
+        padding: 30px 0 0 30px;
+    }
+
+        .question-box .mid-box1 ul li {
+            display: block;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px;
+        }
+
+    .ans-box {
+        height: 580px;
+        overflow-x: scroll;
+    }
+
+    .wrong .radio-container {
+        transform: scale(1.1);
+    }
+
+        .wrong .radio-container .checkmark {
+            background-color: #f00;
+        }
+</style>
+
+
+
+<!-- Main End -->

@@ -1,0 +1,3676 @@
+.body-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -12px;
+    margin-left: -12px;
+    float: none;
+    width: auto
+}
+
+button.toc-scroll {
+    position: fixed;
+    left: 20px;
+    bottom: 120px;
+    z-index: 8;
+    border: 0;
+    background-color: #15a18d;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    display: none
+}
+
+    button.toc-scroll.not-visible {
+        display: block
+    }
+
+    button.toc-scroll div {
+        position: relative;
+        height: 13px
+    }
+
+        button.toc-scroll div:after, button.toc-scroll div:before {
+            content: '';
+            position: absolute;
+            height: 9px;
+            width: 2px;
+            background-color: #fff
+        }
+
+        button.toc-scroll div:before {
+            transform: rotate(45deg);
+            margin-left: -1px
+        }
+
+        button.toc-scroll div:after {
+            transform: rotate(-45deg);
+            margin-left: 1px
+        }
+
+@media screen and (min-width:768px) {
+    .book-col {
+        -ms-flex: 0 0 50%
+    }
+}
+
+.book-col {
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%
+}
+
+.book-box {
+    box-shadow: 0 12px 36px rgb(0 0 0 / 18%);
+    margin: 10px 0;
+    border-radius: 8px
+}
+
+    .book-box .book-heading {
+        background-color: #15a18d;
+        padding: 13px 20px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px
+    }
+
+    .book-box h3 {
+        color: #fff;
+        font-size: 16px;
+        margin: 0
+    }
+
+    .book-box ul.subject-list {
+        display: flex;
+        flex-flow: wrap;
+        padding: 10px 0
+    }
+
+        .book-box ul.subject-list li {
+            width: 33.33%;
+            list-style: none
+        }
+
+.ikd-books .book-box ul li a {
+    padding: 10px 20px;
+    color: grey;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center
+}
+
+    .ikd-books .book-box ul li a img {
+        margin-right: 10px;
+        filter: brightness(.5);
+        margin-bottom: 0
+    }
+
+    .ikd-books .book-box ul li a span {
+        margin: auto 0
+    }
+
+    .ikd-books .book-box ul li a:hover {
+        color: #000
+    }
+
+        .ikd-books .book-box ul li a:hover img {
+            filter: brightness(.1)
+        }
+
+.ab-ikd-class-view-subjects {
+    font-family: system-ui !important
+}
+
+.video-responsive {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+    margin-bottom: 20px
+}
+
+    .video-responsive iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute
+    }
+
+.chapter-table, .ikd-guid-content .responsive-table {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    width: 100%
+}
+
+    .chapter-table table, .ikd-guid-content table {
+        min-width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .chapter-table table th, .ikd-guid-content table th {
+            padding: 5px;
+            background-color: #39f;
+            color: #fff;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .chapter-table table tr, .ikd-guid-content tr {
+            border-bottom: 1px solid #3399ff33
+        }
+
+        .chapter-table table td, .ikd-guid-content td {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+            .chapter-table table td:first-letter, .ikd-guid-content td:first-letter {
+                text-transform: none
+            }
+
+            .chapter-table table td a, .ikd-guid-content td a {
+                color: #15a18d
+            }
+
+                .chapter-table table td a:hover, .ikd-guid-content td a:hover {
+                    color: #39f
+                }
+
+.ikd-guid-content {
+    margin-bottom: 20px
+}
+
+    .ikd-guid-content .tab-content p {
+        margin-bottom: 0;
+        text-align: center;
+        font-weight: 700
+    }
+
+    .ikd-guid-content span {
+        word-break: break-word
+    }
+
+    .ikd-guid-content p {
+        font-weight: 400;
+        word-break: break-word
+    }
+
+        .ikd-guid-content p a, .ikd-guid-content ul li a {
+            color: #39f
+        }
+
+            .ikd-guid-content p a:hover, .ikd-guid-content ul li a:hover {
+                color: #15a18d
+            }
+
+    .ikd-guid-content h1 {
+        font-size: 32px;
+        line-height: 34px;
+        font-weight: 700;
+        margin-bottom: 20px
+    }
+
+    .ikd-guid-content h2 {
+        font-size: 26px;
+        line-height: 34px;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 28px;
+        font-weight: 400;
+        margin: 0 0 10px 0;
+    }
+
+    .ikd-guid-content h3 {
+        font-size: 22px;
+        line-height: 34px;
+        font-weight: 700
+    }
+
+        .ikd-guid-content h2 a, .ikd-guid-content h2 a span, .ikd-guid-content h3 a {
+            color: #15a18d !important
+        }
+
+            .ikd-guid-content h2 a:hover, .ikd-guid-content h2 a:hover span, .ikd-guid-content h3 a:hover {
+                color: #39f !important
+            }
+
+    .ikd-guid-content ul {
+        padding-left: 20px
+    }
+
+.responsivs-table {
+    overflow-x: auto
+}
+
+.ikd-guid-content ol {
+    padding-left: 20px;
+}
+
+.ikd-guid-content ul li {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    padding: 5px;
+    list-style-type: disc
+}
+
+.ikd-guid-content ol li {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    padding: 5px;
+    list-style-type: decimal
+}
+
+.ikd-guid-content ul li p {
+    margin-bottom: 0
+}
+
+.ikd-guid-content ul ol li {
+    list-style-type: decimal
+}
+
+.ikd-guid-content img {
+    margin-bottom: 20px
+}
+
+.ikd-guid-content .data_tab ul li {
+    margin: 0
+}
+
+.youtube-section {
+    padding: 20px;
+    background-color: #f8f8f8;
+    box-sizing: border-box;
+    margin-bottom: 20px
+}
+
+.mdcat.coaching-classes {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding: 20px 0;
+    padding: 0;
+    width: 100%
+}
+
+    .mdcat.coaching-classes h1, .mdcat.coaching-classes h2 {
+        font-size: 26px;
+        text-align: left !important
+    }
+
+.mcqs-section h1, .youtube-section h1 {
+    color: #000;
+    font-size: 30px;
+    padding: 10px 0;
+    margin-bottom: 10px
+}
+
+.mcqs-section .inner-section, .youtube-section .inner-section {
+    padding: 20px 0;
+    list-style: none;
+    padding-top: 15px
+}
+
+    .youtube-section .inner-section ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        flex-flow: wrap
+    }
+
+    .youtube-section .inner-section .box {
+        width: 50%;
+        list-style: none;
+        margin: 0
+    }
+
+        .youtube-section .inner-section .box .banner-img {
+            display: inline-flex
+        }
+
+            .youtube-section .inner-section .box .banner-img img {
+                position: relative
+            }
+
+                .youtube-section .inner-section .box .banner-img img.left {
+                    height: 105px;
+                    position: relative;
+                    top: 23px
+                }
+
+                .youtube-section .inner-section .box .banner-img img.right {
+                    position: relative;
+                    right: 69px;
+                    bottom: 13px
+                }
+
+        .youtube-section .inner-section .box .video-box {
+            display: inline-flex
+        }
+
+            .youtube-section .inner-section .box .video-box .vertical-bar {
+                background-image: url('https://resources.ilmkidunya.com/css/images/vertical-bar.png');
+                width: 10px;
+                height: auto;
+                margin-right: 10px
+            }
+
+            .mcqs-section .inner-section .box .video-box .right-side, .youtube-section .inner-section .box .video-box .right-side {
+                padding-right: 10px;
+                text-align: left
+            }
+
+                .youtube-section .inner-section .box .video-box .right-side h3 {
+                    font-size: 17px;
+                    font-weight: 700
+                }
+
+                .youtube-section .inner-section .box .video-box .right-side p {
+                    font-size: 15px
+                }
+
+                .youtube-section .inner-section .box .video-box .right-side .y-icon {
+                    margin-top: 20px
+                }
+
+                    .youtube-section .inner-section .box .video-box .right-side .y-icon img {
+                        margin-right: 10px
+                    }
+
+                    .youtube-section .inner-section .box .video-box .right-side .y-icon a {
+                        position: relative;
+                        bottom: 8px;
+                        color: #6fb613 !important;
+                        font-size: 16px
+                    }
+
+.mcqs-section {
+    padding: 20px;
+    background-color: #fbfbfb;
+    box-sizing: border-box;
+    margin-bottom: 20px
+}
+
+    .mcqs-section .inner-section .box .heading-box img {
+        width: 100%;
+        height: auto;
+        max-width: 32px;
+        margin-right: 8px;
+        margin-bottom: 0
+    }
+
+    .mcqs-section .inner-section .box .heading-box span {
+        bottom: 10px;
+        font-size: 17px;
+        color: #333;
+        font-weight: 700
+    }
+
+    .mcqs-section .inner-section .box .video-box {
+        display: inline-flex;
+        margin-top: 10px
+    }
+
+    .mcqs-section .inner-section ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-flow: wrap
+    }
+
+    .mcqs-section .inner-section .box {
+        width: 25%;
+        list-style: none;
+        margin: 0
+    }
+
+        .mcqs-section .inner-section .box .video-box .vertical-bar {
+            background-image: url('https://resources.ilmkidunya.com/css/images/vertical-bar.png');
+            width: 10px;
+            height: auto;
+            margin: 0 7px
+        }
+
+        .mcqs-section .inner-section .box .video-box li {
+            line-height: 20px;
+            list-style: none;
+            padding: 0
+        }
+
+            .mcqs-section .inner-section .box .video-box li a {
+                color: #0072ff;
+                font-size: 12px
+            }
+
+                .mcqs-section .inner-section .box .video-box li a:hover {
+                    color: #15a18d
+                }
+
+.notice-board {
+    float: left;
+    margin: 0 5px 30px;
+    padding-bottom: 15px
+}
+
+    .notice-board ul li {
+        font-size: 20px;
+        display: inline-block;
+        padding: 8px 7px
+    }
+
+        .notice-board ul li span {
+            color: #333;
+            float: left
+        }
+
+        .notice-board ul li a {
+            float: right;
+            color: #15a18d
+        }
+
+        .notice-board ul li .box {
+            display: inline-flex
+        }
+
+            .notice-board ul li .box img {
+                max-width: 80px;
+                width: 100% height: 80px;
+                margin-right: 10px
+            }
+
+            .notice-board ul li .box span {
+                font-size: 14px
+            }
+
+            .notice-board ul li .box a {
+                font-size: 16px
+            }
+
+    .notice-board ul:nth-child(1) {
+        display: flex
+    }
+
+        .notice-board ul:nth-child(1) li {
+            display: flex
+        }
+
+            .notice-board ul:nth-child(1) li a {
+                font-size: 14px;
+                padding: 5px 0
+            }
+
+.u_here ul {
+    list-style: none
+}
+
+    .u_here ul li {
+        list-style: none
+    }
+
+.subject-wise-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 -10px;
+    display: flex;
+    flex-flow: wrap
+}
+
+    .subject-wise-list ul li {
+        list-style: none;
+        width: 25%;
+        padding: 20px 10px;
+        list-style: none;
+        text-align: center;
+        position: relative
+    }
+
+        .subject-wise-list ul li .icon {
+            position: relative;
+            padding: 0 10px
+        }
+
+        .subject-wise-list ul li:before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            bottom: 10px;
+            right: 10px;
+            background-color: #ddd
+        }
+
+        .subject-wise-list ul li a {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center
+        }
+
+        .subject-wise-list ul li:hover:before {
+            background-color: #15a18d
+        }
+
+        .subject-wise-list ul li:hover p a {
+            color: #fff
+        }
+
+        .subject-wise-list ul li .icon figure {
+            height: 90px;
+            overflow: hidden;
+            width: 100%;
+            margin: 0 0 10px
+        }
+
+        .subject-wise-list ul li .icon p {
+            margin-bottom: 0;
+            line-height: 1.2;
+            font-weight: 600
+        }
+
+        .subject-wise-list ul li .icon figure img {
+            margin-bottom: 0;
+            object-fit: cover;
+            width: 100% !important;
+            height: 100% !important;
+            object-position: center
+        }
+
+        .subject-wise-list ul li a:hover p {
+            color: #fff
+        }
+
+.ikd-books h2 {
+    font-size: 22px;
+    line-height: 34px;
+    font-weight: 700;
+    margin-bottom: 10px
+}
+
+.merit-detail-list, .subjects-tble2 {
+    margin-bottom: 20px
+}
+
+    .subjects-tble2 h1 {
+        font-size: 26px;
+        line-height: 34px;
+        font-weight: 700;
+        margin-bottom: 20px
+    }
+
+    .merit-detail-list ul, .merit-detail-list-2 ul, .subjects-tble2 ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 -10px;
+        display: flex;
+        flex-flow: wrap
+    }
+
+        .merit-detail-list ul li, .merit-detail-list-2 ul li, .subjects-tble2 ul li {
+            list-style: none;
+            width: 33.33%;
+            padding: 0 10px;
+            margin: 6px 0
+        }
+
+            .merit-detail-list ul li a, .subjects-tble2 ul li a {
+                display: flex;
+                padding: 7px;
+                height: 100%;
+                border: solid 1px #b6e0f7
+            }
+
+                .subjects-tble2 ul li a img {
+                    max-width: 50px;
+                    max-height: 50px;
+                    margin: auto 0;
+                    margin-right: 10px
+                }
+
+                .merit-detail-list ul li a .avatar-wrap {
+                    max-width: 50px;
+                    max-height: 50px;
+                    margin: auto 0;
+                    margin-right: 10px;
+                    flex: 0 0 auto
+                }
+
+                    .merit-detail-list ul li a .avatar-wrap img {
+                        margin: 0
+                    }
+
+                .subjects-tble2 ul li a span {
+                    margin: auto 0;
+                    color: #080808;
+                    font-size: 14px
+                }
+
+                .merit-detail-list ul li a .author {
+                    margin: auto 0
+                }
+
+                    .merit-detail-list ul li a .author p {
+                        margin: 0;
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 1
+                    }
+
+                    .merit-detail-list ul li a .author span {
+                        font-size: 14px
+                    }
+
+                .merit-detail-list ul li a:hover, .merit-detail-list-2 ul li .list-2-box:hover, .subjects-tble2 ul li a:hover {
+                    border-color: #fff;
+                    box-shadow: 0 4px 36px rgb(0 0 0 / 18%)
+                }
+
+            .merit-detail-list-2 ul li .list-2-box {
+                display: flex;
+                padding: 7px;
+                height: 100%;
+                border: solid 1px #b6e0f7
+            }
+
+                .merit-detail-list-2 ul li .list-2-box .avatar-wrap {
+                    flex: 0 0 auto
+                }
+
+                    .merit-detail-list-2 ul li .list-2-box .avatar-wrap img {
+                        margin: 0
+                    }
+
+                .merit-detail-list-2 ul li .list-2-box .author {
+                    margin-left: 10px
+                }
+
+                    .merit-detail-list-2 ul li .list-2-box .author p {
+                        margin: 0;
+                        line-height: 1.3
+                    }
+
+                        .merit-detail-list-2 ul li .list-2-box .author p a {
+                            color: #080808
+                        }
+
+.course-filter {
+    width: 100%;
+    background: #efefef;
+    display: flex;
+    padding: 12px;
+    flex-flow: wrap
+}
+
+    .course-filter .filt-title {
+        display: flex;
+        width: 33.33%
+    }
+
+.filt-div {
+    width: 66.666666667%;
+    display: flex
+}
+
+.course-filter .filt-title img {
+    display: inline-block;
+    margin: auto 0;
+    margin-right: 13px
+}
+
+.course-filter .filt-title span {
+    font-size: 25px;
+    line-height: 25px;
+    color: #000;
+    display: inline-block
+}
+
+.course-filter .filt-select {
+    width: 206px;
+    margin-right: 15px
+}
+
+    .course-filter .filt-select label {
+        font-size: 13px;
+        color: #989898;
+        margin-bottom: 2px;
+        display: block
+    }
+
+    .course-filter .filt-select select {
+        width: 100%;
+        height: 40px;
+        font-size: 17px;
+        color: #000;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        padding: 0 12px;
+        background-color: #fff;
+        background-image: url('https://resources.ilmkidunya.com/images/big-select.png');
+        background-position: 95%;
+        background-repeat: no-repeat
+    }
+
+.filt-btn .filter-btn {
+    text-decoration: none;
+    color: #fff;
+    border: 0;
+    font-size: 15px;
+    height: 40px;
+    width: 157px;
+    margin-top: 20px;
+    background: #15a18d;
+    cursor: pointer
+}
+
+    .filt-btn .filter-btn:hover {
+        background: #7bb035
+    }
+
+.tutor-list {
+    margin-top: 10px
+}
+
+div#ldata a.tutor-box {
+    display: flex;
+    text-decoration: none;
+    background: #f1f1f1;
+    padding: 9px;
+    margin-bottom: 13px
+}
+
+    div#ldata a.tutor-box .ttimage {
+        width: 93px;
+        overflow: hidden;
+        margin-right: 10px
+    }
+
+    div#ldata a.tutor-box:hover {
+        background: #cfff91
+    }
+
+a.tutor-box .ttimage img {
+    margin-bottom: 0
+}
+
+.ttdiv {
+    display: flex;
+    font-size: 14px
+}
+
+a.tutor-box .ttname {
+    font-size: 18px;
+    line-height: 20px;
+    color: #4f4f4f;
+    font-weight: 600
+}
+
+.ttaffairs, .ttdintro, .ttteaches {
+    width: 33.33%;
+    padding: 0 10px;
+    overflow-wrap: break-word
+}
+
+div.cls-subj-chptr-lstngs {
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -10px
+}
+
+div.single-cls-suj-chptr-itm {
+    width: 50%;
+    padding: 8px
+}
+
+    div.single-cls-suj-chptr-itm div.tp {
+        color: #fff
+    }
+
+        div.single-cls-suj-chptr-itm div.tp a {
+            display: block
+        }
+
+        div.single-cls-suj-chptr-itm div.tp div.linker {
+            display: flex;
+            padding: 10px 20px;
+            background-color: #15a18d
+        }
+
+            div.single-cls-suj-chptr-itm div.tp div.linker:hover {
+                background-color: #15a18d !important
+            }
+
+.single-cls-suj-chptr-itm .linker .ic {
+    margin: 0 10px
+}
+
+    .single-cls-suj-chptr-itm .linker .ic img {
+        margin-bottom: 0
+    }
+
+div.single-cls-suj-chptr-itm div.txt {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 7px
+}
+
+.single-cls-suj-chptr-itm .linker .txt {
+    margin: auto 0
+}
+
+div.single-cls-suj-chptr-itm div.cptrbx {
+    padding: 10px 0;
+    height: 140px;
+    overflow: hidden;
+    background: #ededed;
+    position: relative
+}
+
+div.single-cls-suj-chptr-itm .cptrbx ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-flow: wrap
+}
+
+    div.single-cls-suj-chptr-itm .cptrbx ul li {
+        width: 25%;
+        padding: 5px;
+        box-sizing: border-box;
+        margin: 0;
+        list-style: none
+    }
+
+div.single-cls-suj-chptr-itm li a {
+    display: inline-block;
+    color: #000;
+    font-size: 16px;
+    line-height: normal
+}
+
+    div.single-cls-suj-chptr-itm li a b {
+        color: #00aeef;
+        font-size: 20px
+    }
+
+    div.single-cls-suj-chptr-itm li a:hover {
+        color: #15a18d
+    }
+
+        div.single-cls-suj-chptr-itm li a:hover b {
+            color: #15a18d
+        }
+
+.load-more-button-element-fancy {
+    text-align: left;
+    padding: 10px 0
+}
+
+div.single-cls-suj-chptr-itm .load-more-button-element-fancy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center !important;
+    background-color: #ededed;
+    box-shadow: 0 4px 36px rgb(0 0 0 / 20%)
+}
+
+.load-more-button-element-fancy .btn-load-more-fancy {
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    color: #000;
+    background: 0;
+    font-size: 18px;
+    color: rgba(0, 0, 0, .8);
+    font-weight: 700;
+    text-transform: uppercase
+}
+
+.load-more-button-element-fancy a span {
+    width: 17px;
+    height: 17px;
+    background: #71bc27;
+    color: #fff;
+    line-height: 15px;
+    margin-right: 5px;
+    display: inline-block;
+    border-radius: 50%;
+    font-weight: 700;
+    text-align: center
+}
+
+div.single-cls-suj-chptr-itm .load-more-button-element-fancy i {
+    text-transform: capitalize;
+    font-style: normal
+}
+
+div.single-cls-suj-chptr-itm .load-more-button-element-fancy:hover i {
+    color: #71bc27
+}
+
+.subjects-tble {
+    margin-bottom: 20px
+}
+
+    .subjects-tble h2 {
+        background: none repeat scroll 0 0 #228cc6;
+        color: #fff;
+        font-size: 18px;
+        padding: 10px;
+        line-height: 1;
+        margin-bottom: 6px
+    }
+
+    .subjects-tble ul {
+        display: flex;
+        flex-flow: wrap;
+        padding: 0;
+        margin: 0 -5px
+    }
+
+        .subjects-tble ul li {
+            width: 25%;
+            list-style: none;
+            display: flex
+        }
+
+            .subjects-tble ul li a {
+                border: solid 1px #b6e0f7;
+                display: block;
+                font-size: 16px;
+                line-height: 1.3;
+                padding: 8px;
+                color: #388ae0;
+                text-align: center;
+                width: 100%
+            }
+
+                .subjects-tble ul li a:hover {
+                    background-color: #000;
+                    color: #fff;
+                    border-color: #000
+                }
+
+.full-column {
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -10px
+}
+
+.calum-half-container {
+    height: auto;
+    width: 50%;
+    padding: 0 10px;
+    float: left
+}
+
+.pastpapers-edu-center ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    flex-flow: wrap;
+    padding: 0
+}
+
+.pastpapers-boards h3, .pastpapers-uni h3 {
+    font-size: 20px;
+    margin: 0
+}
+
+.section-line {
+    height: auto;
+    width: 100%;
+    background: url(https://ikddata.ilmkidunya.com/icons/halfline.jpg) bottom repeat-x;
+    padding-bottom: 1px
+}
+
+.pastpapers-boards h4 {
+    background: #388ae0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 2%;
+    margin-top: 15px
+}
+
+.pastpapers-uni ul {
+    margin-top: 10px;
+    padding: 0;
+    display: flex;
+    flex-flow: wrap
+}
+
+.pastpapers-boards ul, .pastpapers-uni uli {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-flow: wrap
+}
+
+.pastpapers-boards li, .pastpapers-uni li {
+    padding: 3px !important;
+    width: 33.33%;
+    list-style: none !important
+}
+
+.pastpapers-uni li {
+    width: 50%
+}
+
+    .pastpapers-boards li a, .pastpapers-uni li a {
+        font-size: 11px;
+        color: #388ae0;
+        border-bottom: solid #e7e7e7 1px;
+        display: flex;
+        height: 100%
+    }
+
+.pastpapers-edu-center ul li {
+    padding: 15px 15px 0 15px;
+    list-style: none
+}
+
+.pastpapers-edu-center li a {
+    font-size: 12px;
+    color: #388ae0;
+    border-bottom: solid #e7e7e7 1px;
+    display: flex;
+    height: 100%
+}
+
+    .pastpapers-boards ul li a:hover, .pastpapers-edu-center li a:hover, .pastpapers-uni ul li a:hover {
+        color: #f60
+    }
+
+.result-update-alert {
+    background: #f4f4f4;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0
+}
+
+    .result-update-alert .alert-wrapper {
+        display: flex;
+        margin-bottom: 20px
+    }
+
+        .result-update-alert .alert-wrapper .alert-figue {
+            width: 67px;
+            margin-right: 15px
+        }
+
+        .result-update-alert .alert-wrapper .alert-content p {
+            font-size: 14px;
+            margin: 0;
+            color: #999
+        }
+
+        .result-update-alert .alert-wrapper .alert-content h4 {
+            font-size: 15px;
+            margin: 5px 0
+        }
+
+    .result-update-alert .alert-form {
+        display: flex;
+        flex-flow: wrap;
+        width: 80%
+    }
+
+        .result-update-alert .alert-form .half-box {
+            width: 50%;
+            padding-right: 20px;
+            padding-bottom: 10px;
+            box-sizing: border-box
+        }
+
+            .result-update-alert .alert-form .half-box .alert-input {
+                border: 0;
+                border-radius: 8px;
+                padding: 9px 15px;
+                width: 100%;
+                box-sizing: border-box;
+                color: #999;
+                border: 1px solid #fff
+            }
+
+                .result-update-alert .alert-form .half-box .alert-input:hover {
+                    border: 1px solid #15a18d
+                }
+
+            .result-update-alert .alert-form .half-box .btn-subscribe {
+                display: inline-block;
+                width: 100%;
+                background-color: #228cc6;
+                color: #fff;
+                border: 0;
+                padding: 9px;
+                border-radius: 8px
+            }
+
+                .result-update-alert .alert-form .half-box .btn-subscribe:hover {
+                    background-color: #15a18d
+                }
+
+.scroll-top {
+    cursor: pointer;
+    position: fixed;
+    top: 65px;
+    left: 15px;
+    z-index: 6;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 5px;
+    background-color: #15a18d;
+    box-shadow: 6px 18px 33px rgb(0 0 0 / 18%)
+}
+
+    .scroll-top:hover {
+        background-color: #35e87e;
+        color: #fff
+    }
+
+    .scroll-top.not-visible {
+        top: 5px;
+        position: absolute
+    }
+
+.ab-ikd-class-view-subjects ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 -10px;
+    display: flex;
+    flex-flow: wrap;
+    list-style: none
+}
+
+    .ab-ikd-class-view-subjects ul li {
+        list-style: none;
+        width: 25%;
+        padding: 20px 10px;
+        list-style: none;
+        text-align: center;
+        position: relative
+    }
+
+        .ab-ikd-class-view-subjects ul li:before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            bottom: 10px;
+            right: 10px;
+            background-color: #ddd
+        }
+
+        .ab-ikd-class-view-subjects ul li .icon {
+            position: relative;
+            text-align: center !important
+        }
+
+        .ab-ikd-class-view-subjects ul li p {
+            margin-bottom: 0;
+            line-height: 1.2;
+            font-weight: 600;
+            position: relative;
+            text-align: center !important
+        }
+
+        .ab-ikd-class-view-subjects ul li:hover:before {
+            background-color: #15a18d
+        }
+
+        .ab-ikd-class-view-subjects ul li:hover p a {
+            color: #fff
+        }
+
+.fleft {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px
+}
+
+.culm3-box, .lrg-culm-box {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%
+}
+
+.question-paper ol li {
+    list-style: auto
+}
+
+    .question-paper ol li li {
+        list-style: lower-alpha
+    }
+
+.sec-btn {
+    text-align: center !important;
+    margin-bottom: 15px
+}
+
+    .sec-btn > a {
+        background-color: #15a18d;
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        border-radius: 6px
+    }
+
+        .sec-btn > a:hover {
+            background-color: #0072ff;
+            cursor: pointer
+        }
+
+.section-heading {
+    flex: 0 0 100%;
+    max-width: 100%;
+    position: relative;
+    padding: 0 15px
+}
+
+div.offeringCourses {
+    margin-bottom: 15px;
+    color: #fff;
+    padding: 25px;
+    box-sizing: border-box
+}
+
+    div.offeringCourses.blue {
+        background: #2f88b9
+    }
+
+    div.offeringCourses div.tbox {
+        padding: 8px 30px 19px;
+        display: flex
+    }
+
+    div.offeringCourses div.title {
+        margin-right: 25px;
+        font-size: 124px;
+        color: #93d9ff;
+        font-weight: 700;
+        line-height: 1
+    }
+
+    div.offeringCourses div.desc {
+        padding-top: 0;
+        margin: auto 0
+    }
+
+        div.offeringCourses div.desc h3 {
+            font-size: 34px;
+            font-weight: bolder;
+            text-transform: uppercase;
+            line-height: 30px;
+            margin-bottom: 5px
+        }
+
+    div.offeringCourses.blue div.desc h3, div.offeringCourses.blue div.desc p {
+        color: #fff
+    }
+
+    div.offeringCourses div.desc p {
+        font-size: 20px;
+        line-height: normal;
+        margin: 0
+    }
+
+div.ikdCourseArea div.fancyBox {
+    padding: 0 30px;
+    position: relative
+}
+
+div.offeringCourses .collegesUniversitiesSlider {
+    overflow: hidden
+}
+
+div.ikdCourseArea div.fancyBox .slick-next, div.ikdCourseArea div.fancyBox .slick-prev {
+    width: 17px;
+    height: 29px;
+    position: absolute
+}
+
+div.ikdCourseArea div.fancyBox .slick-prev {
+    background: url(https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/img-arrow-left-green.png) no-repeat center center;
+    left: 0;
+    right: auto
+}
+
+div.ikdCourseArea div.fancyBox .slick-next {
+    background: url(https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/img-arrow-right-green.png) no-repeat center center;
+    right: 0;
+    left: auto
+}
+
+    div.ikdCourseArea div.fancyBox .slick-next:after, div.ikdCourseArea div.fancyBox .slick-next:before, div.ikdCourseArea div.fancyBox .slick-prev:after, div.ikdCourseArea div.fancyBox .slick-prev:before {
+        display: none
+    }
+
+div.fancyBox div.singleBox {
+    width: 112px;
+    background: #fff;
+    margin: 5px;
+    text-align: center
+}
+
+    div.fancyBox div.singleBox img {
+        display: inline-block
+    }
+
+    div.fancyBox div.singleBox div.box {
+        background: #fff;
+        padding: 10px 5px;
+        text-align: center
+    }
+
+        div.fancyBox div.singleBox div.box p {
+            clear: both;
+            color: #000;
+            font-size: 12px;
+            line-height: 15px;
+            height: 45px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-align: center
+        }
+
+            div.fancyBox div.singleBox div.box p a {
+                display: block;
+                color: #000
+            }
+
+ul.ikd-accordion {
+    list-style: none;
+    padding: 0;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    margin-top: 20px
+}
+
+    ul.ikd-accordion .inner {
+        overflow: hidden;
+       
+        padding: 20px 0 20px 20px;
+        font-size: 16px;
+        box-sizing: border-box;
+        position: relative;
+        margin-left: 8%
+    }
+
+        ul.ikd-accordion .inner:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 24px;
+            bottom: 24px;
+            width: 4px;
+            background: #15a18d;
+            display:block;
+                    }
+
+    ul.ikd-accordion li {
+        margin: .7em 0;
+        box-sizing: border-box;
+        list-style: none;
+        padding: 0;
+        border-bottom: 1px solid #ebebeb
+    }
+
+        ul.ikd-accordion li a.toggle {
+            width: 100%;
+            display: block;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 0 30px 10px 30px;
+            color: #000;
+            box-sizing: border-box;
+            transition: background .3s ease;
+            position: relative
+        }
+
+            ul.ikd-accordion li a.toggle:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 14px;
+                height: 2px;
+                background-color: #000;
+                bottom: 0;
+                display: flex;
+                vertical-align: top;
+                width: 12px;
+                transition: .4s all;
+                font-size: 29px;
+                align-items: center;
+                font-weight: 400
+            }
+
+            ul.ikd-accordion li a.toggle:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 14px;
+                height: 2px;
+                background-color: #000;
+                bottom: 0;
+                display: flex;
+                transform: rotate(90deg);
+                vertical-align: top;
+                width: 12px;
+                transition: .4s all;
+                font-size: 29px;
+                align-items: center;
+                font-weight: 400
+            }
+
+            ul.ikd-accordion li a.toggle.active:before {
+                transform: rotate(0)
+            }
+
+            ul.ikd-accordion li a.toggle:hover {
+                border-bottom-color: #15a18d
+            }
+
+    ul.ikd-accordion .inner ol, ul.ikd-accordion .inner ul {
+        padding-left: 20px
+    }
+
+        ul.ikd-accordion .inner ol li, ul.ikd-accordion .inner ul li {
+            list-style: disc
+        }
+
+div.collegesUniversitiesByCities {
+    background: #15a18d;
+    padding: 15px;
+    box-sizing: border-box
+}
+
+    div.collegesUniversitiesByCities div.left {
+        width: 42%;
+        padding: 30px 0
+    }
+
+    div.collegesUniversitiesByCities div.right {
+        width: 100%;
+        padding: 0;
+        box-sizing: border-box
+    }
+
+    div.collegesUniversitiesByCities h3 {
+        font-size: 28px;
+        text-transform: uppercase;
+        color: #fff;
+        margin-top: 5px;
+        font-weight: bolder
+    }
+
+        div.collegesUniversitiesByCities h3 span {
+            display: block
+        }
+
+    div.collegesUniversitiesByCities h4 {
+        font-size: 18px;
+        text-transform: uppercase;
+        color: #fff;
+        margin-top: 5px;
+        font-weight: bolder;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 15px
+    }
+
+    div.collegesUniversitiesByCities p {
+        font-size: 16px;
+        color: #fff;
+        line-height: normal;
+        margin-top: 10px;
+        margin-bottom: 10px
+    }
+
+    div.collegesUniversitiesByCities div.filters {
+        width: 100%
+    }
+
+        div.collegesUniversitiesByCities div.filters select {
+            width: 100%;
+            font-size: 16px;
+            color: #000;
+            padding: 10px;
+            border: 0;
+            border-radius: 3px;
+            padding: 18px 30px 18px 15px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-indent: 1px;
+            text-overflow: '';
+            background: url(/web/20210425220721im_/https://resources.ilmkidunya.com/images/icons/ic-arrow-down-green.png) no-repeat right center #fff;
+            background-position: 96% 21px;
+            outline: 0 none;
+            text-transform: capitalize
+        }
+
+        div.collegesUniversitiesByCities div.filters a.btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 22px 10px;
+            border-radius: 3px;
+            background: #318bbc;
+            color: #fff;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: 700;
+            box-sizing: border-box;
+            margin: 10px 0 10px
+        }
+
+            div.collegesUniversitiesByCities div.filters a.btn:hover {
+                background: #fff;
+                color: #318bbc
+            }
+
+    div.collegesUniversitiesByCities div.fourBoxes {
+        display: flex;
+        flex-flow: wrap
+    }
+
+        div.collegesUniversitiesByCities div.fourBoxes div.singleBox {
+            width: 25%;
+            padding: 10px
+        }
+
+            div.collegesUniversitiesByCities div.fourBoxes div.singleBox a {
+                display: flex;
+                color: #000;
+                background-color: #fff;
+                padding: 20px
+            }
+
+                div.collegesUniversitiesByCities div.fourBoxes div.singleBox a .inner {
+                    text-align: center
+                }
+
+            div.collegesUniversitiesByCities div.fourBoxes div.singleBox span {
+                display: block;
+                text-align: center
+            }
+
+            div.collegesUniversitiesByCities div.fourBoxes div.singleBox div.icon {
+                float: left;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+                clear: both;
+                min-height: 53px;
+                line-height: 53px
+            }
+
+                div.collegesUniversitiesByCities div.fourBoxes div.singleBox div.icon img {
+                    display: inline-block;
+                    opacity: .5
+                }
+
+            div.collegesUniversitiesByCities div.fourBoxes div.singleBox:hover {
+                opacity: .8
+            }
+
+        div.collegesUniversitiesByCities div.fourBoxes div.sldLinks {
+            float: left;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px
+        }
+
+            div.collegesUniversitiesByCities div.fourBoxes div.sldLinks div {
+                width: 40px;
+                height: 7px;
+                background: #fff;
+                display: inline-block;
+                margin: 0 3px
+            }
+
+                div.collegesUniversitiesByCities div.fourBoxes div.sldLinks div.active, div.collegesUniversitiesByCities div.fourBoxes div.sldLinks div:hover {
+                    background: #318bbc;
+                    cursor: pointer
+                }
+
+div.fancyBox div.singleBox div.image {
+    margin-bottom: 10px;
+    height: 60px;
+    text-align: center
+}
+
+    div.fancyBox div.singleBox div.image img {
+        max-width: 100%;
+        margin: 0
+    }
+
+div.fancyBox div.singleBox div.link {
+    width: 100%;
+    text-align: center
+}
+
+    div.fancyBox div.singleBox div.link a {
+        font-size: 12px;
+        display: block;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: #15a18d;
+        color: #fff;
+        padding: 6px 5px 5px 4px;
+        text-align: center
+    }
+
+        div.fancyBox div.singleBox div.link a span {
+            font-weight: bolder;
+            margin-right: 3px;
+            font-size: 22px;
+            display: inline-block;
+            position: relative;
+            line-height: 10px;
+            top: 3px
+        }
+
+div.fancyBox div.singleBox:hover {
+    opacity: .9
+}
+
+div.offeringCourses div.bottom {
+    margin-bottom: 3px;
+    margin-top: 19px
+}
+
+    div.offeringCourses div.bottom div.link {
+        width: 100%;
+        text-align: center
+    }
+
+        div.offeringCourses div.bottom div.link a {
+            display: inline-block;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bolder;
+            text-transform: uppercase
+        }
+
+            div.offeringCourses div.bottom div.link a.dk-gray {
+                color: #484848
+            }
+
+            div.offeringCourses div.bottom div.link a span {
+                position: relative;
+                margin-right: 5px;
+                font-size: 20px;
+                line-height: 19px;
+                font-weight: bolder;
+                border-radius: 50%;
+                color: #fff;
+                background: #15a18d;
+                text-align: center;
+                display: inline-block;
+                width: 23px;
+                height: 23px
+            }
+
+            div.offeringCourses div.bottom div.link a:hover {
+                opacity: .9
+            }
+
+div.offeringCourses.gray {
+    background: #e5e5e5
+}
+
+div.offeringCourses div.title.blue {
+    color: #2f88b9
+}
+
+.crs-uni-list .unis-list {
+    background: #f9f9f9;
+    display: flex;
+    padding: 10px 18px;
+    margin-bottom: 12px;
+    width: 100%;
+    position: relative
+}
+
+    .crs-uni-list .unis-list .image {
+        width: 52px;
+        max-height: 52px;
+        margin-right: 15px
+    }
+
+        .crs-uni-list .unis-list .image img {
+            border-radius: 10px;
+            height: 50px;
+            width: 50px;
+            margin: 0
+        }
+
+    .crs-uni-list .unis-list .uni-name {
+        width: 40%;
+        padding-right: 15px
+    }
+
+        .crs-uni-list .unis-list .uni-name a {
+            color: #388ae0;
+            font-size: 20px
+        }
+
+    .crs-uni-list .unis-list .uni-course-list {
+        font-family: Calibri;
+        font-size: 15px;
+        width: 40%
+    }
+
+    .crs-uni-list .unis-list .col-70 hr {
+        width: 100%
+    }
+
+    .crs-uni-list .unis-list .uni-course-list ul {
+        list-style: none;
+        margin: 0;
+        padding: 0
+    }
+
+        .crs-uni-list .unis-list .uni-course-list ul li {
+            list-style: none;
+            padding: 0;
+            font-size: 15px;
+            line-height: 1.3
+        }
+
+    .crs-uni-list .unis-list .uni-rates {
+        position: relative;
+        text-align: center;
+        border-left: 2px solid #cdcccc;
+        padding: 0 0 0 15px;
+        width: 17%
+    }
+
+        .crs-uni-list .unis-list .uni-rates img {
+            margin-bottom: 0
+        }
+
+        .crs-uni-list .unis-list .uni-rates span {
+            font-family: Calibri;
+            display: block;
+            font-size: 51px;
+            line-height: 55px
+        }
+
+    .crs-uni-list .unis-list:hover {
+        background: #f0f0f0
+    }
+
+.admission-lists, .admission-program {
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 20px
+}
+
+    .admission-program li {
+        border-bottom: 1px solid #e6e6e6;
+        list-style: disc outside none;
+        margin-left: 15px;
+        padding: 2px 0 4px;
+        width: 95%;
+        color: #4d93e2
+    }
+
+    .admission-lists ul {
+        list-style: none !important;
+        display: flex;
+        padding-left: 0 !important;
+        flex-flow: wrap;
+        margin: 0 -10px
+    }
+
+.ikdCourseArea .admission-lists li {
+    list-style: none;
+    width: 30%;
+    padding: 5px 10px;
+    display: block;
+    color: #969494
+}
+
+.admission-lists li a {
+    color: #007bff;
+    display: block;
+    border-bottom: #e6e6e6 solid 1px
+}
+
+    .admission-lists li a:hover {
+        color: #7cbf26
+    }
+
+.admission-lists ul li {
+    list-style: none;
+    width: 25%
+}
+
+.ab-ikd-class-view-subjects2 ul {
+    padding: 0;
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -5px
+}
+
+    .ab-ikd-class-view-subjects2 ul li {
+        text-align: center;
+        list-style: none;
+        width: 50%
+    }
+
+        .ab-ikd-class-view-subjects2 ul li a {
+            display: block;
+            color: #000
+        }
+
+        .ab-ikd-class-view-subjects2 ul li .icon {
+            height: 100px
+        }
+
+            .ab-ikd-class-view-subjects2 ul li .icon img {
+                margin: 0;
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover;
+                object-position: center
+            }
+
+        .ab-ikd-class-view-subjects2 ul li p {
+            padding: 10px 0;
+            color: #000;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 0
+        }
+
+        .ab-ikd-class-view-subjects2 ul li:hover a {
+            color: #15a18d
+        }
+
+ul.citi-clg {
+    margin: 20px -5px;
+    display: flex;
+    flex-flow: wrap;
+    padding: 0
+}
+
+    ul.citi-clg li {
+        font-size: 13px;
+        width: 50%;
+        padding: 5px;
+        list-style: none
+    }
+
+    .adate, .dt, .loaderimage, a.lrg-bbtn, ul.citi-clg li, ul.mts-itms li, ul.nts-crs-icon-boxes li, ul.nts-crs-icon-boxes li span, ul.nts-main-tests li {
+        text-align: center
+    }
+
+        .clg-sctn li a, .lrgbox-nws a, .smlbox-nws a, ul.citi-clg li a, ul.citi-clg li img, ul.media li img {
+            display: block
+        }
+
+        ul.citi-clg li a {
+            padding: 10px;
+            color: #404040;
+            min-height: initial;
+            border: 1px solid #d1f3a4;
+            background: #ecffd3
+        }
+
+            ul.citi-clg li a:hover {
+                background: #15a18d
+            }
+
+        ul.citi-clg li:hover a {
+            text-decoration: none;
+            color: #fff
+        }
+
+        ul.citi-clg li img {
+            margin: 0 auto 5px;
+            display: block
+        }
+
+.crs-uni-list .unis-list .col-70 {
+    width: 80%;
+    display: flex;
+    flex-flow: wrap
+}
+
+.crs-uni-list .unis-list .uni-course-list a {
+    cursor: pointer
+}
+
+    .crs-uni-list .unis-list .uni-course-list a:hover {
+        color: #5a8b1c
+    }
+
+.videos-section {
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    background-color: #fff !important;
+    padding: 10px !important
+}
+
+.coursePakagesSlider {
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -10px
+}
+
+.singleCousePakage {
+    width: 50%;
+    padding: 0 10px 20px;
+    position: relative
+}
+
+div.singleCousePakage div.inBox {
+    background: #fff;
+    box-shadow: 0 0 16px rgb(0 0 0 / 20%);
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    position: relative
+}
+
+div.singleCousePakage div.title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0 0 20px;
+    line-height: normal
+}
+
+div.singleCousePakage div.inBox p {
+    font-size: 14px;
+    color: #000;
+    line-height: 1.3;
+    text-align: center
+}
+
+div.singleCousePakage div.title a {
+    color: #318bbc
+}
+
+div.singleCousePakage div.desc {
+    background: #fff;
+    padding: 0 0 20px;
+    width: 100%
+}
+
+div.singleCousePakage div.feeByinstitute {
+    display: flex;
+    width: 100%
+}
+
+    div.singleCousePakage div.feeByinstitute div.singleFee {
+        width: 50%;
+        margin-right: 10px;
+        padding-bottom: 10px;
+        overflow: hidden;
+        height: 100%
+    }
+
+        div.singleCousePakage div.feeByinstitute div.singleFee span {
+            display: block;
+            font-size: 25px;
+            text-transform: uppercase;
+            color: #fff;
+            line-height: 30px;
+            font-weight: bolder;
+            text-align: center
+        }
+
+        div.singleCousePakage div.feeByinstitute div.singleFee.last {
+            margin-right: 0
+        }
+
+        div.singleCousePakage div.feeByinstitute div.singleFee p {
+            width: 100%;
+            font-size: 14px;
+            color: #000;
+            text-align: center;
+            margin: 3px 0
+        }
+
+    div.singleCousePakage div.feeByinstitute div.box {
+        width: 100%;
+        padding: 15px;
+        height: auto;
+        margin-bottom: 10px;
+        min-height: 120px
+    }
+
+        div.singleCousePakage div.feeByinstitute div.box.blue {
+            background-color: #318bbb
+        }
+
+        div.singleCousePakage div.feeByinstitute div.box.green {
+            background-color: #15a18d
+        }
+
+        div.singleCousePakage div.feeByinstitute div.box.last {
+            margin-right: 0
+        }
+
+div.singleCousePakage div.link {
+    clear: both;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px
+}
+
+    div.singleCousePakage div.link a {
+        display: inline-block;
+        font-size: 17px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #000
+    }
+
+        div.singleCousePakage div.link a:hover {
+            color: #15a18d
+        }
+
+        div.singleCousePakage div.link a span {
+            background: #15a18d;
+            color: #fff;
+            border-radius: 50%;
+            width: 23px;
+            height: 23px;
+            line-height: 19px;
+            display: inline-block;
+            font-size: 20px;
+            font-weight: bolder;
+            margin-right: 5px
+        }
+
+div.singleCousePakage ul {
+    padding: 0;
+    margin: 10px 0;
+    list-style-type: none
+}
+
+    div.singleCousePakage ul li {
+        font-size: 16px;
+        color: #000;
+        padding: 10px 10px 10px 40px;
+        background: url(../images/icons/ic-check-blue.png) no-repeat left center;
+        list-style-type: none
+    }
+
+div.singleCousePakage.last {
+    display: flex;
+    width: 100%
+}
+
+    div.singleCousePakage.last .boxStyle2 {
+        width: 50%
+    }
+
+.table-search {
+    background-color: #f4f4f4;
+    padding: 5px
+}
+
+    .table-search span {
+        font-size: 17px
+    }
+
+    .table-search select {
+        background-color: #fff;
+        padding: 5px 10px;
+        margin: 0 10px;
+        font-size: 17px;
+        width: 190px;
+        border: 0
+    }
+
+    .table-search .btn-search {
+        box-shadow: none;
+        padding: 5px 20px;
+        color: #fff;
+        font-size: 18px;
+        text-transform: capitalize;
+        background: #15a18d;
+        border-radius: 0;
+        outline: 0;
+        border: 0;
+        text-align: center
+    }
+
+.sorting .sortlist {
+    margin-bottom: 20px
+}
+
+    .sorting .sortlist .dropdown a.nav-link {
+        width: 248px;
+        background: #fafff4;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        padding: 12px 20px;
+        color: #000;
+        font-size: 18px;
+        border: 1px solid #15a18d
+    }
+
+        .sorting .sortlist .dropdown a.nav-link[aria-expanded=true] {
+            background-color: #edfadd
+        }
+
+        .sorting .sortlist .dropdown a.nav-link span {
+            padding: 0 20px 0 10px
+        }
+
+        .sorting .sortlist .dropdown a.nav-link img {
+            margin: 0
+        }
+
+        .sorting .sortlist .dropdown a.nav-link .text {
+            margin-left: 10px
+        }
+
+        .sorting .sortlist .dropdown a.nav-link img:nth-last-child(1) {
+            margin-left: auto
+        }
+
+    .sorting .sortlist .dropdown .dropdown-menu .border-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        top: -10px;
+        left: 10%;
+        margin-left: -10px;
+        border-width: 0 10px 10px;
+        border-bottom-color: #fff;
+        z-index: 1
+    }
+
+    .sorting .sortlist .dropdown .dropdown-menu {
+        width: 100%;
+        border: 0;
+        position: absolute;
+        padding: 0 0;
+        background: 0 0;
+        transition: 1s linear
+    }
+
+.search-filter form {
+    border-radius: 10px;
+    margin-top: 0;
+    box-shadow: 0 -1px 26px 0 #00000012;
+    background-color: #fff;
+    padding: 20px
+}
+
+    .search-filter form select {
+        width: 100%;
+        background: #fafafa;
+        border: 1px solid rgb(40 45 64 / .16);
+        padding: 15px 20px;
+        border-radius: 6px;
+        appearance: none;
+        background-image: url(../images/icons/arrow-down-black.png);
+        background-repeat: no-repeat;
+        background-position: 95% center;
+        height: 48px
+    }
+
+    .search-filter form .btn-primary {
+        background-color: #15a18d;
+        padding: 11px 20px;
+        border-radius: 6px;
+        width: 100%;
+        box-shadow: none
+    }
+
+.admission-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0
+}
+
+    .admission-table table th {
+        padding: 11px;
+        background-color: #39f;
+        color: #fff;
+        text-align: left;
+        border-left: 1px solid #39f;
+        border-right: 1px solid #39f;
+        overflow: hidden;
+        font-size: 15px;
+        font-weight: 600
+    }
+
+        .admission-table table th:nth-child(1) {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            border-left: 0
+        }
+
+        .admission-table table th:nth-last-child(1) {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-right: 0
+        }
+
+        .admission-table table th p {
+            margin: 0;
+            color: #fff;
+            font-size: 14px
+        }
+
+    .admission-table table tr {
+        border-bottom: 1px solid rgb(51 153 255 / 20%);
+        position: relative
+    }
+
+    .admission-table table td {
+        padding: 5px;
+        border: 1px solid rgb(40 45 64 / .16)
+    }
+
+        .admission-table table td:nth-child(1) {
+            border-left: 0;
+            position: relative
+        }
+
+        .admission-table table td:nth-last-child(1) {
+            border-right: 0
+        }
+
+        .admission-table table td p {
+            margin: 0;
+            font-size: 14px
+        }
+
+.admission-table th {
+    padding: 10px
+}
+
+.admission-table ul.course-list {
+    padding: 0;
+    list-style-type: none;
+    margin: 0
+}
+
+    .admission-table ul.course-list li {
+        font-size: 14px;
+        color: #828282;
+        font-weight: 600;
+        list-style: none;
+        line-height: 24px;
+        padding: 0 5px
+    }
+
+.admission-table table td:nth-child(1) {
+    width: 238px
+}
+
+.admission-table table td:nth-child(2) {
+    width: 230px
+}
+
+.admission-table p.last-date, .admission-table td p.post-date {
+    font-weight: 600
+}
+
+.admission-table p.post-date {
+    color: #6ea923
+}
+
+.admission-table p.last-date {
+    color: #fe0000
+}
+
+.admission-table .notice-figure {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 5px;
+    flex: 0 0 auto
+}
+
+    .admission-table .notice-figure img {
+        margin: 0
+    }
+
+.admission-table tr:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #39f;
+    opacity: 0
+}
+
+.admission-table tr:hover:before {
+    opacity: 1
+}
+
+.admission-table tr:hover {
+    background-color: #f7f7f7
+}
+
+.uni-row {
+    display: flex;
+    transition: .3s ease
+}
+
+.admission-table tr:hover .uni-row {
+    padding-left: 12px
+}
+
+.uni-row .figure {
+    border: 1px solid #e2e2e2;
+    height: 40px;
+    width: 40px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px
+}
+
+    .uni-row .figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin: 0
+    }
+
+.uni-row .title a, .uni-row .title h6 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #161b21;
+    line-height: 20px
+}
+
+.mdcat-table table tr {
+    border-bottom: 1px solid #eee
+}
+
+    .mdcat-table table tr td {
+        border: 0;
+        padding: 5px 20px 5px
+    }
+
+        .mdcat-table table tr td a {
+            display: flex;
+            color: #15a18d
+        }
+
+.tbldata {
+    display: flex
+}
+
+.mdcat-table table tr td .figue {
+    margin: auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    overflow: hidden
+}
+
+    .mdcat-table table tr td .figue img {
+        margin: 0;
+        width: auto !important;
+        height: auto !important
+    }
+
+.mdcat-table table tr td .content {
+    margin: auto 10px
+}
+
+.mdcat-table table tbody td span {
+    font-size: 17px;
+    color: #000;
+    vertical-align: -webkit-baseline-middle;
+    padding: 10px 0;
+    display: inline-block
+}
+
+.mdcat-table table tbody td a span {
+    margin: auto 10px
+}
+
+.mdcat-table table tr td a {
+    display: flex;
+    color: #15a18d
+}
+
+.mdcat-table table tr:hover {
+    background-color: #6fb6134f
+}
+
+.mdcat .load-more {
+    text-align: center;
+    padding: 20px 0
+}
+
+.mdcat .btn-load-more {
+    box-shadow: none;
+    padding: 15px 20px;
+    color: #eee;
+    font-size: 17px;
+    text-transform: capitalize;
+    background: #434343;
+    border-radius: 5px;
+    outline: 0;
+    border: 0;
+    display: inline-block
+}
+
+    .mdcat .btn-load-more:hover {
+        background-color: #000
+    }
+
+.body-row .admission-lists {
+    padding: 0 10px
+}
+
+.cdcms_notifications {
+    margin-bottom: 20px
+}
+
+    .cdcms_notifications .cdcms-header strong, .cdcms_notifications .cdcms-header strong a {
+        color: red
+    }
+
+    .cdcms_notifications .cdcms-header {
+        border-color: #3399ff33 !important
+    }
+
+.mdcat .colleges-list {
+    width: 100%;
+    display: flex;
+    flex-flow: wrap;
+    margin: 0;
+    padding: 0 0 20px
+}
+
+    .mdcat .colleges-list .box {
+        width: 50%;
+        list-style: none;
+        padding: 0
+    }
+
+    .mdcat .colleges-list ul {
+        padding: 0;
+        margin: 0
+    }
+
+        .mdcat .colleges-list ul li {
+            width: 100%;
+            list-style: none;
+            padding: 0
+        }
+
+    .mdcat .colleges-list li a {
+        font-size: 14px;
+        line-height: 23px;
+        color: #2883c9
+    }
+
+.table-of-content {
+    border: 1px solid #ddd;
+    padding: 0 20px;
+    margin-bottom: 20px
+}
+
+    .table-of-content li a:hover, .table-of-content li:hover::marker {
+        color: #15a18d
+    }
+
+    .table-of-content li a, .table-of-content li::marker {
+        color: #39f
+    }
+
+.tble-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px
+}
+
+.tri-culm {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 15px;
+    position: relative;
+    min-height: 1px
+}
+
+.tble3-culm {
+    display: flex;
+    height: 100%
+}
+
+    .tble3-culm ul {
+        padding: 0
+    }
+
+    .tble3-culm .child {
+        margin-bottom: 20px;
+        padding: 20px;
+        box-shadow: 0 20px 30px rgb(0 0 0 / 10%);
+        border-radius: 8px;
+        width: 100%
+    }
+
+    .tble3-culm ul li {
+        list-style: none;
+        padding: 0
+    }
+
+.embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%
+}
+
+    .embed-container embed, .embed-container iframe, .embed-container object {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%
+    }
+
+.more-expand {
+    text-align: center
+}
+
+    .more-expand a {
+        color: #388ae0;
+        font-weight: 900;
+        letter-spacing: 2px;
+        font-size: 18px;
+        font-style: italic;
+        text-transform: uppercase;
+        text-decoration: underline;
+        -webkit-text-underline-positon: under;
+        -ms-text-underline-position: under;
+        text-underline-position: under;
+        text-decoration-style: double;
+        padding: 11px 0;
+        display: inline-block
+    }
+
+        .more-expand a:hover {
+            color: #15a18d
+        }
+
+div.JobsByCntryCity {
+    margin: 10px 0 20px;
+    padding: 10px
+}
+
+    div.JobsByCntryCity.gray {
+        background: #e9e9e9
+    }
+
+    div.JobsByCntryCity div.tpBxLft {
+        display: flex;
+        flex-flow: wrap
+    }
+
+    div.JobsByCntryCity div.nmbr {
+        font-size: 126px;
+        color: #2f88b9;
+        font-weight: 700;
+        line-height: 88px
+    }
+
+    div.JobsByCntryCity div.txt {
+        width: 330px;
+        margin: auto 0;
+        margin-left: 15px
+    }
+
+        div.JobsByCntryCity div.txt h3 {
+            font-size: 30px;
+            color: #525252;
+            font-weight: 700;
+            line-height: 36px;
+            margin-bottom: 0;
+            text-transform: uppercase
+        }
+
+div.job-listing-block {
+    clear: both;
+    margin-top: 30px;
+    margin-bottom: 9px
+}
+
+div.single-job-list-block {
+    min-height: 110px;
+    position: relative;
+    overflow: visible;
+    border: 1px #eee solid;
+    background: #fff;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    transition: all .3s ease 0s
+}
+
+div.single-job-list-wrap {
+    overflow: hidden;
+    width: 100%;
+    display: flex
+}
+
+div.single-job-list-block div.lftBx {
+    padding: 10px 19px;
+    height: 100%;
+    width: 68.5%;
+    min-height: 108px;
+    overflow: hidden
+}
+
+    div.single-job-list-block div.lftBx .link-inner {
+        display: flex
+    }
+
+div.single-job-list-block div.rgtBx {
+    width: 248px;
+    overflow: hidden;
+    border-left: 1px #e9e9e9 solid;
+    background: #fff;
+    height: 108px;
+    overflow: hidden;
+    display: flex
+}
+
+div.single-job-list-block div.jDesc {
+    width: 100%;
+    font-size: 12px;
+    color: rgba(0, 0, 0, .5);
+    max-height: 45px;
+    overflow: hidden
+}
+
+    div.single-job-list-block div.jDesc p {
+        line-height: 14px;
+        font-size: 11px;
+        color: rgba(0, 0, 0, .5);
+        margin: 0
+    }
+
+div.single-job-list-block .jobPostingInfo {
+    width: 80px;
+    border-right: 1px #eee solid;
+    font-size: 11px;
+    color: rgba(0, 0, 0, .5);
+    font-weight: 700;
+    height: 100%
+}
+
+    div.single-job-list-block .jobPostingInfo .jPostedOn {
+        width: 100%;
+        text-align: center;
+        padding: 13px 10px 10px;
+        box-sizing: border-box
+    }
+
+    div.single-job-list-block .jobPostingInfo .jLastDate {
+        width: 100%;
+        text-align: center;
+        padding: 0 10px 0;
+        box-sizing: border-box
+    }
+
+    div.single-job-list-block .jobPostingInfo b {
+        display: block;
+        font-size: 16px;
+        line-height: normal
+    }
+
+        div.single-job-list-block .jobPostingInfo b.green {
+            color: #15a18d
+        }
+
+        div.single-job-list-block .jobPostingInfo b.red {
+            color: #c00
+        }
+
+div.single-job-list-block div.compImage {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    margin-right: 19px;
+    position: relative
+}
+
+    div.single-job-list-block div.compImage img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%
+    }
+
+    div.single-job-list-block div.compImage div.jLocation {
+        position: absolute;
+        bottom: -22px;
+        left: 0;
+        width: 90px;
+        color: #000;
+        opacity: .5;
+        line-height: 10px;
+        margin-left: -14px;
+        padding-left: 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+        div.single-job-list-block div.compImage div.jLocation a {
+            display: flex;
+            margin: auto 0;
+            margin-left: 5px;
+            font-size: 13px
+        }
+
+        div.single-job-list-block div.compImage div.jLocation img {
+            border-radius: 0;
+            position: relative;
+            left: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            margin: 0
+        }
+
+div.single-job-list-block div.desc {
+    width: 82%;
+    box-sizing: border-box
+}
+
+div.single-job-list-block div.jTitle {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    line-height: normal;
+    margin-bottom: 5px
+}
+
+    div.single-job-list-block div.jTitle a {
+        font-size: 18px;
+        color: #000;
+        font-weight: 700;
+        line-height: normal
+    }
+
+div.single-job-list-block div.jInfo {
+    width: 100%;
+    font-size: 13px;
+    color: #000;
+    margin-top: 10px;
+    display: none
+}
+
+div.single-job-list-block span.location {
+    opacity: .5;
+    margin-right: 5px;
+    position: relative;
+    top: 3px
+}
+
+    div.single-job-list-block span.location img {
+        margin: 0
+    }
+
+div.single-job-list-block span.date-posted {
+    font-weight: 700;
+    color: #15a18d;
+    margin-left: 20px;
+    margin-right: 20px
+}
+
+div.single-job-list-block div.jobAd {
+    width: 111px;
+    height: 108px;
+    overflow: hidden
+}
+
+    div.single-job-list-block div.jobAd:hover .popJobImage {
+        display: block
+    }
+
+div.single-job-list-block div.jobCounting {
+    border-right: 1px #eee solid;
+    width: 55px;
+    height: 100%
+}
+
+div.single-job-list-block div.jobtotal {
+    font-size: 12px;
+    color: #000;
+    text-align: center;
+    border-bottom: 1px #eee solid;
+    padding: 12px 5px 7px;
+    box-sizing: border-box
+}
+
+    div.single-job-list-block div.jobtotal b {
+        font-weight: 700;
+        display: block
+    }
+
+div.single-job-list-block div.jobFavorite {
+    font-size: 14px;
+    color: #000;
+    text-align: center;
+    padding: 10px 5px;
+    box-sizing: border-box
+}
+
+    div.single-job-list-block div.jobFavorite a {
+        font-size: 12px;
+        color: #000;
+        text-align: center
+    }
+
+        div.single-job-list-block div.jobFavorite a.favorited span.imgJobFavrt, div.single-job-list-block div.jobFavorite a:hover span.imgJobFavrt {
+            background: url(../images/jobs/ic-fvrt-activated.png) no-repeat center center
+        }
+
+    div.single-job-list-block div.jobFavorite span.imgJobFavrt {
+        background: url(../images/jobs/ic-fvrt-normal.png) no-repeat center center;
+        background-size: 21px 17px;
+        height: 17px;
+        width: 21px;
+        display: block;
+        margin: 0 auto
+    }
+
+div.single-job-list-block div.popJobImage {
+    width: 270px;
+    height: auto;
+    padding: 10px;
+    text-align: center;
+    background: #45bce4;
+    position: absolute;
+    z-index: 999999;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-top: 0;
+    top: -105px;
+    display: none;
+    left: 101%
+}
+
+    div.single-job-list-block div.popJobImage.animated {
+        animation-duration: 1s;
+        animation-fill-mode: both
+    }
+
+    div.single-job-list-block div.popJobImage img {
+        max-width: 100%;
+        max-height: 100%
+    }
+
+div.single-job-list-wrap:hover .popJobImage {
+    display: block !important
+}
+
+div.single-job-list-wrap:hover div.lftBx {
+    background: 0
+}
+
+div.single-job-list-wrap:hover span.cityName {
+    color: #2f88b9 !important
+}
+
+div.single-job-list-wrap:hover div.jLocation {
+    opacity: 1 !important
+}
+
+    div.single-job-list-wrap:hover div.jLocation img.normal {
+        display: none
+    }
+
+    div.single-job-list-wrap:hover div.jLocation img.hovered {
+        display: inline-block !important;
+        filter: contrast(0)
+    }
+
+div.single-job-list-wrap:hover div.jTitle {
+    color: #2f88b9
+}
+
+div.single-job-list-wrap:hover div.jInfo {
+    color: #fff
+}
+
+div.single-job-list-wrap:hover div.jDesc p {
+    color: #2f88b9
+}
+
+ul#CourseLevel {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 -5px
+}
+
+    ul#CourseLevel li {
+        list-style: none
+    }
+
+        ul#CourseLevel li a:hover {
+            opacity: .7
+        }
+
+.ribbon-wrapper {
+    width: 85px;
+    height: 88px;
+    overflow: hidden;
+    position: absolute;
+    top: -3px;
+    left: -3px
+}
+
+    .ribbon-wrapper .ribbon {
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        position: relative;
+        padding: 4px 0;
+        top: 9px;
+        left: -40px;
+        width: 120px;
+        background-color: #f60;
+        color: #fff
+    }
+
+.tst-guid .intbox img, .tst-guid .ntbox img {
+    height: 50px;
+    margin-right: 15px;
+    margin-top: -7px;
+    width: 50px
+}
+
+.tst-guid .intbox h4, .tst-guid .ntbox h4 {
+    display: block;
+    color: #080808;
+    padding: 2% 0;
+    font-size: 20px;
+    font-weight: 700
+}
+
+.tst-guid .intbox ul, .tst-guid .ntbox ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    padding: 0;
+    flex-flow: wrap;
+    margin: 0 -5px
+}
+
+.tst-guid .intbox li, .tst-guid .ntbox li {
+    width: 50%;
+    list-style: none
+}
+
+    .tst-guid .intbox li a, .tst-guid .ntbox li a {
+        display: flex;
+        color: #404040;
+        padding: 10px 0 11px 0;
+        border-bottom: solid 1px #ccc
+    }
+
+        .tst-guid .intbox li a:hover, .tst-guid .ntbox li a:hover {
+            background: #fb9d23;
+            color: #fff
+        }
+
+.ikdCourseArea .ikd-navigation {
+    display: none
+}
+
+.guides-tabs {
+    box-shadow: 0 20px 30px rgb(0 0 0 / 10%);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px
+}
+
+    .guides-tabs .nav-tabs {
+        flex-flow: nowrap
+    }
+
+        .guides-tabs .nav-tabs .nav-link {
+            padding: 15px;
+            font-weight: 700;
+            font-size: 22px;
+            border-radius: 0;
+            border: 0
+        }
+
+            .guides-tabs .nav-tabs .nav-item.show .nav-link, .guides-tabs .nav-tabs .nav-link.active {
+                background-color: #316690;
+                color: #fff
+            }
+
+    .guides-tabs .tab-content {
+        padding: 20px
+    }
+
+    .guides-tabs .form-control {
+        padding: 15px 20px;
+        background-color: #fafafa;
+        border-radius: 7px
+    }
+
+        .guides-tabs .form-control.error {
+            border-color: #f44336
+        }
+
+        .guides-tabs .form-control:focus {
+            box-shadow: 0 20px 30px rgb(0 0 0 / 10%);
+            border-color: #fff
+        }
+
+    .guides-tabs .btn-primary {
+        padding: 15px 20px;
+        width: 100%;
+        text-align: center
+    }
+
+    .guides-tabs .tab-content h2 {
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 20px
+    }
+
+.contant-body .ab-ikd-class-view-subjects {
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 20px;
+    width: 45%;
+}
+
+    .contant-body .ab-ikd-class-view-subjects .icon {
+        display: inline-block;
+    }
+
+        .contant-body .ab-ikd-class-view-subjects .icon img {
+            margin: 0;
+        }
+
+    .contant-body .ab-ikd-class-view-subjects p {
+        text-align: center !important;
+    }
+
+@media screen and (min-width:767px) {
+    .ab-ikd-class-view-subjects2 ul li {
+        width: 33.33%
+    }
+
+    ul.citi-clg li {
+        width: 33.33%
+    }
+
+    .search-filter form .form-group {
+        margin-bottom: 0
+    }
+}
+
+@media screen and (min-width:992px) {
+    .ab-ikd-class-view-subjects2 ul li {
+        width: 25%
+    }
+
+    .lrg-culm-box {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 66.6666667%;
+        flex: 0 0 66.6666667%;
+        max-width: 66.6666667%
+    }
+
+    .culm3-box {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.33%;
+        flex: 0 0 33.33%;
+        max-width: 33.33%
+    }
+
+    .scroll-top {
+        display: none
+    }
+
+    .navigation-convas .close {
+        display: none
+    }
+
+    ul.citi-clg li {
+        width: 20%
+    }
+}
+
+@media screen and (max-width:991.92px) {
+    div#ldata a.tutor-box {
+        flex-flow: wrap
+    }
+
+        div#ldata a.tutor-box .ttaffairs, div#ldata a.tutor-box .ttdintro, div#ldata a.tutor-box .ttimage {
+            width: 50%
+        }
+
+        div#ldata a.tutor-box .ttimage {
+            height: 93px;
+            margin: 0 auto 20px
+        }
+
+    .ikd-navigation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transition: .4s;
+        -o-transition: .4s;
+        transition: .4s;
+        z-index: 999999999999999;
+        margin-top: 0;
+        padding: 60px 0 0;
+        background-color: rgb(255 255 255 / 50%)
+    }
+
+        .ikd-navigation.open {
+            opacity: 1;
+            visibility: visible
+        }
+
+    .navigation-convas {
+        background-color: rgb(255 255 255 / 50%);
+        width: 100%;
+        margin-top: 60px;
+        padding: 20px;
+        height: 100%;
+        position: relative;
+        -webkit-transform: translateX(calc(-100% - 50px));
+        -ms-transform: translateX(calc(-100% - 50px));
+        transform: translateX(calc(-100% - 50px));
+        -webkit-transition: .4s;
+        -o-transition: .4s;
+        transition: .4s
+    }
+
+    .open .navigation-convas {
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none
+    }
+
+    .navigation-convas .close {
+        position: absolute;
+        left: 0;
+        top: -70px;
+        font-size: 30px;
+        opacity: 1;
+        background-color: #15a18d;
+        width: 30px;
+        height: 30px;
+        color: #fff;
+        border-radius: 7px
+    }
+
+    .ikd-navigation ul {
+        overflow-y: auto;
+        max-height: calc(100vh - 260px)
+    }
+}
+
+@media screen and (max-width:767.85px) {
+    .book-box .book-heading {
+        padding: 8px 20px
+    }
+
+        .book-box .book-heading h3 {
+            font-size: 20px
+        }
+
+    .book-box ul.subject-list li {
+        width: 50%
+    }
+
+    .ikd-books .book-box ul li a {
+        font-size: 12px;
+        line-height: 20px;
+        padding: 10px
+    }
+
+        .ikd-books .book-box ul li a img {
+            max-width: 30px
+        }
+
+    .crs-uni-list .unis-list .uni-name a {
+        font-size: 16px
+    }
+
+    .tst-guid .intbox li, .tst-guid .ntbox li {
+        width: 100%
+    }
+
+    div#ldata a.tutor-box .ttimage {
+        margin: 0 auto 20px;
+        width: 100%;
+        text-align: center
+    }
+
+    .ikd-banner .row {
+        width: auto
+    }
+
+    .ikd-guid-content h2 {
+        line-height: 28px;
+        font-size: 22px
+    }
+
+    .merit-detail-list ul li, .merit-detail-list-2 ul li, .subjects-tble2 ul li {
+        width: 100%
+    }
+
+    .filt-div {
+        width: 100%;
+        flex-flow: wrap
+    }
+
+    .ttdiv {
+        flex-flow: wrap;
+        width: 70%
+    }
+
+    a.tutor-box .ttimage {
+        width: 30%
+    }
+
+    .ttaffairs, .ttdintro, .ttteaches {
+        width: 100%
+    }
+
+    .course-filter .filt-select {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px
+    }
+
+    .filt-btn {
+        margin: auto
+    }
+
+    .course-filter .filt-title {
+        width: 100%;
+        justify-content: center
+    }
+
+    .subject-wise-list ul li {
+        width: 50%
+    }
+
+    div.single-cls-suj-chptr-itm {
+        width: 100%
+    }
+
+        div.single-cls-suj-chptr-itm .cptrbx ul li {
+            width: 33.33%
+        }
+
+    .ikd-guid-content .homeNewsList ul li {
+        width: 100%
+    }
+
+    .calum-half-container {
+        width: 100%
+    }
+
+    .result-update-alert .alert-form {
+        width: 100%
+    }
+
+        .result-update-alert .alert-form .half-box {
+            padding-right: 0;
+            width: 100%
+        }
+
+    .subjects-tble ul li {
+        width: 33.33%
+    }
+
+    .ab-ikd-class-view-subjects ul li {
+        width: 50%
+    }
+
+    .scroll-top {
+        font-size: 16px
+    }
+
+    .ikd-guid-content embed {
+        height: auto !important
+    }
+
+    .crs-uni-list .unis-list {
+        flex-flow: wrap
+    }
+
+        .crs-uni-list .unis-list .col-70 {
+            width: 100%
+        }
+
+        .crs-uni-list .unis-list .uni-name.uniannounced {
+            width: 70%;
+            margin-bottom: 7px;
+            font-size: 14px
+        }
+
+    .book-box ul li {
+        width: 50%
+    }
+
+    .crs-uni-list .unis-list .uni-name {
+        width: 77%;
+        margin-bottom: 14px;
+        padding-right: 0
+    }
+
+    .crs-uni-list .unis-list .image {
+        margin-bottom: 20px
+    }
+
+    .crs-uni-list .unis-list .uni-course-list {
+        width: 70%
+    }
+
+    .crs-uni-list .unis-list .uni-rates {
+        width: 30%;
+        position: absolute;
+        right: 20px;
+        bottom: 0;
+        border: 0
+    }
+
+    .ikdCourseArea .admission-lists li {
+        width: 50%
+    }
+
+    .singleCousePakage {
+        width: 100%
+    }
+
+    .table-search .btn-search, .table-search select {
+        width: 100%;
+        margin: 3px 0
+    }
+
+    .mcqs-section .inner-section .box {
+        width: 50%
+    }
+
+    .youtube-section .inner-section .box {
+        width: 100%
+    }
+
+    div.single-job-list-wrap {
+        flex-flow: wrap
+    }
+
+    div.JobsByCntryCity div.nmbr {
+        font-size: 50px;
+        text-align: center;
+        width: 100%;
+        line-height: 1
+    }
+
+    div.JobsByCntryCity div.txt {
+        margin-left: 0;
+        text-align: center
+    }
+
+        div.JobsByCntryCity div.txt h3 {
+            font-size: 20px;
+            line-height: normal;
+            text-align: center
+        }
+
+    div.single-job-list-block div.lftBx {
+        width: 100%;
+        padding: 0;
+        padding-right: 70px;
+        min-height: 90px;
+        border-bottom: 1px #e9e9e9 solid !important;
+        overflow: hidden
+    }
+
+    div.single-job-list-block .link-inner {
+        width: 100%;
+        position: relative
+    }
+
+    div.single-job-list-block div.compImage {
+        width: 50px;
+        height: 50px;
+        margin-top: 0;
+        position: absolute;
+        left: 5px;
+        top: 10px;
+        margin: 0
+    }
+
+    div.single-job-list-block div.desc {
+        width: 100%;
+        padding-left: 65px;
+        box-sizing: border-box
+    }
+
+    iv.single-job-list-block div.lftBx a.linker {
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box
+    }
+
+    div.single-job-list-block div.lftBx .jTitle {
+        font-size: 14px;
+        margin-top: 10px
+    }
+
+    div.single-job-list-block div.rgtBx {
+        width: auto;
+        position: absolute;
+        height: 90px !important;
+        top: 0;
+        right: 0;
+        overflow: hidden
+    }
+
+    div.single-job-list-block .jobPostingInfo {
+        display: none
+    }
+
+    div.single-job-list-block div.jobAd {
+        display: none !important
+    }
+
+    div.single-job-list-block div.jobtotal {
+        padding: 8px 5px
+    }
+
+    div.single-job-list-block div.jobFavorite {
+        padding: 11px 3px 10px;
+        border-bottom: 1px #e9e9e9 solid
+    }
+
+    div.single-job-list-block .jShowMobo {
+        width: 100%;
+        display: block !important;
+        padding: 5px !important
+    }
+
+        div.single-job-list-block .jShowMobo .jInfo {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-size: 12px;
+            margin: 5px 0
+        }
+
+    div.single-job-list-block div.compImage div.jLocation {
+        display: none
+    }
+
+    div.single-job-list-block span.location {
+        top: 0
+    }
+
+    div.single-job-list-block span.date-posted {
+        margin-left: 5px;
+        margin-right: 5px
+    }
+
+    div.offeringCourses div.title {
+        font-size: 36px;
+        margin: auto;
+        margin-right: 20px
+    }
+
+    div.offeringCourses div.desc h3 {
+        font-size: 24px;
+        line-height: 24px
+    }
+
+    div.offeringCourses div.desc p {
+        font-size: 16px
+    }
+
+    .admission-lists ul li {
+        width: 50%
+    }
+
+    div.collegesUniversitiesByCities div.fourBoxes div.singleBox {
+        width: 50%
+    }
+
+    .guides-tabs .nav-tabs .nav-link {
+        padding: 10px;
+        font-size: 16px
+    }
+
+    .guides-tabs .tab-content h2 {
+        font-size: 14px
+    }
+
+    .guides-tabs .form-control {
+        padding: 10px 20px
+    }
+
+    .guides-tabs .btn-primary {
+        padding: 10px 20px
+    }
+
+    .mdcat.coaching-classes {
+        padding: 0
+    }
+
+    .mdcat .colleges-list .box {
+        width: 100%
+    }
+
+    .mdcat-table table tr td {
+        padding: 5px
+    }
+
+    .mdcat .btn-load-more {
+        padding: 10px 20px
+    }
+
+    .tri-culm {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-width: 100%
+    }
+
+    div.offeringCourses div.tbox {
+        padding: 8px 0 19px
+    }
+
+    .chapter-table table, .ikd-guid-content table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    section.ikd-banner {
+        height: auto;
+        margin-bottom: 20px;
+        padding-top: 20px;
+    }
+
+    .banner-content p:empty {
+        display: none;
+    }
+
+    .scroll-top.not-visible {
+        top: -5px;
+        position: inherit;
+        width: auto;
+        float: right;
+        left: -20px;
+    }
+
+    .scroll-top {
+        font-size: 16px;
+        position: inherit;
+        float: right;
+        left: -20px;
+        top: -5px;
+    }
+}

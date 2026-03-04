@@ -1,0 +1,33 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+@{
+    int serialCollege = ViewBag.CollegeSerialStart ?? 1;
+}
+@foreach (var institution in Model.CollegesWithCourseNames)
+{
+    <tr>
+        <td>
+            <a href="/colleges/@(institution.College.Url).aspx" target="_blank">
+                <span><img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" />@institution.College.Name</span>
+            </a>
+        </td>
+        <td><span>@institution.College.Address</span></td>
+        <td><span>@institution.College.ContactNumber</span></td>
+        <td><span>@string.Join(", ", institution.CourseNames)</span></td>
+        <td>
+            <span>
+                @{
+                    var isGovt = institution.College.IsGovt?.ToLower();
+                    string displayText = isGovt == null ? "N/A"
+                    : (isGovt == "public" || isGovt == "government") ? "Public"
+                    : isGovt == "private" ? "Private"
+                    : isGovt;
+                }
+                @displayText
+            </span>
+        </td>
+
+        <td>@serialCollege</td>
+        <td><span>@string.Format("{0:0.00}", institution.AvgRating)</span></td>
+    </tr>
+    serialCollege++;
+}

@@ -1,0 +1,49 @@
+﻿@model IKDFrontEnd.ViewModels.ChapterPdfViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Questions PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .correct {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2>@Model.SubjectName - @Model.ChapterName</h2>
+
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        var q = Model.Questions[i];
+        <div class="question">
+            <strong>Q@((i + 1)):</strong> @q.Question <br />
+            @if (!string.IsNullOrEmpty(q.QuestionImage))
+            {
+                <img src="@q.QuestionImage" alt="Image" width="150" />
+
+                <br />
+            }
+            A. @q.Choice1 <br />
+            B. @q.Choice2 <br />
+            C. @q.Choice3 <br />
+            D. @q.Choice4 <br />
+            <span class="correct">Correct Answer: @q.CorrectAnswer</span>
+        </div>
+    }
+</body>
+</html>

@@ -1,0 +1,959 @@
+﻿@model IKDFrontEnd.ViewModels.OnlineTestChapterListViewModel
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+
+	div#pol-answer-mode {
+	position: fixed;
+	right: -100%;
+	top: 0px;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 999;
+	transition: 0.3s ease-in-out;
+	}
+
+	div#pol-answer-mode.visible {
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	opacity: 1;
+	visibility: visible;
+	z-index: 999;
+	transition: 0.3s ease-in-out;
+	}
+
+
+	#quest-holder {
+	min-height: 320px;
+	height: fit-content;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	}
+
+	.letter-circle {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background: #007bff;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 20px;
+	}
+
+	.all-test-box {
+	padding: 20px 0 0;
+	}
+
+	.all-test-box ul {
+	margin: 0 -10px;
+	padding: 15px 0 0 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	}
+
+	.all-test-box ul li {
+	padding: 15px;
+	background: rgba(54,229,124,0.1);
+	border: 1px solid #36e57c;
+	border-radius: 10px;
+	width: 18.2%;
+	margin: 0 10px 20px;
+	}
+
+	.all-test-box ul li h3 {
+	font-size: 20px;
+	}
+
+	.all-test-box ul li p {
+	margin: 0 0 10px 0;
+	}
+
+	.all-test-box ul li a {
+	display: inline-block;
+	background: #36e57c;
+	font-size: 16px;
+	line-height: 22px;
+	text-decoration: none;
+	border-radius: 5px;
+	padding: 8px 30px;
+	margin: 0;
+	font-weight: 600;
+	color: #000;
+	}
+
+	.correct .radio-container {
+	transform: scale(1.1);
+	}
+
+	.correct .radio-container .checkmark {
+	background-color: #36e57c;
+	;
+	}
+
+</style>
+<style>
+	.question-box .mid-box1 {
+	padding: 30px 0 0 30px;
+	}
+
+	.question-box .mid-box1 ul li {
+	display: block;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 10px;
+	}
+
+	.ans-box {
+	height: 580px;
+	overflow-x: scroll;
+	}
+
+	.wrong .radio-container {
+	transform: scale(1.1);
+	}
+
+	.wrong .radio-container .checkmark {
+	background-color: #f00;
+	}
+</style>
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+<div class="col-lg-11">
+	<partial name="_NavBarPartial" />
+</div>
+}
+
+@section innerbanner {
+	<div class="ss-banner-inner college-banner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						@if (ViewBag.CmsData.Heading != null)
+						{
+							<h1>@ViewBag.CmsData.Heading</h1>
+						}
+						else
+						{
+							<h1>@Model.Test.TestName</h1>
+						}
+
+						
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+}
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+						@Html.Raw(ViewBag.CmsData.Desc1)
+						
+					
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+
+					
+						<h2>@Model.Test.TestName</h2>
+						<p>Try the @Model.Test.TestName </p>
+						<ul class="contact-detail">
+							<li>
+								<p><span>Total Questions</span>@Model.TestDetail.TotalQuestions</p>
+							</li>
+							<li>
+								<p><span>Time Allowed</span>@Model.TestDetail.Time</p>
+							</li>
+						</ul>
+						
+					
+
+
+					<div class="teststartbtn">
+						<a href="javascript:void(0)" id="launch-test-btn" onClick="launchTest()" class="text-btn">Start Quiz</a>
+						@* <a href="/download-all-questions/@Model.TestUrl" id="launch-test-btn" class="text-btn">
+							Download PDF
+						</a>
+ *@
+					</div>
+
+					<div class="question-side" id="pol">
+						<div class="question-box">
+							<div class="top-box">
+								<h2> @Model.Test.TestName </h2>
+
+
+
+								<div class="stopwatch">
+									<div id="display">00:00</div>
+
+								</div>
+								<div class="close-btn">
+									<a href="javascript:void(0)" id="close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="" /></a>
+								</div>
+							</div>
+							<div class="holder-question">
+								@foreach (var question in Model.Questions)
+								{
+									<div class="mid-box" data-question-number="@question.QuestionNumber">
+										<strong>Question # @question.QuestionNumber</strong>
+										<h3>@Html.Raw(question.QuestionText)</h3>
+										@* Show Question Image if available *@
+										@if (!string.IsNullOrEmpty(question.QuestionImageUrl))
+										{
+											<div class="question-image mb-2">
+												<img src="https://cdn.ilmkidunya.com/ots/mcqs/@question.QuestionImageUrl" alt="Question Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+											</div>
+										}
+										<ul>
+											@foreach (var option in question.Options)
+											{
+												var correctLabel = question.CorrectOption switch
+												{
+													1 => "A",
+													2 => "B",
+													3 => "C",
+													4 => "D",
+													5 => "E",
+													_ => ""
+												};
+
+												var isCorrect = option.OptionLabel == correctLabel ? "true" : "false";
+
+												<li>
+													<label class="radio-container d-flex align-items-start">
+														<span class="q-detiel">
+															@Html.Raw(option.OptionText)
+
+															@* Show Option Image if available *@
+															@if (!string.IsNullOrEmpty(option.OptionImageUrl))
+															{
+																<div class="option-image mt-2">
+																	<img src="https://cdn.ilmkidunya.com/ots/mcqs/@option.OptionImageUrl" alt="Option Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+																</div>
+															}
+														</span>
+
+														<input type="radio"
+															   name="question_@question.QuestionNumber"
+															   value="@option.OptionLabel"
+															   data-correct="@isCorrect" />
+														<span class="label">@option.OptionLabel</span>
+														<span class="checkmark"></span>
+													</label>
+												</li>
+											}
+
+										</ul>
+									</div>
+								}
+							</div>
+
+							<div class="last-box">
+								<a href="javascript:void(0)" class="prev"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+								<a href="javascript:void(0)" class="next"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+							</div>
+							<div class="last-box-btns">
+								
+								<!-- Fake Submit -->
+								<a href="javascript:void(0)"
+								   class="text-btn fake-submit"
+								   style="margin: 30px 0 0 30px; display:none;">Submit</a>
+
+								<!-- Real Submit -->
+								<a href="javascript:void(0)"
+								   class="text-btn real-submit"
+								   style="margin: 30px 0 0 30px;">Submit</a>
+							</div>
+
+
+
+							<!-- This stays in your view -->
+							<div class="ans-question" style="display: none;">
+								<div class="ans-box">
+									<!-- JavaScript yahan questions insert karega -->
+								</div>
+								<div class="last-box-btns">
+									<a href="javascript:void(0)" id="download-result" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				@* @if (Model.TestSets != null && Model.TestSets.Any())
+				{
+					<div class="col-lg-12">
+						<div class="all-test-box">
+
+
+							@if (Model.OtschNo.HasValue)
+							{
+								<h2>Prepare Complete @Model.Test.TestName MCQs Online With Answers</h2>
+
+							}
+							else
+							{
+								<h2>Prepare All @Model.Test.TestName MCQs With Answers</h2>
+							}
+
+
+							<ul>
+								@{
+									int setNumber = 1;
+									int cumulativeQuestions = 0;
+									foreach (var set in Model.TestSets)
+									{
+										int startFrom = cumulativeQuestions;
+										int last = startFrom + set.TotalQuestions;
+
+										<li>
+											<h3>Set @setNumber</h3>
+											<p>@set.TotalQuestions Questions</p>
+											<a href="javascript:void(0)"
+											   onclick="openAnsMode('/online-test/@Model.Test.Url.Replace(".aspx","")-mcqs-with-answers?startfrom=@startFrom&last=@last')"
+											   class="text-btn">
+												Start
+											</a>
+
+										</li>
+
+										setNumber++;
+										cumulativeQuestions += set.TotalQuestions;
+									}
+								}
+							</ul>
+						</div>
+					</div>
+				}
+	 *@		</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+
+				@Html.Raw(	ViewBag.CmsData.Desc2)
+
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec level fee-box" style="padding-top: 30px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-12">
+						
+
+
+					</div>
+					<h2>Related Quiz</h2>
+					<ul class="sports-list">
+						@foreach (var item in Model.RelatedTests)
+						{
+							<li>
+								<a href="/online-test/@item.Url">
+									<figure>
+										<span>@item.AttemptedCount attemped</span>
+										<img src="https://cdn.ilmkidunya.com/ots/specialtestthumb/@item.ImageName" alt="" />
+												<figcaption>@item.TestName.Replace("Online", "")</figcaption>
+									</figure>
+								</a>
+							</li>
+						}
+
+					</ul>
+
+					<ul class="ss-ads" style="border: 0; padding-top: 35px;">
+						@await Html.PartialAsync("_maincontenttopbanner")
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="g-add-sec" style="padding: 30px 0 0 0;">
+		<div class="container">
+			<div class="row">
+				@await Html.PartialAsync("_GoogleAd")
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (Model.TopScorers != null)
+					{
+						@if (Model.OtschNo.HasValue)
+						{
+									<h2>Top Scorers @Model.Test.TestName MCQ`s Quiz</h2>
+
+						}
+						else
+						{
+							<h2>Top Scorers of @Model.Test.TestName</h2>
+						}
+
+
+						<ul class="top-scorer">
+							@{
+								// Pre-generate random colors for all items
+								var rand = new Random();
+								var colors = new List<string>();
+								for (int i = 0; i < Model.TopScorers.Count(); i++)
+								{
+									int r = rand.Next(150, 256);
+									int g = rand.Next(150, 256);
+									int b = rand.Next(150, 256);
+									colors.Add($"rgb({r},{g},{b})");
+								}
+
+								int colorIndex = 0;
+							}
+
+							@foreach (var item in Model.TopScorers)
+							{
+								<li>
+									<div class="score-holder">
+										<div class="img-holder">
+											<figure class="letter-circle" style="background:@colors[colorIndex]">
+												@item.MemberName.Substring(0, 1).ToUpper()
+											</figure>
+										</div>
+										<div class="text-holder">
+											<strong>@item.MemberName</strong>
+											<span>@item.Dated.ToString("dd - MMM - yyyy")</span>
+											<span>
+												@(item.TestTime.HasValue
+																						? string.Format("{0:D2} Min {1:D2} Sec",
+																						(int)item.TestTime.Value.TotalMinutes,
+																						item.TestTime.Value.Seconds)
+																						: "")
+											</span>
+											<em class="high-score">@item.ObtainedMarks/@item.TotalMarks</em>
+										</div>
+									</div>
+								</li>
+								colorIndex++;
+							}
+						</ul>
+					}
+
+				</div>
+
+				@await Html.PartialAsync("_GoogleAd")
+
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+<div class="question-side" id="pol-answer-mode">
+	<div class="question-box">
+		<div class="top-box">
+			<h2 id="test-title">Quiz Questions</h2>
+			<div class="close-btn">
+				<a href="javascript:void(0)" id="close-ans">
+					<img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="" />
+				</a>
+			</div>
+		</div>
+		<div class="holder-question" id="quest-holder">
+			<!-- Questions will load here -->
+		</div>
+		<div class="last-box">
+			<a href="javascript:void(0)" class="prev prev-ans"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+			<a href="javascript:void(0)" class="next next-ans"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	const closeBtn = document.getElementById("close-ans");
+	const targetBox = document.getElementById("pol-answer-mode");
+	const holder = document.getElementById("quest-holder");
+
+	function openAnsMode(apiUrl) {
+		fetch(apiUrl)
+			.then(res => res.json())
+			.then(data => {
+				console.log("Fetched Questions:", data);
+				holder.innerHTML = "";
+
+				const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
+
+				data.forEach((q, index) => {
+					let correctIndex = q.correctAnswer - 1;
+
+					let questionImgHtml = q.questionImage
+						? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+						: "";
+
+					let choicesHtml = q.choices
+						.filter(c => c.text || c.img)
+						.map((c, i) => `
+							<li class="${i === correctIndex ? "correct" : ""}">
+								<label class="radio-container">
+									<span class="q-detiel">
+										${c.text ? c.text : ""}
+										${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+									</span>
+									<input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
+									<span class="label">${c.value}</span>
+									<span class="checkmark"></span>
+								</label>
+							</li>
+						`).join("");
+
+					holder.innerHTML += `
+						<div class="mid-box1 ans-bx-visible">
+							<strong>Question # ${index + 1}</strong>
+							<h3>${q.question}</h3>
+							${questionImgHtml}
+							<ul>${choicesHtml}</ul>
+						</div>
+					`;
+				});
+
+				setupNavigation();
+				targetBox.classList.add("visible");
+			});
+	}
+
+	closeBtn.addEventListener("click", function (e) {
+		e.preventDefault();
+		targetBox.classList.remove("visible");
+	});
+	document.addEventListener("click", function (event) {
+		if (
+			targetBox.classList.contains("visible") &&
+			!targetBox.contains(event.target) &&
+			event.target !== closeBtn &&
+			!event.target.closest("[onclick*='openAnsMode']")
+		) {
+			targetBox.classList.remove("visible");
+		}
+	});
+
+	function setupNavigation() {
+		let questions = document.querySelectorAll(".ans-bx-visible");
+		let currentIndex = 0;
+
+		const prevBtn = document.querySelector(".prev-ans");
+		const nextBtn = document.querySelector(".next-ans");
+
+		function showQuestion(index) {
+			questions.forEach((q, i) => {
+				q.style.display = (i === index) ? "block" : "none";
+			});
+
+			prevBtn.classList.toggle("active", index > 0);
+			nextBtn.classList.toggle("active", index < questions.length - 1);
+		}
+
+		showQuestion(currentIndex);
+
+		nextBtn.onclick = function (e) {
+			e.preventDefault();
+			if (currentIndex < questions.length - 1) {
+				currentIndex++;
+				showQuestion(currentIndex);
+			}
+		};
+
+		prevBtn.onclick = function (e) {
+			e.preventDefault();
+			if (currentIndex > 0) {
+				currentIndex--;
+				showQuestion(currentIndex);
+			}
+		};
+	}
+</script>
+
+<script>
+	let testAlreadyStarted = false;
+	window.addEventListener('DOMContentLoaded', function () {
+		document.getElementById('close').addEventListener('click', function (event) {
+			closePoll();
+			event.preventDefault();
+		});
+
+		document.addEventListener('click', function (event) {
+			var pol = document.getElementById('pol');
+			if (!pol.contains(event.target) && event.target !== document.getElementById('launch-test-btn')) {
+				closePoll();
+			}
+		});
+	});
+
+	function closePoll() {
+		document.body.classList.remove('open-poll');
+	}
+
+	function launchTest() {
+		document.body.classList.add('open-poll');
+
+		if (!testAlreadyStarted && !isRunning) {
+			startTime = Date.now(); // only first time
+			startStop(); // start stopwatch
+			testAlreadyStarted = true; // mark as started
+		}
+	}
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		let midBoxes = document.querySelectorAll(".mid-box");
+		let currentIndex = 0;
+
+		function showBox(index) {
+			midBoxes.forEach((box, i) => {
+				box.style.display = i === index ? "block" : "none";
+			});
+		}
+
+		showBox(currentIndex);
+
+		document.querySelector(".next").addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex < midBoxes.length - 1) {
+				currentIndex++;
+				showBox(currentIndex);
+			}
+		});
+
+		document.querySelector(".prev").addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex > 0) {
+				currentIndex--;
+				showBox(currentIndex);
+			}
+		});
+
+		midBoxes.forEach((box, index) => {
+			let radios = box.querySelectorAll('input[type="radio"]');
+			radios.forEach((radio, i) => {
+				radio.name = `radio-${index}`;
+			});
+		});
+	});
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		let midBoxes = document.querySelectorAll(".mid-box");
+		let nextBtn = document.querySelector(".next");
+		let prevBtn = document.querySelector(".prev");
+		let currentIndex = 0;
+
+		function showBox(index) {
+			midBoxes.forEach((box, i) => {
+				if (i === index) {
+					box.style.display = "block";
+					setTimeout(() => {
+						box.style.opacity = "1";
+					}, 200);
+				} else {
+					box.style.opacity = "0";
+					setTimeout(() => {
+						box.style.display = "none";
+					}, 300);
+				}
+			});
+
+			prevBtn.classList.toggle("active", index > 0);
+			nextBtn.classList.toggle("active", index < midBoxes.length - 1);
+		}
+
+		midBoxes.forEach(box => {
+			box.style.transition = "opacity 0.3s ease-in-out";
+			box.style.opacity = "0";
+		});
+
+		showBox(currentIndex);
+
+		nextBtn.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex < midBoxes.length - 1) {
+				currentIndex++;
+				showBox(currentIndex);
+			}
+		});
+
+		prevBtn.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex > 0) {
+				currentIndex--;
+				showBox(currentIndex);
+			}
+		});
+	});
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		document.querySelector(".get-result").addEventListener("click", function (e) {
+			e.preventDefault();
+			document.querySelector(".holder-question").style.display = "none";
+			document.querySelector(".last-box").style.display = "none";
+			this.style.display = "none";
+			document.querySelector(".ans-question").style.display = "block";
+		});
+	});
+</script>
+
+<script>
+	let timer;
+	let isRunning = false;
+	let elapsedTime = 0;
+	let finalDuration = null; // ✅ Added — store once when fakeSubmit clicked
+
+	function startStop() {
+		if (isRunning) {
+			clearInterval(timer);
+			document.getElementById('startStopBtn').textContent = 'Start';
+		} else {
+			const startTime = Date.now() - elapsedTime;
+			timer = setInterval(() => {
+				elapsedTime = Date.now() - startTime;
+				const totalSeconds = Math.floor(elapsedTime / 1000);
+				const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+				const seconds = String(totalSeconds % 60).padStart(2, '0');
+				document.getElementById('display').textContent = `${minutes}:${seconds}`;
+			}, 1000);
+			document.getElementById('startStopBtn').textContent = 'Stop';
+		}
+		isRunning = !isRunning;
+	}
+
+	function reset() {
+		clearInterval(timer);
+		elapsedTime = 0;
+		document.getElementById('display').textContent = '00:00';
+		document.getElementById('startStopBtn').textContent = 'Start';
+		isRunning = false;
+		finalDuration = null; // ✅ Reset only on page refresh or manual reset
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		document.getElementById('startStopBtn').onclick = startStop;
+		document.getElementById('resetBtn').onclick = reset;
+	});
+
+	function getDurationInSeconds() {
+		return Math.floor(elapsedTime / 1000);
+	}
+</script>
+
+<script>
+	const testTitle = @Html.Raw(Json.Serialize(Model.Test.TestName));
+	const testUrl = @Html.Raw(Json.Serialize(Model.Test.Url));
+	const testId = @Html.Raw(Json.Serialize(Model.Test.Id));
+	let isUserLoggedIn = @Model.IsLoggedIn.ToString().ToLower();
+	let Marks = @Html.Raw(Json.Serialize(Model.TotalMarks));
+	let startTime;
+	let autoStartAfterLogin = false;
+
+	async function submitTest() {
+		const durationInSeconds = finalDuration ?? getDurationInSeconds(); // ✅ use stored or current
+		const questionBoxes = document.querySelectorAll(".mid-box");
+		let resultHTML = "";
+		let correctCount = 0;
+
+		questionBoxes.forEach((box) => {
+			const questionNumber = box.dataset.questionNumber;
+			const questionText = box.querySelector("h3").innerHTML;
+			const questionImageElem = box.querySelector(".question-image");
+			const questionImageHtml = questionImageElem ? questionImageElem.outerHTML : "";
+
+			const inputs = box.querySelectorAll("input[type='radio']");
+			const selected = box.querySelector("input[type='radio']:checked");
+			const selectedVal = selected ? selected.value : null;
+
+			let correct = null;
+			inputs.forEach(input => {
+				if (input.dataset.correct === "true") correct = input.value;
+			});
+
+			if (selectedVal === correct) correctCount++;
+
+			let optionsHTML = "";
+			inputs.forEach(input => {
+				const label = input.value;
+				const optionLabelElem = input.closest("label");
+				const optionText = optionLabelElem.querySelector(".q-detiel").innerHTML;
+
+				let liClass = "";
+				if (label === correct) liClass = "correct";
+				if (label === selectedVal && selectedVal !== correct) liClass = "wrong";
+
+				optionsHTML += `
+					<li class="${liClass}">
+						<label class="radio-container">
+							<span class="q-detiel">${optionText}</span>
+							<input type="radio" disabled value="${label}" data-correct="${label === correct ? 'true' : 'false'}">
+							<span class="label">${label}</span>
+							<span class="checkmark"></span>
+						</label>
+					</li>`;
+			});
+
+			resultHTML += `
+				<div class="mid-box1">
+					<strong>Question # ${questionNumber}</strong>
+					<h3>${questionText}</h3>
+					${questionImageHtml}
+					<ul>${optionsHTML}</ul>
+				</div>`;
+		});
+
+		if (typeof timer !== "undefined") {
+			clearInterval(timer);
+			isRunning = false;
+		}
+
+		document.querySelector(".ans-box").innerHTML = resultHTML;
+		document.querySelector(".holder-question").style.display = "none";
+		document.querySelector(".last-box").style.display = "none";
+		document.querySelector(".real-submit").style.display = "none";
+		document.querySelector(".fake-submit").style.display = "none";
+		document.querySelector(".ans-question").style.display = "block";
+
+		try {
+			const response = await fetch('/online-test/save-result', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					TestId: testId,
+					TestTitle: testTitle,
+					TotalQuestions: questionBoxes.length,
+					CorrectAnswers: correctCount,
+					Duration: durationInSeconds,
+					TestUrl: testUrl,
+					TotalMarks: Marks
+				})
+			});
+
+			if (!response.ok) {
+				console.error("Error saving result:", response.statusText);
+				return;
+			}
+
+			const data = await response.json();
+			if (data.success) {
+				window.savedTestResultId = data.testResultId;
+				console.log("Result saved successfully", data);
+			}
+		} catch (err) {
+			console.error("Fetch error:", err);
+		}
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		if (!isUserLoggedIn) {
+			document.querySelector(".real-submit").style.display = "none";
+			document.querySelector(".fake-submit").style.display = "inline-block";
+		} else {
+			document.querySelector(".fake-submit").style.display = "none";
+			document.querySelector(".real-submit").style.display = "inline-block";
+		}
+	});
+
+	document.querySelector(".fake-submit").addEventListener("click", function (e) {
+		e.preventDefault();
+
+		// ✅ Capture duration only first time
+		if (finalDuration === null) {
+			finalDuration = getDurationInSeconds();
+			console.log("Captured duration at fake submit:", finalDuration, "seconds");
+		}
+
+		autoStartAfterLogin = true;
+		if (typeof timer !== "undefined") {
+			clearInterval(timer);
+			isRunning = false;
+		}
+		showLoginPopup();
+	});
+
+	document.querySelector(".real-submit").addEventListener("click", function (e) {
+		e.preventDefault();
+		submitTest();
+	});
+
+	window.addEventListener("message", function (event) {
+		if (event.data && event.data.success) {
+			console.log("Login success:", event.data.user);
+			isUserLoggedIn = true;
+			document.querySelector(".fake-submit").style.display = "none";
+			document.querySelector(".real-submit").style.display = "inline-block";
+
+			if (autoStartAfterLogin) {
+				const startBtn = document.getElementById("launch-test-btn");
+				if (startBtn) {
+					startBtn.click();
+					setTimeout(() => {
+						const submitBtn = document.querySelector(".real-submit");
+						if (submitBtn) submitBtn.click();
+					}, 2000);
+				}
+				autoStartAfterLogin = false;
+			}
+		}
+	});
+</script>
+
+
+<script>
+	document.querySelector("#download-result").addEventListener("click", function () {
+		if (window.savedTestResultId) {
+			window.location.href = `/online-test/test-results?id=${window.savedTestResultId}`;
+		} else {
+			alert("Please submit the test first.");
+		}
+	});
+</script>

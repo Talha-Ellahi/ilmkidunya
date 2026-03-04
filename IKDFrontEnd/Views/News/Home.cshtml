@@ -1,0 +1,398 @@
+﻿@using System.Net
+@using IKDFrontEnd.ViewModels
+@model NewsPageViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/edunews/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/national-news.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+                    National
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/international-news.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/icon-world.webp" alt="image" />
+                    International
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/announcements.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+                    Announcement
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/merit-lists.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/icon-meritlist.webp" alt="image" />
+                    Merit list
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/date-sheets.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/icon-datesheet.webp" alt="image" />
+                    Date Sheet
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/results.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/icon-result.webp" alt="image" />
+                    Result
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/admissions.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/icon-admission.webp" alt="image" />
+                    Admission
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/edunews/news-categories/study-abroad-events.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-10.webp" alt="image" />
+                    Study Abroad
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+@section MetaData {
+    <title>Latest Education News in Pakistan | Education News Today Exam, Result, Admission</title>
+    <meta name="description" content="All Latest Education News in Pakistan are available here related to Exams, Results, Admissions, date sheets, scholarships of any college, university and institute." />
+    <meta name="keywords" content="education news today. education news today lahore, pakistan education news, latest news about exams in pakistan, today education news, latest news about exams in pakistan today, College News, University News, Examinations, results, jobs news, News about Education, Latest Educational News." />
+    <meta property="og:image" content="https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg" />
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+}
+@section innerbanner {
+    <div class="ss-banner-inner college-banner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>Latest Educational News</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="main">
+    <div class="college-news-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bs-admission-sec" style="padding: 15px;">
+                        <h2>Explore Educational News</h2>
+                        <ul class="admission-nav" style="border: 0; justify-content: flex-start;">
+                            <li>
+                                <a href="/edunews/news-categories/national-news.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-national.webp" alt="" />
+                                    <span>National</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/international-news.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-world.webp" alt="" />
+                                    <span>International</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/announcements.aspx">
+                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+                                    <span>Announcements</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/merit-lists.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-meritlist.webp" alt="" />
+                                    <span>Merit List</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/date-sheets.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-datesheet.webp" alt="" />
+                                    <span>Date Sheets</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/results.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-result.webp" alt="" />
+                                    <span>Results</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/admissions.aspx">
+                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+                                    <span>Admissions</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/edunews/news-categories/study-abroad-events.aspx">
+                                    <img src="https://images.ishallwin.com/news/ico-studyabroad.webp" alt="" />
+                                    <span>Study Abroad</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="new-ads-sec">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <h2>Latest Educational News</h2>
+                    @if (Model.LatestNews != null && Model.LatestNews.Any())
+                    {
+                        <ul class="news-list" id="newsList">
+                            @foreach (var news in Model.LatestNews)
+                            {
+                                <li>
+                                    <div class="news-box">
+                                        <div class="img-holder">
+                                            <figure>
+                                                <img src="@news.PictureThumbnail" alt="@news.MainHeading" width="250" height="209" />
+                                            </figure>
+                                        </div>
+                                        <div class="text-holder">
+                                            <span class="date">@news.Dated?.ToString("dd-MMM-yyyy")</span>
+                                            <h4>
+                                                <a asp-controller="News"
+                                                   asp-action="NewsDetails"
+                                                   asp-route-newsslug="@news.RewriteUrl">
+                                                    @news.MainHeading
+                                                </a>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- Loading indicator -->
+                        <div id="loadingIndicator" style="text-align: center; display: none; padding: 20px;">
+                            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading more news...</p>
+                        </div>
+
+                        <!-- No more news indicator -->
+                        <div id="noMoreNews" style="text-align: center; display: none; padding: 20px; color: #666; font-style: italic;">
+                            No more news to load.
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No news available at the moment.</p>
+                    }
+                </div>
+                <div class="g-add-sec" style="padding: 30px 0 0 0;">
+                    <div class="container">
+                        <div class="row">
+                            @await Html.PartialAsync("_GoogleAd")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentPage = 2; // Start from page 2 since page 1 is already loaded
+    let isLoading = false;
+    let hasMoreNews = true;
+
+    const newsList = document.getElementById('newsList');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const noMoreNewsIndicator = document.getElementById('noMoreNews');
+
+    // Function to check if last news item is in viewport
+    function isLastNewsItemInViewport() {
+        if (!newsList || !hasMoreNews || isLoading) return false;
+
+        const lastNewsItem = newsList.lastElementChild;
+        if (!lastNewsItem) return false;
+
+        const rect = lastNewsItem.getBoundingClientRect();
+
+        // Check if the last news item is visible in the viewport
+        // We'll trigger when the last item is within 200px of the bottom of the viewport
+        return rect.bottom <= (window.innerHeight + 200);
+    }
+
+    // Function to load more news
+    async function loadMoreNews() {
+        if (isLoading || !hasMoreNews) return;
+
+        isLoading = true;
+
+        // Show loading indicator
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+        if (noMoreNewsIndicator) noMoreNewsIndicator.style.display = 'none';
+
+        try {
+            const response = await fetch(`/edunews?page=${currentPage}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.news && data.news.length > 0) {
+                    // Append new news items
+                    data.news.forEach(newsItem => {
+                        const newsHtml = `
+                            <li>
+                                <div class="news-box">
+                                    <div class="img-holder">
+                                        <figure>
+                                            <img src="${newsItem.pictureThumbnail}" alt="${newsItem.mainHeading}" width="250" height="209" />
+                                        </figure>
+                                    </div>
+                                    <div class="text-holder">
+                                        <span class="date">${formatDate(newsItem.dated)}</span>
+                                        <h4>
+                                            <a href="/edunews/${newsItem.rewriteUrl}">
+                                                ${newsItem.mainHeading}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
+                        newsList.insertAdjacentHTML('beforeend', newsHtml);
+                    });
+
+                    // Update pagination
+                    hasMoreNews = data.hasMore;
+                    currentPage = data.nextPage;
+
+                    // If no more news, show indicator
+                    if (!hasMoreNews && noMoreNewsIndicator) {
+                        noMoreNewsIndicator.style.display = 'block';
+                    }
+                } else {
+                    // No more news
+                    hasMoreNews = false;
+                    if (noMoreNewsIndicator) {
+                        noMoreNewsIndicator.style.display = 'block';
+                    }
+                }
+            } else {
+                console.error('Failed to load news');
+                hasMoreNews = false;
+            }
+        } catch (error) {
+            console.error('Error loading more news:', error);
+            hasMoreNews = false;
+        } finally {
+            isLoading = false;
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+        }
+    }
+
+    // Helper function to format date
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }).replace(',', '');
+    }
+
+    // Function to handle scroll
+    function handleScroll() {
+        if (isLastNewsItemInViewport()) {
+            loadMoreNews();
+        }
+    }
+
+    // Throttle function for better performance
+    function throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        }
+    }
+
+    // Add scroll event listener with throttle
+    const throttledScroll = throttle(handleScroll, 200);
+    window.addEventListener('scroll', throttledScroll);
+
+    // Also check on initial load in case content is shorter than viewport
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (isLastNewsItemInViewport()) {
+                loadMoreNews();
+            }
+        }, 1000);
+    });
+
+    // Check when window is resized
+    window.addEventListener('resize', throttledScroll);
+</script>
+
+<style>
+    .spinner-border {
+        display: inline-block;
+        width: 3rem;
+        height: 3rem;
+        vertical-align: text-bottom;
+        border: 0.25em solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spinner-border .75s linear infinite;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    @@keyframes spinner-border {
+        to
+
+    {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .visually-hidden {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0,0,0,0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+    }
+</style>

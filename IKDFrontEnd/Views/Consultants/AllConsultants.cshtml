@@ -1,0 +1,198 @@
+﻿@model List<IKDFrontEnd.ViewModels.ConsultantBasicViewModel>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css-files/style/studyabroad.css" rel="stylesheet" async>
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya" />
+	<meta property="og:description" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya">
+	<meta name="keywords" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya</title>
+}
+@section header {
+	<div class="col-lg-11">
+	<ul class="navigation">
+		<li>
+			<a aria-label="link" href="/consultants/">
+				<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+				Home
+			</a>
+		</li>
+		<li>
+			<a aria-label="link" href="/studyabroad/">
+				<img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+					 alt="image" />
+				studyabroad
+			</a>
+		</li>
+
+		<li>
+			<a aria-label="link" href="/studyabroad/country-guides.aspx">
+				<img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+					 alt="image" />
+				Guides
+			</a>
+		</li>
+
+		<li>
+			<a aria-label="link" href="/scholarships/topscholarship">
+				<img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+					 alt="image" />
+				Top Scholarship
+			</a>
+		</li>
+	</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>All Consultants</h1>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="std-consultant">
+						<div class="consultant-numb-row">
+							<div class="cnsltant-numbers">
+								<span class="cn-numbs">319</span>
+								Consultants in Pakistan
+							</div>
+							<div class="cnsltant-btn-bx cnsltant-numbers">
+								<a href="#" class="bcme-tp-consultant-btn">Register as Consultant</a>
+							</div>
+						</div>
+						<div class="tp-consultant-list" id="tp-consultant-list">
+							@if (Model != null && Model.Any())
+							{
+								foreach (var consultant in Model)
+								{
+									var url = consultant?.Url ?? string.Empty;
+									bool hasIdAtEnd = !string.IsNullOrEmpty(url) && char.IsDigit(url.Last());
+
+									if (!hasIdAtEnd)
+									{
+										url += consultant?.Id ?? 0; // fallback to 0 if Id is null
+									}
+
+									<a href="/consultants/@(url).aspx" class="consultan-icon-bx box-cnslt1">
+										@if (consultant?.PremiumMember == true)
+										{
+											<img class="premium-consltn"
+												 src="https://ikddata.ilmkidunya.com/images/img-consultant-premimum.png"
+												 alt="Premium Consultant" />
+										}
+
+										<img src="https://cdn.ilmkidunya.com/StudyAbroad/Images/@(consultant?.Image ?? "default.png")"
+											 alt="@((consultant?.Name ?? "Consultant") + " Image")" />
+
+										<span>@(consultant?.Name ?? "Unknown Consultant")</span>
+									</a>
+								}
+							}
+							else
+							{
+								<p>No consultants available at the moment.</p>
+							}
+						</div>
+
+
+						<div class="cnslt-view-all-btn">
+							<a id="std-load-more">
+								<div class="load-micon-r"></div>
+								Load More
+							</a>
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding:0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+
+</div>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const itemsPerClick = 12;
+		const initialItems = 54;
+		const listContainer = document.getElementById("tp-consultant-list");
+		const loadMoreBtn = document.getElementById("std-load-more");
+		const items = listContainer.querySelectorAll(".consultan-icon-bx");
+		const loader = document.querySelector(".load-micon-r");
+
+		let visibleCount = 0;
+
+		function showItems(count) {
+			for (let i = visibleCount; i < visibleCount + count && i < items.length; i++) {
+				items[i].classList.add("visible");
+			}
+			visibleCount += count;
+
+			if (visibleCount >= items.length) {
+				loadMoreBtn.style.display = "none";
+			}
+		}
+
+		// Initial load
+		showItems(initialItems);
+
+		// On button click
+		loadMoreBtn.addEventListener("click", function () {
+			if (loader) {
+				loader.classList.add("active");
+
+				// 1 second delay before loading items
+				setTimeout(function () {
+					loader.classList.remove("active");
+					showItems(itemsPerClick);
+				}, 1000);
+			} else {
+				// fallback if loader not found
+				showItems(itemsPerClick);
+			}
+		});
+	});
+</script>

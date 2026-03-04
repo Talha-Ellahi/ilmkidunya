@@ -1,0 +1,411 @@
+﻿@using System.Net
+@using IKDFrontEnd.ViewModels
+@model NewsPageViewModel
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header {
+
+			<div class="col-lg-11">
+				<ul class="navigation">
+					<li>
+						<a aria-label="link" href="/edunews/">
+							<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+							Home
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/national-news.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+							National
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/international-news.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/icon-world.webp" alt="image" />
+							International
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/announcements.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/job-govt-icon.webp" alt="image" />
+							Announcement
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/merit-lists.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/icon-meritlist.webp" alt="image" />
+							Merit list
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/date-sheets.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/icon-datesheet.webp" alt="image" />
+							Date Sheet
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/results.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/icon-result.webp" alt="image" />
+							Result
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/admissions.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/icon-admission.webp" alt="image" />
+							Admission
+						</a>
+					</li>
+					<li>
+						<a aria-label="link" href="/edunews/news-categories/study-abroad-events.aspx">
+							<img src="https://images.ishallwin.com/nav-icons/chem-nav-10.webp" alt="image" />
+							Study Abroad
+						</a>
+					</li>
+				</ul>
+			</div>
+			
+}
+@section MetaData
+{
+	@if (Model != null && !string.IsNullOrEmpty(Model.MetaTitle) && !string.IsNullOrEmpty(Model.MetaDescription))
+	{
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@Model.MetaTitle" />
+		<meta property="og:description" content="@Model.MetaDescription" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/{Model.MetaImage}" />
+		<meta name="description" content="@Model.MetaDescription">
+		<meta name="keywords" content="@Model.MetaKeywords">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@Model.MetaTitle</title>
+	}
+	else
+	{
+
+		<title>Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya</title>
+
+		<meta name="description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+		<meta name="keywords" content="ilmkidunya, education, educational, news, colleges, universities, result, admission, jobs, scholarship, visa, study, abroad, courses, pakistan, pakistani, information" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg" />
+		<meta property="og:image:width" content="200" />
+		<meta property="og:image:height" content="200" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	}
+}
+@section innerbanner {
+	<div class="ss-banner-inner college-banner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.MainHeading</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (Model.Desc1 != null)
+					{
+					@Html.Raw(Model.Desc1)	
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="college-news-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="bs-admission-sec" style="padding: 15px;">
+						<h2>Explore Educational News</h2>
+						<ul class="admission-nav" style="border: 0; justify-content: flex-start;">
+							<li>
+								<a href="/edunews/news-categories/national-news.aspx">
+									<img src="https://images.ishallwin.com/news/ico-national.webp" alt="" />
+									<span>National</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/international-news.aspx">
+									<img src="https://images.ishallwin.com/news/ico-world.webp" alt="" />
+									<span>International</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/announcements.aspx">
+									<img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+									<span>Announcements</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/merit-lists.aspx">
+									<img src="https://images.ishallwin.com/news/ico-meritlist.webp" alt="" />
+									<span>Merit List</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/date-sheets.aspx">
+									<img src="https://images.ishallwin.com/news/ico-datesheet.webp" alt="" />
+									<span>Date Sheets</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/results.aspx">
+									<img src="https://images.ishallwin.com/news/ico-result.webp" alt="" />
+									<span>Results</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/admissions.aspx">
+									<img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+									<span>Admissions</span>
+								</a>
+							</li>
+							<li>
+								<a href="/edunews/news-categories/study-abroad-events.aspx">
+									<img src="https://images.ishallwin.com/news/ico-studyabroad.webp" alt="" />
+									<span>Study Abroad</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="new-ads-sec">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						@await Html.PartialAsync("_maincontenttopbanner")
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<h2>Related News</h2>
+					<ul class="news-list" id="newsList">
+						@foreach (var news in Model.LatestNews)
+						{
+							<li>
+								<div class="news-box">
+									<div class="img-holder">
+										<figure><img src="@news.PictureThumbnail" alt="" /></figure>
+									</div>
+									<div class="text-holder">
+										<span class="date">@news.Dated?.ToString("dd-MMM-yyyy")</span>
+										<h4>
+											<a asp-controller="News"
+											   asp-action="NewsDetails"
+											   asp-route-newsslug="@news.RewriteUrl">
+												@news.MainHeading
+											</a>
+										</h4>
+									</div>
+								</div>
+							</li>
+						}
+					</ul>
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="loadMoreBtn">Load More News</button>
+					</p>
+				</div>
+				<div class="g-add-sec" style="padding: 30px 0 0 0;">
+					<div class="container">
+						<div class="row">
+							@await Html.PartialAsync("_GoogleAd")
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+					
+				</div>
+				@* <div class="col-lg-12">
+					<div class="comment-sec">
+
+					 
+
+								<form method="post" enctype="multipart/form-data" action="@Url.Action("PostComment", "News", new { newsslug = Model.NewsUrl })">
+										<div class="comment-box">
+											<div class="user-img">
+												<img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" />
+												<div class="has-letter">A</div>
+											</div>
+											<div class="comment-input">
+												<div class="inputArea">
+													<div class="upload-image" id="showimage4" style="display:none;">
+														<div class="single-image">
+															<button class="close" onclick="closePreview('showimage4', 'image4show', 'image4');">×</button>
+															<img src="" id="image4show" alt="Image Preview">
+														</div>
+													</div>
+													<!-- The 'name' attribute maps to the 'Comments' field in TblNewsComment -->
+													<input type="text" name="Comments" placeholder="Add Your Comments..." required />
+													<div class="file-upload">
+														<input type="file" class="file-input" name="CommentImage" id="image4" onchange="readURL(this, 'showimage4', 'image4show');">
+													</div>
+												</div>
+												<button type="submit" class="btn btn-primary">POST COMMENT</button>
+											</div>
+										</div>
+									</form>
+
+
+						 <ul class="comments-list">
+							@if (Model.NewsComments != null && Model.NewsComments.Any())
+							{
+								int commentIndex = 1;
+
+								foreach (var comment in Model.NewsComments)
+								{
+									var userImage = !string.IsNullOrEmpty(comment.MemberImage)
+									? comment.MemberImage
+									: "https://images.ishallwin.com/news/default-thumb.webp";
+
+									var hasImage = !string.IsNullOrEmpty(comment.MemberImage);
+									var initial = !string.IsNullOrEmpty(comment.Name) ? comment.Name.Substring(0, 1).ToUpper() : "U";
+									var postedDate = comment.DatePosted?.ToString("dd MMM yyyy") ?? "";
+
+									<li>
+										<div class="comment">
+											<div class="comment-header">
+												<div class="user-img">
+													<img src="@userImage" alt="" @(hasImage ? "" : "style=\"display:none;\"") />
+													<div class="has-letter" @(hasImage ? "style=\"display:none;\"" : "style=\"display:block;\"")>@initial</div>
+												</div>
+												<div class="top-left">
+													<h4>@comment.Name</h4>
+													<span class="time">@postedDate</span>
+												</div>
+											</div>
+											<div class="desc-detail">
+												<p>@Html.Raw(comment.Comments)</p>
+
+												<div class="action-comment">
+													<div class="likeBx" onclick="toggleLike(this)" comment-id="@comment.CommentId">
+														<input type="hidden" value="0">
+														<span>Like (0)</span>
+													</div>
+													<div class="replyBx" onclick="toggleCommentInput(this)">
+														<span>Reply</span>
+													</div>
+												</div>
+
+												<div class="comment-input" style="display: none;">
+													<div class="inputArea">
+														<div class="upload-image" id="showimage@(commentIndex)" style="display:none;">
+															<div class="single-image">
+																<button class="close" onclick="closePreview('showimage@(commentIndex)', 'image@(commentIndex)show', 'image@(commentIndex)');">×</button>
+																<img src="" id="image@(commentIndex)show" alt="Image Preview">
+															</div>
+														</div>
+														<input type="text" id="replyText@(comment.CommentId)" placeholder="Add Your Comments..." />
+														<div class="file-upload">
+															<input type="file" class="file-input" id="image@(commentIndex)" onchange="readURL(this, 'showimage@(commentIndex)', 'image@(commentIndex)show');">
+														</div>
+													</div>
+													<button type="button" class="btn btn-primary">
+														<img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png" onclick="PostChildComment(@comment.CommentId)">
+													</button>
+												</div>
+
+												@{
+													var replies = Model.NewsChildComments?.Where(r => r.CId == comment.CommentId).ToList();
+												}
+
+												@if (replies != null && replies.Any())
+												{
+													<ul class="comments-list" style="margin-left: 40px;">
+														@foreach (var reply in replies)
+														{
+															var rInitial = !string.IsNullOrEmpty(reply.Username) ? reply.Username.Substring(0, 1).ToUpper() : "U";
+															<li>
+																<div class="comment">
+																	<div class="comment-header">
+																		<div class="user-img">
+																			<img src="https://images.ishallwin.com/news/default-thumb.webp" alt="" style="display: none;" />
+																			<div class="has-letter" data-letter="@rInitial" style="display: block;">@rInitial</div>
+																		</div>
+																		<div class="top-left">
+																			<h4>@reply.Username</h4>
+																			<span class="time">@reply.Posteddate</span>
+																		</div>
+																	</div>
+																	<div class="desc-detail">
+																		<p>@Html.Raw(reply.Comment)</p>
+																	</div>
+																</div>
+															</li>
+														}
+													</ul>
+												}
+											</div>
+										</div>
+									</li>
+
+									commentIndex++;
+								}
+							}
+							else
+							{
+								<p>No comments yet.</p>
+							}
+						</ul> 
+
+
+
+
+					</div>
+				</div> *@
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	let currentPage = 1; // Track current page
+	const loadMoreBtn = document.getElementById('loadMoreBtn');
+	const newsList = document.getElementById('newsList');
+	const categorySlug = '@Model.NewsCategoryName'; // Get the categorySlug from the model
+
+	loadMoreBtn.addEventListener('click', function () {
+		currentPage++; // Increment the page number
+		loadMoreBtn.innerHTML = 'Loading...'; // Change button text while loading
+		loadMoreBtn.disabled = true; // Disable the button to prevent multiple clicks
+
+		// Fetch new articles via AJAX
+		fetch(`/edunews/news-categories/${categorySlug}.aspx?page=${currentPage}`)
+			.then(response => response.text()) // Get the HTML response as text
+			.then(data => {
+				// Create a temporary container to hold the new articles
+				const tempContainer = document.createElement('div');
+				tempContainer.innerHTML = data;
+
+				// Extract the new articles list from the response
+				const newNewsList = tempContainer.querySelector('#newsList');
+
+				// Append the new articles to the existing article list
+				newsList.insertAdjacentHTML('beforeend', newNewsList.innerHTML);
+
+				// Reset the button text after loading and enable the button again
+				loadMoreBtn.innerHTML = 'Load More News'; // Reset the button text
+				loadMoreBtn.disabled = false; // Re-enable the button
+			})
+			.catch(error => {
+				console.error('Error loading more news:', error);
+				loadMoreBtn.innerHTML = 'Error loading news'; // Show error message
+				loadMoreBtn.disabled = false; // Re-enable the button
+			});
+	});
+
+</script>
+

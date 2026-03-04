@@ -1,0 +1,99 @@
+﻿@using IKDFrontEnd.ViewModels
+@model PastPaperPageViewModel
+
+@{
+	Layout = "~/Views/Shared/_pastpapers.cshtml";
+	ViewData["PageTitle2"] = Model.PageTitle2;
+}
+
+@section innerbanner{
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.PageTitle2</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<p>Board of Intermediate and Secondary Education Lahore, Bise Lahore conducts matriculation and intermediate exams under its authoritative body. Mostly matric part I & Part II exams held in the month of March while inter exams starts in the month of April every year.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="my-ads" id="slider1" style="display:none;">
+						<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="page-content">
+						<div class="table-of-content">
+							<h2>Choose your education level</h2>
+							<ul>
+								<li><a href="#" aria-label="link">BISE Lahore Board Matric Past Papers</a></li>
+								<li><a href="#" aria-label="link">BISE Lahore Board Inter Past Papers</a></li>
+							</ul>
+						</div>
+					</div>
+					<p>Board of intermediate and secondary education Lahore is considered to be the largest educational board of the country for conducting exams for thousands of students every year.</p>
+					<p>Students of matric and inter look for the test papers to preparation of their exams. This search is very common among students of matric and inter. Past papers helps students a lot while they are doing preparation of their exams. Going through past papers you get to know about the strengths and weaknesses in different parts of the courses you find most challenging.</p>
+					<p>Past papers are of great importance for students especially when they are near to their exams. A number of students study past paper s of their related subjects, past papers are a great way to revise your syllabus and by studying past papers you get to know which sort of questions you are going to be asked in the exam and you learn how to answer them properly.</p>
+					<p>Matric and inter Students of Lahore board can easily find out past papers on ilmkidunya in its past paper section. Here student of matric and inter can find past papers of every subject, science and arts both which will be helpful for the students.</p>
+					<p>Past papers including Punjab, KPK, Sindh, Balochistand and AJK Educational Boards are available at ilmkidunya. Those students, who are doing preparations for their exams, should not be worry. By consulting past papers they can get the idea about attempting the paper in an effective way and can achieve shining grades.</p>
+					<p>Dear students keep in touch with the following pages for more information about the matric and inter past papers of BISE Lahore Board. All current and previous past paers of matric and inter examination Lahore board are available at the following respective page of the board.</p>
+					
+					<div class="home-scholar-list">
+						<ul>
+							@foreach (var paper in Model.PastPapers)
+							{
+								<li>
+									<a aria-label="link" href="/past_papers/@(paper.PaperName.Replace(" ", "-").ToLower() + "-" + paper.Id.ToString() + ".aspx")">
+										<div class="img-holder">
+											<img alt="image" src="@paper.ImageUrl">
+										</div>
+										<div class="text-holder">
+											<div class="top-box">
+												<span>Subject : @paper.SubjectName</span>
+											</div>
+											<h3>@paper.PaperName</h3>
+											<p>@Model.PageTitle2</p>
+										</div>
+									</a>
+								</li>
+							}
+						</ul>
+					</div>
+
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>

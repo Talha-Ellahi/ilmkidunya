@@ -1,0 +1,521 @@
+.study-abroad-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.study-abroad-hero .study-abbxes {
+    flex: 1 1 48%;
+    min-height: 150px;
+    min-width: 300px;
+    text-align: center;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.study-abroad-hero .imgholder img,
+.inner-flag-box .flag-image-section img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50px;
+}
+
+.inner-flag-box {
+    min-width: 330px;
+    min-height: 200px;
+    align-self: flex-end;
+    background-color: #e6fbee6e;
+    padding: 30px 20px;
+    border-radius: 10px;
+}
+
+.inner-flag-box p {
+    margin-top: 13px;
+    font-size: 15px;
+}
+
+.inner-flag-box .flag-image-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    font-size: 35px;
+    font-weight: 800;
+    color: black;
+}
+
+.inner-flag-box .flag-image-section img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50px;
+}
+
+.inner-flag-box .std-btn {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: white;
+    letter-spacing: 0.3px;
+    background-color: rgb(0, 90, 255);
+    transition: all 0.3s ease-in-out;
+}
+
+.inner-flag-box .std-btn:hover {
+    background-color: rgb(0, 62, 179);
+}
+
+.std-country-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 30px 0px;
+}
+
+.std-country-list.in-cont {
+    justify-content: left;
+}
+
+.std-country-list>a {
+    text-align: center;
+}
+
+.std-country-list .sgle-country-box span {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: black;
+    margin-top: 10px;
+}
+
+.std-country-list .sgle-country-box img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50px;
+    opacity: 0.9;
+}
+
+.std-country-list .sgle-country-box img:hover {
+    opacity: 1;
+}
+
+.study-abrd-main {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.std-view-all-btn {
+    color: black;
+    font-size: 17px;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.std-view-all-btn::before {
+    width: 50px;
+    height: 1px;
+    background: url(https://resources.ilmkidunya.com/images/fancylink-white-bg-left.png) no-repeat left center;
+    position: absolute;
+    content: "";
+    left: -37%;
+    top: 11px;
+}
+
+.std-view-all-btn::after {
+    width: 50px;
+    height: 1px;
+    background: url(https://resources.ilmkidunya.com/images/fancylink-white-bg-left.png) no-repeat left center;
+    position: absolute;
+    content: "";
+    transform: rotate(180deg);
+    right: -37%;
+    top: 11px;
+}
+
+.std-view-all-btn:hover {
+    color: #71BC27;
+}
+
+.std-view-all-btn span {
+    color: rgb(255, 255, 255);
+    border-radius: 50%;
+    font-weight: 700;
+    margin-right: 6px;
+    padding: 0px 4px;
+    background-color: #71BC27;
+}
+
+.std-consultant {
+    width: 100%;
+    background-color: #E9E9E9;
+    margin: 20px 0px;
+    padding: 30px clamp(10px, 2vw, 30px);
+}
+
+.consultant-numb-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.cnsltant-numbers {
+    flex: 1 1 47%;
+    min-width: 320px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.3em;
+    color: #424242;
+}
+
+.cnsltant-numbers .cn-numbs {
+    font-size: clamp(75px, 5vw, 90px);
+    line-height: 1;
+    font-weight: 700;
+    color: #4388B9;
+}
+
+.cnsltant-btn-bx {
+    justify-content: right;
+    align-items: end;
+}
+
+.bcme-tp-consultant-btn {
+    color: #000;
+    font-size: 20px;
+    padding: 10px 20px;
+    line-height: normal;
+    font-weight: 500;
+    background: #fff;
+    border-radius: 3px;
+    position: relative;
+    text-transform: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.bcme-tp-consultant-btn:hover {
+    color: white;
+    background-color: #71E87F;
+}
+
+.tp-consultant-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 5px;
+    margin-bottom: 30px;
+}
+
+.consultan-icon-bx {
+    background-color: #fff;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px clamp(10px, 0.3vw, 20px);
+    gap: 15px;
+    text-align: center;
+    position: relative;
+    color: #000;
+    display: none;
+}
+
+.consultan-icon-bx.box-cnslt1 {
+    display: flex;
+}
+
+.consultan-icon-bx.visible {
+    display: flex;
+}
+
+.consultan-icon-bx:hover {
+    color: white;
+    background-color: #71E87F;
+}
+
+.consultan-icon-bx .premium-consltn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 55px;
+    height: auto;
+}
+
+.consultan-icon-bx img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+}
+
+.cnslt-view-all-btn {
+    text-align: center;
+}
+
+#std-load-more {
+    display: flex;
+    gap: 7px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    font-size: 18px;
+    color: #000;
+    line-height: normal;
+    border-radius: 3px;
+    background-color: white;
+    align-self: center;
+    width: 150px;
+    transition: all 0.3s ease-in-out;
+    margin: 10px auto;
+}
+
+#std-load-more:hover {
+    color: white;
+    background-color: #71E87F;
+    cursor: pointer;
+}
+
+.load-micon-r {
+    width: 16px;
+    height: 16px;
+    transition: all 0.3s ease-in-out;
+    background: url(https://resources.ilmkidunya.com/images/ic-load-more-black.png) no-repeat center;
+}
+
+#std-load-more:hover .load-micon-r {
+    color: white;
+    background: url(https://resources.ilmkidunya.com/images/ic-load-more-white.png) no-repeat center;
+}
+
+.load-micon-r.active {
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.consultant-box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #6FE388;
+    padding: clamp(30px, 4vw, 40px) clamp(12px, 3vw, 40px);
+}
+
+.consultant-box .left-section {
+    flex: 1 1 46%;
+    max-width: 500px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.consultant-box .left-section img {
+    width: 90px;
+}
+
+.consultant-box .left-section h2 {
+    font-size: 30px !important;
+    font-weight: 600 !important;
+    margin: 10px 0px 0px !important;
+}
+
+.consultant-box .left-section p {
+    font-size: 17px !important;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.consultant-box .left-section select {
+    width: 100%;
+    background: url(https://resources.ilmkidunya.com/images/ic-select-green.png) no-repeat 95% 22px #ffffff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    border-radius: 3px;
+    height: 50px;
+    padding: 10px 15px;
+}
+
+.consultant-box .left-section button {
+    border-radius: 3px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    height: 50px;
+    font-weight: 700;
+    background: #318bbc;
+    transition: all 0.2s ease-in-out;
+}
+
+.consultant-box .left-section button:hover {
+    background: #17628a;
+}
+
+.consultant-box .right-section {
+    flex: 1 1 46%;
+    min-width: 300px;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    align-content: center;
+}
+
+.consultant-box .city-card {
+    min-width: 160px;
+    flex: 1 1 40%;
+    height: 130px;
+    background-color: white;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-size: 17px;
+    gap: 10px;
+    transition: all 0.3s ease-in;
+}
+
+.consultant-box .city-card:hover {
+    background-color: #4EA28D;
+    color: white;
+}
+
+.consultant-box .city-card img {
+    width: 80px;
+}
+
+.consultant-box .city-card:hover img {
+    filter: brightness(0) saturate(100%) invert(99%) sepia(2%) saturate(3292%) hue-rotate(286deg) brightness(122%) contrast(100%);
+}
+
+.consultants-dhero {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 17px 20px;
+    padding: 20px 0px;
+}
+
+.consultants-dhero .dt-const-logo {
+    width: 160px;
+    height: 160px;
+    padding: clamp(12px, 2vw, 18px);
+    overflow: hidden;
+    border: 3px solid #cecece;
+    border-radius: 50%;
+    background-color: #fff;
+    text-align: center;
+    align-content: center;
+}
+
+.consultants-dhero .dt-const-logo img {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.consultants-dhero .dt-const-right {
+    min-width: 320px;
+    flex: 1 1 60%;
+}
+
+.dt-const-right .dt-contries a {
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0px 3px 8px 0px;
+}
+
+.dt-const-right .dt-contries img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.dt-const-right .dt-contries img:hover {
+    opacity: 1;
+}
+
+.dt-const-right h1 {
+    text-align: left;
+    margin: 0 0 3px !important;
+}
+
+.cnsltn-bx-mian .consultant-box {
+    padding: 0px;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 0;
+    margin: 20px 0px;
+}
+
+.cnsltn-bx-mian .conslt-bx-green {
+    min-width: 250px;
+    flex: 1 1 35%;
+    padding: clamp(25px, 2vh, 40px);
+}
+
+.cnsltn-bx-mian .conslt-bx-map {
+    min-width: 330px;
+    width: 400px;
+    flex: 1 1 60%;
+    background-color: #DFDFDF;
+    min-height: 250px;
+}
+
+.cnsltn-bx-mian .conslt-bx-green img {
+    width: 80px;
+}
+
+.cnsltn-bx-mian .conslt-bx-green h3 {
+    font-size: 27px;
+    font-weight: 600;
+    color: white;
+    margin: 12px 0px 20px;
+}
+
+.cnsltn-bx-mian .conslt-bx-green p,
+.conslt-bx-green a .conslt-bx-green a:hover {
+    color: white;
+}
+
+.conslt-bx-green .dtbox-info {
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0px;
+}
+
+.conslt-bx-green .dtbox-info img {
+    width: 25px;
+    margin-right: 8px;
+}

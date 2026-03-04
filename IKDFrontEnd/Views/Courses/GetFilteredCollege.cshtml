@@ -1,0 +1,693 @@
+﻿@model IKDFrontEnd.ViewModels.CoursesViewModels
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.d-none {
+		display: none !important;
+	}
+
+	
+	
+</style>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+	<meta property="og:image" content="https://www.ilmkidunya.com/ikd-default-og.png" />
+	<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/courses/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/test-preparation.aspx">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/testprep.png" alt="image" />
+					Test Preparation
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/matric">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/matric.png" alt="image" />
+					Matric Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/intermediate">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/inter.png" alt="image" />
+					Inter Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/bachelors">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/bachelor.png" alt="image" />
+					Bachelor Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/masters">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/master.png" alt="image" />
+					Master Level
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/courses/popular-courses.aspx">
+					<img src="https://www.ilmkidunya.com/icons/coursesicons/popular.png" alt="image" />
+					Most Popular
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder" id="coursesHeading">
+						@Html.Raw(ViewBag.HeadingHtml ?? $"<h1>Courses In Pakistan</h1><p>Search from <strong>{Model.CoursesCount}</strong> Courses</p>")
+					</div>
+
+
+
+				</div>
+				<div class="ss-col-lg-12">
+					<div class="banner-form" style="margin: 0 20%;">
+						<div class="input-holder" style="width: 90%;">
+							<div style="width: 33.33%; position: relative;">
+								<select class="form-select" name="location" id="cityDropdown">
+									<option value="">Select City</option>
+									@foreach (var city in Model.Cities)
+									{
+										<option value="@city.CityId"
+												selected="@(ViewBag.Location != null && ViewBag.Location.ToString() == city.CityId.ToString() ? "selected" : null)">
+											@city.CityName
+										</option>
+									}
+								</select>
+							</div>
+							<div style="width: 33.33%; position: relative;">
+								<select class="form-select" name="level" id="levelDropdown">
+									<option value="">Select Level</option>
+									@foreach (var level in Model.Levels)
+									{
+										<option value="@level.Id"
+												selected="@(ViewBag.Level != null && ViewBag.Level.ToString() == level.Id.ToString() ? "selected" : null)">
+											@level.Name
+										</option>
+									}
+								</select>
+							</div>
+							<div style="width: 33.33%; position: relative;">
+								<select class="form-select" name="category" id="categoryDropdown">
+									<option value="">Select Category</option>
+									@foreach (var cat in Model.Categories)
+									{
+										<option value="@cat.Id"
+												selected="@(ViewBag.Category != null && ViewBag.Category.ToString() == cat.Id.ToString() ? "selected" : null)">
+											@cat.Name
+										</option>
+									}
+								</select>
+							</div>
+						</div>
+
+						<div class="btn-holder">
+							<button type="button" id="searchBtn">
+								<img src="https://images.ishallwin.com/search-icon.webp" alt="Search" />
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+<div id="main">
+	<div id="admissionsResults">
+		@if (Model.SearchResults != null && Model.SearchResults.Any())
+		{
+			@Html.Partial("_CoursesHomeSearch", Model)
+		}
+
+	</div>
+	
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<div class="page-content pp-sec" style="background: #effcf4;">
+	      <div class="container">
+	            <div class="row">
+				   <div class="flex-container">
+	                 <div class="col-lg-4">
+						<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px; background: #effcf4;">
+							<h2>More Study programs related to your search</h2>
+							<p>Explore these study programs related to your preferences of location and study level.</p>
+							<ul class="citywise-list" id="guidesList">
+								
+							</ul>
+
+					 </div>
+					</div>
+				  </div>
+		     </div>
+		</div>
+	 </div>
+	
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<form id="suggestion-form" method="post" action="/form/submition/courses">
+	<input type="hidden" id="levelHiddenId" name="LevelId" value="" />
+
+	<div class="un-info-side">
+		<div class="top-box">
+			<h2>Get Program/Admission Info</h2>
+			<div class="close-btn">
+				<a href="#" id="close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt=""></a>
+			</div>
+		</div>
+		<div class="form-holder" id="style-3">
+			<div class="top-form">
+				<p>Use this form to inquire any additional details for your program of choice from the university</p>
+				<div class="field-set">
+					<label>College/University*</label>
+					<input type="text" id="collegeInput" name="CollegeName" style="width:100%;" autocomplete="off" />
+					<div id="collegeSuggestions" class="suggestions-box"></div>
+				</div>
+
+
+
+
+				<div class="field-set">
+					<label>Interest in Program of Study*</label>
+					<select name="CategoryId">
+					<option value="">Select Program</option>
+					@foreach (var cat in Model.Categories)
+					{
+						<option value="@cat.Id"
+								selected="@(ViewBag.Category != null && ViewBag.Category.ToString() == cat.Id.ToString() ? "selected" : null)">
+							@cat.Name
+						</option>
+					}
+					</select>
+				</div>
+
+				<div class="field-set">
+					<label>What information do you want? Describe below*</label>
+					<textarea rows="3" name="Information" required ></textarea>
+				</div>
+			</div>
+
+			<div class="btm-form">
+				<h3>Tell us about yourself</h3>
+				<div class="field-set">
+					<label>Your Name*</label>
+					<input type="text" name="AboutYourself" required />
+				</div>
+
+				<div class="field-set">
+					<label>Contact Number *</label>
+					<input type="text" name="ContactNumber" required />
+				</div>
+
+				<div class="field-set">
+					<label>Your City *</label>
+					<select  name="CityId">
+						<option value="">Select City</option>
+						@foreach (var city in Model.Cities)
+						{
+							<option value="@city.CityId"
+									selected="@(ViewBag.Location != null && ViewBag.Location.ToString() == city.CityId.ToString() ? "selected" : null)">
+								@city.CityName
+							</option>
+						}
+					</select>
+					
+				</div>
+
+				<div class="field-set">
+					<label>What is your highest education degree/course*</label>
+					<input type="text" name="Education" required />
+				</div>
+
+				<div class="field-set" style="display:flex; align-items:center; gap:10px;">
+					<input type="submit" value="Submit" />
+					<div id="form-message" style="font-size:14px; color:green; font-weight:bold;"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="overlay-box"></div>
+</form>
+<style>
+	.suggestions-box div.highlight {
+	background-color: #f0f0f0;
+}
+
+	.suggestions-box {
+		border: 1px solid #ccc;
+		max-height: 200px;
+		overflow-y: auto;
+		background: #fff;
+		position: absolute;
+		width: 100%;
+		z-index: 999;
+		display: none;
+	}
+
+		.suggestions-box div {
+			padding: 8px;
+			cursor: pointer;
+		}
+
+			.suggestions-box div:hover {
+				background: #f0f0f0;
+			}
+</style>
+<script>
+$(document).ready(function () {
+	// Remove the auto-generated anti-forgery token
+	$('input[name="__RequestVerificationToken"]').remove();
+
+	$("#suggestion-form").submit(function (event) {
+	event.preventDefault();
+	 $("#levelHiddenId").val($("#levelDropdown").val());
+	var formData = $(this).serialize();
+
+	$.ajax({
+		url: "/form/submition/courses",
+		type: "POST",
+		data: formData,
+		success: function (response) {
+			if (response.success) {
+				$("#form-message").css("color", "green").text(response.message);
+				$("#suggestion-form")[0].reset();
+			} else {
+				$("#form-message").css("color", "red").text(response.message);
+			}
+
+			// ✅ Hide message after 3 seconds
+			setTimeout(function () {
+				$("#form-message").fadeOut("slow", function() {
+					$(this).text("").show(); // Clear text and reset display
+				});
+			}, 3000);
+		},
+		error: function () {
+			$("#form-message").css("color", "red").text("There was an error submitting the form. Please try again.");
+
+			setTimeout(function () {
+				$("#form-message").fadeOut("slow", function() {
+					$(this).text("").show();
+				});
+			}, 3000);
+		}
+	});
+});
+
+});
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Open when clicking on "Get Info"
+	 // Event delegation
+	$(document).on("click", ".course-info, .un-btn", function (event) {
+		event.preventDefault();
+		document.body.classList.add("un-info-open");
+	});
+
+
+ // Close when clicking the close button
+  document.getElementById('close').addEventListener('click', function (event) {
+	event.preventDefault();
+	document.body.classList.remove('un-info-open');
+  });
+
+ 
+
+  // Close when pressing ESC
+  document.addEventListener('keydown', function (event) {
+	if (event.key === 'Escape') {
+	  document.body.classList.remove('un-info-open');
+	}
+  });
+});
+</script>
+
+<script>
+$(document).ready(function () {
+	let typingTimer;
+	let selectedIndex = -1; // currently highlighted suggestion
+
+	// Typing in input
+	$("#collegeInput").on("keyup", function (e) {
+		const suggestionsBox = $("#collegeSuggestions");
+		const term = $(this).val();
+
+		// Handle keyboard navigation
+		if (suggestionsBox.is(":visible")) {
+			const items = suggestionsBox.children("div");
+			if (e.key === "ArrowDown") {
+				e.preventDefault();
+				selectedIndex = (selectedIndex + 1) % items.length;
+				items.removeClass("highlight");
+				$(items[selectedIndex]).addClass("highlight");
+				return;
+			}
+			if (e.key === "ArrowUp") {
+				e.preventDefault();
+				selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+				items.removeClass("highlight");
+				$(items[selectedIndex]).addClass("highlight");
+				return;
+			}
+			if (e.key === "Enter") {
+				e.preventDefault();
+				if (selectedIndex >= 0) {
+					$(items[selectedIndex]).click();
+				}
+				return;
+			}
+		}
+
+		// Normal typing
+		if (term.length < 2) {
+			suggestionsBox.hide();
+			return;
+		}
+
+		clearTimeout(typingTimer);
+		typingTimer = setTimeout(function () {
+			$.ajax({
+				url: "/courses/quicksearch-colleges",
+				data: { term: term },
+				success: function (data) {
+					suggestionsBox.empty();
+					selectedIndex = -1;
+
+					if (data.length > 0) {
+						data.forEach(function (item) {
+							suggestionsBox.append(
+								`<div class="suggestion-item" data-id="${item.id}">${item.text}</div>`
+							);
+						});
+						suggestionsBox.show();
+					} else {
+						suggestionsBox.hide();
+					}
+				}
+			});
+		}, 300);
+	});
+
+	// Mouse click on suggestion
+	$(document).on("click", ".suggestion-item", function () {
+		let text = $(this).text();
+		let id = $(this).data("id");
+
+		$("#collegeInput").val(text);
+		$("#collegeSuggestions").hide();
+
+		if ($("#collegeId").length === 0) {
+			$("<input>").attr({
+				type: "hidden",
+				id: "collegeId",
+				name: "CollegeId",
+				value: id
+			}).appendTo("form");
+		} else {
+			$("#collegeId").val(id);
+		}
+	});
+
+	// Auto-fill on Get Info / un-btn click
+	$(document).on("click", ".un-btn, .course-info", function () {
+		let collegeId = $(this).data("college-id");
+		let collegeName = $(this).data("college-name");
+		let cityId = $(this).data("city-id");
+		let categoryId = $(this).data("category-id");
+
+		// Auto-fill input
+		$("#collegeInput").val(collegeName);
+
+		// Hidden input create/update
+		if ($("#collegeHiddenId").length === 0) {
+			$("<input>").attr({
+				type: "hidden",
+				id: "collegeHiddenId",
+				name: "CollegeId",
+				value: collegeId
+			}).appendTo("#suggestion-form");
+		} else {
+			$("#collegeHiddenId").val(collegeId);
+		}
+
+		// Update City
+		$("select[name='CityId']").val(cityId);
+
+		// Update Category
+		$("select[name='LevelId']").val(categoryId);
+	});
+});
+</script>
+
+<script>
+			document.getElementById('searchBtn').addEventListener('click', function () {
+		const location = document.getElementById('cityDropdown').value;
+		const level = document.getElementById('levelDropdown').value;
+		const category = document.getElementById('categoryDropdown').value;
+
+		if (!location && !level && !category) {
+			alert("Please select at least one filter.");
+			return;
+		}
+
+		const fetchUrl = `/courses/Index?location=${location}&level=${level}&category=${category}&page=1`;
+		const cleanUrl = `/courses/Index?location=${location}&level=${level}&category=${category}`;
+		history.pushState(null, '', cleanUrl);
+
+		fetch(fetchUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById('coursesHeading').innerHTML = data.heading;
+				document.getElementById('admissionsResults').innerHTML = data.results;
+
+				// ✅ ALSO load guides dynamically
+				loadGuides(level, category);
+			})
+			.catch(error => console.error("Error:", error));
+	});
+
+		function loadGuides(levelId, categoryId) {
+		$.ajax({
+			url: `/guides/links/search?levelId=${levelId}&categoryId=${categoryId}`,
+			type: "GET",
+			success: function (data) {
+		let listHtml = "";
+		if (data && data.length > 0) {
+			data.forEach(item => {
+				listHtml += `
+					<li style="max-width: 384px;">
+						<a href="${item.guideMainUrl}" title="${item.guideName}">
+							${item.guideName}
+						</a>
+					</li>`;
+			});
+		} else {
+			listHtml = `<li style="max-width: 384px;">No guides found</li>`;
+		}
+		$("#guidesList").html(listHtml);
+	}
+	,
+			error: function () {
+				$("#guidesList").html("<li>Error loading guides</li>");
+			}
+		});
+	}
+
+		$(document).ready(function () {
+		// page load hone par bhi guides fetch karo
+		const urlParams = new URLSearchParams(window.location.search);
+		const level = urlParams.get("level");
+		const category = urlParams.get("category");
+
+		if (level && category) {
+			loadGuides(level, category);
+		}
+	});
+
+
+</script>
+
+<script>
+		// Desktop Load More
+	document.addEventListener('click', function (e) {
+		if (e.target && e.target.id === 'loadMoreBtn') {
+			const loadMoreBtn = e.target;
+			const institutionList = document.getElementById('institutionList');
+				let currentPage = parseInt(loadMoreBtn.getAttribute('data-page')) || 1;
+	currentPage++;
+			loadMoreBtn.setAttribute("data-page", currentPage);
+			loadMoreBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading More...';
+			loadMoreBtn.disabled = true;
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const location = urlParams.get("location") || "";
+			const level = urlParams.get("level") || "";
+			const category = urlParams.get("category") || "";
+
+			const url = `/courses/Index?location=${location}&level=${level}&category=${category}&page=${currentPage}`;
+
+			fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+			.then(response => response.json())
+			.then(data => {
+				const tempDiv = document.createElement('div');
+				tempDiv.innerHTML = data.results;
+
+				const newTableBody = tempDiv.querySelector('tbody#institutionList');
+				const newLoadMoreContainer = tempDiv.querySelector('.desktop-loadmore');
+
+				if (!newTableBody || newTableBody.children.length === 0) {
+					loadMoreBtn.innerText = 'No more institutions';
+					loadMoreBtn.disabled = true;
+					return;
+				}
+
+				newTableBody.querySelectorAll('tr').forEach(row => {
+					institutionList.appendChild(row);
+				});
+
+				// re-init ads
+				const newAds = institutionList.querySelectorAll('tr td .adsbygoogle');
+				if (newAds.length > 0) {
+					window.adsbygoogle = window.adsbygoogle || [];
+					newAds.forEach(ad => {
+						window.adsbygoogle.push({});
+					});
+				}
+
+				// Replace only desktop loadmore
+				if (newLoadMoreContainer) {
+					document.querySelector('.desktop-loadmore').outerHTML = newLoadMoreContainer.outerHTML;
+				} else {
+					loadMoreBtn.innerText = 'No more institutions';
+					loadMoreBtn.disabled = true;
+				}
+			})
+			.catch(() => {
+				loadMoreBtn.innerText = "Load More Institutions";
+				loadMoreBtn.disabled = false;
+			});
+		}
+	});
+
+
+		// Mobile Load More
+	document.addEventListener('click', function (e) {
+		if (e.target && e.target.id === 'loadMoreUlBtn') {
+			const loadMoreBtn = e.target;
+			const institutionUlList = document.getElementById('institutionUlList');
+				let currentPage = parseInt(loadMoreBtn.getAttribute('data-page')) || 1;
+	currentPage++;
+			loadMoreBtn.setAttribute("data-page", currentPage);
+			loadMoreBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading More...';
+			loadMoreBtn.disabled = true;
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const location = urlParams.get("location") || "";
+			const level = urlParams.get("level") || "";
+			const category = urlParams.get("category") || "";
+
+			const url = `/courses/Index?location=${location}&level=${level}&category=${category}&page=${currentPage}`;
+
+			fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+			.then(response => response.json())
+			.then(data => {
+				const tempDiv = document.createElement('div');
+				tempDiv.innerHTML = data.results;
+
+				const newUl = tempDiv.querySelector('ul#institutionUlList');
+				const newLoadMoreContainer = tempDiv.querySelector('.mobile-loadmore');
+
+				if (!newUl || newUl.children.length === 0) {
+					loadMoreBtn.innerText = 'No more institutions';
+					loadMoreBtn.disabled = true;
+					return;
+				}
+
+				newUl.querySelectorAll('li').forEach(li => {
+					institutionUlList.appendChild(li);
+				});
+
+				// re-init ads
+				const newAds = institutionUlList.querySelectorAll('li .adsbygoogle');
+				if (newAds.length > 0) {
+					window.adsbygoogle = window.adsbygoogle || [];
+					newAds.forEach(ad => {
+						window.adsbygoogle.push({});
+					});
+				}
+
+				// Replace only mobile loadmore
+				if (newLoadMoreContainer) {
+					document.querySelector('.mobile-loadmore').outerHTML = newLoadMoreContainer.outerHTML;
+				} else {
+					loadMoreBtn.innerText = 'No more institutions';
+					loadMoreBtn.disabled = true;
+				}
+			})
+			.catch(() => {
+				loadMoreBtn.innerText = "Load More Institutions";
+				loadMoreBtn.disabled = false;
+			});
+		}
+	});
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+﻿@model IKDFrontEnd.ViewModels.HomePageViewModel3
+<div class="ikd-search-banner" style="background: #effcf4;">
+	<img class="sideimg lazy-load" src="https://images.ishallwin.com/home/side-img-1.webp" alt="image">
+	<img class="sideimg right lazy-load" src="https://www.ilmkidunya.com/images/side-img-2.webp" alt="image">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				@{
+					var data = Model.Courses;
+				}
+				<div id="courseResults"></div>
+
+				<div class="banner-search-form">
+					<div class="banner-heading">
+						<h2 class="banner-title">Find your dream course/university</h2>
+						<p>by using Pakistan’s leading course search system</p>
+					</div>
+					<form class="banner-form" id="form-id" method="post">
+						<div class="banner-inputs">
+							<select aria-label="State" class="big-select" id="ddlCity" style="width:24%">
+								<option value="-1">Select City</option>
+								@foreach (var city in data.Cities)
+								{
+									<option value="@city.CityId">@city.CityName</option>
+								}
+							</select>
+
+							<select aria-label="State" class="big-select" id="ddlLevel" style="width:36%">
+								<option value="-1">Select Achieved Education Level</option>
+								@foreach (var level in data.Levels)
+								{
+									<option value="@level.Id">@level.Name</option>
+								}
+							</select>
+							<select aria-label="State" class="big-select" id="catUlList" style="width:40%">
+								<option value="-1">Select category</option>
+								@foreach (var category in data.Categories)
+								{
+									<option value="@category.Id">@category.Name</option>
+								}
+							</select>
+
+						</div>
+						<button id="searchBtn" type="button" value="Show Courses" class="btn-search" onclick="return LoadBackEnd();" aria-label="Name" style="position: relative;">
+							<img style="left: 17px; bottom: 17px;" class="lazy-load" src="https://images.ishallwin.com/icons/search.webp" alt="image">
+							<span>Search</span>
+						</button>
+					</form>
+
+					<div class="banner-heading">
+						<p>Searches from 3736 colleges &amp; universities and 63547 courses</p>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,202 @@
+﻿@model IKDFrontEnd.ViewModels.TestResultViewModel
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Luxurious+Script&display=swap');
+
+    .result-certificate.fail {
+        background: url(https://images.ishallwin.com/certi/bg-certificates-fail.jpg) no-repeat 0 0;
+        background-size: cover;
+    }
+
+    .result-certificate.pass {
+        background: url(https://resources.ilmkidunya.com/online-test/assets/images/bg-certificates.jpg) no-repeat 0 0;
+        background-size: cover;
+    }
+
+    .result-certificate {
+        height: 630px;
+        position: relative;
+        width: 100%;
+        margin: 0;
+    }
+
+        .result-certificate .inner-box {
+            padding: 220px 100px 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+            .result-certificate .inner-box h2 {
+                text-transform: uppercase;
+                font-size: 34px;
+                line-height: 42px;
+                font-weight: 600;
+                letter-spacing: 1px;
+                margin: 0;
+                color: #000;
+            }
+
+            .result-certificate .inner-box h3 {
+                font-size: 24px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                line-height: 30px;
+                margin: 10px 0;
+                color: #000;
+            }
+
+            .result-certificate .inner-box .name-certi {
+                display: block;
+                margin: 0 50px 20px;
+                padding: 25px 0 15px;
+                border-bottom: 2px solid #000;
+            }
+
+                .result-certificate .inner-box .name-certi h1 {
+                    font-size: 70px;
+                    letter-spacing: 2px;
+                    text-transform: capitalize;
+                    font-family: "Luxurious Script", cursive;
+                    margin: 0 0 5px 0;
+                    color: #000;
+                }
+
+            .result-certificate .inner-box .marks-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 0 10px 0;
+            }
+
+                .result-certificate .inner-box .marks-box span {
+                    font-size: 20px;
+                    color: #000;
+                    text-align: left;
+                    line-height: 26px;
+                    font-weight: 500;
+                }
+
+                    .result-certificate .inner-box .marks-box span:first-child {
+                        font-size: 50px;
+                        padding: 0 20px;
+                        font-weight: bold;
+                    }
+
+            .result-certificate .inner-box .last-certi {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 5px 0 10px;
+            }
+
+                .result-certificate .inner-box .last-certi .box span {
+                    display: block;
+                    color: #000;
+                    font-size: 20px;
+                    line-height: 26px;
+                }
+
+                .result-certificate .inner-box .last-certi .box {
+                    width: 32%;
+                }
+
+                    .result-certificate .inner-box .last-certi .box em {
+                        color: #000;
+                        font-size: 16px;
+                        line-height: 26px;
+                        font-style: normal;
+                        display: inline-block;
+                        padding: 3px 25px 0;
+                        border-top: 1px solid #000;
+                        margin: 10px 0 0 0;
+                    }
+
+    @@media (max-width: 768px) {
+        .result-certificate {
+            height: 500px;
+        }
+
+            .result-certificate .inner-box {
+                padding: 150px 30px 0;
+            }
+
+                .result-certificate .inner-box h2 {
+                    font-size: 24px;
+                }
+
+                .result-certificate .inner-box h3 {
+                    font-size: 18px;
+                }
+
+                .result-certificate .inner-box .name-certi h1 {
+                    font-size: 50px;
+                }
+
+                .result-certificate .inner-box .marks-box span:first-child {
+                    font-size: 40px;
+                }
+
+                .result-certificate .inner-box .last-certi .box span {
+                    font-size: 16px;
+                }
+    }
+</style>
+
+@if (Model.IsPassed)
+{
+    <!-- PASS CERTIFICATE -->
+    <div class="result-certificate pass">
+        <div class="inner-box">
+            <h2>@Model.TestTitle</h2>
+            <h3>Congratulations!</h3>
+            <div class="name-certi">
+                <h1>@Model.UserName</h1>
+            </div>
+            <div class="marks-box">
+                <span style="color: green;">@Model.CorrectAnswers</span>
+                <span>Marks <br> Out of @Model.TotalQuestions</span>
+            </div>
+            <div class="last-certi">
+                <div class="box">
+                    <img src="https://cdn.ilmkidunya.com/logo.svg" alt="" style="height: 70px; max-width: 100%;" />
+                </div>
+                <div class="box">
+                    <img src="https://images.ishallwin.com/certi/high-scorrers.png" alt="" style="width: 100%; max-height: 70px; object-fit: contain;" />
+                </div>
+                <div class="box">
+                    <span>@Model.Dated.ToString("dd MMM yyyy")</span>
+                    <em>Issue date</em>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- FAIL CERTIFICATE -->
+    <div class="result-certificate fail">
+        <div class="inner-box">
+            <h2>@Model.TestTitle</h2>
+            <h3>Better Luck Next Time</h3>
+            <div class="name-certi">
+                <h1>@Model.UserName</h1>
+            </div>
+            <div class="marks-box">
+                <span style="color: red;">@Model.CorrectAnswers</span>
+                <span>Marks <br> Out of @Model.TotalQuestions</span>
+            </div>
+            <div class="last-certi">
+                <div class="box">
+                    <img src="https://cdn.ilmkidunya.com/logo.svg" alt="" style="height: 70px; max-width: 100%;" />
+                </div>
+                <div class="box">
+                    <img src="https://images.ishallwin.com/certi/img-fail.png" alt="" style="width: 100%; max-height: 70px; object-fit: contain;" />
+                </div>
+                <div class="box">
+                    <span>@Model.Dated.ToString("dd MMM yyyy")</span>
+                    <em>Issue date</em>
+                </div>
+            </div>
+        </div>
+    </div>
+}

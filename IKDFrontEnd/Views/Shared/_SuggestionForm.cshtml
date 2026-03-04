@@ -1,0 +1,97 @@
+﻿@using IKDFrontEnd.ViewModels
+@model SuggestionViewModel
+<form id="suggestion-form">
+    <input type="hidden" name="PageUrl" id="PageUrl" />
+   
+
+<div class="form-holder">
+        <div class="fieldset">
+            <label>Your Name *</label>
+            <input type="text" name="Name" placeholder="Enter your full name" />
+        </div>
+        <div class="fieldset">
+            <label>Contact Number</label>
+            <input type="number" name="Mobile" placeholder="Enter your mobile number" />
+        </div>
+        <div class="fieldset">
+            <label>I want to study in</label>
+            <select name="EducationLevel">
+                <option value="">-- Select Education Level --</option>
+                <option value="14">Matric / O-Level</option>
+                <option value="3">Intermediate / A-Level</option>
+                <option value="5">Diploma & Certificates</option>
+                <option value="6">Bachelors</option>
+                <option value="7">Masters</option>
+                <option value="8">MPhil</option>
+                <option value="9">Ph.D</option>
+            </select>
+        </div>
+        <div class="fieldset">
+            <label>What is your highest education degree/course*</label>
+            <input type="text" name="CurrentDegree" placeholder="Enter Course/Degree Name" />
+        </div>
+        <div class="fieldset">
+            <label>I want to study in</label>
+            <select name="cityId">
+                <option value="">-- Select City --</option>
+                @foreach (var city in (ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>).OrderBy(c => c.CityName))
+                {
+                    <option value="@city.CityId">
+                        @city.CityName
+                    </option>
+                }
+            </select>
+
+        </div>
+        <div class="fieldset">
+            <label>My favourite fields of study is</label>
+            <select name="FieldId">
+                <!-- Changed name to FieldId -->
+                <option value="">-- Select Field --</option>
+                @foreach (var field in ViewBag.Fields as List<IKDFrontEnd.Models.CourseCategory>)
+                {
+                    <option value="@field.Id">
+                        @field.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="fieldset">
+            <label>What information do you want? Describe below*</label>
+            <input type="text" name="Description" placeholder="Enter Description" />
+        </div>
+       
+        <div class="fieldset " style="margin : 0; position : relative; ">
+            <label for="checkopt" style="padding: 1px 0 0 22px;">I agree with ilmkidunya terms &amp; conditions</label>
+
+            <input type="checkbox" style="
+                   position: absolute;
+                   left: 0;
+                   top: 0;"
+                   checked="checked"
+                   id="checkopt" 
+                   name="AgreeToTerms"
+                   value="true" required />
+            <input type="hidden" name="AgreeToTerms" value="false"   />
+           
+        </div>
+        <div class="fieldset">
+            <input type="submit" value="Submit" style="float : left ;" />
+        </div>
+    </form>
+</div>
+<style>
+    @@media screen and (max-width: 980px) {
+        .bs-admission-sec .inner-holder .box-right .form-holder .fieldset {
+            width: 100%;
+            margin-bottom: 20px !important;
+        }
+
+        .bs-admission-sec .inner-holder .box-right{
+            border : none;
+            padding : 0;
+        }
+
+       
+    }
+</style>

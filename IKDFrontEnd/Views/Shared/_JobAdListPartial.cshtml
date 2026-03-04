@@ -1,0 +1,42 @@
+﻿@model IKDFrontEnd.ViewModels.JobListingPageViewModel
+
+@foreach (var job in Model.GroupedJobAds)
+{
+    <li>
+        <div class="box-left">
+            <strong>@job.Dated.ToString("dd MMM yy")</strong>
+            @{
+                var jobCompany = job.CompanyName?.ToLower().Replace(" ", "-");
+            }
+            <a href="/jobs/@job.CompanyUrl">@job.CompanyName</a>
+        </div>
+        <div class="box-right">
+            <ul>
+                <li>
+                    @foreach (var title in job.JobTitles)
+                    {
+                        <p>@title</p>
+                    }
+                </li>
+                <li>
+                    @foreach (var count in job.JobCounts)
+                    {
+                        <p>@count Jobs</p>
+                    }
+                </li>
+                <li>
+                    <p>Last Date</p>
+                    <p>@job.LastDate?.ToString("dd-MMM-yy")</p>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-view">
+            @{
+                var jobTitle = job.JobTitles[0].ToLower().Replace(" ", "-");
+                var jobId = job.JobAdIds.FirstOrDefault();
+                var fullSlug = $"{jobTitle}-jobs-in-{jobCompany}-{jobId}";
+            }
+            <a href="/jobs/@fullSlug">View</a>
+        </div>
+    </li>
+}

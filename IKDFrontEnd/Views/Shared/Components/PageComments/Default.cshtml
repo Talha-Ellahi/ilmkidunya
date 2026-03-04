@@ -1,0 +1,118 @@
+﻿@* @model IKDFrontEnd.ViewModels.PageCommentsViewModel
+
+<div class="col-lg-12">
+    <div class="comment-sec">
+        <h2>Share Your Comments Questions Here</h2>
+        <form id="commentForm" enctype="multipart/form-data">
+            <div class="comment-box">
+                <div class="user-img">
+                    <img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" />
+                    <div class="has-letter">A</div>
+                </div>
+                <div class="comment-input">
+                    <div class="inputArea">
+                        <input type="hidden" name="PageUrl" value="@Model.PageUrl" />
+                        <input type="text" name="Comments" placeholder="Add Your Comments..." required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">POST COMMENT</button>
+                </div>
+            </div>
+        </form>
+
+
+        <ul class="comments-list">
+            @foreach (var commentVm in Model.Comments)
+            {
+                var comment = commentVm.Comment;
+                <li>
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="user-img">
+                                <img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" />
+                                <div class="has-letter">@(!string.IsNullOrEmpty(comment.Name) ? comment.Name[0].ToString().ToUpper() : "A")</div>
+                            </div>
+                            <div class="top-left">
+                                <h4>@comment.Name</h4>
+                                <span class="time">@comment.DatePosted?.ToString("dd MMM yyyy")</span>
+                            </div>
+                        </div>
+
+                        <div class="desc-detail">
+                            <p>@comment.Comments</p>
+
+                            <div class="action-comment">
+                                <div class="likeBx"
+                                     onclick="toggleCommentLike(this)"
+                                     data-comment-id="@comment.CommentId"
+                                     data-liked="false"
+                                     style="cursor: pointer;">
+                                    <input type="hidden" value="@comment.LikeCmt" />
+                                    <span>Like (@(comment.LikeCmt ?? 0))</span>
+                                </div>
+
+
+                                <div class="replyBx" onclick="toggleCommentInput(this)">
+                                    <span>Reply</span>
+                                </div>
+                            </div>
+
+
+                            <!-- Reply Input -->
+                           
+                                <div class="comment-input" style="display: none;">
+
+                                <form method="post" class="reply-form" asp-controller="Comments" asp-action="PostReply" enctype="multipart/form-data">
+                                    <input type="hidden" name="CId" value="@comment.CommentId" />
+                                    <div class="inputArea">
+                                        <!-- Image Preview -->
+                                        <div class="upload-image" id="showimage3-@comment.CommentId" style="display:none;">
+                                            <div class="single-image">
+                                                <button class="close" type="button" onclick="closePreview('showimage3-@comment.CommentId', 'image3show-@comment.CommentId', 'image3-@comment.CommentId');">×</button>
+                                                <img src="" id="image3show-@comment.CommentId" alt="Image Preview">
+                                            </div>
+                                        </div>
+
+                                        <!-- Comment Text -->
+                                        <input type="text" name="Comment" placeholder="Write a reply..." required />
+
+                                        <!-- File Upload -->
+                                        <div class="file-upload">
+                                            <input type="file" name="ImageFile" class="file-input" id="image3-@comment.CommentId" onchange="readURL(this, 'showimage3-@comment.CommentId', 'image3show-@comment.CommentId');" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary">
+                                        <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png" />
+                                    </button>
+                                         </form>
+                                </div>
+                           
+
+                           
+
+                            <!-- Replies Section -->
+                            <ul class="replies-list">
+                                @foreach (var reply in commentVm.Replies)
+                                {
+                                    <li class="reply-item">
+                                        <div>
+                                            <strong>@reply.Username</strong>:
+                                            <span>@reply.Comment</span>
+                                        </div>
+                                        <div class="likeBx" onclick="toggleReplyLike(this)" reply-id="@reply.ChildCmtId" style="cursor: pointer;" data-liked="false">
+                                            <input type="hidden" value="@(reply.Likes ?? 0)">
+                                            <span>Like (@(reply.Likes ?? 0))</span>
+                                        </div>
+
+
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div> *@

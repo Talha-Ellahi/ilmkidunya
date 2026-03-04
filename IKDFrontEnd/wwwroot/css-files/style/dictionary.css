@@ -1,0 +1,248 @@
+.dictionary-from.banner-form {
+    position: relative;
+}
+
+.custom-select-wrapper {
+    user-select: none;
+    padding: 8px 20px;
+    border-left: 1px solid #c8c8c8;
+}
+
+.custom-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-select .arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #15a18d;
+    margin-left: 10px;
+    transition: transform .2s;
+}
+
+.custom-options {
+    position: absolute;
+    top: 80%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #15a18d;
+    border-radius: 5px;
+    margin-top: 5px;
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    z-index: 10;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.custom-options .search-box {
+    padding: 5px;
+    border-bottom: 2px solid #ddd;
+    flex: 1 1 100%;
+}
+
+.custom-options input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.custom-options span {
+    padding: 10px;
+    cursor: pointer;
+    flex: 1 1 33%;
+    min-width: 150px;
+    transition: 0.2s;
+}
+
+.custom-options span:hover {
+    background: #15a18d;
+    color: #fff;
+}
+
+.custom-select-wrapper.open .custom-options {
+    display: flex;
+}
+
+.custom-select-wrapper.open .custom-select .arrow {
+    transform: rotate(180deg);
+}
+
+.dictionary-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+}
+
+.dictionary-row .dictionary-boxes {
+    min-width: 300px;
+    min-height: 200px;
+    width: 45%;
+    flex: 1;
+    padding: 25px;
+    background: rgba(54, 229, 124, 0.1);
+    border: 1px solid #36e57c;
+    border-radius: 10px;
+    position: relative;
+}
+
+.dictionary-boxes .meaning-bx {
+    margin: 15px 0px;
+}
+
+.dictionary-boxes .meaning-bx li {
+    color: #383838;
+    line-height: 1.18;
+    margin-bottom: 6px;
+}
+
+.dictionary-speaker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dictionary-speaker h2 {
+    font-weight: bold !important;
+}
+
+.dictionary-boxes .spk-icon svg {
+    cursor: pointer;
+    color: #15a18d;
+    fill: #15a18d;
+    width: 35px;
+}
+
+.dictionary-boxes .spk-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
+.dictionary-boxes .banner-form {
+    margin: 0px !important;
+}
+
+.translation-result p {
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+.translation-result p.urdu {
+    font-size: 25px;
+    text-align: right;
+    font-weight: 600;
+}
+
+.responsive-table span.urdu {
+    font-size: 20px;
+    text-align: right;
+    font-weight: 500;
+    display: block;
+}
+
+.dictionary-synonyms-list {
+    padding: 25px;
+    background: rgba(54, 229, 124, 0.1);
+    border: 1px solid #36e57c;
+    border-radius: 10px;
+    margin: 15px 0px 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dictionary-synonyms-list a {
+    background-color: #ffffff;
+    padding: 5px 14px;
+    border-radius: 50px;
+}
+
+.dictionary-by-words {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.dictionary-by-words .by-words-colm {
+    min-width: 300px;
+    min-height: 200px;
+    flex: 1 1 46%;
+    padding: 30px;
+    background: rgba(54, 229, 124, 0.1);
+    border: 1px solid #36e57c;
+    border-radius: 10px;
+}
+
+.dictionary-letters {
+    margin: 20px 0px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dictionary-letters a {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    color: black;
+    cursor: pointer;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background-color: #36e57c;
+    transition: all 0.3s ease;
+}
+
+.dictionary-letters a:hover {
+    background-color: #4EA28D;
+}
+
+.by-words-colm.words-by-urdu {
+    flex-basis: 100%;
+}
+
+.by-words-colm.words-by-urdu .dictionary-letters {
+    direction: rtl !important;
+}
+
+.by-words-colm.words-by-urdu .dictionary-letters a {
+    font-size: 23px;
+}
+
+span.dict-urdu-word {
+    font-size: 20px;
+    display: block;
+    text-align: right;
+}
+
+.responsive-table td {
+    align-content: center;
+}
+
+.translator-btns {
+    text-align: center;
+}
+
+.translator-btns a.text-btn {
+    margin: 0px 8px 30px 0px !important;
+}
+.diclinkclr ul li a{
+    color: #4EA28D !important;
+}
+.diclinkclr ul li:hover a{
+    color: black !important;
+}

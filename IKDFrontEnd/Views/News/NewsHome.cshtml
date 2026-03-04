@@ -1,0 +1,321 @@
+﻿@model IEnumerable<IKDFrontEnd.Models.TblMainNews>
+
+
+
+@{
+	Layout = "~/Views/Shared/_News.cshtml";
+
+}
+
+
+@section innerbanner {
+
+}
+
+
+@section newbanner {
+
+}
+
+
+
+<div id="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="my-ads" id="slider1" style="display:none;">
+					<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="college-news-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="bs-admission-sec" style="padding: 15px;">
+						<h2>Explore Educational News</h2>
+						<ul class="admission-nav" style="border: 0; justify-content: flex-start;">
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-national.webp" alt="" />
+									<span>National</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-world.webp" alt="" />
+									<span>International</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+									<span>Announcements</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-meritlist.webp" alt="" />
+									<span>Merit List</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-datesheet.webp" alt="" />
+									<span>Date Sheets</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-result.webp" alt="" />
+									<span>Results</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+									<span>Admissions</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="https://images.ishallwin.com/news/ico-studyabroad.webp" alt="" />
+									<span>Study Abroad</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="new-ads-sec">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<ul class="ss-ads" style="border-top: 0;">
+							<li>
+								<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/1.webp" alt=""></a>
+							</li>
+							<li>
+								<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/2.webp" alt=""></a>
+							</li>
+							<li>
+								<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/3.webp" alt=""></a>
+							</li>
+							<li>
+								<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/4.webp" alt=""></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<h2>Latest Educational News</h2>
+					<ul class="news-list" id="newsList">
+						@foreach (var news in Model)
+						{
+							<li>
+								<div class="news-box">
+									<div class="img-holder">
+										<figure><img src="@news.Picture1" alt="News Image" /></figure>
+									</div>
+									<div class="text-holder">
+										<span class="date">@news.Dated?.ToString("dd-MMM-yyyy")</span>
+
+										<h4><a href="#">@news.MainHeading</a></h4>
+									</div>
+								</div>
+							</li>
+						}
+					</ul>
+
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="loadMoreBtn">Load More News</button>
+					</p>
+				
+				@* <div class="col-lg-12">
+					<ul class="ss-ads" style="border-top: 0;">
+						<li>
+							<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/5.webp" alt=""></a>
+						</li>
+						<li>
+							<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/6.webp" alt=""></a>
+						</li>
+						<li>
+							<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/7.webp" alt=""></a>
+						</li>
+						<li>
+							<a href="#" aria-label="ads"><img src="https://images.ishallwin.com/8.webp" alt=""></a>
+						</li>
+					</ul>
+					<div class="my-ads" id="slider1">
+						<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="comment-sec">
+						<h2>Share Your Comments Questions Here</h2>
+						<div class="comment-box">
+							<div class="user-img">
+								<img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" />
+								<div class="has-letter">A</div>
+							</div>
+							<div class="comment-input">
+								<div class="inputArea">
+									<div class="upload-image" id="showimage4" style="display:none;">
+										<div class="single-image">
+											<button class="close" onclick="closePreview('showimage4', 'image4show', 'image4');">×</button>
+											<img src="" id="image4show" alt="Image Preview">
+										</div>
+									</div>
+									<input type="text" name="" placeholder="Add Your Comments...">
+									<div class="file-upload">
+										<input type="file" class="file-input" id="image4" onchange="readURL(this, 'showimage4', 'image4show');">
+									</div>
+								</div>
+								<button type="button" class="btn btn-primary">POST COMMENT</button>
+							</div>
+						</div>
+
+						<ul class="comments-list">
+							<li>
+								<div class="comment">
+									<div class="comment-header">
+										<div class="user-img">
+											<img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" />
+											<div class="has-letter">A</div>
+										</div>
+										<div class="top-left">
+											<h4>Mshoaib Shahidawan</h4>
+											<span class="time">27 Sep 2023</span>
+										</div>
+									</div>
+									<div class="desc-detail">
+										<p>Aoa sir kia sargodha uni ka contact number mil skta hy.  Admsion k ly information chyee</p>
+										<div class="action-comment">
+											<div class="likeBx" onclick="toggleLike(this)" comment-id="846438.0">
+												<input type="hidden" value="7">
+												<span>Like (7)</span>
+											</div>
+											<div class="replyBx" onclick="toggleCommentInput(this)">
+												<span>Reply</span>
+											</div>
+										</div>
+										<div class="comment-input" style="display: none;">
+											<div class="inputArea">
+												<div class="upload-image" id="showimage3" style="display:none;">
+													<div class="single-image">
+														<button class="close" onclick="closePreview('showimage3', 'image3show', 'image3');">×</button>
+														<img src="" id="image3show" alt="Image Preview">
+													</div>
+												</div>
+												<input type="text" name="" placeholder="Add Your Comments...">
+												<div class="file-upload">
+													<input type="file" class="file-input" id="image3" onchange="readURL(this, 'showimage3', 'image3show');">
+												</div>
+											</div>
+											<button type="button" class="btn btn-primary"><img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png" onclick="PostChild(785086)"></button>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="comment">
+									<div class="comment-header">
+										<div class="user-img">
+											<img src="https://images.ishallwin.com/news/Pakistani1.webp" alt="" style="display: none;" />
+											<div class="has-letter" data-letter="A" style="display: block;">A</div>
+										</div>
+										<div class="top-left">
+											<h4>Mshoaib Shahidawan</h4>
+											<span class="time">27 Sep 2023</span>
+										</div>
+									</div>
+									<div class="desc-detail">
+										<p>Aoa sir kia sargodha uni ka contact number mil skta hy.  Admsion k ly information chyee</p>
+										<div class="action-comment">
+											<div class="likeBx" onclick="toggleLike(this)" comment-id="846438.0">
+												<input type="hidden" value="7">
+												<span>Like (7)</span>
+											</div>
+											<div class="replyBx" onclick="toggleCommentInput(this)">
+												<span>Reply</span>
+											</div>
+										</div>
+										<div class="comment-input" style="display: none;">
+											<div class="inputArea">
+												<div class="upload-image" id="showimage2" style="display:none;">
+													<div class="single-image">
+														<button class="close" onclick="closePreview('showimage2', 'image2show', 'image2');">×</button>
+														<img src="" id="image2show" alt="Image Preview">
+													</div>
+												</div>
+												<input type="text" name="" placeholder="Add Your Comments...">
+												<div class="file-upload">
+													<input type="file" class="file-input" id="image2" onchange="readURL(this, 'showimage2', 'image2show');">
+												</div>
+											</div>
+											<button type="button" class="btn btn-primary"><img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png" onclick="PostChild(785086)"></button>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div> *@
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		let skip = @Model.Count();
+		const take = 5;
+
+		$(document).ready(function () {
+			$('#loadMoreBtn').on('click', function () {
+				$.ajax({
+					url: '@Url.Action("LoadMoreNews", "YourControllerName")',
+					type: 'GET',
+					data: { skip: skip, take: take },
+					success: function (data) {
+						if (data.length === 0) {
+							$('#loadMoreBtn').hide();
+						}
+
+						data.forEach(function (newsItem) {
+							const newsHtml = `
+									<li>
+										<div class="news-box">
+											<div class="img-holder">
+												<figure><img src="${newsItem.ImageUrl}" alt="News Image" /></figure>
+											</div>
+											<div class="text-holder">
+												<span class="date">${newsItem.Date}</span>
+												<h4><a href="#">${newsItem.Title}</a></h4>
+											</div>
+										</div>
+									</li>
+								`;
+							$('#newsList').append(newsHtml);
+						});
+
+						skip += data.length;
+					},
+					error: function (error) {
+						console.error('Error loading news:', error);
+					}
+				});
+			});
+		});
+	</script>

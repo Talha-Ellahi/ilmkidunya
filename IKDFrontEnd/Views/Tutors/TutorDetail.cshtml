@@ -1,0 +1,426 @@
+﻿@model IKDFrontEnd.ViewModels.TutorDetailViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var random = new Random();
+	var colorClasses = new[] { "sh-green", "sh-blue", "sh-purple", "sh-red" };
+	var title = @Model.TutorName + " Home Tutor/ Tution avaialable in " + Model.CityName;
+}
+@section MetaData {
+@* 	<meta charset="utf-8">
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+				<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+				<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+				<meta property="og:image" content="" />
+				<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+				<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+				<meta name="viewport" content="width=device-width, initial-scale=1">
+				*@
+	<title>@title</title>
+}
+@section header {
+	<!-- Header Start -->
+	<div class="col-lg-11">
+		<partial name="_JobsNavBar" />
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner college-banner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="with-img">
+						<div class="ss-img-box">
+							<div class="img-holder">
+								<img src="@Model.ProfileImage" style="height:150px;"
+									 onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" />
+							</div>
+						</div>
+						<div class="ss-text-holder">
+							@if (Model.TutorName != null)
+							{
+								<input id="tutorname" type="hidden" name="TutorName" value="@Model.TutorName" />
+								<h1>@Model.TutorName</h1>
+							}
+
+							@if (Model.Email != null)
+							{
+								<input id="tutoremail" type="hidden" name="tutoremail" value="@Model.Email" />
+							}
+							<ul>
+								<li>
+									<span>Gender</span>
+									<em>@(Model.Gender ? "Male" : "Female")</em>
+								</li>
+								<li>
+									<span>City</span>
+									<em>@Model.CityName</em>
+								</li>
+								<li>
+									<span>Now studying</span>
+									<em>@Model.CourseName</em>
+								</li>
+							</ul>
+
+							<ul style="width: 65%;">
+								<li>
+
+									<em>
+										@Model.Availability<br />
+										@Model.TutoringOptions
+									</em>
+								</li>
+							</ul>
+							<a href="#" class="cont-totor" data-toggle="modal" data-target=".bd-example-modal-md">Contact Tutor</a>
+							<div class="modal fade bd-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="tutorModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-md popupWidth md-width" role="document">
+									<div class="modal-content tutor-popup-inner">
+										<div class="modal-header">
+											<h3 class="modal-title">Contact Home Tutor Fatir Ahmed</h3>
+											<p>Please use this form to contact this home tutor.</p>
+											<button type="button" class="close closePopup" data-dismiss="modal" aria-label="Close" onclick="CloseTutorContact();">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="form-group" id="divtutorpopuplabels">
+												<label class="form-label" for="txtnametutor">Enter Your Name</label>
+												<input class="form-control border-zero" id="txtnametutor" type="text">
+
+												<label class="form-label" for="txtcontactTutor">Enter Your Contact Number</label>
+												<input class="form-control border-zero" id="txtcontactTutor" type="text">
+
+												<label class="form-label" for="txttutorsubject">Tutor required for class/subjects?</label>
+												<input class="form-control border-zero" id="txttutorsubject" type="text">
+											</div>
+
+											<button type="button" style="margin-top:10px;" class="btn btnSuccess btn-block" onclick="SaveRecords();">Save</button>
+										</div>
+
+										<div class="modal-body popupContent" id="divAcknowledgment" style="display:none;">
+											<p>Your information has been saved. You will be contacted shortly.</p>
+											<button type="button" class="btn btnSuccess btn-block" style="margin-top:10px;" data-dismiss="modal" onclick="CloseTutorContact();">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<a href="#" class="cont-totor" data-toggle="modal" data-target=".bd-example-modal-md"
+							   style="margin-top: 200px; margin-right:50px;" onclick="display()">Contact Tutor</a>
+
+							<div  class="modal fade bd-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="tutorModalLabel" aria-hidden="true">
+								<div  class="modal-dialog modal-md popupWidth md-width" role="document">
+									<div  class="modal-content tutor-popup-inner">
+										<div id="contactTutor">
+											<div class="modal-header">
+												<h3 class="modal-title">Contact Home Tutor Fatir Ahmed</h3>
+												<p>Please use this form to contact this home tutor.</p>
+												<button type="button" class="close closePopup" data-dismiss="modal" aria-label="Close" onclick="CloseTutorContact();">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<div class="form-group" id="divtutorpopuplabels">
+													<label class="form-label" for="txtnametutor">Enter Your Name</label>
+													<input class="form-control border-zero" id="txtnametutor" type="text">
+
+													<label class="form-label" for="txtcontactTutor">Enter Your Contact Number</label>
+													<input class="form-control border-zero" id="txtcontactTutor" type="text">
+
+													<label class="form-label" for="txttutorsubject">Tutor required for class/subjects?</label>
+													<input class="form-control border-zero" id="txttutorsubject" type="text">
+												</div>
+
+												<button type="button" style="margin-top:10px;" class="btn btnSuccess btn-block" onclick="SaveRecords();">Save</button>
+											</div>
+										</div>
+										<div class="modal-body popupContent" id="divAcknowledgment" style="display:none;">
+											<p>Your information has been saved. You will be contacted shortly.</p>
+											<button type="button" class="btn btnSuccess btn-block" style="margin-top:10px;" data-dismiss="modal" onclick="CloseTutorContact();">Close</button>
+										</div>
+
+									</div>
+
+
+								</div>
+							</div>
+							<script>
+								function display(){
+									$("#contactTutor").show();
+									$("#divAcknowledgment").hide();
+								}
+								function VerifyRecords() {
+									// Add real validation here if needed
+									// Return true to block submission, false to continue
+									const name = $("#txtnametutor").val().trim();
+									const contact = $("#txtcontactTutor").val().trim();
+									const subject = $("#txttutorsubject").val().trim();
+
+									if (!name || !contact || !subject) {
+										alert("Please fill all the fields.");
+										return true; // Stop execution
+									}
+
+									return false; // Continue (false means: "no error found")
+								}
+
+								function SaveRecords() {
+									var i = VerifyRecords();
+									if (i === false) {
+										const data = {
+											Url: window.location.href,
+											Name: $("#txtnametutor").val().trim(),
+											Contact: $("#txtcontactTutor").val().trim(),
+											Subject: $("#txttutorsubject").val().trim(),
+											TutorName: $("#tutorname").val().trim(),
+											TutorEmail: $("#tutoremail").val().trim()
+										};
+
+
+
+										$.ajax({
+											type: "POST",
+											url: "/tutors/contactTutor",
+											contentType: "application/json",
+											data: JSON.stringify(data),
+											success: function (response) {
+												console.log(response.message);
+												$("#contactTutor").hide();
+										        $("#divAcknowledgment").show();
+											},
+											error: function (err) {
+												console.log("Error: ")
+												console.error(err);
+											}
+										});
+									}
+								}
+
+							</script>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+}
+
+
+<!-- Main Start -->
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<p>
+
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Experience</h2>
+					<p>
+						@if (!string.IsNullOrWhiteSpace(Model.Experience))
+						{
+							@Model.Experience
+						}
+						else
+						{
+							<text>Experience not specified</text>
+						}
+					</p>
+
+					<p>
+						<strong>Availability: </strong>
+						@if (!string.IsNullOrWhiteSpace(Model.Availability))
+						{
+							@Model.Availability
+						}
+						else
+						{
+							<text>Not specified</text>
+						}
+					</p>
+
+					<h3>I Teach These Subjects</h3>
+					<ul class="tt-list">
+						@if (Model.Subjects != null && Model.Subjects.Any())
+						{
+							foreach (var subject in Model.Subjects)
+							{
+								<li>@subject</li>
+							}
+						}
+						else
+						{
+							<li>No subjects listed</li>
+						}
+					</ul>
+
+					<h3>I Teach These Classes/Levels</h3>
+					<ul class="tt-list">
+						@if (Model.EducationLevels != null && Model.EducationLevels.Any())
+						{
+							foreach (var level in Model.EducationLevels)
+							{
+								<li>@level</li>
+							}
+						}
+						else
+						{
+							<li>No levels listed</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				@await Html.PartialAsync("_maincontenttopbanner")
+			</div>
+		</div>
+	</div>
+
+	<div class="content-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>More Similar Tutors in @Model.CityName</h2>
+					<div class="institute-list">
+						<ul id="tutor-list" class="skills-tutors">
+							@foreach (var tutor in Model.SimilarTutors)
+							{
+								var slug = tutor.TutorName.ToLower().Replace(" ", "-") + "-home-tutor-" + tutor.MemberId+".aspx";
+
+								<li>
+									<a aria-label="link" href="/tutors/@slug">
+										<div class="figure">
+											<img onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" src="@tutor.ProfileImage" />
+										</div>
+										<div class="author" style="height:200px">
+											<h4>@tutor.TutorName</h4>
+											<span>@tutor.CityName | @tutor.CourseName</span>
+											<p>Teaching</p>
+											<span style ="height:200px; overflow:hidden">@string.Join(", ", tutor.Subjects)...</span>
+										</div>
+									</a>
+								</li>
+							}
+						</ul>
+						<style>
+							.button {
+								display: inline-block;
+								background: #434343;
+								font-size: 16px;
+								border: none;
+								padding: 5px 20px;
+								color: #fff;
+								border-radius: 5px;
+								margin: 0;
+								text-decoration: none;
+								cursor: pointer;
+							}
+
+								.button:hover,
+								.button:focus,
+								.button.load-more {
+									background-color: #15A18D;
+									border-color: #15A18D;
+									color: #fff;
+								}
+
+							.load-more span {
+								animation-name: loading;
+								animation-duration: 1.2s;
+								animation-iteration-count: infinite;
+								animation-fill-mode: both;
+								background-color: #15A18D;
+								border-color: #15A18D;
+								color: #fff;
+							}
+							@@keyframes loading {
+								0%
+
+							{
+								opacity: 0;
+							}
+
+							50% {
+								opacity: 1;
+							}
+
+							100% {
+								opacity: 0;
+							}
+
+							}
+
+							.load-more span:nth-child(2) {
+								animation-delay: 0.2s;
+							}
+
+							.load-more span:nth-child(3) {
+								animation-delay: 0.4s;
+							}
+						</style>
+
+						<div class="loader" style="text-align: center; margin-bottom: 20px;">
+							<a href="javascript:void(0)" class="button js-load-more" id="load-more-btn" data-skip="10">Load More</a>
+						</div>
+
+						<script>
+							document.getElementById("load-more-btn").addEventListener("click", function () {
+								const btn = this;
+								const skip = parseInt(btn.getAttribute("data-skip"));
+
+								const subjId = '@ViewBag.SubjectId';
+								const cityId = '@ViewBag.CityId';
+								const levelId = '@ViewBag.LevelId';
+
+								// Optional: show loading animation
+								btn.classList.add("load-more");
+								btn.innerHTML = 'Loading <span>.</span><span>.</span><span>.</span>';
+
+								fetch(`/tutors/LoadMore?skip=${skip}&subjId=${subjId}&cityId=${cityId}&levelId=${levelId}`)
+									.then(res => res.text())
+									.then(html => {
+										document.getElementById("tutor-list").insertAdjacentHTML("beforeend", html);
+										const newSkip = skip + 10;
+										btn.setAttribute("data-skip", newSkip);
+										if (html.trim() === '') {
+											btn.parentElement.remove(); // No more tutors
+										} else {
+											btn.classList.remove("load-more");
+											btn.textContent = "Load More";
+										}
+									})
+									.catch(err => {
+										console.error("LoadMore error:", err);
+										btn.classList.remove("load-more");
+										btn.textContent = "Load More";
+									});
+							});
+						</script>
+
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="share-box">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main End -->
+
+

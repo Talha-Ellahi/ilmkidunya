@@ -1,0 +1,409 @@
+﻿@model IKDFrontEnd.ViewModels.HostelRegistrationViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async>
+<link href="https://www.ilmkidunya.com/css-files/style/hostel-section.css" rel="stylesheet" async="">
+
+@* @section MetaData {
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+    <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+    <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>@ViewBag.CmsData.MetaTitle</title>
+}
+ *@
+
+@section header {
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @*                         @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        } *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+
+
+                    <div class="hostel-registration">
+                        <h2>Enter Your Hostel Details</h2>
+                        <form asp-action="HostelRegistration" method="post">
+                            <div class="resgistration-form">
+
+                                <div class="halfBox">
+                                    <label asp-for="HostelName"></label>
+                                    <input asp-for="HostelName" class="form-control" placeholder="Enter hostel name" />
+                                </div>
+
+                                <div class="halfBox">
+                                    <label asp-for="CityId">City</label>
+                                    <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-control">
+                                        <option value="0" selected="selected">Select City</option>
+                                    </select>
+                                </div>
+
+                                <div class="halfBox">
+                                    <label asp-for="GenderType">Gender</label>
+                                    <select asp-for="GenderType" asp-items="ViewBag.Genders" class="form-control">
+                                        <option value="0" selected="selected">Select Gender</option>
+                                    </select>
+                                </div>
+
+                                <div class="halfBox">
+                                    <label asp-for="AreaId">Area</label>
+                                    <select asp-for="AreaId" asp-items="ViewBag.Cities" class="form-control"></select>
+                                </div>
+
+                                <div class="halfBox full">
+                                    <label asp-for="FullAddress">Full Address</label>
+                                    <input asp-for="FullAddress" class="form-control" placeholder="Enter full address" />
+                                </div>
+
+                                <div class="halfBox full btn-form">
+                                    <input type="button" value="Search" class="hostal-btn" onclick="searchAddress()" />
+                                </div>
+
+                                <!-- Google Map Picker -->
+                                <div class="halfBox full">
+                                    <label>Select Hostel Location On Map</label>
+                                    <div id="map" style="height: 300px; width: 100%;"></div>
+                                    <input asp-for="Latitude" type="hidden" />
+                                    <input asp-for="Longitude" type="hidden" />
+                                    <input asp-for="ZoomLevel" type="hidden" />
+                                </div>
+
+                                <div class="halfBox full">
+                                    <label asp-for="HostelDetails">Hostel Details</label>
+                                    <textarea asp-for="HostelDetails" rows="4" class="form-control" placeholder="Details about your hostel"></textarea>
+                                </div>
+
+                                <div class="halfBox full">
+                                    <label>Hostel Features</label>
+                                    <div class="hostel-facilities-list">
+                                        <ul class="ikd-checkbox">
+                                            @foreach (var feature in Model.Features)
+                                            {
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" name="SelectedFeatures" value="@feature.FeatureId" />
+                                                        <span class="ikd-custom-label">
+                                                            <div class="list-item-icon"><i class="@feature.IconPath"></i></div>
+                                                            <div class="list-item-title">@feature.FeatureName</div>
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2>Room Types</h2>
+                            <div class="resgistration-form">
+                                @for (int i = 0; i < 3; i++)
+                                {
+                                    <div class="halfBox med-width">
+                                        <label>Room Category</label>
+                                        <input name="RoomCategories[@i]" class="border-btm" />
+                                    </div>
+                                    <div class="halfBox">
+                                        <label>Room Details</label>
+                                        <input name="RoomDetails[@i]" class="border-btm" />
+                                    </div>
+                                    <div class="halfBox med-width">
+                                        <label>Cost/month</label>
+                                        <input name="RoomCosts[@i]" class="border-btm" type="number" step="0.01" />
+                                    </div>
+                                }
+                            </div>
+
+                            <h2>Your Account Details</h2>
+                            <div class="resgistration-form">
+                                <div class="halfBox">
+                                    <label asp-for="OwnerName"></label>
+                                    <input asp-for="OwnerName" />
+                                </div>
+                                <div class="halfBox">
+                                    <label asp-for="PhoneNumber"></label>
+                                    <input asp-for="PhoneNumber" />
+                                </div>
+                                <div class="halfBox full">
+                                    <label asp-for="Email"></label>
+                                    <input asp-for="Email" />
+                                </div>
+                                <div class="halfBox">
+                                    <label asp-for="Password"></label>
+                                    <input asp-for="Password" type="password" />
+                                </div>
+                                <div class="halfBox">
+                                    <label asp-for="ConfirmPassword"></label>
+                                    <input asp-for="ConfirmPassword" type="password" />
+                                </div>
+                                <div class="halfBox full btn-form">
+                                    <input type="submit" value="Save Hostel Information" class="hostal-btn" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwisd4N7E9EBwkqIcJFEklueiH12NE5vU&libraries=places&callback=initAutocomplete"
+                            async defer></script>
+                    <script>
+
+                                 $(document).ready(function () {
+                                    $('#CityId').change(function () {
+                                        var cityId = $(this).val();
+                                        var areaDropdown = $('#AreaId');
+                                        areaDropdown.empty(); // Clear previous options
+                                        areaDropdown.append('<option value="">Select Area</option>');
+
+                                        if (cityId) {
+                                            $.ajax({
+                                                url: '/hostels/GetAreasByCity',
+                                                type: 'GET',
+                                                data: { cityId: cityId },
+                                                success: function (data) {
+                                                    $.each(data, function (index, area) {
+                                                        areaDropdown.append('<option value="' + area.id + '">' + area.name + '</option>');
+                                                    });
+                                                },
+                                                error: function () {
+                                                    alert('Error loading areas');
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+
+                        let map, marker, geocoder, infowindow;
+
+                        function initMap() {
+                            geocoder = new google.maps.Geocoder();
+                            infowindow = new google.maps.InfoWindow();
+
+                        let oldLat = parseFloat('@Model.Latitude' || 31.5204);
+                        let oldLng = parseFloat('@Model.Longitude' || 74.3587);
+                        let zoomLevel = parseInt('@Model.ZoomLevel' || 12);
+
+                            let initialPos = { lat: oldLat, lng: oldLng };
+
+                            map = new google.maps.Map(document.getElementById("map"), {
+                                center: initialPos,
+                                zoom: zoomLevel,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            });
+
+                            marker = new google.maps.Marker({
+                                position: initialPos,
+                                map: map,
+                                draggable: true
+                            });
+
+                            // Save coordinates when marker is dragged
+                            google.maps.event.addListener(marker, 'dragend', function () {
+                                updateLocation(marker.getPosition());
+                            });
+
+                            // Save zoom level changes
+                            map.addListener('zoom_changed', function () {
+                                document.querySelector('[name="ZoomLevel"]').value = map.getZoom();
+                            });
+
+                            // Update location when clicking map
+                            map.addListener("click", (e) => {
+                                placeMarker(e.latLng);
+                            });
+
+                            // Initialize hidden fields
+                            updateLocation(marker.getPosition());
+                        }
+
+                        function placeMarker(location) {
+                            marker.setPosition(location);
+                            updateLocation(location);
+                        }
+
+                        function updateLocation(latLng) {
+                            document.querySelector('[name="Latitude"]').value = latLng.lat().toFixed(8);
+                            document.querySelector('[name="Longitude"]').value = latLng.lng().toFixed(8);
+                            document.querySelector('[name="ZoomLevel"]').value = map.getZoom();
+                        }
+
+                        function searchAddress() {
+                            const address = document.querySelector('[name="FullAddress"]').value;
+                            geocoder.geocode({ address: address }, (results, status) => {
+                                if (status === "OK") {
+                                    map.setCenter(results[0].geometry.location);
+                                    placeMarker(results[0].geometry.location);
+                                } else {
+                                    alert("Geocode failed: " + status);
+                                }
+                            });
+                        }
+
+                    </script>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="my-ads">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <ul class="ss-ads" style="border: 0; padding-top: 35px;">
+                    <li>
+                        <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/1.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/2.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/3.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/4.webp" alt=""></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="g-ad-box">
+                        <figure>
+                            <img src="https://images.ishallwin.com/college-images/g-add-m.webp" alt="">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>
+                        Matriculation marks are very important as it contributes in merit at different level. For
+                        making your merit high and getting admission in good field, the students should score
+                        maximum marks in matric. For better preparation, 10th class online test is available on
+                        our website. These tests are highly helpful for 10th class students. Now, you can make
+                        your preparation perfect by online preparation from ilmkidunya. Matric online
+                        preparation is now become very easy and helpful. The students can prepare the best for
+                        their examination online. This is the best opportunity for 10th class student class
+                        chapter wise MCQs are provided to you by which you can make your preparation perfect.
+                    </p>
+                    <p>
+                        The MCQs tests of all subjects of 10th class are available online now. All subject MCQs
+                        with answer for 10th class are given. These tests are very important and made by our
+                        highly qualified staff. Our talented teachers tried their best in preparing these tests.
+                        You can improve yourself in studies by these notes. These MCQs give you much practice
+                        for examination. You can also download these tests in pdf files. Start your online
+                        preparation on ilmkidunya. These tests are prepared according to your paper pattern. It
+                        is a famous quote “practice makes mans perfect”. You can make your more practice by
+                        attempting these tests.
+                    </p>
+                    <p>
+                        10th class MCQs with answer are available online. Get advantage of this bright chance and
+                        make yourself perfect in every subject. These tests are available on our website free of
+                        cost. These tests are especially made for 10th class students. Now, 10th class students
+                        can give online tests and the answer of each question is also given. You can attempt
+                        these tests many times. You can make practice of all subjects by these tests. Both Urdu
+                        medium and English medium students can attempt these tests.
+                    </p>
+                    <p>
+                        Check 10th class English medium MCQs with answers. A lot of MCQs of every subject are
+                        given for more practice of students. Chapter wise MCQs of every subject are prepared for
+                        the best preparation of our hardworking students. These tests will be highly helpful for
+                        you in getting maximum marks in the board examination. Matric Urdu medium subject wise
+                        MCQs are very important and beneficial in the preparation. Start your practice without
+                        wasting any time from today. Avail this best opportunity and get well prepared for
+                        performing best in the examination. You can also get the test of every class and every
+                        subject. You can get the best and most important material from our website.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="ss-ads" style="border: 0; padding-top: 35px;">
+                        <li>
+                            <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/5.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/6.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/7.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="#" aria-label="ads"><img src="https://images.ishallwin.com/8.webp" alt=""></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

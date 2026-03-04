@@ -1,0 +1,520 @@
+﻿@model IKDFrontEnd.ViewModels.SearchViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="Colleges in Pakistan | Top Ranking Universities in Pakistan" />
+	<meta property="og:description" content="Colleges in Pakistan, Top Ranking Colleges in Pakistan, Universities in Pakistan, Top Ranking Universities in Pakistan List is available here online on ilmkidunya." "  />
+	<meta property="og:image" content="" />
+	<meta name="description" content="Colleges in Pakistan, Top Ranking Colleges in Pakistan, Universities in Pakistan, Top Ranking Universities in Pakistan List is available here online on ilmkidunya.">
+	<meta name="keywords" content="Find any college, Institute, University in Pakistan, HEC recognized Colleges, HEC non recognized colleges, University Directory, College Listing, List of Institutes">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="/images-files/images/favicon.ico">
+	<title>Colleges in Pakistan | Top Ranking Universities in Pakistan</title>
+}
+@section header {
+
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+					City Wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+					Level wise colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/college-category">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+					Category wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+					Featured colleges
+				</a>
+			</li>
+
+		</ul>
+	</div>
+
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>Find Colleges & Universities Across Pakistan</h1>
+						@if (ViewBag.Count > 0)
+						{
+							<p>Find any College/Universities from @ViewBag.Count instutitions in Pakistan</p>
+						}
+					</div>
+				</div>
+				<div class="ss-col-lg-12">
+					<form action="/colleges/col/search" method="get">
+
+
+						<div class="banner-form">
+							<div class="input-holder">
+								<input type="text" name="keyword" placeholder="e.g GCU, Karachi University etc..." value="" />
+								<select name="cityId">
+									<option value="">-- Select City --</option>
+									@if (ViewBag.Cities != null)
+									{
+										@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+										{
+											<option value="@city.CityId">
+												@city.CityName
+											</option>
+										}
+									}
+								</select>
+								<select name="categoryId">
+									<option value="">-- Select Category --</option>
+									@if (ViewBag.Categories != null)
+									{
+										@foreach (var city in ViewBag.Categories as List<IKDFrontEnd.Models.CourseCategory>)
+										{
+											<option value="@city.Id">
+												@city.Name
+											</option>
+										}
+									}
+								</select>
+								<select name="levelId">
+									<option value="">-- Select Level --</option>
+									@if (ViewBag.Levels != null)
+									{
+										@foreach (var city in ViewBag.Levels as List<IKDFrontEnd.Models.TblXcourseLevel>)
+										{
+											<option value="@city.Id">
+												@city.Name
+											</option>
+										}
+									}
+								</select>
+							</div>
+							<div class="btn-holder">
+								<button type="submit"><img src="https://images.ishallwin.com/search-icon.webp" alt="Search" /></button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec feature-insitute" style="padding-top: 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Featured Institutions</h2>
+					@{
+						// ✅ Define max length based on given example
+						int maxLength = "Shaheed Zulfikar Ali Bhutto Institute of Science and Technology (SZABIST)".Length;
+					}
+
+					<div class="institute-list">
+						<ul>
+							@if (ViewBag.FeaturedColleges != null && ((IEnumerable<dynamic>)ViewBag.FeaturedColleges).Any())
+							{
+								foreach (var college in (IEnumerable<dynamic>)ViewBag.FeaturedColleges)
+								{
+									string displayName = college.Name;
+									if (!string.IsNullOrEmpty(displayName) && displayName.Length > maxLength)
+									{
+										displayName = displayName.Substring(0, maxLength) + "......";
+									}
+
+									<li>
+										<a href="@($"/colleges/{college.Url}.aspx")">
+											<div class="figure">
+												<img class="lazyloaded"
+													 src="@(!string.IsNullOrEmpty(college.Logo)
+															? $"https://cdn.ilmkidunya.com/Inst/logos/{college.Logo}"
+															: "https://cdn.ilmkidunya.com/images/placeholder.png")"
+													 alt="@college.Name" />
+											</div>
+											<div class="author">@displayName</div>
+										</a>
+									</li>
+								}
+							}
+							else
+							{
+								<li>No featured institutions found</li>
+							}
+						</ul>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Colleges/Universities</h2>
+					<p>Study City Wise</p>
+					<ul class="ss-class-list" style="padding-bottom: 20px;">
+						<li class="inter">
+							<a href="/colleges/intermediate">
+								<div class="inner-text">
+									<span>Colleges for</span>
+									<strong>Inter</strong>
+								</div>
+							</a>
+						</li>
+						<li class="bachelor">
+							<a href="/colleges/bachelors" class="sh-red">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Bachelor</strong>
+								</div>
+							</a>
+						</li>
+						<li class="master">
+							<a href="/colleges/masters" class="sh-green">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Master</strong>
+								</div>
+							</a>
+						</li>
+						<li class="mphill">
+							<a href="/colleges/mphil" class="sh-purple">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>M.Phil</strong>
+								</div>
+							</a>
+						</li>
+						<li class="phd">
+							<a href="/colleges/phd" class="sh-blue">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Ph.D</strong>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-12">
+					<h2>Colleges/Universities</h2>
+					<p>Study Level Wise</p>
+					<ul class="admission-nav">
+						<li>
+							<a href="/colleges/colleges-in-lahore.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/lahore.png" alt="" />
+								</figure>
+								<span>Lahore</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-karachi.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/karachi.png" alt="" />
+								</figure>
+								<span>Karachi</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-islamabad.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/isb.png" alt="" />
+								</figure>
+								<span>Islamabad</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-rawalpindi.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/rwp.png" alt="" />
+								</figure>
+								<span>Rawalpindi</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-peshawar.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/peshawar.png" alt="" />
+								</figure>
+								<span>Peshawar</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-multan.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/multan.png" alt="" />
+								</figure>
+								<span>Multan</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-faisalabad.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/faisalabad.png" alt="" />
+								</figure>
+								<span>Faisalabad</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-gujranwala.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/gujrat.png" alt="" />
+								</figure>
+								<span>Gujranwala</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-sialkot.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/faisalabad.png" alt="" />
+								</figure>
+								<span>Sialkot</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-quetta.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/quetta.png" alt="" />
+								</figure>
+								<span>Quetta</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-hyderabad.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/hyderabad.png" alt="">
+								</figure>
+								<span>Hyderabad</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-bahawalpur.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/bahawalpur.png" alt="" />
+								</figure>
+								<span>Bahawalpur</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-gilgit.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/gilgit.png" alt="" />
+								</figure>
+								<span>Gilgit</span>
+							</a>
+						</li>
+						<li>
+							<a href="/colleges/colleges-in-sargodha.aspx">
+								<figure>
+									<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/sargodha.png" alt="" />
+								</figure>
+								<span>Sargodha</span>
+							</a>
+						</li>
+					</ul>
+					<a href="/colleges/city-wise-colleges.aspx" class="view-all">View All</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="study-institute contact-sec" style="padding-bottom: 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Explore Instituitions by Study Catreogy</h2>
+					<ul class="study-institue-list">
+						@if (ViewBag.Categories != null)
+						{
+							@foreach (var category in ViewBag.Categories as List<IKDFrontEnd.Models.CourseCategory>)
+							{
+								<li>
+									<a href="/colleges/category/@category.Url">
+										<div class="img-holder">
+											<figure><img src="https://cdn.ilmkidunya.com/Courses/Images/icons/@category.Image" alt="" /></figure>
+										</div>
+										<div class="text-holder">
+											<span>@category.Name</span>
+										</div>
+									</a>
+								</li>
+							}
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="news-ad-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Colleges & Universites for Popular Study Programs </h2>
+					<p>Please choose a program to find relevant colleges or universites in Pakistan.</p>
+				</div>
+				<div class="col-lg-4">
+					<ul class="list-bullet">
+						<li>
+							<a href="https://www.ilmkidunya.com/fsc-pre-medical/colleges.aspx">FSC Pre-Medical</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/fsc-pre-engineering/colleges.aspx">FSC Pre-Eng</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ics/colleges">ICS</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/icom/colleges">I.Com</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/dae/universities">DAE</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/fa/colleges">FA</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ba/universities.aspx">BA</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/bs/universities">BSC</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-4">
+					<ul class="list-bullet">
+						<li>
+							<a href="https://www.ilmkidunya.com/bscs/universities.aspx">BSCS</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/bba/universities.aspx">BBA</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/mbbs/universities.aspx">MBBS</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/bds/universities.aspx">BDS</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/dpt/colleges-universities.aspx">DPT</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/acca/colleges">ACCA</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ca/preparation-institutes-in-pakistan.aspx">CA</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/bachelor-education/universities.aspx">B.Ed</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/colleges/ielts-colleges-universities-in-pakistan.aspx">IELTS</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-4">
+					<ul class="list-bullet">
+						<li>
+							<a href="https://www.ilmkidunya.com/bcom/universities">B.Com</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ms/universities">MSC</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ms/universities">MSC Mathematics</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/mit/">MIT</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/colleges/mcom-colleges-universities-in-pakistan.aspx">M.Com</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/ma-english/universities.aspx">MA English</a>
+						</li>
+						<li>
+							<a href="https://www.ilmkidunya.com/mba/universities.aspx">MBA</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-12">
+					<h2>More Links to University & Colleges Lists</h2>
+					<ul class="uni-list">
+						<li>
+							<a href="/colleges/hec-list-of-recognized-universities-institutes.aspx">HEC Recognized Institutes/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/hec-recognized-private-universities-institutes.aspx">List of HEC Recognized Private Universities/Institutes</a>
+						</li>
+						<li>
+							<a href="/colleges/hec-recognized-government-public-universities-institutes.aspx">List of HEC Recognized Public Universities/Institutes</a>
+						</li>
+						<li>
+							<a href="/colleges/medical-dental-colleges-universities.aspx">Medical Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/engineering-universities.aspx">Engineering Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/business-management-colleges-universities.aspx">Business Management Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/computer-sciences-colleges-universities.aspx">Computer Sciences Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/girls-colleges-universities.aspx">Girls/Female Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/pharmacy-colleges-universities.aspx">Pharmacy Colleges/Universities in Pakistan</a>
+						</li>
+						<li>
+							<a href="/colleges/fine-arts-colleges-universities.aspx">Fine Arts Colleges/Universities in Pakistan</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

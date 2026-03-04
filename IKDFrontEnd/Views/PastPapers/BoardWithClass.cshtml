@@ -1,0 +1,148 @@
+﻿@using IKDFrontEnd.ViewModels
+@model PastPaperPageViewModel
+
+@{
+    Layout = "~/Views/Shared/_pastpapers.cshtml";
+    ViewData["PageTitle2"] = Model.PageTitle2;
+}
+
+@section innerbanner {
+    <div class="wrapper">
+        <div class="ss-banner-inner">
+            <div class="ss-container">
+                <div class="ss-row">
+                    <div class="ss-col-lg-12">
+                        <div class="ss-text-holder">
+                            <h1>@(Model.PastPapers.FirstOrDefault()?.PaperName ?? "Past Paper")</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- ✅ Main Content -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    @if (Model.PastPapers.Any())
+                    {
+                        <button type="button" class="load-more-button" id="downloadBtn">
+                            <img src="https://images.ishallwin.com/download.webp" alt="" /> Download This Paper
+                        </button>
+                        <button type="button" class="load-more-button" id="printBtn">
+                            <img src="https://images.ishallwin.com/print.webp" alt="" /> Print This Paper
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Advertisement Section -->
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="my-ads" id="slider1" style="display:none;">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Paper Content -->
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+                    <div class="home-scholar-list">
+                        <ul>
+                            @if (Model.PastPapers.Any())
+                            {
+                                @foreach (var paper in Model.PastPapers)
+                                {
+                                    <li>
+                                        <a aria-label="link" href="/past_papers/@(paper.PaperName.Replace(" ", "-").ToLower() + "-" + paper.Id.ToString() + ".aspx")">
+                                            <div class="img-holder">
+                                                <img alt="@paper.SubjectName"
+                                                     src="https://pastpapers.ilmkidunya.com/past_papers/Images/@(paper.Dated.ToString("yyyy"))/@(paper.Dated.ToString("MM").TrimStart('0'))/Large/@(paper.ImageName ?? "default.jpg")"
+                                                     onerror="this.onerror=null;this.src='https://pastpapers.ilmkidunya.com/past_papers/Images/default.jpg';" />
+                                            </div>
+                                            <div class="text-holder">
+                                                <div class="top-box">
+                                                    <span>Subject : @paper.SubjectName</span>
+                                                </div>
+                                                <h3>@paper.PaperName</h3>
+                                                <p>@paper.BoardName</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li><p>No past papers found.</p></li>
+                            }
+                        </ul>
+                    </div>
+
+					<p>Past papers are of great importance for the students of all level of study either of school/college level or students of university. Also the students of other examinations like ECAT, MCAT, CSS, and PMS/PCS also can get benefit from the past papers.</p>
+					<p>Going through past papers will help students to work out where the gaps in their knowledge are, and also the strengths and weaknesses. This will comfort students to target their goals together, and then they can work on the parts of the course they find most challenging. The students get an idea of what time frame they should finish answering. Past papers help students in problem solving and also test their knowledge and understanding.</p>
+					<p>ilmkidunya has given the facility to students of all level of study that they can get and study all kind of past papers by visiting the past papers section on ilmkidunya . Past papers for matric and inter examinations, for graduation level and also for university level are available for the help of students. Students of other examinations like MCAT, ECAT, CSS, PMS and PCS can also get past papers easily on ilmkidunya.</p>
+
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var downloadBtn = document.getElementById('downloadBtn');
+        var printBtn = document.getElementById('printBtn');
+        var paperImage = document.getElementById('paperImage');
+
+        if (downloadBtn && paperImage) {
+            downloadBtn.addEventListener('click', function () {
+                var imgSrc = paperImage.src;
+
+                // Create an anchor element
+                fetch(imgSrc, { mode: 'no-cors' }) // Ensure it's accessible
+                    .then(response => response.blob()) // Convert to Blob
+                    .then(blob => {
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'PastPaper.jpg'; // Set the download filename
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url); // Clean up memory
+                    })
+                    .catch(error => console.error('Error downloading the image:', error));
+            });
+        }
+
+        if (printBtn && paperImage) {
+            printBtn.addEventListener('click', function () {
+                var imgSrc = paperImage.src;
+                var printWindow = window.open('', '_blank');
+                printWindow.document.write(`<img src="${imgSrc}" style="max-width: 100%;"/>`);
+                printWindow.document.close();
+                printWindow.print();
+            });
+        }
+    });
+
+</script>

@@ -1,0 +1,249 @@
+﻿@model IKDFrontEnd.ViewModels.ScholarshipSearchResultViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Scholarships for Pakistani students to study abroad" />
+    <meta property="og:description" content="Get all the latest fully funded scholarships for Pakistani students scholarships here to study abroad at your dream destination" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="Get all the latest fully funded scholarships for Pakistani students scholarships here to study abroad at your dream destination">
+    <meta name="keywords" content="study abroad, scholarships for pakistani students, fully funded scholarships">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Scholarships for Pakistani students to study abroad</title>
+
+    <style>
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/scholarships/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a aria-label="link" href="/studyabroad/">
+                    <img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+                         alt="image" />
+                    Studyabroad
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/studyabroad/country-guides.aspx">
+                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+                         alt="image" />
+                    Guides
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/consultants/">
+                    <img src="https://www.ilmkidunya.com/icons/tutor.png"
+                         alt="image" />
+                    Consultants
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/scholarships/topscholarship">
+                    <img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+                         alt="image" />
+                    Top Scholarship
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>Search Scholarship by Your Choice</h1>
+                    </div>
+                </div>
+                <form id="searchForm" action="/scholarship/search" method="get">
+                    <div class="ss-col-lg-12">
+                        <div class="banner-form" style="margin: 0 20%;">
+                            <div class="input-holder" style="width: 90%;">
+                                <div style="width: 50%; position: relative;">
+                                    <select name="studyLevelName">
+                                        <option value="">Select Study Level</option>
+                                        @foreach (var level in Model.StudyLevels)
+                                        {
+                                            <option value="@level.SchStudyLevelName"
+                                                    selected="@(level.SchStudyLevelName == Model.SelectedLevel ? "selected" : null)">
+                                                @level.SchStudyLevelName
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div style="width: 50%; position: relative;">
+                                    <select name="countryName">
+                                        <option value="">Select Country</option>
+                                        @foreach (var country in Model.Countries)
+                                        {
+                                            <option value="@country.Name"
+                                                    selected="@(country.Name == Model.SelectedCountry ? "selected" : null)">
+                                                @country.Name
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="btn-holder">
+                                <button type="submit">
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="Search" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add spinner overlay -->
+    <div class="spinner-overlay" id="spinner">
+        <div class="spinner"></div>
+    </div>
+}
+
+
+<div class="contact-sec level fee-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @if (Model.Results != null && Model.Results.Any())
+                {
+                    <h2>Scholarship For Pakistani Students</h2>
+
+                    <div id="scholarshipList">
+                        @foreach (var item in Model.Results)
+                        {
+                            <partial name="_ScholarshipListPartial" model="new List<IKDFrontEnd.ViewModels.ScholarshipApiViewModel> { item }" />
+                        }
+                    </div>
+
+                    @if (Model.Results.Count() > 9)
+                    {
+                        <p style="text-align: center; margin-top: 20px;">
+                            <button type="button" class="load-more-button" id="loadMoreBtn">Load More Scholarships</button>
+                        </p>
+                    }
+                }
+                else
+                {
+                    <div class="no-data-message">
+                        <p>No scholarships available.</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // Show spinner when form is submitted
+    document.getElementById('searchForm').addEventListener('submit', function() {
+        document.getElementById('spinner').style.display = 'flex';
+    });
+
+    // Hide spinner when page finishes loading (fallback in case AJAX isn't used)
+    window.addEventListener('load', function() {
+        document.getElementById('spinner').style.display = 'none';
+    });
+
+    let currentPage = 1;
+    const levelId = "@Model.SelectedLevel";
+    const country = "@Model.SelectedCountry";
+
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const scholarshipList = document.getElementById('scholarshipList');
+
+    loadMoreBtn?.addEventListener('click', function () {
+        currentPage++;
+        loadMoreBtn.innerText = 'Loading...';
+        loadMoreBtn.disabled = true;
+        document.getElementById('spinner').style.display = 'flex';
+
+        const query = new URLSearchParams({
+            studyLevelName: levelId,
+            countryName: country,
+            page: currentPage
+        });
+
+        fetch(`/scholarship/search?${query.toString()}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('spinner').style.display = 'none';
+            if (data.trim()) {
+                scholarshipList.insertAdjacentHTML('beforeend', data);
+                loadMoreBtn.innerText = 'Load More Scholarships';
+                loadMoreBtn.disabled = false;
+            } else {
+                loadMoreBtn.innerText = 'No more scholarships available';
+                loadMoreBtn.disabled = true;
+            }
+        })
+        .catch(error => {
+            document.getElementById('spinner').style.display = 'none';
+            console.error('Error loading more scholarships:', error);
+            loadMoreBtn.innerText = 'Error';
+        });
+    });
+</script>
+
+

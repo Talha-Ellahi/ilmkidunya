@@ -1,0 +1,777 @@
+/*	College section Css Start*/
+.ss-banner-inner.college-banner .with-img .ss-img-box {
+    width: 16%;
+    padding: 0;
+    border: 0;
+}
+
+    .ss-banner-inner.college-banner .with-img .ss-img-box .img-holder {
+        width: auto;
+    }
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder {
+    overflow: hidden;
+    text-align: left;
+    width: 84%;
+}
+
+    .ss-banner-inner.college-banner .with-img .ss-text-holder ul {
+        margin: 0;
+        width: 34%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+        .ss-banner-inner.college-banner .with-img .ss-text-holder ul li {
+            width: 100%;
+            vertical-align: top;
+        }
+
+            .ss-banner-inner.college-banner .with-img .ss-text-holder ul li em {
+                font-style: normal;
+                overflow: hidden;
+                width: 60%;
+                display: inline-block;
+            }
+
+            .ss-banner-inner.college-banner .with-img .ss-text-holder ul li span {
+                float: left;
+                width: 40%;
+            }
+
+.galler-sec {
+    padding: 0 0;
+}
+
+.gallery-holder {
+    display: flex;
+    padding: 0 0 0 0;
+}
+
+    .gallery-holder .box-1 {
+        padding: 0;
+    }
+
+        .gallery-holder .box-1 figure {
+            overflow: hidden;
+            margin: 0 0 0 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+    .gallery-holder .box-2 {
+        padding: 0;
+    }
+
+        .gallery-holder .box-2 figure {
+            overflow: hidden;
+            position: relative;
+            margin: 0 0 2px 2px;
+        }
+
+            .gallery-holder .box-2 figure:last-child {
+                margin-bottom: 0;
+            }
+
+            .gallery-holder .box-2 figure figcaption {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                font-size: 18px;
+                line-height: 34px;
+                text-decoration: underline;
+                text-align: center;
+                font-weight: 600;
+                padding: 30% 0;
+            }
+
+    .gallery-holder figure img {
+        width: 100%;
+    }
+
+.page-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.table-of-content {
+    border: 1px solid #ddd;
+    padding: 20px 20px 0;
+    background: #e6fbee;
+    margin: 0 0 30px 0;
+    border-radius: 10px;
+}
+
+    .table-of-content ul li a {
+        color: #080808;
+    }
+
+.page-content .table-of-content {
+    border: 0;
+    padding: 15px 15px 20px;
+    width: 48%;
+    margin-right: 15px;
+}
+
+    .page-content .table-of-content ul li {
+        position: relative;
+        padding: 2px 0 2px 25px;
+    }
+
+        .page-content .table-of-content ul li:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 10px;
+            height: 10px;
+            background: #46bd74;
+        }
+
+        .page-content .table-of-content ul li:before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 17px;
+            width: 1px;
+            height: 100%;
+            background: #46bd74;
+        }
+
+        .page-content .table-of-content ul li:last-child:before {
+            display: none;
+        }
+
+        .page-content .table-of-content ul li a {
+            text-decoration: none;
+        }
+
+.college-news-sec {
+    padding: 0 0 0 0;
+}
+
+    .college-news-sec .news-box {
+        padding: 0 0 30px 0;
+    }
+
+        .college-news-sec .news-box .img-holder {
+            margin: 0 0 10px 0;
+        }
+
+            .college-news-sec .news-box .img-holder figure {
+                overflow: hidden;
+                margin: 0;
+                border-radius: 15px 15px 0 0;
+            }
+
+            .college-news-sec .news-box .img-holder img {
+                width: 100%;
+            }
+
+        .college-news-sec .news-box .text-holder {
+            margin: 0;
+        }
+
+            .college-news-sec .news-box .text-holder h4 {
+                font-weight: normal;
+                font-size: 18px;
+            }
+
+                .college-news-sec .news-box .text-holder h4 a:hover {
+                    color: #080808;
+                }
+
+.g-add-sec {
+    margin: 0 0 30px 0;
+}
+
+    .g-add-sec .g-ad-box {
+        display: block;
+        text-align: center;
+    }
+
+        .g-add-sec .g-ad-box figure {
+            display: inline-block;
+            margin: 0;
+        }
+
+            .g-add-sec .g-ad-box figure img {
+                width: 100%;
+            }
+
+.review-sec {
+    background: #effcf4;
+    padding: 30px 0;
+}
+
+    .review-sec h2,
+    .contact-sec h2 {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 500;
+        margin: 0 0 10px 0;
+        color: #080808;
+    }
+
+ul.review-slide {
+    margin: 0;
+    padding: 0 15% 0 0;
+}
+
+    ul.review-slide .draggable {
+        overflow: hidden;
+    }
+
+    ul.review-slide li {
+        float: left;
+        padding: 0 0 20px 0;
+        margin: 0;
+        list-style: none;
+    }
+
+        ul.review-slide li p {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            line-height: 26px;
+        }
+
+        ul.review-slide li strong {
+            color: #969696;
+            font-size: 14px;
+            line-height: 26px;
+            font-weight: normal;
+        }
+
+    ul.review-slide button {
+        font-size: 0;
+        background: url(../images/prev.png) no-repeat 0 0;
+        width: 35px;
+        height: 35px;
+        border: 0;
+        margin: 0 5px 0 0;
+        line-height: 0;
+        cursor: pointer;
+    }
+
+        ul.review-slide button.slick-next {
+            background: url(../images/next.png) no-repeat 0 0;
+        }
+
+        ul.review-slide button:hover {
+            opacity: 0.7;
+        }
+
+.btn-review {
+    color: #46bd74;
+    font-size: 18px;
+    display: inline-block;
+    margin: 15px 0 0 0;
+}
+
+ul.rating-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+    ul.rating-list li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        width: 372px;
+    }
+
+        ul.rating-list li:first-child {
+            width: 173px;
+        }
+
+        ul.rating-list li .all-rating {
+            background: #fff;
+            border: 1px solid #b8c2bc;
+            border-radius: 10px;
+            height: 173px;
+            width: 173px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 26px;
+            color: #737373;
+            padding: 28px 0 0 0;
+            letter-spacing: -0.5px;
+        }
+
+            ul.rating-list li .all-rating span {
+                width: 100%;
+                text-align: center;
+                display: block;
+                font-size: 65px;
+                line-height: 1;
+                color: #000;
+                padding: 10px 0;
+            }
+
+        ul.rating-list li .side-rating {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding: 0 0 0 20px;
+        }
+
+            ul.rating-list li .side-rating .rating-box {
+                width: 50%;
+                padding: 0 0 0 5px;
+                font-size: 18px;
+                line-height: 1;
+                border-bottom: 2px solid #a3e0ba;
+                margin: 0 0 15px 0;
+            }
+
+                ul.rating-list li .side-rating .rating-box span {
+                    display: block;
+                    font-size: 40px;
+                    padding: 10px 0 15px 0;
+                    line-height: 1;
+                }
+
+                ul.rating-list li .side-rating .rating-box:last-child {
+                    border: 0;
+                }
+
+.contact-sec {
+    padding: 30px 0 40px;
+}
+
+ul.contact-detail {
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+    ul.contact-detail li {
+        list-style: none;
+        margin: 0;
+    }
+
+        ul.contact-detail li p {
+            margin: 0;
+        }
+
+            ul.contact-detail li p span {
+                display: inline-block;
+                margin: 0 15px 0 0;
+                width: 15%;
+            }
+
+            ul.contact-detail li p a {
+                color: #080808;
+            }
+
+                ul.contact-detail li p a:hover {
+                    color: #15a18d;
+                    text-decoration-line: none;
+                }
+
+.contact-admin {
+    padding: 0;
+    overflow: hidden;
+}
+
+    .contact-admin .img-holder {
+        float: left;
+        width: 154px;
+        margin: 0 0 15px 0;
+    }
+
+        .contact-admin .img-holder figure {
+            display: block;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .contact-admin .img-holder img {
+            width: 100%;
+        }
+
+        .contact-admin .img-holder figcaption {
+            text-align: center;
+            font-size: 16px;
+            color: #000;
+            line-height: 22px;
+            padding: 10px 0 0 0;
+        }
+
+            .contact-admin .img-holder figcaption span {
+                display: block;
+                font-size: 14px;
+            }
+
+    .contact-admin .text-holder {
+        overflow: hidden;
+        padding: 0 0 0 30px;
+    }
+
+        .contact-admin .text-holder ul {
+            margin: 0;
+            padding: 0;
+        }
+
+            .contact-admin .text-holder ul li {
+                list-style: none;
+                border-bottom: 1px solid #ddd;
+                padding: 7px 0px;
+                font-size: 15px;
+                margin: 0;
+            }
+
+                .contact-admin .text-holder ul li span {
+                    display: inline-block;
+                    width: 43%;
+                    vertical-align: top;
+                }
+
+                .contact-admin .text-holder ul li em {
+                    display: inline-block;
+                    width: 56%;
+                    font-style: normal;
+                }
+
+                .contact-admin .text-holder ul li:first-child {
+                    border-top: 1px solid #ddd;
+                }
+
+.news-ad-sec {
+    padding: 30px 0 0;
+    border-top: 1px solid #c2cfc7;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#e6f6ec+0,ffffff+54 */
+    background: linear-gradient(to bottom, rgba(230,246,236,1) 0%,rgba(255,255,255,1) 54%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+    .news-ad-sec h2 {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 500;
+        margin: 0 0 10px 0;
+        color: #080808;
+        overflow: hidden;
+    }
+
+        .news-ad-sec h2 a {
+            float: right;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+            .news-ad-sec h2 a:hover {
+                color: #000;
+            }
+
+    .news-ad-sec ul.news-date {
+        margin: 0 0 15px 0;
+        padding: 0;
+    }
+
+        .news-ad-sec ul.news-date li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+            .news-ad-sec ul.news-date li span {
+                display: inline-block;
+                width: 16%;
+                font-weight: normal;
+            }
+
+.news-ad {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+    .news-ad .img-holder {
+        float: left;
+        width: 542px;
+        margin: 0 0 15px 0;
+    }
+
+    .news-ad .text-holder {
+        overflow: hidden;
+        padding: 0 0 0 25px;
+        margin: 0 0 0 0;
+    }
+
+        .news-ad .text-holder h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 0 0;
+            color: #000;
+        }
+
+        .news-ad .text-holder p {
+            color: #000;
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .news-ad .text-holder ul {
+            margin: 0;
+            padding: 0;
+        }
+
+            .news-ad .text-holder ul li {
+                position: relative;
+                padding: 2px 0 2px 20px;
+                list-style: none;
+                font-size: 14px;
+                line-height: 22px;
+            }
+
+                .news-ad .text-holder ul li:after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 8px;
+                    width: 10px;
+                    height: 10px;
+                    background: #46bd74;
+                }
+
+                .news-ad .text-holder ul li:before {
+                    content: '';
+                    position: absolute;
+                    left: 4px;
+                    top: 17px;
+                    width: 1px;
+                    height: 100%;
+                    background: #46bd74;
+                }
+
+                .news-ad .text-holder ul li:last-child:before {
+                    display: none;
+                }
+
+.fee-box .contact-admin .text-holder {
+    padding: 0;
+}
+
+    .fee-box .contact-admin .text-holder ul li em {
+        text-align: right;
+    }
+
+.fee-box ul.contact-detail {
+    margin: 0 0 20px 0;
+    padding: 0 15% 0 0;
+}
+
+    .fee-box ul.contact-detail li {
+        margin: 0 0 15px 0;
+    }
+
+        .fee-box ul.contact-detail li p span {
+            width: 35%;
+        }
+
+.fee-box .contact-admin .text-holder ul {
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+
+.course span:after {
+    content: ',';
+    font-size: 16px;
+    color: #080808;
+}
+
+.course span:nth-last-child(2):after {
+    display: none;
+}
+
+
+.contact-sec.fee-box {
+    padding: 0 0;
+}
+
+    .contact-sec.fee-box .table > thead > tr > th {
+        vertical-align: bottom;
+        border-bottom: 0;
+        background: #effcf4;
+        color: #000;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .contact-sec.fee-box .table > tbody > tr > td {
+        border-bottom: 1px solid #dddddd;
+        border-top: 0;
+        padding: 8px 10px;
+        font-size: 16px;
+        color: #000;
+    }
+
+        .contact-sec.fee-box .table > tbody > tr > td ul {
+            margin: 0;
+            padding: 0;
+        }
+
+            .contact-sec.fee-box .table > tbody > tr > td ul li {
+                list-style: none;
+                font-size: 16px;
+                line-height: 1.3;
+                margin: 0;
+                padding: 0;
+            }
+
+                .contact-sec.fee-box .table > tbody > tr > td ul li a {
+                    color: #000;
+                    font-size: 16px;
+                    display: block;
+                }
+
+                    .contact-sec.fee-box .table > tbody > tr > td ul li a:hover {
+                        color: #15a18d;
+                    }
+
+        .contact-sec.fee-box .table > tbody > tr > td a.load-more {
+            color: #15a18d;
+        }
+
+        .contact-sec.fee-box .table > tbody > tr > td a.simple-link {
+            color: #15a18d;
+        }
+
+            .contact-sec.fee-box .table > tbody > tr > td a.load-more:hover,
+            .contact-sec.fee-box .table > tbody > tr > td a.simple-link:hover {
+                color: #15a18d;
+            }
+
+.ss-banner-inner.left-align .ss-text-holder {
+    text-align: left;
+}
+
+    .ss-banner-inner.left-align .ss-text-holder ul {
+        margin: 0;
+    }
+
+        .ss-banner-inner.left-align .ss-text-holder ul li {
+            display: block;
+            width:50%;
+        }
+
+            .ss-banner-inner.left-align .ss-text-holder ul li span {
+                width: 30%;
+                display:inline-block;
+            }
+
+            .ss-banner-inner.left-align .ss-text-holder ul li em {
+                font-style: normal;
+            }
+
+.contact-sec.fee-box .table.mid > tbody > tr > td {
+    height: 40px;
+    vertical-align: middle;
+}
+    .contact-sec.fee-box .table.mid > tbody > tr > td:first-child {
+        white-space: nowrap;
+    }
+
+.contact-sec .g-ad-box {
+    text-align: center;
+    padding: 0 0 30px 0;
+}
+
+ul.list-bullet {
+    margin: 0 0 35px 0;
+    padding: 0;
+}
+
+    ul.list-bullet li {
+        position: relative;
+        padding: 2px 0 2px 25px;
+        margin: 0;
+        list-style: none;
+        width:364px;
+        display:inline-flex;
+    }
+
+        ul.list-bullet li:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 10px;
+            height: 10px;
+            background: #46bd74;
+        }
+
+        ul.list-bullet li:before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 17px;
+            width: 1px;
+            height: 100%;
+            background: #46bd74;
+        }
+
+        ul.list-bullet li:last-child:before {
+            display: none;
+        }
+
+.ss-banner-inner .with-img .ss-img-box .img-holder img {
+    width: 100%;
+}
+
+.ss-banner-inner .with-img {
+    padding: 0;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 -15px;
+}
+
+    .ss-banner-inner .with-img .ss-img-box .img-holder {
+        float: left;
+        width: 70px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+.ss-banner-inner .ss-text-holder ul li {
+    display: inline-block;
+    margin: 0 -4px 5px 0;
+    font-size: 18px;
+    line-height: 26px;
+}
+ul.list-bullet .info_content {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: #f2f2f2;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 999;
+    transition: all 0.3s ease-in-out;
+    padding: 50px 20px;
+}
+
+    ul.list-bullet .info_content.open {
+        right: 0;
+        opacity: 1;
+        visibility: visible;
+        overflow: scroll;
+    }
+/*	College section Css End*/

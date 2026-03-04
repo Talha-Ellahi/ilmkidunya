@@ -1,0 +1,360 @@
+ul.admission-by {
+    margin: 0;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+ul.admission-by li {
+    width: 23%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul.admission-by li a {
+    display: block;
+    padding: 20px;
+    background: #effcf4;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 10px;
+}
+ul.admission-by li a span {
+    display: block;
+    background: #35e87e;
+    color: #000;
+    padding: 10px 0;
+    margin: 10px 10% 0;
+    border-radius: 5px;
+}
+ul.admission-by-new {
+    margin: 0 -10px;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+ul.admission-by-new li {
+    margin: 0;
+    padding: 0 10px;
+    list-style: none;
+    width: auto;
+}
+ul.admission-by-new li a {
+    display: block;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 0;
+}
+ul.admission-by-new li a span {
+    display: block;
+    background: #35e87e;
+    color: #000;
+    padding: 10px 25px;
+    margin: 0;
+    border-radius: 5px;
+}
+ul.admission-open-list {
+    margin: 0;
+    padding: 0;
+}
+
+ul.admission-open-list {
+    margin: 0;
+    padding: 0;
+}
+
+ul.admission-open-list li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.admission-open-list li .uni-box {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+ul.admission-open-list li .uni-box .img-holder {
+    width: 8%;
+    margin: 15px 15px 0 0;
+    text-align: center;
+}
+
+ul.admission-open-list li .uni-box .img-holder figure {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+ul.admission-open-list li .uni-box .img-holder figure img {
+    width: 100%;
+}
+ul.admission-open-list li .uni-box .text-holder {
+    width: 90.5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left {
+    width: 80%;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-right {
+    width: 18.5%;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-right figure {
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    border-radius: 5px;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-right figure img {
+    height: 150px;
+    object-fit: cover;
+    width: 100%;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left .datewise {
+    text-align: right;
+    margin: 0 0 5px 0;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left .datewise span {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 0 0 20px;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left .datewise span em {
+    font-style: normal;
+    color: #15a08f;
+    font-weight: 500;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left .datewise span:last-child em {
+    color: #f00;
+}
+
+ul.admission-open-list li .uni-box .text-holder .box-left h3 {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 500;
+    margin: 0 0 10px 0;
+}
+ul.ss-company-list.adm-list{
+    padding-top: 10px;
+}
+ul.ss-company-list.adm-list li a span {
+    font-size: 17px;
+    color: #18a98b;
+}
+ul.ss-company-list.adm-list li a span em {
+    display: block;
+    font-style: normal;
+    font-size: 15px;
+    color: #080808;
+}
+ul.pa-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.page-content .table-of-content ul.pa-list li {
+    width: 50%;
+    padding-right: 20px;
+}
+.page-content .table-of-content ul.pa-list li a {margin-bottom: 10px;display: block;}
+.f-w {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #a5aea8;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin:0 0 15px;
+}
+.bs-admission-sec .inner-holder .box-right .form-holder .f-w .fieldset{
+    width: 25%;
+    margin-bottom: 10px;
+}
+.f-w p {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+.bs-admission-sec .inner-holder .box-right .form-holder .f-w .fieldset label {
+    display: inline-block;
+    margin: 0;
+    line-height: 25px;
+    padding-left: 6px !important;
+}
+.bs-admission-sec .inner-holder .box-right .form-holder .f-w .fieldset input[type=checkbox] {
+    width: 18px;
+    height: 18px;
+    vertical-align: top;
+}
+ul.degree-list{
+    margin: 0 -5px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+ul.degree-list li{
+    padding: 0 5px;
+    margin: 0 0 15px 0;
+    list-style: none;
+    width: 195px;
+}
+ul.degree-list li a{
+    border-radius: 5px;
+    display: block;
+    border: 1px solid #e5e5e5;
+    padding: 5px;
+    text-align: center;
+}
+ul.degree-list li a img{
+    width: 100%;
+    height: 91px;
+    object-fit: cover;
+}
+ul.degree-list li a span{
+    display: block;
+    padding: 3px 0 0;
+}
+ul.degree-list li a span em {
+    display: block;
+    font-style: normal;
+    color: #000;
+}
+ul.ss-company-list.ad-list li a {
+    text-align: center;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px;
+}
+ul.ss-company-list.ad-list li a span {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #35e87e;
+    border-radius: 5px;
+}
+.faq-sec ul{
+    margin: 0;
+    padding: 0;
+}
+.faq-sec ul li{
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    color: #000;
+}
+.faq-sec ul li span{
+    display: block;
+    position: relative;
+    color: #080808;
+    padding: 5px 0 0 40px;
+    font-size: 14px;
+}
+.faq-sec ul li span:after{
+    content: '';
+    position:absolute;
+    left: 25px;
+    top: 7px;
+    width: 2px;
+    height: 80%;
+    background: #15a18d;
+}
+input.btn-search {
+    width: 52px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: #15a18d;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0;
+    background-image: url(https://images.ishallwin.com/icons/search.webp);
+    background-repeat: no-repeat;
+    background-position: 17px 10px;
+}
+ul.institute-list li a .img-holder img {
+    object-fit: cover;
+    height: 60px;
+    width: 100%;
+}
+ul.institute-list li a .img-holder figure {
+    width: 60px;
+    height: 60px;
+}
+ul.video-list {
+    margin: 0 -10px 30px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+ul.video-list li {
+    list-style: none;
+    margin: 0;
+    padding: 0 10px;
+    width: 25%;
+}
+ul.video-list li a {
+    display: block;
+    color: #000;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+ul.video-list li a figure {
+    overflow: hidden;
+    height: 153px;
+    margin: 0 0 10px 0;
+}
+ul.video-list li a figure img {
+    width: 100%;
+}
+ul.video-list li a p {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+ul.video-list li a span {
+    font-size: 14px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* number of lines to show */
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-bottom: 5px;
+}
+ul.video-list li a em {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-style: normal;
+    font-size: 15px;
+}
+ul.video-list li a em img {
+    height: 20px;
+    margin-right: 10px;
+}
+ul.video-list li a:hover p, ul.video-list li a:hover em {
+    color: #15a18d;
+}

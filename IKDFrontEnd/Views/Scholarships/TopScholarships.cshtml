@@ -1,0 +1,154 @@
+﻿@model List<IKDFrontEnd.ViewModels.ScholarshipsByCountryViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .d-none {
+        display: none !important;
+    }
+
+    ul.latest-ScholarShips2 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+        gap: 20px;
+        justify-content: start;
+        margin: 0px;
+        padding: 8px 0px 25px;
+        
+    }
+
+    ul.latest-ScholarShips2 li{
+            list-style: none;
+        }
+</style>
+
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="  @ViewBag.CmsData.MetaTitle" />
+    <meta property="og:description" content="  @ViewBag.CmsData.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="  @ViewBag.CmsData.MetaKeys">
+    <meta name="keywords" content="  @ViewBag.CmsData.MetaKeys">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>  @ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/scholarships/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a aria-label="link" href="/studyabroad/">
+                    <img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+                         alt="image" />
+                    Studyabroad
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/studyabroad/country-guides.aspx">
+                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+                         alt="image" />
+                    Guides
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/consultants/">
+                    <img src="https://www.ilmkidunya.com/icons/tutor.png"
+                         alt="image" />
+                    Consultants
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/scholarships/topscholarship">
+                    <img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+                         alt="image" />
+                    Top Scholarship
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+@section innerbanner {
+ <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>Top Scholarships for Pakistani Students</h1>
+                    </div>
+                </div>
+                
+
+
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @if (ViewBag.CmsData != null && !string.IsNullOrEmpty(ViewBag.CmsData.Desc1))
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                    @if (ViewBag.CmsData != null && !string.IsNullOrEmpty(ViewBag.CmsData.Desc2))
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc2)
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    @foreach (var countryGroup in Model)
+                    {
+                        <h2>Scholarships From <strong> @countryGroup.Country</strong></h2>
+                        <ul class="latest-ScholarShips2">
+                            @foreach (var sch in countryGroup.Scholarships)
+                            {
+                                <li>
+                                    <a href="/scholarships/@sch.Url">
+                                        <div class="ScholarShips-img-holder"><img src="https://cdn.ilmkidunya.com/scholarshipimages/topsch/@sch.Image" alt=""></div>
+                                    @* <span class="date">@sch.Deadline?.ToString("dd-MMM-yyyy")</span> *@
+                                        <h3>@sch.Name</h3>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                 
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+</div>

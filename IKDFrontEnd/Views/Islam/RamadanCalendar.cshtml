@@ -1,0 +1,596 @@
+﻿@model IKDFrontEnd.ViewModels.RamadanHomeViewModel
+@{
+    ViewData["Title"] = "Ramadan Calendar 2025 - Sehri & Iftar Timings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Heading != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Worldwide Islamic Prayer Timings</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .ramadan-timing-wrapper {
+        display: flex;
+        gap: 0px 20px;
+        flex-wrap: wrap;
+    }
+
+    .prayer-times {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        min-width: 300px;
+        background: #ffffff;
+        border: 1px solid #15a18d;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        padding: 20px 30px;
+        margin: 10px auto 30px;
+        flex: 1 1 47%;
+    }
+
+    .prayer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 140px;
+        width: 100%;
+        gap: 10px;
+        position: relative;
+    }
+
+    .location-icon {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+        .location-icon p {
+            margin: 0;
+            font-size: 15px;
+        }
+
+    .prayer-name {
+        font-size: 22px;
+        font-weight: 600;
+        color: #15a18d;
+        margin: 20px 0px 5px;
+    }
+
+    .prayer-time {
+        font-size: 35px;
+        font-weight: 700;
+        margin-top: 20px;
+        color: #222;
+        line-height: 1;
+    }
+
+    .next-prayer-time {
+        max-width: 420px;
+        width: 100%;
+        padding: 10px 10px 0px;
+        justify-content: space-between;
+        /* margin-top: 12px; */
+        border-top: 1px solid #15a18d;
+    }
+
+    .arabic,
+    .urdu-text {
+        font-family: 'Noto Sans Arabic', sans-serif;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    .urdu-text {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .translation-dua {
+        padding: 10px 20px;
+        background: #effcf4;
+        border-left: 3px solid #15a18d;
+        margin: 20px 0px;
+        font-size: 16px;
+        color: black;
+    }
+
+    @@media (max-width: 600px) {
+        .prayer-times {
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .prayer-item {
+            min-width: 100px;
+        }
+
+   
+    }
+</style>
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Dynamic CMS Content -->
+                    <div class="ckeditorcontent">
+                        @Html.Raw(ViewBag.CmsData?.Desc1)
+                    </div>
+
+                    <!-- Hanafi Timing Section -->
+                    <h2>Today Sehr &amp; Iftar Timing For Fiqh Hanafi</h2>
+                    <div class="ramadan-timing-wrapper">
+                        <!-- Sehri Time Card -->
+                        <div class="prayer-times" style="display: block;">
+                            <div class="location-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <p>@Model.Location</p>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-time">@Model.TodayHanafi.Sehri</div>
+                                <div class="prayer-name">Sehri Time</div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <p id="hanafi-sehri-time-left">Time Left: @FormatTimeSpan(Model.TimeLeftHanafi)</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p id="hanafi-sehri-islamic-date">@Model.TodayHanafi.IslamicDateEnglish</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p class="todayDate">@DateTime.Now.ToString("dd MMMM yyyy")</p>
+                                </div>
+                                <div class="location-icon next-prayer-time">
+                                    <p>Next Sehri:</p>
+                                    <p><span style="color: #15A18D;">@Model.TomorrowHanafi.Sehri</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iftar Time Card -->
+                        <div class="prayer-times" style="display: block;">
+                            <div class="location-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <p>@Model.Location</p>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-time">@Model.TodayHanafi.Iftar</div>
+                                <div class="prayer-name">Iftar Time</div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <p id="hanafi-iftar-time-left">Time Left: @FormatTimeSpan(Model.TimeLeftHanafi)</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p id="hanafi-iftar-islamic-date">@Model.TodayHanafi.IslamicDateEnglish</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p class="todayDate">@DateTime.Now.ToString("dd MMMM yyyy")</p>
+                                </div>
+                                <div class="location-icon next-prayer-time">
+                                    <p>Next Iftar:</p>
+                                    <p><span style="color: #15A18D;">@Model.TomorrowHanafi.Iftar</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jafaria Timing Section -->
+                    <h2>Today Sehr &amp; Iftar Timing For Fiqh Jafaria</h2>
+                    <div class="ramadan-timing-wrapper">
+                        <!-- Sehri Time Card -->
+                        <div class="prayer-times" style="display: block;">
+                            <div class="location-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <p>@Model.Location</p>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-time">@Model.TodayJafaria.Sehri</div>
+                                <div class="prayer-name">Sehri Time </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <p id="jafaria-sehri-time-left">Time Left: @FormatTimeSpan(Model.TimeLeftJafaria)</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p id="jafaria-sehri-islamic-date">@Model.TodayJafaria.IslamicDateEnglish</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p class="todayDate">@DateTime.Now.ToString("dd MMMM yyyy")</p>
+                                </div>
+                                <div class="location-icon next-prayer-time">
+                                    <p>Next Sehri:</p>
+                                    <p><span style="color: #15A18D;">@Model.TomorrowJafaria.Sehri</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iftar Time Card -->
+                        <div class="prayer-times" style="display: block;">
+                            <div class="location-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <p>@Model.Location</p>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-time">@Model.TodayJafaria.Iftar</div>
+                                <div class="prayer-name">Iftar Time</div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <p id="jafaria-iftar-time-left">Time Left: @FormatTimeSpan(Model.TimeLeftJafaria)</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p id="jafaria-iftar-islamic-date">@Model.TodayJafaria.IslamicDateEnglish</p>
+                                </div>
+                                <div class="location-icon time-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <p class="todayDate">@DateTime.Now.ToString("dd MMMM yyyy")</p>
+                                </div>
+                                <div class="location-icon next-prayer-time">
+                                    <p>Next Iftar:</p>
+                                    <p><span style="color: #15A18D;">@Model.TomorrowJafaria.Iftar</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Duas Section -->
+                    <h2>Dua For Sehri</h2>
+                    <div class="ramdan-dua">
+                        <p class="arabic">وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ</p>
+                        <p class="urdu-text">’’اورمیں نے ماہ رمضان کے کل کے روزے کی نیت کی.‘‘</p>
+                        <p class="translation-dua">I Intend to keep the fast for month of Ramadan</p>
+                    </div>
+
+                    <h2>Dua For Iftar</h2>
+                    <div class="ramdan-dua">
+                        <p class="arabic">اَللّٰهُمَّ اِنَّی لَکَ صُمْتُ وَبِکَ اٰمَنْتُ وَعَلَيْکَ تَوَکَّلْتُ وَعَلٰی رِزْقِکَ اَفْطَرْتُ </p>
+                        <p class="urdu-text">’’اے اللہ!میں نے تیری خاطر روزہ رکھا اور تیرے اوپر ایمان لایا اور تجھ پر بھروسہ کیا اورتیرے رزق سے اسے کھول رہا ہوں۔‘‘</p>
+                        <p class="translation-dua">O Allah! I fasted for you and I believe in you and I put my trust in You and I break my fast with your sustenance.</p>
+                    </div>
+                </div>
+                @await Html.PartialAsync("_GoogleAd")
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+
+                <!-- Popular Cities Table -->
+                <div class="col-lg-12">
+                    <h2>Sehr &amp; Iftar Timings For Popular Cities</h2>
+                    <div class="responsive-table">
+                        <figure class="table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Sehri(Hanafi)</th>
+                                        <th>Iftar(Hanafi)</th>
+                                        <th>Sehri (Jafaria)</th>
+                                        <th>Iftar (Jafaria)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var city in Model.PopularCitiesTimings)
+                                    {
+                                        var citySlug = city.CityName.ToLower().Replace(" ", "-");
+
+                                        if (
+                                        !string.IsNullOrEmpty(city.Sehri) &&
+                                        !string.IsNullOrEmpty(city.Iftar) &&
+                                        !string.IsNullOrEmpty(city.SehriJafaria) &&
+                                        !string.IsNullOrEmpty(city.IftarJafaria)
+                                        )
+                                        {
+                                            <tr>
+                                                <td><a href="/islam/@citySlug-ramadan-calendar" target="_blank">@city.CityName</a></td>
+                                                <td>@city.Sehri</td>
+                                                <td>@city.Iftar</td>
+                                                <td>@city.SehriJafaria</td>
+                                                <td>@city.IftarJafaria</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </figure>
+                    </div>
+                </div>
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+
+    <!-- Countries List Section -->
+    <div class="content-sec level-wise" style="margin-bottom: 15px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Ramadan Timing For Countries</h2>
+                    <div class="subjects-tble2">
+                        <ul>
+                            @foreach (var country in Model.Countries)
+                            {
+                                var countrySlug = country.Name.ToLower().Replace(" ", "-");
+                                <li><a href="/islam/@countrySlug-ramadan-calendar" target="_blank">@country.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-sec" style="padding: 15px 0;">
+    <div class="container">
+        <div class="row">
+            @await Html.PartialAsync("_GoogleAd")
+            <div class="col-lg-12">
+                <div class="ckeditorcontent">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="new-ads-sec">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                @await Html.PartialAsync("_maincontenttopbanner")
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // -----------------------------
+    // Time Left Calculation Functions
+    // -----------------------------
+    function parsePrayerTime(timeStr) {
+        // Remove spaces and convert to uppercase for consistent parsing
+        timeStr = timeStr.trim().toUpperCase();
+
+        // Check if it's AM/PM format
+        const hasAmPm = timeStr.includes('AM') || timeStr.includes('PM');
+
+        if (hasAmPm) {
+            // Extract time and period
+            const timePart = timeStr.replace(/AM|PM/gi, '').trim();
+            const period = timeStr.includes('PM') ? 'PM' : 'AM';
+
+            let [hours, minutes] = timePart.split(':').map(Number);
+
+            // Convert to 24-hour format
+            if (period === 'PM' && hours !== 12) {
+                hours += 12;
+            } else if (period === 'AM' && hours === 12) {
+                hours = 0;
+            }
+
+            return { hours, minutes };
+        } else {
+            // Assume 24-hour format
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return { hours, minutes };
+        }
+    }
+
+    function updateTimeLeft(prayerTime, elementId) {
+        const now = new Date();
+        const { hours, minutes } = parsePrayerTime(prayerTime);
+
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+        let diffMs = prayerDate - now;
+
+        if (diffMs < 0) {
+            // If prayer already passed today, set to next day's prayer
+            prayerDate.setDate(prayerDate.getDate() + 1);
+            diffMs = prayerDate - now;
+        }
+
+        const totalMinutes = Math.floor(diffMs / (1000 * 60));
+        const h = Math.floor(totalMinutes / 60);
+        const m = totalMinutes % 60;
+
+        document.getElementById(elementId).textContent = `Time Left: ${h}h ${m}m`;
+    }
+
+    function updateAllTimeLeft() {
+        // Update Hanafi times
+        updateTimeLeft("@Model.TodayHanafi.Sehri", "hanafi-sehri-time-left");
+        updateTimeLeft("@Model.TodayHanafi.Iftar", "hanafi-iftar-time-left");
+
+        // Update Jafaria times
+        updateTimeLeft("@Model.TodayJafaria.Sehri", "jafaria-sehri-time-left");
+        updateTimeLeft("@Model.TodayJafaria.Iftar", "jafaria-iftar-time-left");
+    }
+
+    // Initial call for all prayer times
+    updateAllTimeLeft();
+
+    // Update every minute
+    setInterval(updateAllTimeLeft, 60000);
+
+    // -----------------------------
+    // Islamic Date Calculation
+    // -----------------------------
+    async function getIslamicDateByCoordinates(latitude, longitude) {
+        try {
+            const apiUrl = `https://api.aladhan.com/v1/gToH?latitude=${latitude}&longitude=${longitude}`;
+            const response = await fetch(apiUrl);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.code === 200 && data.data) {
+                    const hijri = data.data.hijri;
+                    const islamicDate = `${hijri.day} ${hijri.month.en} ${hijri.year} ${hijri.designation.abbreviated}`;
+
+                    // Set Islamic date for ALL sections
+                    document.getElementById("hanafi-sehri-islamic-date").textContent = islamicDate;
+                    document.getElementById("hanafi-iftar-islamic-date").textContent = islamicDate;
+                    document.getElementById("jafaria-sehri-islamic-date").textContent = islamicDate;
+                    document.getElementById("jafaria-iftar-islamic-date").textContent = islamicDate;
+                    return;
+                }
+            }
+            fallbackToIntl();
+        } catch (error) {
+            console.log("Islamic API failed:", error);
+            fallbackToIntl();
+        }
+    }
+
+    function fallbackToIntl() {
+        const today = new Date();
+        const islamic = new Intl.DateTimeFormat('en-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(today);
+        const day = islamic.find(p => p.type === 'day').value;
+        const month = islamic.find(p => p.type === 'month').value;
+        const year = islamic.find(p => p.type === 'year').value;
+        const islamicDate = `${day} ${month} ${year} AH`;
+
+        // Set Islamic date for ALL sections
+        document.getElementById("hanafi-sehri-islamic-date").textContent = islamicDate;
+        document.getElementById("hanafi-iftar-islamic-date").textContent = islamicDate;
+        document.getElementById("jafaria-sehri-islamic-date").textContent = islamicDate;
+        document.getElementById("jafaria-iftar-islamic-date").textContent = islamicDate;
+    }
+
+    const latitude = @Model.City.Latitude ?? 0;
+    const longitude = @Model.City.Longitude ?? 0;
+
+    if (latitude && longitude) {
+        getIslamicDateByCoordinates(latitude, longitude);
+    } else {
+        fallbackToIntl();
+    }
+</script>
+
+@functions {
+    public string FormatTimeSpan(TimeSpan timeSpan)
+    {
+        return $"{(int)timeSpan.TotalHours}h {timeSpan.Minutes}m";
+    }
+}

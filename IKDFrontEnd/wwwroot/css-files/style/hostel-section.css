@@ -1,0 +1,150 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+.hostel-registration {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px clamp(10px, 3vw, 30px);
+    margin-bottom: 20px;
+}
+
+.hostel-registration h2 {
+    margin: 25px 0px !important;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #71E87F;
+    font-weight: 600;
+}
+
+.resgistration-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(15px, 3vw, 30px) 20px;
+    margin: 30px 0px 10px;
+}
+
+.resgistration-form .halfBox {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 300px;
+}
+
+.resgistration-form .full {
+    flex: 1 1 100%;
+}
+
+.resgistration-form input,
+.resgistration-form select {
+    width: 100%;
+    height: 45px;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease-out;
+}
+
+.resgistration-form label {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.resgistration-form input:focus,
+select:focus {
+    border-color: #71E87F;
+    outline: none;
+    box-shadow: 0 0 0 3px #71e87f1a;
+}
+
+.resgistration-form .hostal-btn {
+    width: 200px;
+    align-self: center;
+    padding: 10px 15px;
+    background-color: #71E87F;
+    border: none;
+    color: white;
+}
+
+.resgistration-form .hostal-btn:hover {
+    background-color: #4EA28D;
+}
+
+.resgistration-form .btn-form {
+    text-align: center;
+}
+
+#InitialMap {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    min-height: 250px;
+    margin: 10px 0px;
+}
+
+.hostel-facilities-list {
+    border: 1px solid rgb(218, 218, 218);
+    padding: 20px clamp(8px, 3vw, 20px);
+    border-radius: 8px;
+}
+
+.hostel-facilities-list ul.ikd-checkbox {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: clamp(12px, 3vw, 15px) clamp(6px, 2vw, 12px);
+}
+
+.hostel-facilities-list .list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px;
+}
+
+.hostel-facilities-list input[type="checkbox"] {
+    display: none;
+}
+
+.hostel-facilities-list input[type="checkbox"]:checked+.ikd-custom-label {
+    background: #e6ecfc;
+    border-color: #6c63ff;
+}
+
+.hostel-facilities-list .list-item:hover .ikd-custom-label {
+    background: #f4f8ff;
+    border-color: #6c63ff;
+}
+
+.ikd-custom-label {
+    display: flex;
+    align-items: center;
+    gap: clamp(5px, 1.2vw, 10px);
+    width: 100%;
+    padding: 8px 2px 8px clamp(6px, 2vw, 10px);
+    background: #fbfbfc;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.list-item-icon i {
+    font-size: 18px;
+    color: #fa6948;
+}
+
+.list-item-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.resgistration-form .border-btm {
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    margin: 5px 0px;
+}
+
+.halfBox.med-width {
+    flex-basis: 20%;
+    min-width: 170px;
+}

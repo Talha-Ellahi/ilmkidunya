@@ -1,0 +1,682 @@
+﻿@using IKDFrontEnd.ViewModels
+@model LecturePageViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["PageTitle2"] = Model.PageTitle2;
+}
+@section header {
+
+
+<div class="col-lg-11">
+	<partial name="_NavBarPartial" />
+</div>
+
+
+}
+<style>
+	.citywise-list li.active a {
+	font-weight: bold;
+	color: #007bff; /* blue */
+	text-decoration: underline;
+	}
+
+
+	.see-more {
+	padding: 10px 0 0;
+	height: 40vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	}
+
+	.see-more h3 {
+	font-size: 20px;
+	line-height: 30px;
+	margin: 0 0 5px
+	}
+
+	.see-more a {
+	font-size: 16px;
+	line-height: 24px;
+	display: inline-block;
+	border: 1px solid #23aa77;
+	color: #23aa77;
+	background: #fff;
+	border-radius: 5px;
+	padding: 5px 30px;
+	margin: 0 20px 0 0;
+	text-decoration: none
+	}
+
+	.see-more a:hover {
+	background: #23aa77;
+	color: #fff;
+	text-decoration: none
+	}
+
+	.next-prev-lec {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	}
+
+	.next-prev-lec a.lecture-opt {
+	position: relative;
+	height: 50px;
+	color: #000;
+	line-height: 17px;
+	}
+
+	.next-prev-lec a.lecture-opt:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 50px;
+	height: 50px;
+	background: url(https://images.ishallwin.com/icons/arrow-down.webp) 15px 15px / 20px no-repeat #35e87e;
+	transform: rotate(90deg);
+	border-radius: 5px;
+	}
+
+	.next-prev-lec a.lecture-opt.prev-lec {
+	padding: 8px 0 0 60px;
+	}
+
+	.next-prev-lec a.lecture-opt.next-lec {
+	padding: 8px 60px 0 0;
+	text-align: right;
+	}
+
+	.next-prev-lec a.lecture-opt.next-lec:before {
+	left: auto;
+	right: 0;
+	transform: rotate(-90deg);
+	}
+
+	.next-prev-lec a.lecture-opt:hover {
+	color: #118574;
+	}
+
+	.next-prev-lec a.lecture-opt:hover:before {
+	background-color: #118574;
+	}
+
+	.see-more .flex-container {
+	padding: 0;
+	}
+
+	.see-more .flex-container .table-of-content {
+	background: none;
+	border: 0;
+	padding: 0;
+	}
+
+	.see-more .flex-container .table-of-content ul li {
+	width: 100% !important;
+	margin-bottom: 0;
+	padding: 0;
+	}
+
+	.see-more .flex-container .table-of-content ul li:after, .see-more .flex-container .table-of-content ul li:before {
+	display: none;
+	}
+
+	.see-more .flex-container .table-of-content ul li a {
+	border: 0;
+	background: none;
+	color: #808080;
+	position: relative;
+	font-size: 15px;
+	}
+
+	.see-more .flex-container .table-of-content ul li a:hover {
+	color: #118574;
+	}
+
+	.see-more .flex-container .table-of-content ul li a:before {
+	content: '';
+	position: absolute;
+	left: 9px;
+	top: 10px;
+	width: 8px;
+	height: 8px;
+	background: #808080;
+	border-radius: 10px;
+	}
+
+	#style-4::-webkit-scrollbar-track {
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+	box-shadow: none;
+	border-radius: 10px;
+	background-color: #fff;
+	}
+
+	#style-4::-webkit-scrollbar {
+	width: 6px;
+	background-color: #fff;
+	}
+
+	#style-4::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #1da599;
+	}
+
+	.exercise-box .info_content {
+	position: fixed;
+	right: -100%;
+	top: 0;
+	width: 40%;
+	height: 100%;
+	background: #fff;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 999;
+	transition: .3s ease-in-out;
+	padding: 10px 20px;
+	border-left: 5px solid #0f9e49;
+	}
+
+	ul.exercise-list ul li a.info-close {
+	position: absolute;
+	right: 20px;
+	top: 10px;
+	}
+
+	.lecture-box {
+	width: 100%;
+	height: 100%;
+	}
+
+	#main .lecture-box h2 {
+	font-size: 22px;
+	margin: 0 0 15px;
+	}
+
+	.youtube-box {
+	overflow: hidden;
+	border-radius: 15px;
+	height: 270px;
+	margin: 0 0 20px;
+	}
+
+	.youtube-box iframe {
+	width: 100%;
+	height: 100%;
+	}
+
+	.flex-container > .col-lg-4 {
+	flex: 1 1 calc(33.333% - 15px);
+	display: flex;
+	flex-direction: column
+	}
+
+	.flex-container.result > .col-lg-4 {
+	flex: 1 1 calc(50% - 15px)
+	}
+
+	.flex-container .table-of-content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	margin: 0 0 10px
+	}
+
+	.flex-container .table-of-content h4 {
+	margin-bottom: 10px;
+	font-size: 18px
+	}
+
+	.flex-container .table-of-content ul {
+	margin: 0;
+	padding: 0;
+	list-style: none
+	}
+
+	.flex-container .table-of-content ul li {
+	margin-bottom: 8px;
+	padding: 2px 0 2px 25px
+	}
+
+	.flex-container .table-of-content ul li a {
+	text-decoration: none
+	}
+</style>
+@section MetaData
+{
+	@{
+		// Priority: Metadesc > MetaDescription > Default
+		string metaDesc = !string.IsNullOrEmpty(Model?.Metadesc)
+			? Model.Metadesc
+			: (!string.IsNullOrEmpty(Model?.MetaDescription)
+				? Model.MetaDescription
+				: "Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges.");
+
+		string metaTitle = !string.IsNullOrEmpty(Model?.MetaTitle)
+			? Model.MetaTitle
+			: "Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya";
+
+		string metaImage = !string.IsNullOrEmpty(Model?.MetaImage)
+			? $"https://ikddata.ilmkidunya.com/images/{Model.MetaImage}"
+			: "https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg";
+	}
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@metaTitle" />
+	<meta property="og:description" content="@metaDesc" />
+	<meta property="og:image" content="@metaImage" />
+	<meta name="description" content="@metaDesc">
+	<meta name="keywords" content="@Model?.MetaKeywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@metaTitle</title>
+}
+
+
+
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						@{
+							string headingText = "";
+
+							if (!string.IsNullOrEmpty(Model.PageHeading))
+							{
+								headingText = Model.PageHeading;
+							}
+							else if (!string.IsNullOrEmpty(Model.Chtitle))
+							{
+								headingText = Model.Chtitle;
+							}
+
+							else
+							{
+								// Fallback: Modified PageTitle2
+								string modifiedPageTitle2 = Model.CurrentClassSlug.Replace("-", " ");
+
+								if (modifiedPageTitle2.Contains("mdcat class"))
+								{
+									modifiedPageTitle2 = modifiedPageTitle2.Replace("mdcat class", "Mdcat Test");
+								}
+								else if (modifiedPageTitle2.Contains("ecat class"))
+								{
+									modifiedPageTitle2 = modifiedPageTitle2.Replace("ecat class", "Ecat Test");
+								}
+
+								modifiedPageTitle2 = modifiedPageTitle2.ToLower();
+								modifiedPageTitle2 = System.Globalization.CultureInfo.CurrentCulture.TextInfo
+								.ToTitleCase(modifiedPageTitle2);
+
+								modifiedPageTitle2 = modifiedPageTitle2.Replace("Th", "th");
+
+								headingText = $"{modifiedPageTitle2} {Model.CurrentSubjectSlug.Replace("-", " ")} " +
+								$"Chapter {Model.ChapterName.Replace("-", " ")} Video Lectures";
+							}
+						}
+
+						<h1>@headingText</h1>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<!-- Main Start -->
+<div id="main">
+	<div class="content-sec" style="padding: 0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(Model.PageDescription1)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="exercise-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@foreach (var teacher in Model.Teachers.OrderBy(t => t.SortOrder))
+					{
+						int count = 1;
+						<div class="exercise-box">
+							<div class="img-holder">
+								<figure><img src="https://cdn.ilmkidunya.com/lectures/teachers/@teacher.Image" alt="" /></figure>
+								<strong>@teacher.Name</strong>
+							</div>
+							<div class="text-holder">
+								<ul class="exercise-list" id="accordion">
+									@foreach (var topic in teacher.TblLectures
+																									.Select(l => l.LectureTopic)
+																									.Distinct()
+																									.OrderBy(t => t.SortOrder))
+									{
+										<li class="panel">
+											<a class="accordion-toggle collapsed" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapse@(count)" aria-expanded="false">@topic.TopicName</a>
+											<ul id="collapse@(count)" class="panel-collapse collapse" aria-expanded="false">
+												@foreach (var lecture in teacher.TblLectures
+																															.Where(l => l.LectureTopicId == topic.Id)
+																															.OrderBy(l => l.SortOrder))
+												{
+													<li>
+														<a href="javascript:void(0);" class="btn-lecture">
+															@lecture.LectureName <span>(@lecture.Duration)</span>
+														</a>
+
+														<div class="info_content">
+															<a href="javascript:void(0);" class="info-close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="" /></a>
+															<div class="lecture-box">
+																<h2>@topic.TopicName</h2>
+																<div class="youtube-box">
+																	@if (!string.IsNullOrEmpty(lecture.EmbedCode))
+																	{
+																		@Html.Raw(lecture.EmbedCode)
+																	}
+																	else
+																	{
+																		<p>No video available</p>
+																	}
+																</div>
+
+																<div class="next-prev-lec">
+																	<a href="javascript:void(0);" class="lecture-opt prev-lec">Prev<br> Lecture</a>
+																	<a href="javascript:void(0);" class="lecture-opt next-lec">Next<br> Lecture</a>
+																</div>
+																<div class="see-more" id="style-4">
+																	<h3>Prepare Better. Practice More</h3>
+																	<div class="row">
+																		<div class="flex-container">
+																			<div class="col-lg-4">
+																				<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+																					@Html.Raw(Model.PageDescription3)
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</li>
+												}
+											</ul>
+										</li>
+										count++;
+									}
+								</ul>
+							</div>
+						</div>
+					}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="study-opt">
+					<div class="row">
+
+						<div class="col-lg-6">
+							<div class="flex-container">
+								<div class="col-lg-12">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										<h4>
+											More @char.ToUpper(Model.CurrentSubjectSlug.Replace("-", " ")[0])@Model.CurrentSubjectSlug.Replace("-", " ").Substring(1)
+											Video Lectures
+										</h4>
+										<ul class="citywise-list">
+											@if (Model.RelatedChapters != null && Model.RelatedChapters.Any())
+											{
+												foreach (var ch in Model.RelatedChapters)
+												{
+													var chapterSlug = ch.ChName.Replace(" ", "-").ToLower();
+													var isActive = chapterSlug == Model.ChapterName.ToLower();
+
+													<li class="@(isActive ? "active" : "")">
+														<a href="/study/@Model.CurrentClassSlug-@Model.CurrentSubjectSlug/@(chapterSlug).aspx" target="_blank">
+															@ch.ChName
+														</a>
+													</li>
+												}
+											}
+										</ul>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="flex-container">
+								<div class="col-lg-12">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										@if (!string.IsNullOrWhiteSpace(Model.PageDescription3))
+										{
+											<h4>Prepare Better. Practice More</h4>
+
+											var updatedDescription = System.Text.RegularExpressions.Regex.Replace(
+											Model.PageDescription3,
+											"<a(?![^>]*target=)",
+											"<a target=\"_blank\" rel=\"noopener noreferrer\"",
+											System.Text.RegularExpressions.RegexOptions.IgnoreCase
+											);
+
+											@Html.Raw(updatedDescription)
+										}
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<style>
+					.study-opt {
+						padding: 0 999px;
+						margin: 0 -999px;
+						background: #e6fbee;
+					}
+
+						.study-opt .flex-container {
+							padding: 10px 0 0;
+						}
+
+							.study-opt .flex-container .table-of-content ul.citywise-list.lts li {
+								width: 100% !important;
+							}
+				</style>
+			</div>
+			
+		</div>
+	</div>
+	<br />
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(Model.PageDescription2)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+	$(document).ready(function () {
+
+	  // --- Open lecture info ---
+	  $('body').on('click', '.btn-lecture', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		// Close any open info boxes
+		$('.info_content').removeClass('open');
+
+		// Open the clicked one
+		const $info = $(this).closest('li').find('.info_content');
+		$info.addClass('open');
+
+		// Save current index globally (among all lectures)
+		$('.info_content').data('currentIndex', $('.btn-lecture').index(this));
+	  });
+
+	  // --- Close red cross ---
+	  $('body').on('click', '.info-close', function (e) {
+		e.preventDefault();
+		$(this).closest('.info_content').removeClass('open');
+	  });
+
+	  // --- Next / Prev buttons ---
+	  $('body').on('click', '.next-lec, .prev-lec', function (e) {
+		e.preventDefault();
+
+		const $openInfo = $('.info_content.open');
+		if (!$openInfo.length) return;
+
+		const $lectures = $('.btn-lecture');
+		let currentIndex = $openInfo.data('currentIndex') || 0;
+
+		// Direction handling
+		const direction = $(this).hasClass('next-lec') ? 1 : -1;
+		let newIndex = currentIndex + direction;
+
+		// Loop until we find a valid lecture with iframe, or stop
+		while (newIndex >= 0 && newIndex < $lectures.length) {
+		  const $targetLi = $lectures.eq(newIndex).closest('li');
+		  const iframeSrc = $targetLi.find('iframe').attr('src');
+
+		  if (iframeSrc) {
+			// Found valid lecture with video
+			const title = $lectures.eq(newIndex).clone().children().remove().end().text().trim();
+
+			// Update info content
+			$openInfo.find('h2').text(title);
+			$openInfo.find('iframe').attr('src', iframeSrc);
+			$openInfo.data('currentIndex', newIndex);
+			return; // Stop once updated
+		  }
+
+		  // Move further in direction
+		  newIndex += direction;
+		}
+
+		// If no valid next/prev lecture found — do nothing
+	  });
+
+	  // --- Only one collapse open at a time ---
+	  $('body').on('show.bs.collapse', '.panel-collapse', function () {
+		$('.panel-collapse.show').not(this).collapse('hide');
+	  });
+
+	});
+</script>
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	  // 1) remove data-bs-parent so default accordion behavior doesn't interfere
+	  document.querySelectorAll('[data-bs-parent]').forEach(el => el.removeAttribute('data-bs-parent'));
+
+	  // 2) collect all collapse panels
+	  const collapses = Array.from(document.querySelectorAll('.panel-collapse'));
+
+	  if (!collapses.length) return;
+
+	  // 3) mark them visible by default (no events fired when adding the class)
+	  collapses.forEach(panel => {
+		panel.classList.add('show');
+		panel.setAttribute('aria-expanded', 'true');
+
+		// also update any toggle(s) that point to this panel
+		const toggles = document.querySelectorAll(
+		  `[data-bs-toggle="collapse"][href="#${panel.id}"], [data-bs-toggle="collapse"][data-bs-target="#${panel.id}"], a[href="#${panel.id}"], [data-bs-target="#${panel.id}"]`
+		);
+		toggles.forEach(t => t.setAttribute('aria-expanded', 'true'));
+	  });
+
+	  // 4) ensure bootstrap Collapse instances exist (toggle: false so we don't auto-toggle on init)
+	  collapses.forEach(panel => bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }));
+
+	  // 5) attach handlers AFTER initialization:
+	  //    - when any panel starts hiding => hide all other shown panels
+	  //    - when any panel starts showing => hide all other shown panels (standard accordion-like)
+	  collapses.forEach(panel => {
+		panel.addEventListener('hide.bs.collapse', function () {
+		  collapses.forEach(other => {
+			if (other !== panel && other.classList.contains('show')) {
+			  bootstrap.Collapse.getOrCreateInstance(other, { toggle: false }).hide();
+			}
+		  });
+		});
+
+		panel.addEventListener('show.bs.collapse', function () {
+		  collapses.forEach(other => {
+			if (other !== panel && other.classList.contains('show')) {
+			  bootstrap.Collapse.getOrCreateInstance(other, { toggle: false }).hide();
+			}
+		  });
+		});
+	  });
+	});
+</script>
+@* <script>
+	$(document).ready(function () {
+		// Open and close .info_content when clicking .btn-lecture
+		$('body').on('click', '.btn-lecture', function (event) {
+			event.stopPropagation(); // Prevents event from reaching document
+			var self = $(this).closest('li').find('.info_content');
+
+			if (self.hasClass('open')) {
+				self.removeClass('open');
+			} else {
+				$('.info_content').removeClass('open'); // Close other open ones
+				self.addClass('open'); // Open the clicked one
+			}
+		});
+
+		// Close when clicking outside
+		$(document).on('click', function (event) {
+			if (!$(event.target).closest('.info_content, .btn-lecture').length) {
+				$('.info_content').removeClass('open');
+			}
+		});
+
+		// Close when clicking the .info-close button
+		$('body').on('click', '.info-close', function (event) {
+			event.preventDefault(); // Prevent default action of anchor tag
+			$(this).closest('.info_content').removeClass('open'); // Close only the current content
+		});
+	});
+</script>
+ *@
+

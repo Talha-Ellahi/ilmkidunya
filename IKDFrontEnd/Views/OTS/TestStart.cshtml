@@ -1,0 +1,565 @@
+﻿@model IKDFrontEnd.ViewModels.CustomTestHomeViewModel
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	
+
+.correct .radio-container {
+	transform: scale(1.1);
+}
+.correct .radio-container .checkmark {
+	background-color: #36e57c;;
+}
+
+	
+
+
+</style>
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.Title" />
+	<meta property="og:description" content="@ViewBag.Description" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.Description">
+	<meta name="keywords" content="@ViewBag.Keywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@ViewBag.Title</title>
+}
+
+@section header {
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+}
+
+		@section innerbanner {
+			<div class="ss-banner-inner left-align test">
+				<div class="ss-container">
+					<div class="ss-row">
+						<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.TestTitle</h1>
+						<ul>
+							<li>
+								<span>Medium</span>
+								<em>
+									@(
+																Model.TestTitle.ToLower().Contains("english") ? "English" :
+																Model.TestTitle.ToLower().Contains("urdu") ? "Urdu" :
+																"Not Specified"
+																)
+								</em>
+							</li>
+							<li><span>Available questions</span><em>@ViewBag.TotalAvailableQuestions</em></li>
+							<li><span>Chapter Name</span><em>@ViewBag.ChName</em></li>
+						</ul>
+					</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+		
+		<!-- Main Start -->
+<div id="main">
+	<div class="overlay-box"></div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<ul class="ss-ads" style="border: 0; padding-top: 0; margin: 0;">
+						@await Html.PartialAsync("_maincontenttopbanner")
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>@Model.TestTitle</h2>
+					<ul class="contact-detail">
+						<li>
+							<p><span>Total Questions</span>@Model.TotalQuestions</p>
+						</li>
+						<li>
+							<p><span>Time Allowed</span>@Model.DurationMinutes</p>
+						</li>
+					</ul>
+
+					<a href="javascript:void(0)" id="launch-test-btn" onClick="launchTest()" class="text-btn">Start Test</a>
+					<div class="question-side" id="pol">
+						<div class="question-box">
+							<div class="top-box">
+								<h2>@Model.TestTitle</h2>
+
+								<!-- <div class="switch-box">
+									<input class="switch" id="first-toggle-btn" type="checkbox"/>
+									<label for="first-toggle-btn"></label>
+								</div> -->
+
+								<div class="stopwatch">
+									<div id="display">00:00</div>
+									<!-- <button id="resetBtn">Reset</button> -->
+								</div>
+								<div class="close-btn">
+									<a href="#" id="close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="" /></a>
+								</div>
+							</div>
+							<div class="holder-question">
+								@foreach (var question in Model.Questions)
+								{
+									<div class="mid-box" data-question-number="@question.QuestionNumber">
+										<strong>Question # @question.QuestionNumber</strong>
+										<h3>@Html.Raw(question.QuestionText)</h3>
+										@* Show Question Image if available *@
+										@if (!string.IsNullOrEmpty(question.QuestionImageUrl))
+										{
+											<div class="question-image mb-2">
+												<img src="@question.QuestionImageUrl" alt="Question Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+											</div>
+										}
+										<ul>
+											@foreach (var option in question.Options)
+											{
+												var correctLabel = question.CorrectOption switch
+												{
+													1 => "A",
+													2 => "B",
+													3 => "C",
+													4 => "D",
+													5 => "E",
+													_ => ""
+												};
+
+												var isCorrect = option.OptionLabel == correctLabel ? "true" : "false";
+
+												<li>
+													<label class="radio-container d-flex align-items-start">
+														<span class="q-detiel">
+															@Html.Raw(option.OptionText)
+
+															@* Show Option Image if available *@
+															@if (!string.IsNullOrEmpty(option.OptionImageUrl))
+															{
+																<div class="option-image mt-2">
+																	<img src="@option.OptionImageUrl" alt="Option Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+																</div>
+															}
+														</span>
+
+														<input type="radio"
+															   name="question_@question.QuestionNumber"
+															   value="@option.OptionLabel"
+															   data-correct="@isCorrect" />
+														<span class="label">@option.OptionLabel</span>
+														<span class="checkmark"></span>
+													</label>
+												</li>
+											}
+
+										</ul>
+									</div>
+								}
+							</div>
+
+							<div class="last-box">
+								<a href="#" class="prev"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+								<a href="#" class="next"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+							</div>
+							
+							<a href="#" class="text-btn get-result" style="margin: 30px 0 0 30px;">Submit</a>
+
+							<!-- This stays in your view -->
+							<div class="ans-question" style="display: none;">
+								<div class="ans-box">
+									<!-- JavaScript yahan questions insert karega -->
+								</div>
+								<a href="#" id="download-result" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="background: #f3f3f3; padding: 30px 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Matric Part 2/10th Class English Chapter 1 MCQ Test With Answer for Chapter 1 Hazrat Muhammad (S.A.W) an Embodiment of Justice</h2>
+					<p>Here on this page you can attempt class 10 English chapter 1 mcqs online test and assess your progress. You can start the online test for class 10 English chapter 1 mcqs by clicking the “Start Chapter 1 Test” button and after that just select the answers one by one of all the question. If you want to prepare better for the 10th class English mcqs test, we have given 10th class English chapter 1 mcqs pdf file on this page. This 10th class English chapter 1 mcqs solved file contains all the chapter 1 English 10th class important mcqs. We encourage all the 10th class students to try this English online test, it will help you regardless in the 10th class English board exam. The English chapter 1 test also includes grammar mcqs to help students with objective part of their board exam. </p>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-12">
+					<h2>Biology Chapter 1 - Answers Mode</h2>
+					<ul class="contact-detail">
+						<li>
+							<p>Not ready for the test yet? No problem. </p>
+						</li>
+						<li>
+							<p>You can use the answers mode to study and prepare </p>
+						</li>
+						<li>
+							<p>yourself for the online MCQ test.</p>
+						</li>
+					</ul>
+					<a href="#" class="text-btn">Start Test</a>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-12">
+					<h2>Biology Chapter 1 MCQ  - PDF</h2>
+					<ul class="contact-detail">
+						<li>
+							<p>
+								Download PDF with answers to study online or offline. The PDF
+								cotnains all MCQ questions with answers for Class 10 Biology
+								Chapter 1 - Acids and Liquids. Total questions are 12.
+							</p>
+						</li>
+					</ul>
+					<a href="#" class="text-btn">Download PDF</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="g-add-sec" style="padding: 30px 0 0 0;">
+		<div class="container">
+			<div class="row">
+				@await Html.PartialAsync("_GoogleAd")
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+
+
+<script>
+			window.addEventListener('DOMContentLoaded', function () {
+		  document.getElementById('close').addEventListener('click', function (event) {
+			closePoll();
+			event.preventDefault();
+		  });
+
+		  document.addEventListener('click', function (event) {
+			var pol = document.getElementById('pol');
+			if (!pol.contains(event.target) && event.target !== document.getElementById('launch-test-btn')) {
+			  closePoll();
+			}
+		  });
+		});
+
+		function closePoll() {
+		  document.body.classList.remove('open-poll');
+		}
+
+		function launchTest() {
+		  document.body.classList.add('open-poll');
+
+		  // Uncheck radios
+		  document.querySelectorAll(".mid-box input[type='radio']").forEach(r => r.checked = false);
+
+		  if (!isRunning) {
+			startStop(); // start stopwatch
+		  }
+		}
+	</script>
+<script>
+			document.addEventListener("DOMContentLoaded", function () {
+		let midBoxes = document.querySelectorAll(".mid-box");
+		let currentIndex = 0;
+
+		function showBox(index) {
+			midBoxes.forEach((box, i) => {
+				box.style.display = i === index ? "block" : "none";
+			});
+		}
+
+		showBox(currentIndex); // Show first box initially
+
+		document.querySelector(".next").addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex < midBoxes.length - 1) {
+				currentIndex++;
+				showBox(currentIndex);
+			}
+		});
+
+		document.querySelector(".prev").addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex > 0) {
+				currentIndex--;
+				showBox(currentIndex);
+			}
+		});
+
+		// Assign unique names to radio button groups inside each mid-box
+		midBoxes.forEach((box, index) => {
+			let radios = box.querySelectorAll('input[type="radio"]');
+			radios.forEach((radio, i) => {
+				radio.name = `radio-${index}`; // Unique name per mid-box
+			});
+		});
+	});
+
+
+
+	//  Question box for next and prev
+
+
+	document.addEventListener("DOMContentLoaded", function () {
+		let midBoxes = document.querySelectorAll(".mid-box");
+		let nextBtn = document.querySelector(".next");
+		let prevBtn = document.querySelector(".prev");
+		let currentIndex = 0;
+
+		function showBox(index) {
+			midBoxes.forEach((box, i) => {
+				if (i === index) {
+					box.style.display = "block";
+					setTimeout(() => {
+						box.style.opacity = "1";
+					}, 200); // Small delay for smooth fade-in
+				} else {
+					box.style.opacity = "0";
+					setTimeout(() => {
+						box.style.display = "none";
+					}, 300); // Wait for fade-out before hiding
+				}
+			});
+
+			// Handle active class for navigation buttons
+			prevBtn.classList.toggle("active", index > 0);
+			nextBtn.classList.toggle("active", index < midBoxes.length - 1);
+		}
+
+		// Apply transition effect to all mid-box elements
+		midBoxes.forEach(box => {
+			box.style.transition = "opacity 0.3s ease-in-out";
+			box.style.opacity = "0";
+		});
+
+		showBox(currentIndex); // Show first box initially
+
+		nextBtn.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex < midBoxes.length - 1) {
+				currentIndex++;
+				showBox(currentIndex);
+			}
+		});
+
+		prevBtn.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (currentIndex > 0) {
+				currentIndex--;
+				showBox(currentIndex);
+			}
+		});
+	});
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	  document.querySelector(".get-result").addEventListener("click", function (e) {
+		e.preventDefault();
+
+		// Hide question content
+		document.querySelector(".holder-question").style.display = "none";
+		document.querySelector(".last-box").style.display = "none";
+		this.style.display = "none"; // hide the submit button itself
+
+		// Show result section
+		document.querySelector(".ans-question").style.display = "block";
+	  });
+	});
+</script>
+<style>
+	.question-box .mid-box1 {
+		padding: 30px 0 0 30px;
+	}
+
+		.question-box .mid-box1 ul li {
+			display: block;
+			list-style: none;
+			padding: 0;
+			margin: 0 0 10px;
+		}
+
+	.ans-box {
+		height: 580px;
+		overflow-x: scroll;
+	}
+
+	.wrong .radio-container {
+		transform: scale(1.1);
+	}
+
+		.wrong .radio-container .checkmark {
+			background-color: #f00;
+		}
+</style>
+<script>
+			   let timer;
+	let isRunning = false;
+	let elapsedTime = 0;
+
+	function startStop() {
+	  if (isRunning) {
+		clearInterval(timer);
+		document.getElementById('startStopBtn').textContent = 'Start';
+	  } else {
+		const startTime = Date.now() - elapsedTime;
+		timer = setInterval(() => {
+		  elapsedTime = Date.now() - startTime;
+		  const totalSeconds = Math.floor(elapsedTime / 1000);
+		  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+		  const seconds = String(totalSeconds % 60).padStart(2, '0');
+		  document.getElementById('display').textContent = `${minutes}:${seconds}`;
+		}, 1000);
+		document.getElementById('startStopBtn').textContent = 'Stop';
+	  }
+	  isRunning = !isRunning;
+	}
+
+	function reset() {
+	  clearInterval(timer);
+	  elapsedTime = 0;
+	  document.getElementById('display').textContent = '00:00';
+	  document.getElementById('startStopBtn').textContent = 'Start';
+	  isRunning = false;
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+	  document.getElementById('startStopBtn').onclick = startStop;
+	  document.getElementById('resetBtn').onclick = reset;
+	});
+</script>
+
+
+<script>
+	const testTitle = @Html.Raw(Json.Serialize(Model.TestTitle));
+	const testUrl = @Html.Raw(Json.Serialize(Model.TestUrl));
+	
+	const startTime = Date.now();
+	const testId = @Model.TestId;
+
+	
+
+
+	document.querySelector(".get-result").addEventListener("click", async function (e) {
+		e.preventDefault();
+
+		const questionBoxes = document.querySelectorAll(".mid-box");
+		const durationInSeconds = Math.floor(elapsedTime / 1000);
+		console.log("Duration in seconds:", durationInSeconds);
+
+		let resultHTML = "";
+		let correctCount = 0;
+
+		questionBoxes.forEach((box) => {
+			const questionNumber = box.dataset.questionNumber;
+			const questionText = box.querySelector("h3").innerHTML;
+			const inputs = box.querySelectorAll("input[type='radio']");
+			const selected = box.querySelector("input[type='radio']:checked");
+			const selectedVal = selected ? selected.value : null;
+
+			let correct = null;
+			inputs.forEach(input => {
+				if (input.dataset.correct === "true") {
+					correct = input.value;
+				}
+			});
+
+			if (selectedVal === correct) correctCount++;
+
+			let optionsHTML = "";
+			inputs.forEach(input => {
+				const label = input.value;
+				const optionText = input.closest("label").querySelector(".q-detiel").innerText;
+				let liClass = "";
+
+				if (label === correct) liClass = "correct";
+				if (label === selectedVal && selectedVal !== correct) liClass = "wrong";
+
+
+					optionsHTML += `
+							<li class="${liClass}">
+								<label class="radio-container">
+							<span class="q-detiel">${optionText}</span>
+							<input type="radio" disabled value="${label}" data-correct="${label === correct ? 'true' : 'false'}">
+							<span class="label">${label}</span>
+							<span class="checkmark"></span>
+						</label>
+							</li>`;
+			});
+
+			resultHTML += `
+				<div class="mid-box1">
+					<strong>Question # ${questionNumber}</strong>
+					<h3>${questionText}</h3>
+					<ul>${optionsHTML}</ul>
+				</div>`;
+		});
+
+		// Stop timer
+		clearInterval(timer);
+		isRunning = false;
+
+		document.querySelector(".ans-box").innerHTML = resultHTML;
+		document.querySelector(".holder-question").style.display = "none";
+		document.querySelector(".last-box").style.display = "none";
+		document.querySelector(".get-result").style.display = "none";
+		document.querySelector(".ans-question").style.display = "block";
+
+		// Save result to DB
+		const response = await fetch('/online-test/save-result', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+		TestId: testId,
+		TestTitle: testTitle,
+		TotalQuestions: questionBoxes.length,
+		CorrectAnswers: correctCount,
+		Duration: durationInSeconds,
+		TestUrl: testUrl
+	})
+
+		});
+
+		const data = await response.json();
+		if (data.success) {
+			window.savedTestResultId = data.testResultId;
+		}
+	});
+
+</script>
+
+<script>
+	document.querySelector("#download-result").addEventListener("click", function () {
+		if (window.savedTestResultId) {
+			window.location.href = `/online-test/test-results?id=${window.savedTestResultId}`;
+		} else {
+			alert("Please submit the test first.");
+		}
+	});
+</script>

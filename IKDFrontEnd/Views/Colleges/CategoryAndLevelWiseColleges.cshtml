@@ -1,0 +1,306 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	@if (ViewBag.CmsData != null)
+	{
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+		<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+		<meta property="og:image" content="" />
+		<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+		<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@ViewBag.CmsData.MetaTitle</title>
+	}
+}
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+					City Wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+					Level wise colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/college-category">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+					Category wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+					Featured colleges
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						@if (ViewBag.CmsData != null)
+						{
+							<h1>@ViewBag.CmsData.Heading</h1>
+						}
+						else
+						{
+							<h1>@ViewBag.LevelName Institutes @ViewBag.CatName</h1>
+						}
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (ViewBag.CmsData != null)
+					{
+						@Html.Raw(ViewBag.CmsData.Desc1)
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="news-ad-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Most Popular @ViewBag.CatName Courses for @ViewBag.LevelName Level</h2>
+					<ul class="college-medi-list">
+						@foreach (var course in Model.TopCourses)
+						{
+							<li><span>@course.Name</span></li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<br />
+	<div class="contact-sec level fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div id="city-data" data-city-name="@Model.CityName" style="display:none;"></div>
+					<h2>
+						List of Institutions for @ViewBag.CatName Courses
+						<select class="form-control" name="cityId" id="cityId">
+							<option value="">-- Select City --</option>
+							@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+							{
+								<option value="@city.CityName"
+								selected="@(Model.CityName != null && Model.CityName == city.CityName ? "selected" : null)">
+									@city.CityName
+								</option>
+							}
+						</select>
+					</h2>
+					<div class="responsive-table">
+						<table class="table mid">
+							<thead>
+								<tr>
+									<th><span>Institution Name</span></th>
+									<th><span>Location</span></th>
+									<th><span>Contact #</span></th>
+									<th><span>Total Courses</span></th>
+									<th><span>Sector</span></th>
+									<th><span>Popularity Score</span></th>
+									<th><span>Rating</span></th>
+								</tr>
+							</thead>
+							<tbody id="institutionList">
+								@await Html.PartialAsync("_CityInstitutionsTable2")
+							</tbody>
+
+						</table>
+					</div>
+
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="loadMoreBtn">Load More Institutions</button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Find @ViewBag.CatName Courses for Your Study Level</h2>
+					<p>Choose your study level and get list of colleges & universities that offer @ViewBag.CatName programs and courses.</p>
+				</div>
+				<div class="col-lg-12">
+					<ul class="ss-class-list">
+						<li class="inter">
+							<a href ="@($"/colleges/intermediate-institutes-{@ViewBag.CatUrl}")">
+								<div class="inner-text">
+									<span>Colleges for</span>
+									<strong>Inter</strong>
+								</div>
+							</a>
+						</li>
+						<li class="bachelor">
+							<a href="@($"/colleges/bachelors-institutes-{@ViewBag.CatUrl}")" class="sh-red">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Bachelor</strong>
+								</div>
+							</a>
+						</li>
+						<li class="master">
+							<a href="@($"/colleges/masters-institutes-{@ViewBag.CatUrl}")" class="sh-green">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Master</strong>
+								</div>
+							</a>
+						</li>
+						<li class="mphill">
+							<a href="@($"/colleges/m-phil-institutes-{@ViewBag.CatUrl}")" class="sh-purple">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>M.Phil</strong>
+								</div>
+							</a>
+						</li>
+						<li class="phd">
+							<a href="@($"/colleges/ph-d-institutes-{@ViewBag.CatUrl}")" class="sh-blue">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Ph.D</strong>
+								</div>
+							</a>
+						</li>
+					</ul>
+					<div class="share-box" style="padding-top: 30px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding:30px 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (ViewBag.CmsData != null)
+					{
+						@Html.Raw(ViewBag.CmsData.Desc2)
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	let currentPage = 1;
+	let selectedCity = "@Model.CityName" || "All Cities";  // Use the correct default value
+	const catUrl = "@ViewBag.CatUrl";
+	const levelUrl = "@ViewBag.LevelUrl";
+
+	const loadMoreBtn = document.getElementById('loadMoreBtn');
+	const institutionList = document.getElementById('institutionList');
+
+	document.getElementById('cityId').addEventListener('change', function () {
+		selectedCity = this.value;  // Get the selected city value
+		currentPage = 1;  // Reset the page to 1 when city is changed
+
+		loadMoreBtn.innerHTML = 'Loading...';  // Update the button text to indicate loading
+		loadMoreBtn.disabled = true;  // Disable the button while loading
+		institutionList.innerHTML = '';  // Clear the current institution list
+
+		// Fetch the data for the selected city and first page
+		fetch(`/colleges/category/${catUrl}?cityName=${selectedCity}&page=${currentPage}`, {
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'  // Indicate that it's an AJAX request
+			}
+		})
+		.then(response => response.text())
+		.then(data => {
+			institutionList.innerHTML = data;  // Populate the list with the fetched data
+			loadMoreBtn.innerHTML = 'Load More Institutions';  // Reset the button text
+			loadMoreBtn.disabled = false;  // Re-enable the button
+		})
+		.catch(error => {
+			console.error('Error loading colleges:', error);
+			loadMoreBtn.innerHTML = 'Error loading colleges';  // Show error message
+			loadMoreBtn.disabled = false;  // Re-enable the button even if an error occurred
+		});
+	});
+
+	loadMoreBtn.addEventListener('click', function () {
+		currentPage++;  // Increment the page number when "Load More" button is clicked
+		loadMoreBtn.innerHTML = 'Loading...';  // Show loading text on the button
+		loadMoreBtn.disabled = true;  // Disable the button while loading
+
+		// Fetch more data for the selected city and next page
+		fetch(`/colleges/category/${catUrl}?cityName=${selectedCity}&page=${currentPage}`, {
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'  // Indicate that it's an AJAX request
+			}
+		})
+		.then(response => response.text())
+		.then(data => {
+			const tempContainer = document.createElement('tbody');  // Create a temporary container for the new data
+			tempContainer.innerHTML = data;  // Insert the fetched data into the container
+
+			institutionList.insertAdjacentHTML('beforeend', tempContainer.innerHTML);  // Append the new data
+			loadMoreBtn.innerHTML = 'Load More Institutions';  // Reset the button text
+			loadMoreBtn.disabled = false;  // Re-enable the button
+		})
+		.catch(error => {
+			console.error('Error loading more institutions:', error);
+			loadMoreBtn.innerHTML = 'Error loading institutions';  // Show error message
+			loadMoreBtn.disabled = false;  // Re-enable the button
+		});
+	});
+</script>
+

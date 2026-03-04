@@ -1,0 +1,340 @@
+﻿@model IKDFrontEnd.ViewModels.GuideDetailViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@Model.MetaTitle" />
+	<meta property="og:description" content="@Model.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@Model.MetaDesc">
+	<meta name="keywords" content="@Model.MetaKeyword">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@Model.MetaTitle</title>
+}
+@section header {
+
+	<div class="main-nav">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-11">
+
+					<ul class="navigation">
+						<li>
+							<a href="/@ViewBag.HomeUrl" class="menu_main">
+								<div class="child">
+									<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png" style="width: 26px;height: 24px;">
+									<span>Home</span>
+								</div>
+							</a>
+						</li>
+
+						@if (ViewBag.AdmissionsUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.AdmissionsUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/admission.png" style="width: 26px;height: 24px;">
+										<span>Admission</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.UniversitiesUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.UniversitiesUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/university-2.png" style="width: 26px;height: 24px;">
+										<span>University</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.FeeUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.FeeUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/fee-7.png" style="width: 26px;height: 24px;">
+										<span>Fee Structure</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.SalaryUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.SalaryUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/career-icon-8.png" style="width: 26px;height: 24px;">
+										<span>Career Opportunity</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.SubjectsUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.SubjectsUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/subject-icon-3.png" style="width: 26px;height: 24px;">
+										<span>Subjects</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.MeritUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.MeritUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/merit-icon.png" style="width: 26px;height: 24px;">
+										<span>Merit</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.PastPaperUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.PastPaperUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/papers-icon.png" style="width: 26px;height: 24px;">
+										<span>Past Papers</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.EligibilityUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.EligibilityUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/eligibility-icon.png" style="width: 26px;height: 24px;">
+										<span>Eligibility</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.SyllabusUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.SyllabusUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/syllabus-icon.png" style="width: 26px;height: 24px;">
+										<span>Syllabus</span>
+									</div>
+								</a>
+							</li>
+						}
+
+						@if (ViewBag.StudyAbroadUrl != null)
+						{
+							<li>
+								<a href="@ViewBag.StudyAbroadUrl" class="menu_main">
+									<div class="child">
+										<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/study-abroad.png" style="width: 26px;height: 24px;">
+										<span>Study Abroad</span>
+									</div>
+								</a>
+							</li>
+						}
+					</ul>
+
+
+				</div>
+				<div class="col-lg-1">
+					<ul class="login-option">
+						<li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/search-icon.webp" alt="image" /></a></li>
+						<li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/user-icon.webp" alt="image" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.Heading</h1>
+						<p>
+							@Model.HeadingDesc
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(Model.Detail.Replace("https://www.ilmkidunya.com", ""))
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(Model.Detail2.Replace("https://www.ilmkidunya.com", ""))
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding:0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sharethis-inline-share-buttons st-center st-has-labels  st-inline-share-buttons st-animated" style="margin-bottom: 20px;" id="st-1">
+		<div class="st-total ">
+			<span class="st-label">44</span>
+			<span class="st-shares">
+				Shares
+			</span>
+		</div><div class="st-btn st-first st-hide-label  " data-network="whatsapp" style="display: inline-block;">
+			<img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg">
+
+		</div><div class="st-btn st-hide-label  " data-network="facebook" style="display: inline-block;">
+			<img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg">
+
+		</div><div class="st-btn st-hide-label  " data-network="twitter" style="display: inline-block;">
+			<img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg">
+
+		</div><div class="st-btn st-hide-label  " data-network="linkedin" style="display: inline-block;">
+			<img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg">
+
+		</div><div class="st-btn st-hide-label  " data-network="pinterest" style="display: inline-block;">
+			<img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg">
+
+		</div><div class="st-btn st-last st-hide-label  " data-network="email" style="display: inline-block;">
+			<img alt="email sharing button" src="https://platform-cdn.sharethis.com/img/email.svg">
+
+		</div>
+	</div>
+	<div class="feedback-sec">
+		<div class="container">
+			<div class="col-lg-12">
+				<div class="feed-box">
+					<h3>Is this page helpful?</h3>
+					<ul class="yes-no">
+						<li><a href="javascript:void(0)" data-box="yes-box">Yes</a></li>
+						<li><a href="javascript:void(0)" data-box="no-box">No</a></li>
+					</ul>
+					<div id="yes-box" class="yes-box" style="display: none;">
+						<p>Thank you for your feedback. We are happy our work helped you.</p>
+						<p>Now, please consider sharing this page to your friends/class-fellows. Thank you</p>
+					</div>
+					<div id="no-box" class="no-box" style="display: none;">
+						<p>We are sorry to know you could not find your required information.</p>
+						<p>Please take a moment to let us know about your feedback.</p>
+						<textarea id="Comments" placeholder="Please write your feedback about this page here."></textarea><br>
+						<input type="hidden" id="PageUrl" value="/bs-english/">
+						<input type="button" onclick="getfeedback()" value="Submit">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bs-admission-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>More Information On</h2>
+					<ul class="admission-nav">
+						<li>
+							<a href="/bs-english/">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png" alt=""></figure>
+									<span>Home</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="/bs-english/admissions">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/admission.png" alt=""></figure>
+									<span>Admission</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="/bs-english/universities">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/university-2.png" alt=""></figure>
+									<span>University</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="/bs-english/fee-structure">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/fee-7.png" alt=""></figure>
+									<span>Fee Structure</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="/bs-english/career">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/career-icon-8.png" alt=""></figure>
+									<span>Career Opportunity</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="/bs-english/subjects">
+								<div class="child">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/subject-icon-3.png" alt=""></figure>
+									<span>Subjects</span>
+								</div>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+
+</div>
+
+

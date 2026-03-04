@@ -1,0 +1,452 @@
+@media screen and (min-width:992px) {
+    .header .menu_box-right, .toggle_menu-button {
+        display: none
+    }
+}
+
+@media screen and (max-width:1170px) {
+    .header {
+        padding: 3px 12px 3px;
+        align-items: flex-end;
+        box-shadow: 0 15px 36px rgb(0 0 0 / 16%);
+        margin-bottom: 4px;
+        position: sticky;
+        top: 0;
+        z-index: 9;
+        position: fixed;
+        left: 0;
+        right: 0;
+        background: #fff;
+        align-items: center
+    }
+
+        .header .menu_box-right {
+            margin-left: 0;
+            margin-bottom: 7px;
+            display: flex
+        }
+
+            .header .menu_box-right ul li a.menu_box-right_link {
+                width: 48px;
+                height: 48px;
+                border-radius: 6px;
+                border: 1px solid rgb(0 0 0 / 20%);
+                flex: 0 0 auto;
+                background-color: #fff
+            }
+
+    .toggle_menu-button {
+        width: 48px;
+        height: 48px;
+        border: 1px solid #15a18d;
+        background-color: #15a18d;
+        border-radius: 6px;
+        margin-bottom: 7px;
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex: 0 0 auto;
+        padding: 5px
+    }
+
+        .toggle_menu-button svg {
+            width: 16px;
+            height: 16px
+        }
+
+            .toggle_menu-button svg .st0 {
+                fill: #fff
+            }
+
+    .navigation {
+        display: none !important
+    }
+}
+
+@media screen and (max-width:991px) {
+    .header .headerbanner {
+        display: none
+    }
+}
+
+@media screen and (max-width:768px) {
+    .ikd-logo {
+        height: auto
+    }
+
+    .menu ul li {
+        width: 80px
+    }
+
+        .menu ul li a {
+            padding: 10px 5px;
+            text-align: center;
+            width: 90%
+        }
+
+    .style-1.menu {
+        background: #35e87e;
+        display: none;
+        position: absolute;
+        right: 4px;
+        top: 46px;
+        width: 570px;
+        z-index: 999
+    }
+}
+
+@media screen and (max-width:991px) {
+    .ikd-logo {
+        height: auto
+    }
+
+    .ikd-logo {
+        max-width: 90px;
+        height: 38px
+    }
+
+    .menu ul li a {
+        display: block
+    }
+
+    .header .menu_box-right ul li a.menu_box-right_link, .toggle_menu-button {
+        height: 34px;
+        width: 34px;
+        border-radius: 6px
+    }
+
+    .menu_box-right ul a.menu_box-right_link svg {
+        width: 14px
+    }
+
+    .header .menu_box-right, .toggle_menu-button {
+        margin-bottom: 0
+    }
+
+}
+
+@media screen and (max-width:480px) {
+    .ikd-logo {
+        max-width: 90px;
+        height: 38px
+    }
+
+    .style-1.menu {
+        width: 403px
+    }
+
+    .menu ul li a {
+        display: block;
+        padding: 10px 5px;
+        text-align: center;
+        width: 90%
+    }
+
+    .header .headerbanner {
+        width: 100%
+    }
+}
+
+@media screen and (max-width:380px) {
+    .style-1.menu {
+        width: 330px
+    }
+
+    .ikd-logo {
+        max-width: 90px;
+        height: 38px
+    }
+}
+
+.client-banner {
+    width: 177px;
+    margin: 0 20px;
+    height: 90px;
+}
+
+    .client-banner a {
+        display: block;
+    }
+
+        .client-banner a img {
+            width: 100%;
+        }
+
+        .client-banner a.mob-ad {
+            display: none;
+        }
+
+@media screen and (max-width: 768px) {
+    .client-banner {
+        width: 124px;
+        margin: 0 20px;
+        height: 28px;
+    }
+
+        .client-banner a.dsk-ad {
+            display: none;
+        }
+
+        .client-banner a.mob-ad {
+            display: block;
+        }
+}
+@media screen and (min-width:768px) {
+    .comment-section .comment-input {
+        position: relative;
+        display: flex;
+    }
+
+        .comment-section .comment-input .btn-primary {
+            width: 176px;
+            height: 50px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+}
+
+@media screen and (min-width:992px) {
+    .comment-section .comment-input .inputArea {
+        position: relative;
+        width: calc(100% - 54px);
+        margin-right: 10px;
+    }
+
+    .comment-section .main-input {
+        display: flex;
+    }
+}
+
+@media screen and (max-width:768px) {
+    div.ikdPopupsLoginScreens {
+        top: 5% !important
+    }
+}
+
+@media screen and (max-width:991px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 430px
+    }
+
+    div.ikdPopupsLoginScreens div.modalMain {
+        padding-top: 50px
+    }
+}
+
+@media screen and (max-width:480px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 365px
+    }
+
+    div.ikdPopupsLoginScreens {
+        top: 5px !important
+    }
+
+    .commnetsLists .sort {
+        margin: 10px 0;
+    }
+}
+
+@media screen and (max-width:380px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 340px
+    }
+}
+
+@media only screen and (max-width:359px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 300px
+    }
+}
+
+/*comment section Start*/
+@media screen and (min-width:768px) {
+    .comment-section .comment-input {
+        position: relative;
+        display: flex;
+    }
+
+        .comment-section .comment-input .btn-primary {
+            width: 176px;
+            height: 50px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+}
+
+@media screen and (min-width:992px) {
+    .comment-section .comment-input .inputArea {
+        position: relative;
+        width: calc(100% - 54px);
+        margin-right: 10px;
+    }
+
+    .comment-section .main-input {
+        display: flex;
+    }
+}
+
+@media screen and (max-width:768px) {
+    div.ikdPopupsLoginScreens {
+        top: 5% !important
+    }
+}
+
+@media screen and (max-width:991px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 430px
+    }
+
+    div.ikdPopupsLoginScreens div.modalMain {
+        padding-top: 50px
+    }
+}
+
+@media screen and (max-width:480px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 365px
+    }
+
+    div.ikdPopupsLoginScreens {
+        top: 5px !important
+    }
+
+    .commnetsLists .sort {
+        margin: 10px 0;
+    }
+}
+
+@media screen and (max-width:380px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 340px
+    }
+}
+
+@media only screen and (max-width:359px) {
+    div.ikdPopupsLoginScreens div.modalDiv.style1 {
+        width: 300px
+    }
+}
+@-ms-viewport {
+    width: device-width
+}
+@media only screen and (max-width:600px) {
+    .btn-action {
+        flex-flow: wrap
+    }
+}
+
+@media only screen and (max-width:479.98px) {
+    .comment-section input[type=text] {
+        padding: 12px 40px 12px 15px;
+        font-size: 12px;
+    }
+
+    .comment-section .comment-input .file-upload {
+        height: 40px;
+        width: 40px;
+    }
+
+        .comment-section .comment-input .file-upload input {
+            height: 40px;
+            width: 40px;
+        }
+}
+
+@media screen and (max-width:400px) {
+    .comment-section .tpCsHeading {
+        text-align: center
+    }
+}
+@media only screen and (max-width:599px) {
+
+    .commnentBox {
+        padding: 10px;
+    }
+}
+/*comment section End*/
+
+/*footer Start*/
+@media(min-width:576px) {
+    .container {
+        max-width: 540px
+    }
+}
+
+@media(min-width:768px) {
+    .container {
+        max-width: 720px
+    }
+}
+
+@media(min-width:992px) {
+    .container {
+        max-width: 960px
+    }
+}
+
+@media(min-width:1200px) {
+    .container {
+        max-width: 1170px
+    }
+}
+@media screen and (max-width:991px) {
+    .row {
+        padding: 0
+    }
+    .ss-container{
+        width:100%;
+    }
+    .container,
+    .bs-admission-sec .inner-holder .box-right .form-holder .fieldset {
+        width: 100%;
+    }
+    iframe{
+        width:100% !important;
+    }
+    ul.ss-ads li{
+        width:48%;
+    }
+    ul.admission-nav {
+        justify-content: flex-start;
+    }
+        ul.admission-nav li {
+            width: 25%;
+        }
+    .header-right-banner {
+        padding: 0 0 5px 0;
+    }
+}
+@media screen and (max-width: 767px) {
+    .footer-card {
+        width: 100%;
+        text-align: center;
+        padding: 15px 18px;
+        margin-bottom: 20px;
+    }
+}
+
+/*footer End*/
+
+/*Search Model Start*/
+@media screen and (max-width:768px) {
+    .search-modal .search-form {
+        flex-flow: wrap
+    }
+
+        .search-modal .search-form input {
+            margin: 0 0 14px;
+            ;
+        }
+
+        .search-modal .search-form .search-btn {
+            width: 100%;
+        }
+
+    .search-modal .btn-close {
+        right: 20px;
+    }
+}
+/*Search Model End*/

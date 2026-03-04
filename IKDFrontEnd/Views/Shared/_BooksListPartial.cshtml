@@ -1,0 +1,16 @@
+﻿@using System.Globalization
+@model IEnumerable<IKDFrontEnd.ViewModels.AllBooksViewModel>
+
+@foreach (var book in Model)
+{
+    <li>
+        <a href="@book.Url">
+            <figure>
+                <img src="@book.Image" alt="@book.Name" />
+            </figure>
+            <strong>
+                @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(book.Name)
+            </strong>
+        </a>
+    </li>
+}

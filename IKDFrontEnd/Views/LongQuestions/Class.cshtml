@@ -1,0 +1,93 @@
+﻿@using System.Globalization
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Online Long Questions Preparations</h1>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-sec" style="background: #f9f9f9; padding-bottom: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    @if (ViewBag.CmsData != null  && ViewBag.CmsData.Desc2 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc2)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

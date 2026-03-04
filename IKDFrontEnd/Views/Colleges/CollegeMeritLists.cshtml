@@ -1,0 +1,392 @@
+﻿@using IKDFrontEnd.ViewModels
+@model CollegesViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	// ViewData["PageTitle2"] = Model.PageTitle2;
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta property="og:title" content="@(ViewBag.CmsData?.MetaTitle ?? string.Empty)" />
+	<meta property="og:description" content="@(ViewBag.CmsData?.MetaDesc ?? string.Empty)" />
+	<meta property="og:image" content="" />
+
+	<meta name="description" content="@(ViewBag.CmsData?.MetaDesc ?? string.Empty)">
+	<meta name="keywords" content="@(ViewBag.CmsData?.MetaKeys ?? string.Empty)">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@(ViewBag.CmsData?.MetaTitle ?? "IlmKiDunya")</title>
+}
+
+@section header {
+
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt="image" />
+					Universities & Colleges
+				</a>
+			</li>
+
+			@if (Model?.College != null)
+			{
+				<li>
+					<a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl ?? string.Empty).aspx">
+						<img src="https://cdn.ilmkidunya.com/Inst/logos/@(Model.College.Logo ?? "default.webp")" alt="image" />
+						@Model.College.Name
+					</a>
+				</li>
+			}
+
+			@if (ViewBag.ShowFeeStructure == true)
+			{
+				<li>
+					<a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl ?? string.Empty)-fee-structure.aspx">
+						<img src="https://images.ishallwin.com/nav-icons/chem-nav-3.webp" alt="image" />
+						Fee Structure
+					</a>
+				</li>
+			}
+
+			@if (ViewBag.ShowMeritList == true)
+			{
+				<li>
+					<a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl ?? string.Empty)-merit-lists.aspx">
+						<img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+						Merit List
+					</a>
+				</li>
+			}
+
+			@if (ViewBag.ShowAdmissions == true)
+			{
+				<li>
+					<a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl ?? string.Empty)-admission.aspx">
+						<img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+						Admission
+					</a>
+				</li>
+			}
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@(ViewBag.CmsData?.Heading ?? string.Empty)</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(ViewBag.CmsData?.Desc1 ?? string.Empty)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	@* <div class="content-sec" style="padding:0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="page-content">
+						<div class="table-of-content">
+							<h2>Page Contents</h2>
+							<ul>
+								<li><a href="#intro">@Model.CollegeShortName Introduction</a></li>
+								<li><a href="#reviews">Reviews & Rankings</a></li>
+								<li><a href="#contact">Contact Information</a></li>
+								<li><a href="#courses">Administration</a></li>
+								<li><a href="#courses">Admissions in @Model.CollegeShortName Courses & Programs</a></li>
+								<li><a href="#fee">Fee Structure</a></li>
+								<li><a href="#feadback">Feeback & Comments</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> *@
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+						@if(Model.MeritList.Any() && Model.MeritList.Count > 0)
+					{
+						<h2>Latest Merit Lists at @Model.College.Name</h2>
+
+						<div class="responsive-table" style="margin-bottom: 30px;">
+							<table class="table mid">
+								<thead>
+									<tr>
+										<th><span>Date </span></th>
+										<th><span>CourseName</span></th>
+										<th><span>Merit List</span></th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var meritList in Model.MeritList)
+									{
+										<tr>
+											<td>@meritList.AddedDate.Value.ToString("dd-MMM-yyyy")</td>
+											<td>@meritList.CourseName</td>
+											<td><a href="https://ikddata.ilmkidunya.com/images/MeritListFiles/@meritList.FileName" target="_blank">@meritList.MeritListTypeName (@meritList.MeritListName)</a></td>
+										</tr>
+									}
+								</tbody>
+							</table>
+
+						</div>
+					}
+
+
+
+					@Html.Raw(ViewBag.CmsData?.Desc2 ?? string.Empty)
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="g-add-sec" style="padding: 30px 0 0 0;">
+		<div class="container">
+			<div class="row">
+				@await Html.PartialAsync("_GoogleAd")
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+
+		@foreach (var courseLevel in Model.CourseLevels)
+		{
+		<div class="news-ad-sec" id="Programs">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<h3>@courseLevel.CourseLevelName Level Merit Lists in @Model.College.Name</h3>
+					</div>
+					<div class="col-lg-12">
+						<ul class="list-bullet">
+							@{
+								int list_id = 1;
+								foreach (var course in courseLevel.Courses)
+								{
+
+									<li>
+										<a href="javascript:void(0)" onclick="toggleContent(@list_id)" class="btn-sidebox">@course.Name</a>
+										<div class="info_content">
+											<div class="lecture-box">
+												<h2>@course.Name</h2>
+												<div class="table-responsive">
+													<table class="table">
+														<thead>
+															<tr>
+																<th>Date</th>
+																<th>Merit List</th>
+															</tr>
+														</thead>
+														<tbody>
+															@foreach (var meritList in course.MeritLists)
+															{
+																<tr>
+																	<td>@meritList.AddedDate.Value.ToString("dd-MMM-yyyy")</td>
+																	<td><a href="https://ikddata.ilmkidunya.com/images/MeritListFiles/@meritList.FileName" target="_blank">@meritList.MeritListTypeName (@meritList.MeritListName)</a></td>
+																</tr>
+															}
+														</tbody>
+
+													</table>
+												</div>
+											</div>
+										</div>
+									</li>
+									list_id++;
+								}
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		}
+
+
+	
+	<div class="bs-admission-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+						<h2>More on @Model.College.Name</h2>
+						<ul class="admission-nav">
+							<li>
+								<a href="/colleges/">
+								<figure><img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt=""></figure>
+									<span>Universities & Colleges</span>
+								</a>
+							</li>
+							<li>
+							<a href="/colleges/@(ViewBag.CollegeBaseUrl).aspx">
+								<figure><img src="https://cdn.ilmkidunya.com/Inst/logos/@Model.CollegeImage" alt=""></figure>
+								<span>@Model.College.Name</span>
+							</a>
+							</li>
+
+							@if (ViewBag.ShowAdmissions)
+							{
+								<li>
+									<a href="/colleges/@ViewBag.CollegeBaseUrl-admission.aspx">
+										<figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Admission-Icon.png" alt=""></figure>
+										<span>Admissions</span>
+									</a>
+								</li>
+							}
+
+							@if (ViewBag.ShowFeeStructure)
+							{
+
+								<li>
+									<a href="/colleges/@(ViewBag.CollegeBaseUrl)-fee-structure.aspx">
+										<figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Fees-Icon.png" alt=""></figure>
+										<span>Fees</span>
+									</a>
+								</li>
+							}
+
+							@if (ViewBag.ShowMeritList)
+							{
+								<li>
+									<a href="/colleges/@(ViewBag.CollegeBaseUrl)-merit-lists.aspx">
+										<figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Merit-List-Icon.png" alt=""></figure>
+										<span>Merit List</span>
+									</a>
+								</li>
+							}
+						</ul>
+
+					</div>
+				</div>
+				<div class="inner-holder">
+						<div class="col-lg-4 col-md-4 col-sm-12">
+									<div class="box-left">
+										<h2>Become @Model.College.Name <br> Expert on ilmkidunya</h2>
+										<figure>
+											<img src="/images-files/images/college-images/badge.png" alt="">
+										</figure>
+										<p>If you are a teacher or student at @Model.College.Name you can join as ilmkidunya representative at your university.</p>
+										<p>The process is so simple: just send your brief details/CV on whatsapp 03-111-222-960 and our team will get back to you. </p>
+									</div>
+					</div>
+					<div class="col-lg-8 col-md-8 col-sm-12">
+						<div class="box-right">
+						<h2>Free Admission Advice for @Model.College.Name</h2>
+						@Html.Partial("_SuggestionForm", new SuggestionViewModel())
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="CollegeId" name="CollegeId" value="@Model.CollegeId" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+			var hide = true;
+
+			$(document).on("click", function (evt) {
+				if (hide) {
+					$('.info_content').removeClass('open');
+				}
+				hide = true;
+			});
+
+			// add and remove .active
+			$('body').on('click', '.btn-sidebox', function () {
+				var self = $(this).closest('li').find('.info_content');
+
+				if (self.hasClass('open')) {
+					self.removeClass('open');
+					return false;
+				}
+
+				$('.info_content').removeClass('open');
+				self.addClass('open');
+				hide = false;
+			});
+
+			var openIndex = 1;
+
+			function toggleContent(index) {
+				var contentDivs = document.querySelectorAll('.info_content');
+				if (openIndex !== -1) {
+					contentDivs[openIndex].style.display = 'none';
+				}
+				contentDivs[index - 1].style.display = contentDivs[index - 1].style.display === 'none' ? 'block' : 'none';
+				openIndex = contentDivs[index - 1].style.display === 'none' ? -1 : index - 1;
+			}
+		});
+	</script>
+
+
+<script>
+	$(document).ready(function () {
+		// Set current page URL in hidden field
+		$("#PageUrl").val(window.location.href);
+
+		// Handle form submission
+		$("#suggestion-form").submit(function (event) {
+			event.preventDefault(); // Prevent the form from submitting the usual way
+
+			var formData = $(this).serialize(); // Serialize form data
+
+			 formData += "&CollegeId=" + $("#CollegeId").val();
+			$.ajax({
+				url: '/submitform/colleges',
+				type: 'POST',
+				data: formData,
+				success: function (response) {
+					if (response.success) {
+						alert(response.message);
+						$("#suggestion-form")[0].reset();
+					} else {
+						alert(response.message);
+					}
+				},
+				error: function () {
+					alert("There was an error submitting the form.");
+				}
+			});
+		});
+	});
+
+</script>

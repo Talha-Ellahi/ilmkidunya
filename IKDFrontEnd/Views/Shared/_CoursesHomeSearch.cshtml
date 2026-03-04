@@ -1,0 +1,351 @@
+﻿@model IKDFrontEnd.ViewModels.CoursesViewModels
+
+<div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                  <div class="col-lg-12">
+
+                            <h2> List of Institutions & Programs for You</h2>
+                            <p>
+                                Location: @(ViewBag.LocationName ?? "All") <br />
+                                Education Level: @(ViewBag.LevelName ?? "All") <br />
+                                Category: @(ViewBag.CategoryName ?? "All")
+                            </p>
+
+                            @if (Model.SearchResults == null || !Model.SearchResults.Any())
+                            {
+                                <div style="padding: 20px; text-align: center; font-weight: bold;">
+                                    No records found.
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="responsive-table desktop">
+                                    <table class="table mid">
+                                        <thead>
+                                            <tr>
+                                                <th><span>University/College</span></th>
+                                                <th><span>Program/Course</span></th>
+                                                <th><span>Duration</span></th>
+                                                <th><span>Inquire</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="institutionList">
+                                            @{
+                                                // Initialize count to track the number of records
+                                                int count = 0;
+                                            }
+
+                                            @foreach (var institution in Model.SearchResults)
+                                            {
+                                                <tr>
+                                                    <td style="width: 32%;">
+                                                        <div class="un-col-holder">
+                                                <figure>
+                                                    <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo"
+                                                         alt="College Logo"
+                                                         onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';">
+                                                </figure>
+
+                                                            <div class="un-col-box">
+                                                                <a href="/colleges/@(institution.College.Url).aspx">
+                                                                    @institution.College.Name
+                                                                </a>
+                                                                <span class="rating @(
+                                                                        institution.AvgRating < 1 ? "s1" :
+                                                                        institution.AvgRating < 2 ? "s2" :
+                                                                        institution.AvgRating < 3 ? "s3" :
+                                                                        institution.AvgRating < 4 ? "s4" : "s5"
+                                                                    )">
+                                                                    <img src="https://images.ishallwin.com/college-images/rating.png" alt="rating">
+                                                                </span>
+                                                                <span>
+                                                                    @if (institution.College.EstablishedYear.HasValue)
+                                                                    {
+                                                                        @:Est. @institution.College.EstablishedYear <br />
+                                                                    }
+                                                                    @if (institution.College.Recognition.HasValue && institution.College.Recognition == 1)
+                                                                    {
+                                                                        @:HEC Approved
+                                                                    }
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 32%;">
+                                                        <span class="pro-course">
+                                                            <ul style="list-style:none; padding:0; margin:0;">
+                                                                @foreach (var course in institution.Courses)
+                                                                {
+                                                                    <li>@course.Name</li>
+                                                                }
+                                                            </ul>
+                                                        </span>
+                                                    </td>
+                                                    <td style="width: 18%;">
+                                                        <span class="course-years">
+                                                            <ul style="list-style:none; padding:0; margin:0;">
+                                                                @foreach (var course in institution.Courses)
+                                                                {
+                                                                    <li>@course.Duration.Replace("-","")</li>
+                                                                }
+                                                            </ul>
+                                                        </span>
+                                                    </td>
+                                                    <td style="width: 18%;">
+                                            <a href="javascript:void(0)"
+                                               class="course-info"
+                                               data-college-id="@institution.College.Id"
+                                               data-college-name="@institution.College.Name"
+                                               data-city-id="@ViewBag.Location"
+                                               data-category-id="@ViewBag.Category">
+                                                Get Info
+                                            </a>
+                                                    </td>
+                                                </tr>
+
+                                                {
+                                                    // Increment count after displaying a record row
+                                                    count++;
+
+                                                    // Check if the current record count is 10, 20, 30, etc.
+                                                    // This will insert the ad after the 10th record, the 20th record, and so on.
+                                                    if (count > 0 && count % 10 == 0)
+                                                    {
+                                                        // The Ad is inserted as a new row in the table body.
+                                                        // We wrap the ad in a single <td> that spans all columns.
+                                                        <tr>
+                                                            <td colspan="4" style="padding: 20px 0; text-align: center;">
+                                                                <div class="google-ad-bx">
+                                                                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8866825487085085"
+                                                                            crossorigin="anonymous"></script>
+                                                                    <ins class="adsbygoogle"
+                                                                         style="display:block; text-align:center;"
+                                                                         data-ad-client="ca-pub-8866825487085085"
+                                                                         data-ad-slot="9990874736"
+                                                                         data-ad-format="auto"
+                                                                         data-full-width-responsive="true"></ins>
+                                                                    <script>
+                                                                         (adsbygoogle = window.adsbygoogle || []).push({});
+                                                                    </script>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                  <ul class="un-list" id="institutionUlList">
+                                        @{
+                                            int ulCount = 0;
+                                        }
+
+                                        @foreach (var institution in Model.SearchResults)
+                                        {
+                                            <li class="un-item">
+                                                <div class="un-logo">
+                                                    <figure>
+                                                        <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo"
+                                                             alt=""
+                                             onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';">
+                                                    </figure>
+                                                    <div class="info-un">
+                                                        <a href="/colleges/@(institution.College.Url).aspx" class="un-name">
+                                                            @institution.College.Name
+                                                        </a>
+
+                                                        @* ✅ Rating same as table *@
+                                                        <span class="rating @(
+                                                            institution.AvgRating < 1 ? "s1" :
+                                                            institution.AvgRating < 2 ? "s2" :
+                                                            institution.AvgRating < 3 ? "s3" :
+                                                            institution.AvgRating < 4 ? "s4" : "s5"
+                                                        )">
+                                                            <img src="https://images.ishallwin.com/college-images/rating.png" alt="rating">
+                                                        </span>
+
+                                                        <span class="un-status">
+                                                            @if (institution.College.Recognition.HasValue && institution.College.Recognition == 1)
+                                                            {
+                                                                @:HEC Approved
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="un-info">
+                                                    <div class="un-courses">
+                                                        <ul>
+                                                            @foreach (var course in institution.Courses)
+                                                            {
+                                                                <li>@course.Name (@course.Duration)</li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                    <a href="javascript:void(0)"
+                                       class="un-btn"
+                                       data-college-id="@institution.College.Id"
+                                       data-college-name="@institution.College.Name"
+                                       data-city-id="@ViewBag.Location"
+                                       data-category-id="@ViewBag.Category">
+                                        Get Info
+                                    </a>
+                                                </div>
+                                            </li>
+
+                                            {
+                                                ulCount++;
+                                                if (ulCount > 0 && ulCount % 10 == 0)
+                                                {
+                                                    <li class="un-item" style="list-style:none; width:100%; text-align:center; padding:20px 0;">
+                                                        <div class="google-ad-bx">
+                                                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8866825487085085"
+                                                                    crossorigin="anonymous"></script>
+                                                            <ins class="adsbygoogle"
+                                                                 style="display:block; text-align:center;"
+                                                                 data-ad-client="ca-pub-8866825487085085"
+                                                                 data-ad-slot="9990874736"
+                                                                 data-ad-format="auto"
+                                                                 data-full-width-responsive="true"></ins>
+                                                            <script>
+                                                                (adsbygoogle = window.adsbygoogle || []).push({});
+                                                            </script>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+
+
+                            @if (Model.SearchResults.Count() >= 19)
+                            {
+                        <p style="text-align: center;" class="mobile-loadmore">
+                            <button type="button" class="load-more-button " id="loadMoreUlBtn" data-page="@ViewBag.PageNo">
+                                        Load More Institutions
+                                    </button>
+                                </p>
+                            }
+
+
+                                @if (Model.SearchResults.Count() >= 19)
+                                {
+                        <p style="text-align: center;" class="desktop-loadmore">
+                            <button type="button" class="load-more-button desktop" id="loadMoreBtn" data-page="@ViewBag.PageNo">
+                                            Load More Institutions
+                                        </button>
+                                    </p>
+                                }
+
+           
+                                <div class="share-box" style="padding-top: 30px;">
+                                    <div class="sharethis-inline-share-buttons" style="margin-bottom: 20px;"></div>
+                                </div>
+                            }
+
+                  </div>
+            </div>
+        </div>
+</div>  
+
+
+<style>
+    .un-col-holder {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+        .un-col-holder figure {
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            width: 83px;
+            height: 83px;
+        }
+
+            .un-col-holder figure img {
+                width: 100%;
+                height: 80px;
+                object-fit: cover;
+            }
+
+        .un-col-holder .un-col-box {
+            width: 70%;
+            padding: 0 0 0 15px;
+        }
+
+            .un-col-holder .un-col-box a {
+                color: #15a18d;
+                display: block;
+                margin: 0;
+            }
+
+                .un-col-holder .un-col-box a:hover {
+                    color: #080808;
+                }
+
+            .un-col-holder .un-col-box span {
+                display: block;
+                font-size: 14px;
+                line-height: 20px;
+            }
+
+                .un-col-holder .un-col-box span.rating {
+                    display: inline-block;
+                    margin: 0;
+                    line-height: 1;
+                    position: relative;
+                    top: -4px;
+                }
+
+                    .un-col-holder .un-col-box span.rating.s1 {
+                        width: 15px;
+                        overflow: hidden;
+                        margin-bottom: -4px;
+                    }
+
+                    .un-col-holder .un-col-box span.rating.s2 {
+                        width: 28px;
+                        overflow: hidden;
+                        margin-bottom: -4px;
+                    }
+
+                    .un-col-holder .un-col-box span.rating.s3 {
+                        width: 41px;
+                        overflow: hidden;
+                        margin-bottom: -4px;
+                    }
+
+                    .un-col-holder .un-col-box span.rating.s4 {
+                        width: 53px;
+                        overflow: hidden;
+                        margin-bottom: -4px;
+                    }
+
+                    .un-col-holder .un-col-box span.rating.s5 {
+                        width: 65px;
+                        overflow: hidden;
+                        margin-bottom: -4px;
+                    }
+                    .un-col-holder .un-col-box span.rating img {
+                        height: 18px;
+                    }
+
+                    
+
+
+    span.pro-course,
+    span.course-years {
+        display: block;
+    }
+
+    a.course-info {
+        color: #15a18d;
+    }
+
+        a.course-info:hover {
+            color: #080808;
+        }
+</style>

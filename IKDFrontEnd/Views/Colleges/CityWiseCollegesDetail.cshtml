@@ -1,0 +1,497 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+
+@{
+    int serialUni = ViewBag.UniversitySerialStart ?? 1;
+    int serialCollege = ViewBag.CollegeSerialStart ?? 1;
+
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+    <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+    <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/colleges/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+                    City Wise Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+                    Level wise colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/college-category">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+                    Category wise Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+                    Featured colleges
+                </a>
+            </li>
+
+        </ul>
+    </div>
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@ViewBag.CmsData.Heading</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.Raw(ViewBag.CmsData.Desc1)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="news-ad-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="medical-box">
+                        <div class="img-holder">
+                            <figure><img src="https://images.ishallwin.com/college-images/city-lahore.webp" alt="" /></figure>
+                        </div>
+                        <div class="text-holder">
+                            <h2>Quick facts about institutions in @Model.CityInfo.Name</h2>
+                            <ul class="list-with-img">
+                                <li><span>Total Universities in @Model.CityInfo.Name</span>@Model.CityInfo.TotalUniversities</li>
+                                <li><span>Total Colleges in @Model.CityInfo.Name</span>@Model.CityInfo.TotalColleges</li>
+                                <li><span>Courses for Intermediate studies</span>@Model.CityInfo.InstitutionsForIntermediate</li>
+                                <li><span>Courses for Bachelor studies</span>@Model.CityInfo.InstitutionsForBachelor</li>
+                                <li><span>Courses for Masters studies</span>@Model.CityInfo.InstitutionsForMasters</li>
+                                <li><span>Courses for Diplomas & Certiicates</span>@Model.CityInfo.InstitutionsForDS</li>
+                            </ul>
+                            <ul class="list-with-img">
+                                <li><span>Government/public institutions</span>@Model.CityInfo.GovernmentInstitutions</li>
+                                <li><span>Private institutions</span>@Model.CityInfo.PrivateInstitutions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                @if (Model.Universities.Count > 0)
+                {
+                    <div class="col-lg-12">
+                        <div id="city-data" data-city-name="@Model.CityInfo.Name" style="display:none;"></div>
+
+                        <h1>Universities In @Model.CityInfo.Name</h1>
+                        <div class="responsive-table desktop-view">
+                            <table class="table mid">
+                                <thead>
+                                    <tr>
+                                        <th><span>Colleges/Uni Name</span></th>
+                                        <th><span>Location</span></th>
+                                        <th><span>Contact #</span></th>
+                                        <th><span>Total Courses</span></th>
+                                        <th><span>Sector</span></th>
+                                        <th><span>Popularity Score</span></th>
+                                        <th><span>Rating</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="universityList" data-city-name="@Model.CityInfo.Name">
+                                    @foreach (var collegeWithCourse in Model.Universities)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="/colleges/@(collegeWithCourse.College.Url).aspx">
+                                                    <span><img src="https://cdn.ilmkidunya.com/Inst/logos/@collegeWithCourse.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';" />@collegeWithCourse.College.Name</span>
+                                                </a>
+                                            </td>
+                                            <td><span>@collegeWithCourse.College.Address</span></td>
+                                            <td><span>@collegeWithCourse.College.ContactNumber</span></td>
+                                            <td><span>@collegeWithCourse.CourseCount</span></td>
+                                            <td>
+                                                <span>
+                                                    @{
+                                                        var isGovt = collegeWithCourse.College.IsGovt?.ToLower();
+                                                        string displayText = isGovt == null ? "N/A"
+                                                        : (isGovt == "public" || isGovt == "government") ? "Government"
+                                                        : isGovt == "private" ? "Private"
+                                                        : isGovt;
+                                                    }
+                                                    @displayText
+                                                </span>
+                                            </td>
+                                            <td>@serialUni</td>
+                                            <td><span>@string.Format("{0:0.00}", collegeWithCourse.AvgRating)</span></td>
+                                        </tr>
+                                        serialUni++;
+                                    }
+                                </tbody>
+                            </table>
+                            <p style="text-align: center;">
+                                <button type="button" class="load-more-button" id="loadMoreBtnUniversities">Load More Universities</button>
+                            </p>
+                            <div id="noMoreUniversities" style="display: none; text-align: center; margin-top: 20px;"></div>
+                        </div>
+
+
+
+                        <!-- Mobile View for Universities -->
+                        <div class="admission-mobile mobile-universities">
+                            <ul class="admission-list" id="mobileUniversityList">
+                                @foreach (var institution in Model.Universities)
+                                {
+                                    <li>
+                                        <figure> <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';"> </figure>
+                                        <div class="text-box">
+                                            <a href="/colleges/@(institution.College.Url).aspx">
+                                                @institution.College.Name
+                                            </a>
+                                            <span>
+                                                @{
+                                                    var isGovt = institution.College.IsGovt?.ToLower();
+                                                    string displayText = isGovt == null ? "N/A"
+                                                    : (isGovt == "public" || isGovt == "government") ? "Public"
+                                                    : isGovt == "private" ? "Private"
+                                                    : isGovt;
+                                                }
+                                                Sector: @displayText
+                                            </span>
+                                            <span>Courses: @institution.CourseCount</span>
+                                            <span>Rating: @string.Format("{0:0.00}", institution.AvgRating)</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="load-more-container" style="text-align: center; margin-top: 20px;">
+                                <button type="button" class="load-more-button" id="loadMoreBtnMobileUniversities">Load More Universities</button>
+                            </div>
+                            <div id="noMoreMobileUniversities" style="display: none; text-align: center; margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h1>Colleges In @Model.CityInfo.Name</h1>
+                    <div class="responsive-table desktop-view">
+                        <table class="table mid">
+                            <thead>
+                                <tr>
+                                    <th><span>Colleges/Uni Name</span></th>
+                                    <th><span>Location</span></th>
+                                    <th><span>Contact #</span></th>
+                                    <th><span>Total Courses</span></th>
+                                    <th><span>Sector</span></th>
+                                    <th><span>Popularity Score</span></th>
+                                    <th><span>Rating</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="collegeList" data-city-name="@Model.CityInfo.Name">
+                                @foreach (var collegeWithCourse in Model.Colleges)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/colleges/@(collegeWithCourse.College.Url).aspx">
+                                                <span><img src="https://cdn.ilmkidunya.com/Inst/logos/@collegeWithCourse.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';" />@collegeWithCourse.College.Name</span>
+                                            </a>
+                                        </td>
+                                        <td><span>@collegeWithCourse.College.Address</span></td>
+                                        <td><span>@collegeWithCourse.College.ContactNumber</span></td>
+                                        <td><span>@collegeWithCourse.CourseCount</span></td>
+                                        <td>
+                                            <span>
+                                                @{
+                                                    var isGovt = collegeWithCourse.College.IsGovt?.ToLower();
+                                                    string displayText = isGovt == null ? "N/A"
+                                                    : (isGovt == "public" || isGovt == "government") ? "Government"
+                                                    : isGovt == "private" ? "Private"
+                                                    : isGovt;
+                                                }
+                                                @displayText
+                                            </span>
+                                        </td>
+                                        <td>@serialCollege</td>
+                                        <td><span>@string.Format("{0:0.00}", collegeWithCourse.AvgRating)</span></td>
+                                    </tr>
+                                    serialCollege++;
+                                }
+                            </tbody>
+                        </table>
+                        <p style="text-align: center;">
+                            <button type="button" class="load-more-button" id="loadMoreBtnColleges">Load More Colleges</button>
+                        </p>
+                        <div id="noMoreColleges" style="display: none; text-align: center; margin-top: 20px;"></div>
+
+                    </div>
+
+
+                    <!-- Mobile View for Colleges -->
+                    <div class="admission-mobile mobile-colleges">
+                        <ul class="admission-list" id="mobileCollegeList">
+                            @foreach (var institution in Model.Colleges)
+                            {
+                                <li>
+                                    <figure> <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';"> </figure>
+                                    <div class="text-box">
+                                        <a href="/colleges/@(institution.College.Url).aspx" target="_blank">
+                                            @institution.College.Name
+                                        </a>
+                                        <span>
+                                            @{
+                                                var isGovt = institution.College.IsGovt?.ToLower();
+                                                string displayText = isGovt == null ? "N/A"
+                                                : (isGovt == "public" || isGovt == "government") ? "Public"
+                                                : isGovt == "private" ? "Private"
+                                                : isGovt;
+                                            }
+                                            Sector: @displayText
+                                        </span>
+                                        <span>Courses: @institution.CourseCount</span>
+                                        <span>Rating: @string.Format("{0:0.00}", institution.AvgRating)</span>
+                                    </div>
+                                </li>
+                            }
+                            <div class="load-more-container" style="text-align: center; margin-top: 20px;">
+                                <button type="button" class="load-more-button" id="loadMoreBtnMobileColleges">Load More Colleges</button>
+                            </div>
+                            <div id="noMoreMobileColleges" style="display: none; text-align: center; margin-top: 20px;"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="new-ads-sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                @await Html.PartialAsync("_maincontentlowerbanner")
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    let currentPageUniversities = 1;
+    let currentPageColleges = 1;
+    let currentPageMobileUniversities = 1;
+    let currentPageMobileColleges = 1;
+
+    const loadMoreBtnUniversities = document.getElementById('loadMoreBtnUniversities');
+    const loadMoreBtnColleges = document.getElementById('loadMoreBtnColleges');
+    const loadMoreBtnMobileUniversities = document.getElementById('loadMoreBtnMobileUniversities');
+    const loadMoreBtnMobileColleges = document.getElementById('loadMoreBtnMobileColleges');
+
+    const universityList = document.getElementById('universityList');
+    const collegeList = document.getElementById('collegeList');
+    const mobileUniversityList = document.getElementById('mobileUniversityList');
+    const mobileCollegeList = document.getElementById('mobileCollegeList');
+
+    const noMoreUniversities = document.getElementById('noMoreUniversities');
+    const noMoreColleges = document.getElementById('noMoreColleges');
+    const noMoreMobileUniversities = document.getElementById('noMoreMobileUniversities');
+    const noMoreMobileColleges = document.getElementById('noMoreMobileColleges');
+
+    // Get the city name dynamically
+    const cityName = document.getElementById('city-data').getAttribute('data-city-name');
+
+    // Helper function to handle API response
+    function handleApiResponse(url, button, currentPage, listElement, noMoreElement, isMobile = false, callback) {
+        const newPage = currentPage + 1;
+        button.innerHTML = 'Loading...';
+        button.disabled = true;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === '') {
+                    noMoreElement.innerHTML = 'No more institutions available.';
+                    noMoreElement.style.display = 'block';
+                    button.style.display = 'none';
+                    button.disabled = false;
+                    callback(currentPage);
+                    return;
+                }
+
+                const tempContainer = document.createElement('div');
+                tempContainer.innerHTML = data;
+
+                let hasNewData = false;
+
+                if (isMobile) {
+                    // For mobile, we need to extract the mobile list items
+                    const mobileSection = tempContainer.querySelector(isMobile === 'university' ? '.mobile-universities' : '.mobile-colleges');
+                    if (mobileSection) {
+                        const newListItems = mobileSection.querySelector('.admission-list');
+                        if (newListItems && newListItems.innerHTML.trim() !== '') {
+                            listElement.insertAdjacentHTML('beforeend', newListItems.innerHTML);
+                            button.innerHTML = isMobile === 'university' ? 'Load More Universities' : 'Load More Colleges';
+                            hasNewData = true;
+                        }
+                    }
+                } else {
+                    // For desktop, we need to check if there are table rows in the response
+                    // Look for table rows in the response data
+                    const rows = tempContainer.querySelectorAll('tr');
+
+                    // Filter out header rows and only get data rows
+                    const dataRows = Array.from(rows).filter(row =>
+                        !row.querySelector('th') &&
+                        row.innerHTML.trim() !== '' &&
+                        (row.querySelector('a[href*="/colleges/"]') || row.querySelector('img'))
+                    );
+
+                    if (dataRows.length > 0) {
+                        // Append each row individually
+                        dataRows.forEach(row => {
+                            listElement.appendChild(row.cloneNode(true));
+                        });
+                        button.innerHTML = listElement.id === 'universityList' ? 'Load More Universities' : 'Load More Colleges';
+                        hasNewData = true;
+                    } else {
+                        // Alternative approach: look for specific content patterns
+                        const hasInstitutionContent = tempContainer.textContent.includes('colleges/') ||
+                                                     tempContainer.innerHTML.includes('cdn.ilmkidunya.com/Inst/logos/');
+
+                        if (hasInstitutionContent) {
+                            // If we detect institution content but couldn't parse rows properly,
+                            // try to append the entire table body content
+                            const tableContent = tempContainer.innerHTML;
+                            if (tableContent.includes('<tr>') && tableContent.includes('</tr>')) {
+                                // Extract just the table rows from the response
+                                const startIndex = tableContent.indexOf('<tr>');
+                                const endIndex = tableContent.lastIndexOf('</tr>') + 5;
+                                const tableRowsContent = tableContent.substring(startIndex, endIndex);
+
+                                if (tableRowsContent.trim() !== '') {
+                                    listElement.insertAdjacentHTML('beforeend', tableRowsContent);
+                                    button.innerHTML = listElement.id === 'universityList' ? 'Load More Universities' : 'Load More Colleges';
+                                    hasNewData = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!hasNewData) {
+                    noMoreElement.innerHTML = 'No more institutions available.';
+                    noMoreElement.style.display = 'block';
+                    button.style.display = 'none';
+                    callback(currentPage);
+                } else {
+                    button.disabled = false;
+                    callback(newPage);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading more data:', error);
+                button.innerHTML = 'Error loading data';
+                button.disabled = false;
+                setTimeout(() => {
+                    button.innerHTML = listElement.id.includes('university') ? 'Load More Universities' : 'Load More Colleges';
+                }, 2000);
+                callback(currentPage);
+            });
+    }
+
+    // Load more universities (Desktop)
+    loadMoreBtnUniversities?.addEventListener('click', function () {
+        const url = `/colleges/colleges-in-${cityName}.aspx?page=${currentPageUniversities + 1}&type=university`;
+        handleApiResponse(url, loadMoreBtnUniversities, currentPageUniversities, universityList, noMoreUniversities, false, function(newPage) {
+            if (newPage > currentPageUniversities) {
+                currentPageUniversities = newPage;
+            }
+        });
+    });
+
+    // Load more colleges (Desktop)
+    loadMoreBtnColleges?.addEventListener('click', function () {
+        const url = `/colleges/colleges-in-${cityName}.aspx?page=${currentPageColleges + 1}&type=college`;
+        handleApiResponse(url, loadMoreBtnColleges, currentPageColleges, collegeList, noMoreColleges, false, function(newPage) {
+            if (newPage > currentPageColleges) {
+                currentPageColleges = newPage;
+            }
+        });
+    });
+
+    // Load more universities (Mobile)
+    loadMoreBtnMobileUniversities?.addEventListener('click', function () {
+        const url = `/colleges/colleges-in-${cityName}.aspx?page=${currentPageMobileUniversities + 1}&type=university`;
+        handleApiResponse(url, loadMoreBtnMobileUniversities, currentPageMobileUniversities, mobileUniversityList, noMoreMobileUniversities, 'university', function(newPage) {
+            if (newPage > currentPageMobileUniversities) {
+                currentPageMobileUniversities = newPage;
+            }
+        });
+    });
+
+    // Load more colleges (Mobile)
+    loadMoreBtnMobileColleges?.addEventListener('click', function () {
+        const url = `/colleges/colleges-in-${cityName}.aspx?page=${currentPageMobileColleges + 1}&type=college`;
+        handleApiResponse(url, loadMoreBtnMobileColleges, currentPageMobileColleges, mobileCollegeList, noMoreMobileColleges, 'college', function(newPage) {
+            if (newPage > currentPageMobileColleges) {
+                currentPageMobileColleges = newPage;
+            }
+        });
+    });
+</script>
+

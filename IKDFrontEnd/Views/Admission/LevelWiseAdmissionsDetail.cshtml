@@ -1,0 +1,355 @@
+﻿@using IKDFrontEnd.ViewModels.Common
+@model List<CityWiseAdmissionViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/admissions/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/admissions/city-wise-admission.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+                    City Wise Admissions
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/admissions/level-wise-admissions.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+                    Level wise Admissions
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/admissions/categories-wise-admissions.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+                    Category wise Admissions
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/admissions/most-popular-admissions-pakistan.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+                    Popular Admissions
+                </a>
+            </li>
+
+        </ul>
+    </div>
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null)
+                    {
+                        <h1>@Html.Raw(ViewBag.CmsData.Desc1)</h1>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-sec level-wise" style="padding: 20px 0; background: none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.levelUrl != null)
+                    {
+                        <h2>Location Wise Admissions</h2>
+                        <ul class="admission-nav">
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-lahore.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/lahore.webp" alt="" /></figure>
+                                    <span>Lahore</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-karachi.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/karachi.webp" alt="" /></figure>
+                                    <span>Karachi</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-peshawar.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/peshawar.webp" alt="" /></figure>
+                                    <span>Peshawar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-islamabad.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/isb.webp" alt="" /></figure>
+                                    <span>Islamabad</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-gujranwala.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/gujranwala.webp" alt="" /></figure>
+                                    <span>Gujranwala</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-multan.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/multan.webp" alt="" /></figure>
+                                    <span>Multan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-faisalabad.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/faisalabad.webp" alt="" /></figure>
+                                    <span>Faisalabad</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-sargodha.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/sargodha.webp" alt="" /></figure>
+                                    <span>Sargodha</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-rawalpindi.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/rwp.webp" alt="" /></figure>
+                                    <span>Rawalpindi</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-abbottabad.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/abbottabad.webp" alt="" /></figure>
+                                    <span>Abbottabad</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/admissions/@(ViewBag.levelUrl)-admissions-in-sialkot.aspx">
+                                    <figure><img src="https://images.ishallwin.com/bs-chem/attock.webp" alt="" /></figure>
+                                    <span>Sialkot</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <h2>All Cities Admissions</h2>
+                        <br />
+                        <ul class="citywise-list">
+                            @foreach (var city in @ViewBag.Citylist)
+                            {
+                                <li><a href="/admissions/@(ViewBag.levelUrl)-admissions-in-@(city.CityName).aspx" aria-label="link">@city.CityName</a></li>
+                            }
+                        </ul>
+                    }
+
+                    )
+
+                    <ul class="ss-ads" style="border: 0; padding-top: 35px;">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+    <div class="news-ad-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="admission-open-list" id="admissionList">
+
+                        @foreach (var item in Model)
+                        {
+
+                            <li>
+                                <div class="uni-box">
+                                    <div class="img-holder">
+                                        <figure>
+                                            <img src="https://cdn.ilmkidunya.com/Inst/logos/@item.CollageLogo" alt="" />
+                                        </figure>
+                                        @item.CityName
+                                    </div>
+                                    <div class="text-holder">
+                                        <div class="box-left">
+                                            <div class="datewise">
+                                                <span>Posted On <em>@item.Dated?.ToString("dd-MMM-yyyy")</em></span>
+                                                <span>Last Date <em>@item.LastDate?.ToString("dd-MMM-yyyy")</em></span>
+                                            </div>
+                                            <h3>
+                                                <a href="/admissions/@(item.Url).aspx" class="course-title" target="_blank">
+                                                    @item.AdmissionTitle
+                                                </a>
+                                            </h3>
+
+                                            <p>@item.CollegeName </p>
+                                        </div>
+                                        <div class="box-right">
+
+
+												<figure>
+													@if (!string.IsNullOrWhiteSpace(item.AdmissionLogo))
+													{
+														var year = item.Dated.Value.Year;
+														var month = item.Dated.Value.Month.ToString();
+														<img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@year/@month/thumb/@item.AdmissionLogo" alt="Admission Image" />
+													}
+													else
+													{
+														<img src="https://cdn.traliv.com/wwwroot/images/not-available.png" alt="No Image Available" />
+													}
+												</figure>
+										</div>
+									</div>
+								</div>
+							</li>
+						}
+					</ul>
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="loadMoreBtn">Load More</button>
+					</p>
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="share-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="share-box">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+<script>
+    let currentPage = 1;
+
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const admissionList = document.getElementById('admissionList');
+    const levelUrl = "@ViewBag.levelUrl";
+
+    if (loadMoreBtn && admissionList) {
+        loadMoreBtn.addEventListener('click', function () {
+            currentPage++;
+            loadMoreBtn.innerHTML = 'Loading...';
+            loadMoreBtn.disabled = true;
+
+            fetch(`/admissions/${levelUrl}?page=${currentPage}&pageSize=10`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    loadMoreBtn.innerHTML = 'No More Admissions';
+                    loadMoreBtn.disabled = true;
+                    return;
+                }
+
+                    data.forEach(item => {
+        const li = document.createElement('li');
+        const collageLogoUrl = item.collageLogo && item.collageLogo.trim() !== ""
+            ? `https://cdn.ilmkidunya.com/Inst/logos/${item.collageLogo}`
+            : `https://cdn.traliv.com/wwwroot/images/not-available.png`;
+
+        const admissionLogoUrl = item.admissionLogo && item.admissionLogo.trim() !== "" && item.admissionLogoYear && item.admissionLogoMonth
+    ? `https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/${item.admissionLogoYear}/${item.admissionLogoMonth}/thumb/${item.admissionLogo}`
+    : `https://www.ilmkidunya.com/images/not-available.png`;
+
+
+        li.innerHTML = `
+            <div class="uni-box" style="background-color: white;">
+                <div class="img-holder">
+                    <figure>
+                        <img src="${collageLogoUrl}" alt="Collage Logo" />
+                    </figure>
+                    ${item.cityName}
+                </div>
+                <div class="text-holder">
+                    <div class="box-left">
+                        <div class="datewise">
+                            <span>Posted On <em>${formatDate(item.dated)}</em></span>
+                                <span>Last Date <em>${formatDate(item.lastDate)}</em></span>
+                        </div>
+                        <h3><a href="/admissions/${item.url}.aspx" class="course-title">${item.admissionTitle}</a></h3>
+                        <p>${item.collegeName}</p>
+                    </div>
+                    <div class="box-right">
+                        <figure>
+                            <img src="${admissionLogoUrl}" alt="Admission Logo" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        `;
+        admissionList.appendChild(li);
+    });
+
+                loadMoreBtn.innerHTML = 'Load More Admissions';
+                loadMoreBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error loading more Admissions:', error);
+                loadMoreBtn.innerHTML = 'Error loading Admissions';
+                loadMoreBtn.disabled = false;
+            });
+        });
+    }
+    function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        const date = new Date(dateStr);
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options);
+    }
+</script>

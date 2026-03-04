@@ -1,0 +1,369 @@
+﻿@using IKDFrontEnd.ViewModels
+@model ArticlesPageViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	
+}
+@section header {
+
+
+				<div class="col-lg-11">
+					<ul class="navigation">
+						<li>
+							<a aria-label="link" href="/articles/">
+								<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+								Home
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/education.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-education.webp" alt="image" />
+								Education
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/information-technology.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-information.webp" alt="image" />
+								Technology
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/relationships-and-society.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-relationship-society.webp" alt="image" />
+								Relationship
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/history.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-history.webp" alt="image" />
+								History
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/business-and-economy.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-business.webp" alt="image" />
+								Business
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/careers.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-careers.webp" alt="image" />
+								Career
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/religion-and-spirituality.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-religion.webp" alt="image" />
+								Religion
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+
+}
+@section MetaData
+{
+	@if (Model != null && !string.IsNullOrEmpty(Model.MetaTitle) && !string.IsNullOrEmpty(Model.MetaDescription))
+	{
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@Model.MetaTitle" />
+		<meta property="og:description" content="@Model.MetaDescription" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/{@Model.MetaImage}" />
+		<meta name="description" content="@Model.MetaDescription">
+		<meta name="keywords" content="@Model.MetaKeywords">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@Model.MetaTitle</title>
+	}
+	else
+	{
+
+		<title>Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya</title>
+
+		<meta name="description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+		<meta name="keywords" content="ilmkidunya, education, educational, news, colleges, universities, result, admission, jobs, scholarship, visa, study, abroad, courses, pakistan, pakistani, information" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg" />
+		<meta property="og:image:width" content="200" />
+		<meta property="og:image:height" content="200" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	}
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>Articles</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}		<!-- Main Start -->
+		<div id="main">
+			<div class="college-news-sec">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="article-top">
+								<div class="left-box">
+									<p>Welcome ilmkidunya student articles section. Here you'll find very useful articles from different students from across Pakistan. Anyone can share an article here.</p>
+								</div>
+								<a href="#" id="postArticleLink">Post Your Article!</a>
+							</div>
+						</div>
+					
+						<div class="new-ads-sec">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+						@await Html.PartialAsync("_maincontenttopbanner")
+							</div>
+						</div>
+
+						<div class="col-lg-12">
+							<h2>Latest Articles </h2>
+							<ul class="news-list arti-list" id="artiList">
+								@if (Model.Articles != null && Model.Articles.Any())
+								{
+									foreach (var article in Model.Articles)
+									{
+										var year = article.Dated?.Year.ToString();
+										var month = article.Dated?.Month.ToString("D2");
+										var imageUrl = !string.IsNullOrEmpty(article.PictureThumbnail)
+								? $"https://cdn.ilmkidunya.com/articles/articlesImages/thumb/{article.PictureThumbnail}"
+										: "https://images.ishallwin.com/news/default-thumb.webp";
+
+										var formattedDate = article.Dated?.ToString("dd/MMM/yyyy");
+										var author = !string.IsNullOrEmpty(article.SenderName) ? article.SenderName : "Ilmkidunya";
+
+										<li>
+											<div class="news-box">
+												<div class="img-holder">
+													<figure><img src="@imageUrl" alt="@article.Title" width="250" height="209" /></figure>
+												</div>
+												<div class="text-holder">
+													<div class="post-opt">
+														<span>@author</span>
+														<span class="date">@formattedDate</span>
+													</div>
+											<h4>
+												<a asp-controller="Articles"
+												   asp-action="ArticlesDetails"
+												   asp-route-articlesslug="@article.RewriteUrl">
+													@article.Title
+												</a>
+											</h4>
+												</div>
+											</div>
+										</li>
+									}
+								}
+								else
+								{
+									<li>No articles available at the moment.</li>
+								}
+							</ul>
+
+							<p style="text-align: center;">
+								<button type="button" class="load-more-button" id="loadMoreBtn">Load More Articles</button>
+							</p>
+					@await Html.PartialAsync("_maincontentlowerbanner")
+						</div>
+
+						
+
+						<script>
+							let currentPage = 1; // Track current page
+
+							const loadMoreBtn = document.getElementById('loadMoreBtn');
+							const artiList = document.getElementById('artiList');
+
+							loadMoreBtn.addEventListener('click', function () {
+								currentPage++; // Increment the page number
+								loadMoreBtn.innerHTML = 'Loading...'; // Change button text while loading
+
+								// Fetch new articles via AJAX
+								fetch('/articles?page=' + currentPage)
+									.then(response => response.text()) // Get the HTML response as text
+									.then(data => {
+										// Create a temporary container to hold the new articles
+										const tempContainer = document.createElement('div');
+										tempContainer.innerHTML = data;
+
+										// Extract the new articles list from the response
+										const newArticleList = tempContainer.querySelector('#artiList');
+
+										// Append the new articles to the existing article list
+										artiList.insertAdjacentHTML('beforeend', newArticleList.innerHTML);
+
+										// Reset the button text after loading
+										loadMoreBtn.innerHTML = 'Load More Articles';
+									})
+									.catch(error => {
+										console.error('Error loading more articles:', error);
+										loadMoreBtn.innerHTML = 'Error loading articles';
+									});
+							});
+
+						</script>
+
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-sec level-wise">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<h2>More Article Categories</h2>
+						
+						<ul class="admission-nav">
+							<li>
+								<a href="/articles/article-categories/information-technology.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-information.png" alt=""></figure>
+									<span>Tech</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/careers.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-careers.png" alt=""></figure>
+									<span>Careers</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/education.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-education.png" alt=""></figure>
+									<span>Education</span>
+								</a>
+							</li>
+
+							<li>
+								<a href="/articles/article-categories/entertainment.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-advertisement.png" alt=""></figure>
+									<span>Entertainment</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/history.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-history.png" alt=""></figure>
+									<span>History</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/religion-and-spirituality.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-religion.png" alt=""></figure>
+									<span>Religion</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/health.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com//images/icons/ico-health.png" alt=""></figure>
+									<span> Health &amp; Fitness</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/relationships-and-society.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/relationship-society.png" alt=""></figure>
+									<span>Relationships</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/business-and-economy.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-business.png" alt=""></figure>
+									<span>Business</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/news-and-politics.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-news.png" alt=""></figure>
+									<span>News and Politics</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/sports.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-sports.png" alt=""></figure>
+									<span>Sports</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/women.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/woman.png" alt=""></figure>
+									<span>Women</span>
+								</a>
+							</li>
+							<li>
+								<a href="/articles/article-categories/tourism.aspx">
+									<figure><img src="https://cdn.ilmkidunya.com/images/icons/ico-travel.png" alt=""></figure>
+									<span>Travel</span>
+								</a>
+							</li>
+							
+						</ul>
+						
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />	
+		<div class="college-news-sec">
+			<div class="container">
+				<div class="row">
+					
+
+						@await Html.PartialAsync("_GoogleAd")
+
+					
+				</div>
+			</div>
+		</div>
+		<!-- Main End -->
+		<!-- Footer Start -->
+		
+		<!-- Footer End -->
+	</div>
+	<script>
+		// Get the element by its ID
+		const postArticleLink = document.getElementById('postArticleLink');
+
+		// Add a click event listener
+		postArticleLink.addEventListener('click', function (event) {
+			event.preventDefault(); // Prevent the default action (navigating to the link)
+
+			// Show an alert when the link is clicked
+			alert("This feature is unavailable at this time.");
+		});
+	</script>
+
+
+
+	<script>
+    
+        function generateNewsItem(news) {
+            return `
+                <li>
+                    <div class="news-box">
+                        <div class="img-holder">
+                            <figure><img src="${news.img}" alt="News Image"/></figure>
+                        </div>
+                        <div class="text-holder">
+							<div class="post-opt">
+								<span>${news.author}</span>
+								<span class="date">${news.date}</span>
+							</div>
+                            <span class="date"></span>
+                            <h4><a href="#">${news.title}</a></h4>
+                        </div>
+                    </div>
+                </li>
+            `;
+        }
+</script>

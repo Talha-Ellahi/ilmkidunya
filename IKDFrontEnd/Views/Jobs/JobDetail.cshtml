@@ -1,0 +1,193 @@
+﻿@model IKDFrontEnd.ViewModels.JobDetailViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/ikd-default-og.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+@*         <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+ *@        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+
+
+
+
+<!-- Main Start -->
+<div id="main">
+    <div class="ss-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="main-table">
+                        <div class="responsive-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No</th>
+                                        <th>Post Name</th>
+                                        <th>No. of Jobs</th>
+                                        <th>Qualification</th>
+                                        <th>Other detail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.JobPositions.Count; i++)
+
+                                    {
+
+                                        var pos = Model.JobPositions[i];
+                                        <tr>
+                                            <td><b>@(i + 1)</b></td>
+                                            <td><b>@pos.Title</b></td>
+                                            <td><b>@pos.NoOfJobs</b></td>
+                                            <td><b>@pos.Qualification</b></td>
+                                            <td>
+                                                <b>
+
+                                                    @pos.JobScale
+
+                                                    @(pos.IsMale == false ? "   Male   " : "   Female   ")
+
+                                                    @(string.IsNullOrWhiteSpace(pos.AgeLimit) ? "" : $" Age Limit: {pos.AgeLimit} ")
+
+                                                    @(string.IsNullOrWhiteSpace(pos.Experience) ? "" : $" {pos.Experience} years of experience.")
+                                                </b>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="/jobs/@Model.CompanyUrl" class="latest-jobs">Latest jobs by @Model.CompanyName</a>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details section -->
+    <div class="ss-content has-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h3>Details of Job Advertisement by @Model.CompanyName @Model.Dated?.ToString("dd-MMM-yyyy")</h3>
+                    <p>This job was posted on @Model.Dated?.ToString("dd-MMM-yyyy") and has a last application date of @Model.LastDate?.ToString("dd-MMM-yyyy").</p>
+                    @Html.Raw(Model.Detail)
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.ImageName != null)
+    {
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <img src="@Model.ImageName" alt="Job Image" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Related jobs section -->
+    <div class="ss-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h3>More Jobs for @Model.PostName</h3>
+                    <ul class="ss-jobs-list">
+
+                        @foreach (var job in Model.RelatedJobs)
+
+                        {
+                            <li>
+                                <div class="box-left">
+                                    <strong>@job.PostedDate.ToString("dd-MMM-yy")</strong>
+                                   
+                                    @{
+                                        var jobCompany = job.CompanyName?.ToLower().Replace(" ", "-");
+                                    }
+                                    <a href="/jobs/@job.CompanyUrl">@job.CompanyName</a>
+                                </div>
+                                <div class="box-right">
+                                    <ul>
+                                        <li><p>@job.PostName</p></li>
+                                        <li><p>@job.NoOfJobs Jobs</p></li>
+                                        <li>
+                                            <p>Last Date</p>
+                                            <p>@job.LastDate?.ToString("dd-MMM-yy")</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="btn-view">
+                                    @{
+                                        var jobTitle = job.PostName.ToLower().Replace(" ", "-");
+
+                                        var jobId = job.PostId; // Assuming at least one ID
+                                        var fullSlug = $"{jobTitle}-jobs-in-{jobCompany}-{jobId}";
+                                    }
+                                    <a href="/jobs/@fullSlug">View</a>
+                                </div>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

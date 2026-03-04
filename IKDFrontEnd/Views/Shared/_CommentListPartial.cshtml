@@ -1,0 +1,104 @@
+﻿@model List<TblDefComment>
+
+@{
+    var user = ViewContext.HttpContext.User as System.Security.Claims.ClaimsPrincipal;
+    var isAuthenticated = user?.Identity?.IsAuthenticated ?? false;
+    decimal currentUserId = 0;
+    if (isAuthenticated)
+    {
+        var userIdClaim = user?.FindFirst("UserId")?.Value;
+        decimal.TryParse(userIdClaim, out currentUserId);
+    }
+}
+
+@foreach (var comment in Model)
+{
+    <li>
+        <div class="single-commnet" data-comment-id="@comment.CommentId">
+            <div class="comment-header">
+                <div class="image">
+                    <img src="@(comment.UserProfilePicture ?? "https://resources.ilmkidunya.com/images/avatar.png")"
+                         alt="@comment.UserName"
+                         width="100%"
+                         onerror="this.src='https://resources.ilmkidunya.com/images/avatar.png'">
+                </div>
+                <div class="desc-top">
+                    <div class="top-left">
+                        <h4>@comment.UserName</h4>
+                        <span class="time">@comment.CreatedDate.ToString("dd MMM yyyy")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="desc">
+                <div class="desc-detail">
+                    <p>@comment.CommentText</p>
+                </div>
+                <div class="commentAction">
+                    <div class="likeBx"
+                         id="likeBtn_@comment.CommentId"
+                         data-comment-id="@comment.CommentId"
+                         data-is-authenticated="@isAuthenticated.ToString().ToLower()"
+                         style="background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-black.png') no-repeat left center;">
+                        <span>Like</span>
+                        <span class="like-count" id="likeCount_@comment.CommentId" style="margin-left: 5px;">
+                            @comment.LikeCount
+                        </span>
+                    </div>
+
+                    <div class="replyBx"
+                         data-comment-id="@comment.CommentId"
+                         data-is-authenticated="@isAuthenticated.ToString().ToLower()">
+                        <input type="hidden" id="parentcommentid" value="@comment.CommentId">
+                        <span>Reply</span>
+                    </div>
+
+                    @if (isAuthenticated && comment.UserId == currentUserId)
+                    {
+                        <div class="deleteBx"
+                             style="margin-left: 15px; color: #ff4444; cursor: pointer; font-size: 14px;"
+                             data-comment-id="@comment.CommentId">
+                            <span>Delete</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Replies Container (Hidden by default) -->
+                <div class="replies-container" id="repliesContainer_@comment.CommentId" style="display: none; margin-top: 15px; padding-left: 20px; border-left: 2px solid #eaeaea;">
+                    <!-- Existing Replies will be loaded dynamically -->
+                    <div class="existing-replies" id="existingReplies_@comment.CommentId">
+                        <!-- Replies will be loaded here via AJAX -->
+                    </div>
+
+                    <!-- Reply Input Box -->
+                    @if (isAuthenticated)
+                    {
+                        <div class="reply-input-container" id="replyInputContainer_@comment.CommentId" style="display: none; margin-top: 15px;">
+                            <div class="comment-input" style="display: flex;">
+                                <div class="inputArea" style="flex: 1;">
+                                    <input type="text"
+                                           id="replyInput_@comment.CommentId"
+                                           placeholder="Write your reply..."
+                                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                <button class="btn btn-primary reply-submit-btn"
+                                        style="margin-left: 10px; padding: 8px 15px;"
+                                        data-comment-id="@comment.CommentId">
+                                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png"
+                                         alt="Send" width="16" height="16">
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="reply-input-container" id="replyInputContainer_@comment.CommentId" style="display: none; margin-top: 15px; text-align: center;">
+                            <button class="btn btn-primary" onclick="showLoginModal()" style="padding: 8px 20px;">
+                                Sign in to Reply
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </li>
+}

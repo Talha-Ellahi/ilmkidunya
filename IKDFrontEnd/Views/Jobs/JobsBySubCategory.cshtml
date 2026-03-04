@@ -1,0 +1,249 @@
+﻿@model IKDFrontEnd.ViewModels.JobListingPageViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+<!-- Main Start -->
+<div id="main">
+    <div class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul id="jobs-list" class="ss-jobs-list">
+                        @foreach (var job in Model.GroupedJobAds)
+                        {
+                            <li>
+                                <div class="box-left">
+                                    <strong>@job.Dated.ToString("dd MMM yy")</strong>
+                                    @{
+                                        var jobCompany = job.CompanyName?.ToLower().Replace(" ", "-");
+                                    }
+                                    <a href="/jobs/@job.CompanyUrl">@job.CompanyName</a>
+                                </div>
+                                <div class="box-right">
+                                    <ul>
+                                        <li>
+                                            @foreach (var title in job.JobTitles)
+                                            {
+                                                var shortTitle = title.Length > 45 ? title.Substring(0, 45) + "..." : title;
+                                                <p>@shortTitle</p>
+                                            }
+                                        </li>
+                                        <li>
+                                            <p>@(job.JobCounts.Any() ? job.JobCounts.Sum().ToString() + " Jobs" : "0 Jobs")</p>
+                                        </li>
+                                        <li>
+                                            <p>Last Date</p>
+                                            <p>@(job.LastDate.HasValue ? job.LastDate.Value.ToString("dd-MMM-yy") : "N/A")</p>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="btn-view">
+                                    @{
+                                        var jobTitle = job.JobTitles[0].ToLower().Replace(" ", "-");
+
+                                        var jobId = job.JobAdIds.FirstOrDefault(); // Assuming at least one ID
+                                        var fullSlug = $"{jobTitle}-jobs-in-{jobCompany}-{jobId}";
+                                    }
+                                    <a href="/jobs/@fullSlug">View</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+
+
+
+                    <div class="ss-loadmore">
+                        <a href="javascript:void(0)" class="button js-load-more" id="load-more-btn" data-skip="10">Load More</a>
+                    </div>
+                    <script>
+                        document.getElementById("load-more-btn").addEventListener("click", function () {
+                            const btn = this;
+                            const skip = parseInt(btn.getAttribute("data-skip"));
+
+                            const cityId = '@ViewBag.CityId';
+                            const companyId = '@ViewBag.CompanyId';
+                            const profession = '@ViewBag.Profession';
+
+                            // Optional: show loading animation
+                            btn.classList.add("load-more");
+                            btn.innerHTML = 'Loading <span>.</span><span>.</span><span>.</span>';
+
+                            fetch(`/jobs/load-more-jobs?skip=${skip}&cityId=${cityId}&companyId=${companyId}&profession=${profession}`)
+
+                                .then(res => res.text())
+                                .then(html => {
+                                    document.getElementById("jobs-list").insertAdjacentHTML("beforeend", html);
+                                    const newSkip = skip + 20;
+                                    btn.setAttribute("data-skip", newSkip);
+                                    if (html.trim() === '') {
+                                        btn.parentElement.remove(); // No more tutors
+                                    } else {
+                                        btn.classList.remove("load-more");
+                                        btn.textContent = "Load More";
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error("LoadMore error:", err);
+                                    btn.classList.remove("load-more");
+                                    btn.textContent = "Load More";
+                                });
+                        });
+                    </script>
+                    @if (ViewBag.CmsData != null)
+                    {
+                        <div class="ss-content">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                                    @using Microsoft.AspNetCore.Mvc.ViewComponents
+                                    @using System.IO
+                                    @inject IViewComponentHelper ComponentHelper
+
+                                        @{
+                                            string desc1 = Convert.ToString(ViewBag.CmsData?.Desc1);
+                                            var regex = new System.Text.RegularExpressions.Regex(@"###(.*?)###");
+
+                                            @if (!string.IsNullOrEmpty(desc1) && regex.IsMatch(desc1))
+                                            {
+                                                var output = desc1;
+
+                                                foreach (System.Text.RegularExpressions.Match match in regex.Matches(desc1))
+                                                {
+                                                    try
+                                                    {
+                                                        var professionsRaw = match.Groups.Count > 1
+                                                        ? match.Groups[1]?.Value
+                                                        : null;
+
+                                                        if (string.IsNullOrWhiteSpace(professionsRaw))
+                                                            continue;
+
+                                                        using (var writer = new StringWriter())
+                                                        {
+                                                            var viewContext = (ViewContext)this.ViewContext;
+                                                            var helper = (IViewComponentHelper)ComponentHelper;
+
+                                                            if (helper is IViewContextAware contextable)
+                                                                contextable.Contextualize(viewContext);
+
+                                                            var result = await helper.InvokeAsync(
+                                                            "ProfessionsList",
+                                                            new { professionsRaw }
+                                                            );
+
+                                                            if (result != null)
+                                                            {
+                                                                result.WriteTo(
+                                                                writer,
+                                                                System.Text.Encodings.Web.HtmlEncoder.Default
+                                                                );
+
+                                                                var renderedHtml = writer.ToString();
+
+                                                                if (!string.IsNullOrEmpty(renderedHtml))
+                                                                {
+                                                                    output = output.Replace(match.Value, renderedHtml);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        // 🔴 IMPORTANT: swallow error to prevent page crash
+                                                        // Optionally log this
+                                                        // _logger.LogError(ex, "Failed to render ProfessionsList ViewComponent");
+
+                                                        // Fallback: remove placeholder or keep original text
+                                                        output = output.Replace(match.Value, string.Empty);
+                                                    }
+                                                }
+
+                                                @Html.Raw(output)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(desc1)
+                                            }
+                                        }
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @*                     @if (ViewBag.CmsData != null)
+                    {
+                    <div class="ss-content">
+                    <div class="container">
+                    <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                    @Html.Raw(ViewBag.CmsData.Desc3)
+
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    } *@
+                </div>
+            </div>
+        </div>
+
+        <!-- Main End -->
+    </div>
+</div>
+
+

@@ -1,0 +1,171 @@
+﻿@model IKDFrontEnd.ViewModels.CustomTestHomeViewModel
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.all-test-box {
+		padding: 20px 0 0;
+	}
+
+		.all-test-box ul {
+			margin: 0 -10px;
+			padding: 15px 0 0 0;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+
+			.all-test-box ul li {
+				padding: 15px;
+				background: rgba(54,229,124,0.1);
+				border: 1px solid #36e57c;
+				border-radius: 10px;
+				width: 18.2%;
+				margin: 0 10px 20px;
+			}
+
+				.all-test-box ul li h3 {
+					font-size: 20px;
+				}
+
+				.all-test-box ul li p {
+					margin: 0 0 10px 0;
+				}
+
+				.all-test-box ul li a {
+					display: inline-block;
+					background: #36e57c;
+					font-size: 16px;
+					line-height: 22px;
+					text-decoration: none;
+					border-radius: 5px;
+					padding: 8px 30px;
+					margin: 0;
+					font-weight: 600;
+					color: #000;
+				}
+</style>
+ @section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.Title" />
+	<meta property="og:description" content="@ViewBag.Description" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.Description">
+	<meta name="keywords" content="@ViewBag.Keywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@ViewBag.Title</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+					<h1>@Model.TestTitle</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				@* <div class="col-lg-12">
+					<p>Love Cricket? Sure you do! Welcome to a short but very interesting fun quiz about Pakistan Super League 2020. The inaugural season of the tournament will be held in the United Arab Emirates from 4 February 2020 to 23 February 2025.</p>
+				</div> *@
+			</div>
+		</div>
+	</div>
+
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Attempt Your Test</h2>
+					<ul class="contact-detail">
+						<li>
+							<p><span>@Model.TotalMarks Total Marks </span>@Model.TotalQuestions Total Questions</p>
+						</li>
+						<li>
+							<p><span>@Model.DurationMinutes min Duration</span></p>
+						</li>
+					</ul>
+					<a href="/online-test/@(Model.TestUrl.Replace(".aspx",""))-test-form" class="text-btn">Start Test</a>
+				</div>
+
+				<div class="col-lg-12">
+					<div class="all-test-box">
+						<h2>Prepare All @Model.TestTitle MCQs With Answers</h2>
+						<ul>
+							@if (Model.TestSets != null && Model.TestSets.Any())
+							{
+								int setNumber = 1;
+								foreach (var set in Model.TestSets)
+								{
+									<li>
+										<h3>Set @setNumber</h3>
+										<p>@set.TotalQuestions Questions</p>
+										<a href="@($"/online-test/{Model.TestUrl.Replace(".aspx","")}-mcqs-with-answersold?startfrom={((setNumber - 1) * set.TotalQuestions)}&last={(setNumber * set.TotalQuestions)}")">
+			Start
+		</a>
+
+									</li>
+
+									setNumber++;
+								}
+							}
+							else
+							{
+								<li><p>No test sets available.</p></li>
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+
+	<div class="g-add-sec" style="padding: 30px 0 0 0;">
+		<div class="container">
+			<div class="row">
+				@await Html.PartialAsync("_GoogleAd")
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box">
+		<div class="container">
+			@* <div class="row">
+				<div class="col-lg-12">
+					<p>Students are not only limited until the English subject online test system. However, students can find Urdu Subject Online Test, Math Online Test, and online test of almost all other subjects teaching at matric level. Students from the primary level of education to the master level of education can find test system to assess their practice level.</p>
+					<p>English subject is the compulsory one subject that is teaching from primary to an intermediate level or in some cases at bachelor level too. At the matric level, the level of English subject is, somehow, difficult. Students go through grammatical compositions and rules, English stories, and English poetry etc. In such a way students have to learn accumulated contents. Students find less time to prepare the subject, sometimes. This is the reason, students are to be suggested to go through ilmkidunya.com to find the potential ways of learning and practice.</p>
+					<h2>10th Class English, 2 Paragraphs With Solved and Pdf Keywords:</h2>
+					<p>All the students who are going to appear in 10th class English board exams can prepare for them by attempting our online 10th class English mcqs and students can also download 10th class English mcqs pdf files from this page. These mcqs for 10th class English subject are fully solved. English mcqs 10 class with answers in PDF format are being offered to students on this page. Students can easily prepare for the 10th class English board exam 2023 from these 10th class mcqs pdf files. These solved mcqs of English class 10 are available for everyone and are really easy to download.</p>
+					<p>Solved mcqs of English class 10 are available chapter-wise on this page. PDF files are available for class 10 English mcqs chapter wise with proper headings on this page. These solved English mcqs files will definitely help you to score better in the 10th class English board exam. These English 10 class mcqs are given under proper title of chapter name on this page. These files contains all the 10th class important mcqs of English online test, after preparing these English class 10 full book mcqs candidates can attempt our English class 10 full book mcqs test online to assess that are you fully prepared for the 10th class English board exam 2023 or not.</p>
+				</div>
+			</div> *@
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

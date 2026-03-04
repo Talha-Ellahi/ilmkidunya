@@ -1,0 +1,127 @@
+﻿@model IKDFrontEnd.ViewModels.ShortQuestionsPdfViewModel
+
+@{
+	Layout = null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Answers Questions PDF</title>
+	<style>
+		@@media print {
+			.no-print
+
+		{
+			display: none !important;
+		}
+
+		}
+
+		body {
+			background-color: #f7f8fa;
+			font-family: Arial, Helvetica, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		.main-table {
+			width: 1000px;
+			margin: 20px auto;
+			background: #fff;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			border-radius: 6px;
+			overflow: hidden;
+		}
+
+		.header {
+			height: 100px;
+			border-bottom: 1px solid #eaeaea;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: white;
+		}
+
+			.header img {
+				height: 74px;
+				background-color: white;
+			}
+
+		.green-row {
+			background-color: #35e87e;
+			padding: 20px;
+			text-align: center;
+		}
+
+			.green-row h1 {
+				margin: 0;
+				color: #000;
+				font-weight: 500;
+				font-size: 22px;
+			}
+
+		.question-wrapper {
+			padding: 30px;
+		}
+
+		.question-box {
+			padding-top: 25px;
+			padding-bottom: 20px;
+			border-bottom: 2px solid #4EA28D;
+		}
+
+			.question-box h2 {
+				margin: 0 0 15px 0;
+				color: #000;
+				font-weight: 500;
+				font-size: 18px;
+			}
+
+
+		.answer {
+			margin: 8px 0;
+			padding: 15px;
+			background: #fff;
+			border: 1px solid #eaeaea;
+			border-radius: 4px;
+			line-height: 22px;
+		}
+
+			.answer .q-numb {
+				font-size: 17px;
+				font-weight: 600;
+				padding-right: 10px;
+			}
+	</style>
+</head>
+<body>
+    <div class="main-table">
+        <div class="header">
+            <img style="background-color:#FFF !important;" src="https://cdn.ilmkidunya.com/logo.svg" alt="Logo">
+        </div>
+
+        <div class="green-row">
+            <h1>@Model.SubjectName - @Model.TestName</h1>
+        </div>
+
+        <div class="question-wrapper">
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                var question = Model.Questions[i];
+                <div class="question-box">
+                    <h2><span class="q-numb">Q@(i + 1).</span> @Html.Raw(question.QuestionDescription)</h2>
+
+                    @for (int j = 0; j < question.Answers.Count; j++)
+                    {
+                        var answer = question.Answers[j];
+                        <div class="answer">
+                            <span class="q-numb">Ans @(j + 1):</span> @Html.Raw(answer.ChoiceDescription)
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

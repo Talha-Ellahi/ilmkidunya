@@ -1,0 +1,112 @@
+﻿@model List<IKDFrontEnd.Models.TblOtsTestMcq>
+
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	@if (ViewBag.CmsData != null)
+	{
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+		<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+		<meta property="og:image" content="" />
+		<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+		<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>@ViewBag.CmsData.MetaTitle</title>
+	}
+}
+@section header {
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+}
+@section innerbanner {
+		<div class="ss-banner-inner">
+			<div class="ss-container">
+				<div class="ss-row">
+					<div class="ss-col-lg-12">
+					 <div class="ss-text-holder">
+						@if (ViewBag.TestName != null)
+						{
+							<h1>@ViewBag.TestName With Answers</h1>
+						}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+}
+
+<div id="main">
+
+	<div class="content-sec level-wise" style="margin-bottom: 30px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>@ViewBag.TestName</h2>
+					@* <h3>Choose the correct form of the verb land fill up the bubbles sheet;</h3> *@
+					<div class="responsive-table">
+						<table class="table table-bordered ans-table">
+							<thead class="bg-ikd">
+								<tr>
+									<th style="width: 6%;"><span>Sr. #</span></th>
+									<th style="width: 74%;"><span>Questions</span></th>
+									<th style="width: 20%;"><span>Answers Choice</span></th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int index = 1;
+									foreach (var q in Model)
+									{
+										<tr>
+											<td><span>@index</span></td>
+											<td><span>@Html.Raw(q.Question)</span></td>
+											<td>
+												<span>
+													<em class="@(q.CorrectAnswer == 1 ? "selected" : "")">@q.Choice1</em>
+													<em class="@(q.CorrectAnswer == 2 ? "selected" : "")">@q.Choice2</em>
+													<em class="@(q.CorrectAnswer == 3 ? "selected" : "")">@q.Choice3</em>
+													<em class="@(q.CorrectAnswer == 4 ? "selected" : "")">@q.Choice4</em>
+													@* Optional 5th Choice *@
+													@if (!string.IsNullOrEmpty(q.Choice5))
+													{
+														<em class="@(q.CorrectAnswer == 5 ? "selected" : "")">@q.Choice5</em>
+													}
+												</span>
+											</td>
+										</tr>
+										index++;
+									}
+								}
+							</tbody>
+						</table>
+					</div>
+					@{
+						var testUrl = ViewBag.TestUrl;
+						var start = Context.Request.Query["startfrom"];
+						var end = Context.Request.Query["last"];
+					}
+					<a href="@(Url.Action("DownloadQuestionsPdf", "OTS", new { testUrl = testUrl, startfrom = start, last = end })?.Replace(".aspx", ""))" class="text-btn" target="_blank">
+						Download This Set
+					</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				
+					@await Html.PartialAsync("_maincontenttopbanner")
+				
+			</div>
+		</div>
+	</div>
+</div>

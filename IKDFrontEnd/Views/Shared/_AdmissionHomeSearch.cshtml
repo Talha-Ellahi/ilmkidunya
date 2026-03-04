@@ -1,0 +1,70 @@
+﻿@using IKDFrontEnd.ViewModels.Common
+@model HomePageViewModel
+<div class="news-ad-sec">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+
+				@if (Model.SearchResults != null && Model.SearchResults.Any())
+				{
+					<ul class="admission-open-list" id="admissionList2">
+						@foreach (var item in Model.SearchResults)
+						{
+							<li>
+								<div class="uni-box" style="background-color: white;">
+									<div class="img-holder">
+										<figure>
+											<img src="https://cdn.ilmkidunya.com/Inst/logos/@item.CollageLogo" alt="" />
+										</figure>
+										@item.CityName
+									</div>
+									<div class="text-holder">
+										<div class="box-left">
+											<div class="datewise">
+												<span>Posted On <em>@item.Dated?.ToString("dd-MMM-yyyy")</em></span>
+												<span>Last Date <em>@item.LastDate?.ToString("dd-MMM-yyyy")</em></span>
+											</div>
+											<h3>
+												<a href="/admissions/@(item.Url).aspx" class="course-title" target="_blank">
+													@item.AdmissionTitle
+												</a>
+											</h3>
+
+											<p>@item.CollegeName</p>
+										</div>
+										<div class="box-right">
+											<figure>
+												@if (!string.IsNullOrWhiteSpace(item.AdmissionLogo))
+												{
+													var year = item.Dated.Value.Year;
+													var month = item.Dated.Value.Month.ToString();
+													<img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@year/@month/Thumb/@item.AdmissionLogo" alt="Admission Image" />
+												}
+												else
+												{
+													<img src="https://cdn.traliv.com/wwwroot/images/not-available.png" alt="No Image Available" />
+												}
+											</figure>
+										</div>
+									</div>
+								</div>
+							</li>
+						}
+					</ul>
+
+					@if (Model.SearchResults.Count > 9)
+					{
+						<p style="text-align: center;">
+							<button type="button" class="load-more-button" id="loadMoreSearchBtn">Load More</button>
+						</p>
+					}
+				}
+				else
+				{
+					<h4 style="text-align: center;">Admissions Not Available</h4>
+				}
+
+			</div>
+		</div>
+	</div>
+</div>

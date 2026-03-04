@@ -1,0 +1,462 @@
+﻿@model IKDFrontEnd.ViewModels.FlagWithCountryViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	.flag-popup-wrapper {
+		width: 100%;
+		max-width: 600px;
+		border-radius: 10px;
+		min-height: 300px;
+		padding: 20px;
+		box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+		position: fixed;
+		background : white;
+		display: block;
+		visibility: hidden;
+		z-index: -100;
+		pointer-events: none;
+		margin: auto;
+		top: 0%;
+		opacity: 0;
+		left: 50%;
+		transform: translate(-50%);
+		transition: all 0.3s ease-in-out;
+	}
+
+		.flag-popup-wrapper.visible {
+			visibility: visible;
+			z-index: 1000;
+			top:50px;
+			pointer-events: all;
+			opacity: 1;
+		}
+
+	.flg-heading-row {
+		display: flex;
+		justify-content: start;
+		align-items: center;
+		gap: 15px;
+		min-height: 70px;
+		border-bottom: 1px solid lightgray;
+		width: 100%;
+		margin-bottom: 10px;
+	}
+
+		.flg-heading-row h3 {
+			font-size: 24px;
+		}
+
+		.flg-heading-row img {
+			width: 50px;
+			height: 50px;
+			padding: 8px;
+			border-radius: 6px;
+			background-color: #8FD435;
+		}
+
+	#flg-close-btn {
+		font-size: 40px;
+		position: absolute;
+		font-weight: 800;
+		color: black;
+		top: 10px;
+		right: 20px;
+		z-index: 10;
+		cursor: pointer;
+		transition: all 0.3s ease-in-out;
+	}
+
+		#flg-close-btn:hover {
+			color: #4EA28D;
+			transform: rotate(90deg);
+		}
+
+	.popflg-box {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 20px;
+	}
+
+	.pflg-img {
+		flex: 1 0 65%;
+		min-width: 300px;
+	}
+
+		.pflg-img img {
+			width: 100%;
+			height: auto;
+			max-height: 260px;
+			object-fit: contain;
+		}
+
+	.pfle-btns {
+		flex: 1 1 20%;
+		min-width: 100px;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		flex-wrap: wrap;
+	}
+
+		.pfle-btns > a {
+			width: 100%;
+			max-height: 60px;
+			text-align: center;
+			padding: 10px;
+			background-color: lightgrey;
+			font-size: 16px;
+			transition: all 0.3s ease-in-out;
+		}
+
+			.pfle-btns > a:hover {
+				background-color: #4EA28D;
+				color: white;
+			}
+</style>
+
+
+@section MetaData {
+
+	@{
+		var metaTitle = Model?.MetaTitle ?? "";
+		var metaDescription = Model?.MetaDesc ?? "";
+		var metaKeywords = Model?.MetaKeyword ?? "";
+	}
+
+	<meta charset="utf-8">
+	<meta property="og:title" content="@metaTitle" />
+	<meta property="og:description" content="@metaDescription" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@metaDescription">
+	<meta name="keywords" content="@metaKeywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@metaTitle</title>
+}
+@section header {
+
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+
+
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						
+						<h1>@(Model?.MetaTitle ?? "")</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.RenderWithAds(Model?.Desc1  ?? "")
+			</div>
+		</div>
+	</div>
+	
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<p class="col-lg-12">
+				
+				<h2>Country Information</h2>
+						<ul style="margin-bottom: 20px;">
+							<li><span style="width: 170px; display: inline-block;">Country:</span> <strong>@Model.CountryName</strong></li>
+							<li><span style="width: 170px; display: inline-block;">Continent:</span> <strong>@Model.Continent</strong></li>
+							<li><span style="width: 170px; display: inline-block;">Official Languages:</span> <strong>@Model.Language</strong></li>
+							<li><span style="width: 170px; display: inline-block;">Capital:</span> <strong>@Model.Capital</strong></li>
+							<li><span style="width: 170px; display: inline-block;">Government:</span> <strong>@Model.Government</strong></li>
+							<li><span style="width: 170px; display: inline-block;">Border length:</span> <strong>@Model.Border</strong></li>
+						</ul>
+
+						@if (Model.NeighbourCountries != null && Model.NeighbourCountries.Any())
+						{
+							<h2>Neighboring Countries of @Model.CountryName</h2>
+							<ul class="nearby-country">
+								@foreach (var neighbor in Model.NeighbourCountries)
+								{
+									<li>
+										<a href="/flags/@neighbor.ToLower()"><span>@neighbor</span></a>
+									</li>
+								}
+							</ul>
+						}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<ul class="ss-ads" style="border: 0; padding-top: 35px;">
+					@await Html.PartialAsync("_maincontenttopbanner")
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="contact-sec fee-box">
+	<div class="container">
+		<div class="row">
+				@if (Model != null)
+				{
+					<div class="col-lg-12">
+						<h2>History Of @Model.CountryName ?? "Unknown" Flag</h2>
+						@Html.Raw(Model?.Desc2 ?? "")
+
+						<h2>Color Of @Model.CountryName ?? "Unknown" Flag</h2>
+						@Html.Raw(Model?.Desc4 ?? "")
+
+						<h2>Symbolism of the Flag of @Model.CountryName ?? "Unknown"</h2>
+						@Html.Raw(Model?.Desc3 ?? "")
+
+						<h2>@(Model?.CountryName ?? "This Country") Flag Download</h2>
+
+						<ul class="flags-opt">
+							<li>
+								<img src="https://images.ishallwin.com/flags/hd.png" alt="">
+								<span>Free @(Model?.CountryName ?? "Country") Flag HD</span>
+								<a href="javascript:;"
+								   onclick="openFlapPopup(this)"
+								   data-country="@(Model?.CountryName ?? "")"
+								   data-baseurl="https://invent.ilmkidunya.com/nadmin/Flags/HD/"
+								   data-type="HD"
+								   data-icon="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/hd.png">
+									Download HD
+								</a>
+							</li>
+
+							<li>
+								<img src="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/vector.png" alt="">
+								<span>Free @(Model?.CountryName ?? "Country") Flag Vector</span>
+								<a href="@(Model?.File2 ?? "#")" target="_blank">Download Vector</a>
+							</li>
+
+							<li>
+								<img src="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/pdf.png" alt="">
+								<span>Free @(Model?.CountryName ?? "Country") Flag PDF</span>
+								<a href="@(Model?.File3 ?? "#")" target="_blank">Download PDF</a>
+							</li>
+
+							<li>
+								<img src="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/photo-camera.png" alt="">
+								<span>Free @(Model?.CountryName ?? "Country") Flag Icon</span>
+								<a href="javascript:;"
+								   onclick="openFlapPopup(this)"
+								   data-country="@(Model?.CountryName ?? "")"
+								   data-baseurl="https://invent.ilmkidunya.com/nadmin/Flags/Icon/"
+								   data-type="Icon"
+								   data-icon="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/photo-camera.png">
+									Download Icon
+								</a>
+							</li>
+
+							<li>
+								<img src="https://resources.ilmkidunya.com/Flag-Page/assets/images/icons/smile.png" alt="">
+								<span>Free @(Model?.CountryName ?? "Country") Flag Emoji</span>
+								<a href="@(Model?.File5 ?? "#")" target="_blank">Download Emoji</a>
+							</li>
+						</ul>
+
+						<div class="faq-section">
+							@if (Model?.FaqList != null && Model.FaqList.Any())
+							{
+								int index = 0;
+								foreach (var faq in Model.FaqList)
+								{
+									<div class="faq-item @(index == 0 ? "active" : "")">
+										<h3 class="faq-question">
+											<span class="icon">@(index == 0 ? "−" : "+")</span>
+											@faq?.Name
+										</h3>
+										<div class="faq-answer" style="@(index == 0 ? "display:block;" : "display:none;")">
+											<p>@faq?.Detail</p>
+										</div>
+									</div>
+									index++;
+								}
+							}
+							else
+							{
+								<p>No FAQs available.</p>
+							}
+						</div>
+					</div>
+				}
+				else
+				{
+					<p>Country information is not available.</p>
+				}
+
+
+					@Html.Raw(Model?.Detail ?? "")
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="g-add-sec" style="padding: 30px 0 0 0;">
+	<div class="container">
+		<div class="row">
+			@await Html.PartialAsync("_GoogleAd")
+		</div>
+	</div>
+</div>
+
+<div class="new-ads-sec">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				@await Html.PartialAsync("_maincontentlowerbanner")
+			</div>
+		</div>
+	</div>
+</div>
+
+	<style>
+		.faq-section {
+			margin-top: 20px;
+		}
+
+		.faq-item {
+			border-bottom: 1px solid #ddd;
+			padding: 10px 0;
+		}
+
+		.faq-question {
+			font-size: 18px;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+		}
+
+			.faq-question .icon {
+				font-size: 20px;
+				margin-right: 10px;
+				font-weight: bold;
+			}
+
+		.faq-answer {
+			margin-left: 28px;
+			margin-top: 8px;
+			color: #333;
+			font-size: 15px;
+			line-height: 1.6;
+		}
+	</style>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		document.querySelectorAll(".faq-question").forEach(function (question) {
+			question.addEventListener("click", function () {
+				let item = this.parentElement;
+				let answer = item.querySelector(".faq-answer");
+				let icon = this.querySelector(".icon");
+
+				if (item.classList.contains("active")) {
+					item.classList.remove("active");
+					answer.style.display = "none";
+					icon.textContent = "+";
+					return;
+				}
+
+				document.querySelectorAll(".faq-item").forEach(function (faq) {
+					faq.classList.remove("active");
+					faq.querySelector(".faq-answer").style.display = "none";
+					faq.querySelector(".icon").textContent = "+";
+				});
+
+				item.classList.add("active");
+				answer.style.display = "block";
+				icon.textContent = "−";
+			});
+		});
+	});
+	</script>
+
+
+
+<div class="flag-popup-wrapper" id="flg-pop-box">
+	<div id="flg-close-btn">&times;</div>
+	<div class="flg-heading-row">
+		<img id="popup-icon" src="" alt="Image Icon">
+		<h3 id="popup-title"></h3>
+	</div>
+	<div class="popflg-box">
+		<div class="pflg-img">
+			<img id="popup-main-img" src="" alt="">
+		</div>
+		<div class="pfle-btns" id="popup-links"></div>
+	</div>
+</div>
+
+<script>
+	const flgPopup = document.getElementById("flg-pop-box");
+	const closeBtn = document.getElementById("flg-close-btn");
+
+		function openFlapPopup(el) {
+		const country = el.getAttribute("data-country");
+		const baseUrl = el.getAttribute("data-baseurl");
+		const type = el.getAttribute("data-type") || "HD"; // default HD
+		const iconUrl = el.getAttribute("data-icon");
+
+		// Title update (HD/Icon ke hisaab se)
+		document.getElementById("popup-title").innerText = country + " Flag Download " + type;
+
+		// Main image update
+		document.getElementById("popup-main-img").src = baseUrl + country + "-1.png";
+
+		// Icon update
+		if (iconUrl) {
+			document.getElementById("popup-icon").src = iconUrl;
+		}
+
+		// Links dynamically banani hain
+		const sizes = [
+			{ size: 5, label: "Extra Small" },
+			{ size: 4, label: "Small" },
+			{ size: 3, label: "Medium" },
+			{ size: 2, label: "Large" },
+			{ size: 1, label: "Extra Large" }
+		];
+
+		const linksContainer = document.getElementById("popup-links");
+		linksContainer.innerHTML = "";
+
+		sizes.forEach(s => {
+			const a = document.createElement("a");
+			a.href = baseUrl + country + "-" + s.size + ".png";
+			a.innerText = s.label;
+			a.target = "_blank";
+			linksContainer.appendChild(a);
+		});
+
+		// Show popup
+		flgPopup.classList.add("visible");
+	}
+
+
+	// Close popup
+	closeBtn.addEventListener("click", () => {
+		flgPopup.classList.remove("visible");
+	});
+
+</script>
+

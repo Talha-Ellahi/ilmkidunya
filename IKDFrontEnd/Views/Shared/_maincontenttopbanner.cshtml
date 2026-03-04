@@ -1,0 +1,98 @@
+﻿
+@if (ViewBag.Banners != null)
+{
+    var banners = ViewBag.Banners as List<IKDFrontEnd.Models.Banner>;
+    var bannerSortOrder6 = banners?.FirstOrDefault(b => b.SortOrder == 6);
+    var bannerSortOrder7 = banners?.FirstOrDefault(b => b.SortOrder == 7);
+    var bannerSortOrder8 = banners?.FirstOrDefault(b => b.SortOrder == 8);
+    var bannerSortOrder9 = banners?.FirstOrDefault(b => b.SortOrder == 9);
+
+    <ul class="ss-ads" style="border: 0; padding-top: 0; margin: 0; list-style: none; display: flex; gap: 10px;">
+        @RenderBanner(bannerSortOrder6, "banner-6")
+        @RenderBanner(bannerSortOrder7, "banner-7")
+        @RenderBanner(bannerSortOrder8, "banner-8")
+        @RenderBanner(bannerSortOrder9, "banner-9")
+    </ul>
+}
+
+@functions {
+    private Microsoft.AspNetCore.Html.IHtmlContent RenderBanner(dynamic banner, string alt, string width = null, string height = null, string aspectRatio = null)
+    {
+        if (banner == null)
+        {
+            if (alt == "banner-6")
+            {
+                // Reserve space for banner-6 to prevent layout shift
+                return new Microsoft.AspNetCore.Html.HtmlString(@"
+                    <li>
+                        <div style='width: 100%; height: 300px; background-color: #f5f5f5; display: block;'></div>
+                    </li>
+                ");
+            }
+            return new Microsoft.AspNetCore.Html.HtmlString("<li></li>");
+        }
+
+        var url = banner.Url;
+        var originalImage = $"https://cdn.ilmkidunya.com/images/Banners/{banner.Image}";
+        // var webpImage = ConvertToWebP(originalImage);
+        // var avifImage = ConvertToAvif(originalImage);
+
+        var urlAttribute = url.StartsWith("aHR0") ? $"data-url='{url}'" : $"href='{url}'";
+
+        var styleAttribute = !string.IsNullOrEmpty(aspectRatio) ? $"style='aspect-ratio: {aspectRatio};'" : "";
+        var widthAttribute = !string.IsNullOrEmpty(width) ? $"width='{width}'" : "";
+        var heightAttribute = !string.IsNullOrEmpty(height) ? $"height='{height}'" : "";
+
+        // var htmlContent = $@"
+        //     <li>
+        //         <a aria-label='ads' class='banner-link decode-banner-url' {urlAttribute} target='_blank'>
+        //             <picture>
+        //                 <source srcset='{avifImage}' type='image/avif'>
+        //                 <source srcset='{webpImage}' type='image/webp'>
+        //                 <img class='slider-lazy'
+        //                      data-src='{originalImage}'
+        //                      src='{originalImage}'
+        //                      alt='{alt}'
+        //                      {widthAttribute20
+        //                      {heightAttribute}
+        //                      {styleAttribute}
+        //                      loading='lazy' />
+        //             </picture>
+        //         </a>
+        //     </li>
+        // ";
+
+
+        var htmlContent = $@"
+    <li>
+        <a aria-label='ads' class='banner-link decode-banner-url' {urlAttribute} target='_blank'>
+            <picture>
+                <img class='slider-img'
+                     src='{originalImage}'
+                     alt='{alt}' />
+            </picture>
+        </a>
+    </li>
+";
+
+
+
+
+
+        return new Microsoft.AspNetCore.Html.HtmlString(htmlContent);
+    }
+
+    // private string ConvertToWebP(string imageUrl)
+    // {
+    //     // Replace extension with .webp
+    //     return System.IO.Path.ChangeExtension(imageUrl, ".webp");
+    // }
+
+    // private string ConvertToAvif(string imageUrl)
+    // {
+    //     // Replace extension with .avif
+    //     return System.IO.Path.ChangeExtension(imageUrl, ".avif");
+    // }
+
+
+}

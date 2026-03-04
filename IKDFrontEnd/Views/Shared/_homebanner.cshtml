@@ -1,0 +1,37 @@
+﻿@model IKDFrontEnd.ViewModels.HomePageViewModel3
+<div class="news-add-sec">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="side-news">
+					<ul class="sm-news-list">
+						@foreach (var item in Model.Articles)
+						{
+							<li>
+								<a aria-label="@item.Title" href="@item.RewriteUrl">
+									<div class="img-holder">
+										<img class="lazy-load"
+											 src="https://cdn.ilmkidunya.com/articles/articlesImages/thumb/@item.PictureThumbnail"
+											 alt="@item.Title" />
+									</div>
+									<div class="text-holder">
+										<span>
+											<img src="~/images-files/images/icons/calendar-green.webp" alt="calendar" />
+											@item.Dated?.ToString("dd-MMM-yyyy")
+										</span>
+										<p>@item.Title</p>
+									</div>
+								</a>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="home-banner">
+					@await Html.PartialAsync("_HomeContentTopBanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

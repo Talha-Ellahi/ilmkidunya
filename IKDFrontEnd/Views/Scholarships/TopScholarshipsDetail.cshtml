@@ -1,0 +1,123 @@
+﻿@model IKDFrontEnd.ViewModels.Common.TblCmsDto
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+  
+}
+
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/scholarships/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a aria-label="link" href="/studyabroad/">
+                    <img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+                         alt="image" />
+                    Studyabroad
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/studyabroad/country-guides.aspx">
+                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+                         alt="image" />
+                    Guides
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/consultants/">
+                    <img src="https://www.ilmkidunya.com/icons/tutor.png"
+                         alt="image" />
+                    Consultants
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/scholarships/topscholarship">
+                    <img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+                         alt="image" />
+                    Top Scholarship
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@Model.Heading</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        
+                            @if (!string.IsNullOrEmpty(Model?.Desc1))
+                            {
+                                @Html.Raw(Model.Desc1)
+                            }
+
+                           
+
+                          
+                       
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="new-ads-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-sec level fee-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ckeditorcontent">
+                        @if (!string.IsNullOrEmpty(Model?.Desc2))
+                        {
+                            @Html.Raw(Model.Desc2)
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="new-ads-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontentlowerbanner")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

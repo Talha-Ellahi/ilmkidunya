@@ -1,0 +1,495 @@
+﻿@model IKDFrontEnd.ViewModels.CityPrayerTimesViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/study-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/program-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/college-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/online-test-sec.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/common/style.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/style/dictionary.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Heading != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Worldwide Islamic Prayer Timings</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<style>
+    .prayer-times {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        background: #ffffff;
+        border: 1px solid #15a18d;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        padding: 20px 30px;
+        margin: 30px auto;
+    }
+
+    .prayer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 140px;
+        position: relative;
+    }
+
+        .prayer-item:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to bottom, transparent, #35E87E, transparent);
+        }
+
+    .prayer-name {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: #222;
+        margin-bottom: 6px;
+    }
+
+    .prayer-time {
+        font-size: 18px;
+        font-weight: 700;
+        color: #15a18d;
+    }
+
+    @@media (max-width: 600px) {
+        .prayer-times
+
+    {
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .prayer-item {
+        min-width: 100px;
+    }
+
+    .prayer-time {
+        font-size: 15px;
+    }
+
+    }
+</style>
+
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+                        }
+                    </div>
+
+
+                    <h2>Prayer Times in @Model.City.CityName, @Model.Country.Name (Fiqh Hanafi)</h2>
+
+                    @if (Model.TodayHanafi != null)
+                    {
+                        <div class="prayer-times">
+                            <div class="prayer-item">
+                                <div class="prayer-name">FAJR</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Fajr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">SUNRISE</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Sunrise</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">DHUHR</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Dhuhr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">ASR</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Asr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">MAGHRIB</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Maghrib</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">ISHA</div>
+                                <div class="prayer-time">@Model.TodayHanafi.Isha</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No Hanafi timings found for today.</p>
+                    }
+
+
+
+
+
+                    <h2>Prayer Times in @Model.City.CityName, @Model.Country.Name (Fiqh Shafi‘i)</h2>
+
+                    @if (Model.TodayShafi != null)
+                    {
+                        <div class="prayer-times">
+                            <div class="prayer-item">
+                                <div class="prayer-name">FAJR</div>
+                                <div class="prayer-time">@Model.TodayShafi.Fajr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">SUNRISE</div>
+                                <div class="prayer-time">@Model.TodayShafi.Sunrise</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">DHUHR</div>
+                                <div class="prayer-time">@Model.TodayShafi.Dhuhr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">ASR</div>
+                                <div class="prayer-time">@Model.TodayShafi.Asr</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">MAGHRIB</div>
+                                <div class="prayer-time">@Model.TodayShafi.Maghrib</div>
+                            </div>
+                            <div class="prayer-item">
+                                <div class="prayer-name">ISHA</div>
+                                <div class="prayer-time">@Model.TodayShafi.Isha</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No Shafi timings found for today.</p>
+                    }
+
+
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                    <style>
+                        .islamic-date-show {
+                            display: flex;
+                            gap: 15px;
+                            justify-content: space-between;
+                            padding: 10px 20px;
+                            background: #effcf4;
+                            border-left: 3px solid #15a18d;
+                            margin: 20px 0px;
+                            font-size: 16px;
+                            color: black;
+                        }
+                    </style>
+                    <div class="islamic-date-show">
+                        <span>Today Islamic Date: </span>
+                        <span id="islamic-date-english">Loading...</span>
+
+                        <script>
+                            // Function to get Islamic date using provided coordinates
+                            async function getIslamicDateByCoordinates(latitude, longitude) {
+                                try {
+                                    // Use the Islamic API to get accurate prayer times and Islamic date
+                                    const apiUrl = `https://islamicapi.com/api/v1/prayer-time/?lat=${latitude}&lon=${longitude}&method=MWL&school=2&api_key=ProEFBnLmEcMQz5biwnGX4MjPlVDyHLhK663qR11QKbT3bJV`;
+
+                                    const response = await fetch(apiUrl);
+
+                                    if (response.ok) {
+                                        const data = await response.json();
+
+                                        if (data.code === 200 && data.status === "success") {
+                                            const hijriDate = data.data.date.hijri;
+                                            const locationName = await getLocationName(latitude, longitude);
+
+                                            // Format the Islamic date
+                                            const islamicDate = `${hijriDate.day} ${hijriDate.month.en} ${hijriDate.year} ${hijriDate.designation.abbreviated}`;
+
+                                            document.getElementById("islamic-date-english").textContent =
+                                                `${islamicDate} (${locationName})`;
+                                            return;
+                                        }
+                                    }
+
+                                    // Fallback if API fails
+                                    fallbackToBasicCalculation();
+
+                                } catch (error) {
+                                    console.log('Islamic API failed, using fallback:', error);
+                                    fallbackToBasicCalculation();
+                                }
+                            }
+
+                            // Get location name from coordinates
+                            async function getLocationName(latitude, longitude) {
+                                try {
+                                    const locationResponse = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+
+                                    if (locationResponse.ok) {
+                                        const locationData = await locationResponse.json();
+
+                                        if (locationData.city && locationData.countryName) {
+                                            return `${locationData.city}, ${locationData.countryName}`;
+                                        } else if (locationData.countryName) {
+                                            return locationData.countryName;
+                                        }
+                                    }
+                                } catch (error) {
+                                    console.log('Location API failed:', error);
+                                }
+
+                                return 'Your location';
+                            }
+
+                            // Fallback calculation (basic)
+                            function fallbackToBasicCalculation() {
+                                const today = new Date();
+                                const islamic = new Intl.DateTimeFormat('en-SA-u-ca-islamic', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric'
+                                }).formatToParts(today);
+
+                                const day = islamic.find(p => p.type === 'day').value;
+                                const month = islamic.find(p => p.type === 'month').value;
+                                const year = islamic.find(p => p.type === 'year').value;
+
+                                document.getElementById("islamic-date-english").textContent = `${day} ${month} ${year} AH`;
+                            }
+
+                            // Initialize with provided coordinates
+                            const latitude = @Model.City.Latitude;
+                            const longitude = @Model.City.Longitude;
+
+                            if (latitude && longitude && !isNaN(latitude) && !isNaN(longitude)) {
+                                getIslamicDateByCoordinates(latitude, longitude);
+                            } else {
+                                // Fallback to basic calculation if coordinates not available
+                                fallbackToBasicCalculation();
+                            }
+
+                            // Add timeout fallback
+                            setTimeout(() => {
+                                if (document.getElementById("islamic-date-english").textContent === 'Loading...') {
+                                    fallbackToBasicCalculation();
+                                }
+                            }, 5000);
+                        </script>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="ckeditorcontent">
+                            <h2>7 Days @Model.City.CityName Prayer Time</h2>
+                            <div class="responsive-table">
+                                <figure class="table">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Fajar</th>
+                                                <th>Sunrise</th>
+                                                <th>Zuhr</th>
+                                                <th>Asr</th>
+                                                <th>Maghrib</th>
+                                                <th>Isha</th>
+                                            </tr>
+
+                                            @if (Model.HanafiWeekly != null && Model.HanafiWeekly.Any())
+                                            {
+                                                foreach (var timing in Model.HanafiWeekly)
+                                                {
+                                                    <tr>
+                                                        <td>@timing.Date.ToString("MMM dd yyyy")</td>
+                                                        <td>@timing.Fajr</td>
+                                                        <td>@timing.Sunrise</td>
+                                                        <td>@timing.Dhuhr</td>
+                                                        <td>@timing.Asr</td>
+                                                        <td>@timing.Maghrib</td>
+                                                        <td>@timing.Isha</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="7" style="text-align:center;">No data available</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </figure>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <h2>30 Days @Model.City.CityName Prayer Time</h2>
+                            <div class="responsive-table">
+                                <figure class="table">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Fajar</th>
+                                                <th>Sunrise</th>
+                                                <th>Zuhr</th>
+                                                <th>Asr</th>
+                                                <th>Maghrib</th>
+                                                <th>Isha</th>
+                                            </tr>
+
+                                            @if (Model.HanafiMonthly != null && Model.HanafiMonthly.Any())
+                                            {
+                                                foreach (var timing in Model.HanafiMonthly)
+                                                {
+                                                    <tr>
+                                                        <td>@timing.Date.ToString("MMM dd yyyy")</td>
+                                                        <td>@timing.Fajr</td>
+                                                        <td>@timing.Sunrise</td>
+                                                        <td>@timing.Dhuhr</td>
+                                                        <td>@timing.Asr</td>
+                                                        <td>@timing.Maghrib</td>
+                                                        <td>@timing.Isha</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="7" style="text-align:center;">No data available</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-sec level-wise" style="margin-bottom: 15px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>More Cities From @Model.Country.Name</h2>
+                        <div class="subjects-tble2">
+                            <ul>
+                                @if (Model.AllCities != null && Model.AllCities.Any())
+                                {
+                                    foreach (var city in Model.AllCities)
+                                    {
+                                        var citySlug = city.CityName
+                                        .ToLower()
+                                        .Replace(" ", "-"); // Convert spaces to hyphens
+
+                                        <li>
+                                            <a href="/islam/@citySlug-namaz-timing">@city.CityName</a>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>No cities available</li>
+                                }
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-sec" style="padding: 15px 0;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ckeditorcontent">
+                            @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                            {
+                                @Html.Raw(ViewBag.CmsData.Desc3)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="new-ads-sec">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

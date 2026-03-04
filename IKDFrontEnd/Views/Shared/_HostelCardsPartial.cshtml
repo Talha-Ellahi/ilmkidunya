@@ -1,0 +1,22 @@
+﻿@model IEnumerable<IKDFrontEnd.ViewModels.HostelCard>
+
+@foreach (var hostel in Model)
+{
+    <li>
+        @{
+            var cityName = hostel.CityName.ToLower().Replace(" ", "-");
+        }
+        <a href="/hostels/@($"{hostel.HostelUrl}-{cityName}-{hostel.HostelId}")">
+            <div class="figure">
+                <img src="https://ikddata.ilmkidunya.com/hostels/Images/@hostel.MainImage" alt="@hostel.HostelName" />
+            </div>
+            <div class="author">
+                <h3>@hostel.HostelName</h3>
+                <p>@hostel.CityName</p>
+                <span class="load-more">
+                    @(hostel.Price != null ? hostel.Price.Value.ToString("N0") + " / month" : "N/A")
+                </span>
+            </div>
+        </a>
+    </li>
+}

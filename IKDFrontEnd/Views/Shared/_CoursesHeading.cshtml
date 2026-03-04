@@ -1,0 +1,21 @@
+﻿@model IKDFrontEnd.ViewModels.CoursesViewModels
+
+<div class="ss-text-holder">
+    <!-- Default Heading -->
+    <div id="default-heading" style="display:@((Model.SearchResults == null || !Model.SearchResults.Any()) ? "block" : "none")">
+        <h1>Courses In Pakistan</h1>
+        <p>
+            Search from <strong>@Model.CoursesCount</strong> Courses
+        </p>
+    </div>
+
+    <!-- Search Heading -->
+    <div id="search-heading" style="display:@((Model.SearchResults != null && Model.SearchResults.Any()) ? "block" : "none")">
+        <h1 id="counts-heading">
+            @Model.TotalFilteredCollegeCount Institutions &amp; @Model.TotalFilteredCourseCount Course/Programs
+        </h1>
+        <p id="counts-text">
+            Based on your search criteria, below you`ll find all the relevant institutions &amp; programs that you can apply
+        </p>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@model List<TblMainNews> // Or your appropriate model type
+
+@if (Model != null && Model.Any())
+{
+    foreach (var news in Model)
+    {
+        <li>
+            <div class="news-box">
+                <div class="img-holder">
+                    <figure>
+                        <img src="@news.PictureThumbnail" alt="@news.MainHeading" width="250" height="209" />
+                    </figure>
+                </div>
+                <div class="text-holder">
+                    <span class="date">@news.Dated?.ToString("dd-MMM-yyyy")</span>
+                    <h4>
+                        <a asp-controller="News"
+                           asp-action="NewsDetails"
+                           asp-route-newsslug="@news.RewriteUrl">
+                            @news.MainHeading
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </li>
+    }
+}
+else
+{
+    <li class="no-more-news" style="display: none;">
+        <p style="text-align: center; padding: 20px; color: #666; font-style: italic;">
+            No more news to load.
+        </p>
+    </li>
+}

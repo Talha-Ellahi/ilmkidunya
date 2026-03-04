@@ -1,0 +1,530 @@
+﻿@using IKDFrontEnd.ViewModels
+@model PrayerTimesHomeViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/study-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/program-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/college-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/online-test-sec.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/common/style.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/style/dictionary.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Heading != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                         
+                        }
+                        else
+                        {
+                            <h1>Worldwide Islamic Prayer Timings</h1>
+                        }                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<style>
+    .dictionary-word {
+        color: #15a18d;
+    }
+
+    .dictionary-from.banner-form {
+        position: relative;
+    }
+
+    .custom-select-wrapper {
+        user-select: none;
+        padding: 8px 20px;
+        border-left: 1px solid #c8c8c8;
+    }
+
+    .custom-select {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+        .custom-select .arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #15a18d;
+            margin-left: 10px;
+            transition: transform .2s;
+        }
+
+    .custom-options {
+        position: absolute;
+        top: 80%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #15a18d;
+        border-radius: 5px;
+        margin-top: 5px;
+        display: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        z-index: 10;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+        .custom-options .search-box {
+            padding: 5px;
+            border-bottom: 2px solid #ddd;
+            flex: 1 1 100%;
+        }
+
+        .custom-options input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .custom-options span {
+            padding: 10px;
+            cursor: pointer;
+            flex: 1 1 33%;
+            min-width: 150px;
+            transition: 0.2s;
+        }
+
+            .custom-options span:hover {
+                background: #15a18d;
+                color: #fff;
+            }
+
+    .custom-select-wrapper.open .custom-options {
+        display: flex;
+    }
+
+    .custom-select-wrapper.open .custom-select .arrow {
+        transform: rotate(180deg);
+    }
+
+    .dictionary-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 35px;
+    }
+
+        .dictionary-row .dictionary-boxes {
+            min-width: 300px;
+            min-height: 200px;
+            width: 45%;
+            flex: 1;
+            padding: 25px;
+            background: rgba(54, 229, 124, 0.1);
+            border: 1px solid #36e57c;
+            border-radius: 10px;
+            position: relative;
+        }
+
+    .dictionary-boxes .meaning-bx {
+        margin: 15px 0px;
+    }
+
+        .dictionary-boxes .meaning-bx li {
+            color: #383838;
+            line-height: 1.18;
+            margin-bottom: 6px;
+        }
+
+    .dictionary-speaker {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .dictionary-speaker h2 {
+            font-weight: bold !important;
+        }
+
+    .dictionary-boxes .spk-icon svg {
+        cursor: pointer;
+        color: #15a18d;
+        fill: #15a18d;
+        width: 35px;
+    }
+
+    .dictionary-boxes .spk-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+    }
+
+    .dictionary-boxes .banner-form {
+        margin: 0px !important;
+    }
+
+    .translation-result p {
+        font-size: 20px;
+        margin-top: 15px;
+    }
+
+        .translation-result p.urdu {
+            font-size: 25px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+    .responsive-table span.urdu {
+        font-size: 20px;
+        text-align: right;
+        font-weight: 500;
+        display: block;
+    }
+
+    .dictionary-synonyms-list {
+        padding: 25px;
+        background: rgba(54, 229, 124, 0.1);
+        border: 1px solid #36e57c;
+        border-radius: 10px;
+        margin: 15px 0px 25px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .dictionary-synonyms-list a {
+            background-color: #ffffff;
+            padding: 5px 14px;
+            border-radius: 50px;
+        }
+
+    .dictionary-by-words {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
+
+        .dictionary-by-words .by-words-colm {
+            min-width: 300px;
+            min-height: 200px;
+            flex: 1 1 46%;
+            padding: 30px;
+            background: rgba(54, 229, 124, 0.1);
+            border: 1px solid #36e57c;
+            border-radius: 10px;
+        }
+
+    .dictionary-letters {
+        margin: 20px 0px 0px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .dictionary-letters a {
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            color: black;
+            cursor: pointer;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background-color: #36e57c;
+            transition: all 0.3s ease;
+        }
+
+            .dictionary-letters a:hover {
+                background-color: #4EA28D;
+            }
+
+    .by-words-colm.words-by-urdu {
+        flex-basis: 100%;
+    }
+
+        .by-words-colm.words-by-urdu .dictionary-letters {
+            direction: rtl !important;
+        }
+
+            .by-words-colm.words-by-urdu .dictionary-letters a {
+                font-size: 23px;
+            }
+
+    span.dict-urdu-word {
+        font-size: 20px;
+        display: block;
+        text-align: right;
+    }
+
+    .responsive-table td {
+        align-content: center;
+    }
+</style>
+
+
+<!-- Main Start -->
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <h2>Popular Cities Islamic Prayer Times</h2>
+                    <div class="responsive-table desktop-view">
+                        <figure class="table">
+
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Fajr</th>
+                                        <th>Dhuhr</th>
+                                        <th>Asr</th>
+                                        <th>Maghrib</th>
+                                        <th>Isha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var c in Model.CityPrayerTimes)
+                                    {
+                                        var citySlug = c.CityName.ToLower().Replace(" ", "-");
+                                        <tr>
+
+                                            <td><a href="/islam/@citySlug-namaz-timing">@c.CityName (@c.CountryName)</a></td>
+                                            <td>@c.Fajr</td>
+                                            <td>@c.Dhuhr</td>
+                                            <td>@c.Asr</td>
+                                            <td>@c.Maghrib</td>
+                                            <td>@c.Isha</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+
+                        </figure>
+                    </div>
+                    <div class="admission-mobile">
+                        <ul class="admission-list">
+                            @foreach (var c in Model.CityPrayerTimes)
+                            {
+                                var citySlug = c.CityName.ToLower().Replace(" ", "-");
+                                <li>
+                                    <div class="text-box" style="width: 100%;">
+                                        <a href="/islam/@citySlug-namaz-timing">
+                                            @c.CityName (@c.CountryName)
+                                        </a>
+                                        <ul>
+                                            <li><span>Fajr</span> @c.Fajr</li>
+                                            <li><span>Dhuhr</span> @c.Dhuhr</li>
+                                            <li><span>Asr</span> @c.Asr</li>
+                                            <li><span>Maghrib</span> @c.Maghrib</li>
+                                            <li><span>Isha</span> @c.Isha</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise" style="margin-bottom: 15px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Islamic Prayer Times By Country</h2>
+                    <div class="subjects-tble2">
+                        <ul>
+                            <li><a href="/islam/afghanistan-namaz-timing">Afghanistan</a></li>
+                            <li><a href="/islam/albania-namaz-timing">Albania</a></li>
+                            <li><a href="/islam/algeria-namaz-timing">Algeria</a></li>
+                            <li><a href="/islam/andorra-namaz-timing">Andorra</a></li>
+                            <li><a href="/islam/angola-namaz-timing">Angola</a></li>
+                            <li><a href="/islam/antigua-and-barbuda-namaz-timing">Antigua and Barbuda</a></li>
+                            <li><a href="/islam/argentina-namaz-timing">Argentina</a></li>
+                            <li><a href="/islam/armenia-namaz-timing">Armenia</a></li>
+                            <li><a href="/islam/australia-namaz-timing">Australia</a></li>
+                            <li><a href="/islam/austria-namaz-timing">Austria</a></li>
+                            <li><a href="/islam/azerbaijan-namaz-timing">Azerbaijan</a></li>
+                            <li><a href="/islam/bahamas-namaz-timing">Bahamas</a></li>
+                            <li><a href="/islam/bahrain-namaz-timing">Bahrain</a></li>
+                            <li><a href="/islam/bangladesh-namaz-timing">Bangladesh</a></li>
+                            <li><a href="/islam/barbados-namaz-timing">Barbados</a></li>
+                            <li><a href="/islam/belarus-namaz-timing">Belarus</a></li>
+                            <li><a href="/islam/belgium-namaz-timing">Belgium</a></li>
+                            <li><a href="/islam/belize-namaz-timing">Belize</a></li>
+                            <li><a href="/islam/benin-namaz-timing">Benin</a></li>
+                            <li><a href="/islam/bermuda-namaz-timing">Bermuda</a></li>
+                            <li><a href="/islam/bhutan-namaz-timing">Bhutan</a></li>
+                            <li><a href="/islam/bolivia-namaz-timing">Bolivia</a></li>
+                            <li><a href="/islam/bosnia-and-herzegovina-namaz-timing">Bosnia and Herzegovina</a></li>
+                            <li><a href="/islam/botswana-namaz-timing">Botswana</a></li>
+                            <li><a href="/islam/brazil-namaz-timing">Brazil</a></li>
+                            <li><a href="/islam/brunei-namaz-timing">Brunei</a></li>
+                            <li><a href="/islam/bulgaria-namaz-timing">Bulgaria</a></li>
+                            <li><a href="/islam/burkina-faso-namaz-timing">Burkina Faso</a></li>
+                            <li><a href="/islam/burundi-namaz-timing">Burundi</a></li>
+                            <li><a href="/islam/cambodia-namaz-timing">Cambodia</a></li>
+                            <li><a href="/islam/cameroon-namaz-timing">Cameroon</a></li>
+                            <li><a href="/islam/canada-namaz-timing">Canada</a></li>
+                            <li><a href="/islam/cape-verde-namaz-timing">Cape Verde</a></li>
+                            <li><a href="/islam/central-african-republic-namaz-timing">Central African Republic</a></li>
+                            <li><a href="/islam/chad-namaz-timing">Chad</a></li>
+                            <li><a href="/islam/chile-namaz-timing">Chile</a></li>
+                            <li><a href="/islam/china-namaz-timing">China</a></li>
+                            <li><a href="/islam/colombia-namaz-timing">Colombia</a></li>
+                            <li><a href="/islam/comoros-namaz-timing">Comoros</a></li>
+                            <li><a href="/islam/congo-namaz-timing">Congo</a></li>
+                            <li><a href="/islam/costa-rica-namaz-timing">Costa Rica</a></li>
+                            <li><a href="/islam/croatia-namaz-timing">Croatia</a></li>
+                            <li><a href="/islam/cuba-namaz-timing">Cuba</a></li>
+                            <li><a href="/islam/cyprus-namaz-timing">Cyprus</a></li>
+                            <li><a href="/islam/czech-republic-namaz-timing">Czech Republic</a></li>
+                            <li><a href="/islam/denmark-namaz-timing">Denmark</a></li>
+                            <li><a href="/islam/djibouti-namaz-timing">Djibouti</a></li>
+                            <li><a href="/islam/dominica-namaz-timing">Dominica</a></li>
+                            <li><a href="/islam/dominican-republic-namaz-timing">Dominican Republic</a></li>
+                            <li><a href="/islam/ecuador-namaz-timing">Ecuador</a></li>
+                            <li><a href="/islam/egypt-namaz-timing">Egypt</a></li>
+                            <li><a href="/islam/el-salvador-namaz-timing">El Salvador</a></li>
+                            <li><a href="/islam/ethiopia-namaz-timing">Ethiopia</a></li>
+                            <li><a href="/islam/finland-namaz-timing">Finland</a></li>
+                            <li><a href="/islam/france-namaz-timing">France</a></li>
+                            <li><a href="/islam/germany-namaz-timing">Germany</a></li>
+                            <li><a href="/islam/greece-namaz-timing">Greece</a></li>
+                            <li><a href="/islam/india-namaz-timing">India</a></li>
+                            <li><a href="/islam/indonesia-namaz-timing">Indonesia</a></li>
+                            <li><a href="/islam/iran-namaz-timing">Iran</a></li>
+                            <li><a href="/islam/iraq-namaz-timing">Iraq</a></li>
+                            <li><a href="/islam/ireland-namaz-timing">Ireland</a></li>
+                            <li><a href="/islam/italy-namaz-timing">Italy</a></li>
+                            <li><a href="/islam/japan-namaz-timing">Japan</a></li>
+                            <li><a href="/islam/jordan-namaz-timing">Jordan</a></li>
+                            <li><a href="/islam/kuwait-namaz-timing">Kuwait</a></li>
+                            <li><a href="/islam/lebanon-namaz-timing">Lebanon</a></li>
+                            <li><a href="/islam/libya-namaz-timing">Libya</a></li>
+                            <li><a href="/islam/malaysia-namaz-timing">Malaysia</a></li>
+                            <li><a href="/islam/maldives-namaz-timing">Maldives</a></li>
+                            <li><a href="/islam/mauritania-namaz-timing">Mauritania</a></li>
+                            <li><a href="/islam/mexico-namaz-timing">Mexico</a></li>
+                            <li><a href="/islam/morocco-namaz-timing">Morocco</a></li>
+                            <li><a href="/islam/nepal-namaz-timing">Nepal</a></li>
+                            <li><a href="/islam/netherlands-namaz-timing">Netherlands</a></li>
+                            <li><a href="/islam/new-zealand-namaz-timing">New Zealand</a></li>
+                            <li><a href="/islam/nigeria-namaz-timing">Nigeria</a></li>
+                            <li><a href="/islam/norway-namaz-timing">Norway</a></li>
+                            <li><a href="/islam/oman-namaz-timing">Oman</a></li>
+                            <li><a href="/islam/pakistan-namaz-timing">Pakistan</a></li>
+                            <li><a href="/islam/palestine-namaz-timing">Palestine</a></li>
+                            <li><a href="/islam/philippines-namaz-timing">Philippines</a></li>
+                            <li><a href="/islam/poland-namaz-timing">Poland</a></li>
+                            <li><a href="/islam/portugal-namaz-timing">Portugal</a></li>
+                            <li><a href="/islam/qatar-namaz-timing">Qatar</a></li>
+                            <li><a href="/islam/russia-namaz-timing">Russia</a></li>
+                            <li><a href="/islam/saudi-arabia-namaz-timing">Saudi Arabia</a></li>
+                            <li><a href="/islam/singapore-namaz-timing">Singapore</a></li>
+                            <li><a href="/islam/south-africa-namaz-timing">South Africa</a></li>
+                            <li><a href="/islam/spain-namaz-timing">Spain</a></li>
+                            <li><a href="/islam/sri-lanka-namaz-timing">Sri Lanka</a></li>
+                            <li><a href="/islam/sweden-namaz-timing">Sweden</a></li>
+                            <li><a href="/islam/switzerland-namaz-timing">Switzerland</a></li>
+                            <li><a href="/islam/syria-namaz-timing">Syria</a></li>
+                            <li><a href="/islam/thailand-namaz-timing">Thailand</a></li>
+                            <li><a href="/islam/turkey-namaz-timing">Turkey</a></li>
+                            <li><a href="/islam/united-arab-emirates-namaz-timing">United Arab Emirates</a></li>
+                            <li><a href="/islam/united-kingdom-namaz-timing">United Kingdom</a></li>
+                            <li><a href="/islam/united-states-namaz-timing">United States</a></li>
+                            <li><a href="/islam/uzbekistan-namaz-timing">Uzbekistan</a></li>
+                            <li><a href="/islam/vietnam-namaz-timing">Vietnam</a></li>
+                            <li><a href="/islam/yemen-namaz-timing">Yemen</a></li>
+                            <li><a href="/islam/zambia-namaz-timing">Zambia</a></li>
+                            <li><a href="/islam/zimbabwe-namaz-timing">Zimbabwe</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 15px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Main End -->

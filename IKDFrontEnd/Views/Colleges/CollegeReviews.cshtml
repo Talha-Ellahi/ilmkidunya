@@ -1,0 +1,535 @@
+﻿@model IKDFrontEnd.ViewModels.CollegeReviewsViewModel
+@using IKDFrontEnd.ViewModels
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@* @section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="Ranking and Reviews. Get all information about Admissions, Fee Structure, Courses, Programs, and Merit lists of all programs." />
+	<meta property="og:image" content="" />
+	<meta name="description" content="Ranking and Reviews. Get all information about Admissions, Fee Structure, Courses, Programs, and Merit lists of all programs.">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Ranking and Reviews</title>
+} *@
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+					City Wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+					Level wise colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/college-category">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+					Category wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+					Featured colleges
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.CollegeName</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="contact-sec" style="padding:50px 0 0px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (Model.Reviews.Count > 0)
+					{
+						<ul class="collage-reviews" id="reviewList">
+							@{
+								bool partialViewRendered = false;
+								int totalReviews = Model.Reviews.Count;
+							}
+
+							@for (int i = 0; i < Model.Reviews.Count; i++)
+							{
+								var review = Model.Reviews[i];
+
+								<li>
+									<div class="reivew-box">
+										<div class="box-left">
+											<span>
+												@review.ReviewName
+												<em>@review.ReviewDate?.ToString("dd-MMM-yyyy")</em>
+											</span>
+											<strong>@review.ReviewRating</strong>
+										</div>
+										<div class="box-right">
+											<div class="top-box">
+												<!-- Academics Rating -->
+												<div class="rating-box">
+													<strong>Academics</strong>
+													<div class="rating">
+														<ul id="stars">
+															@for (int j = 1; j <= 5; j++)
+															{
+																<li class="star @(review.Academics >= j ? "selected" : "")" title="Rating @j" data-value="@j">
+																	<i class="fa"></i>
+																</li>
+															}
+														</ul>
+													</div>
+												</div>
+
+												<!-- Facilities Rating -->
+												<div class="rating-box">
+													<strong>Facilities</strong>
+													<div class="rating">
+														<ul id="stars">
+															@for (int j = 1; j <= 5; j++)
+															{
+																<li class="star @(review.Facilities >= j ? "selected" : "")" title="Rating @j" data-value="@j">
+																	<i class="fa"></i>
+																</li>
+															}
+														</ul>
+													</div>
+												</div>
+
+												<!-- Affordability Rating -->
+												<div class="rating-box">
+													<strong>Affordability</strong>
+													<div class="rating">
+														<ul id="stars">
+															@for (int j = 1; j <= 5; j++)
+															{
+																<li class="star @(review.Afford >= j ? "selected" : "")" title="Rating @j" data-value="@j">
+																	<i class="fa"></i>
+																</li>
+															}
+														</ul>
+													</div>
+												</div>
+
+												<!-- Job Placement Rating -->
+												<div class="rating-box">
+													<strong>Job Placement</strong>
+													<div class="rating">
+														<ul id="stars">
+															@for (int j = 1; j <= 5; j++)
+															{
+																<li class="star @(review.JobPlacement >= j ? "selected" : "")" title="Rating @j" data-value="@j">
+																	<i class="fa"></i>
+																</li>
+															}
+														</ul>
+													</div>
+												</div>
+											</div>
+											<p>@review.ReviewComment</p>
+										</div>
+									</div>
+								</li>
+
+
+								@if (!partialViewRendered && (i == 3 || (totalReviews < 4 && i == totalReviews - 1)))
+								{
+									@await Html.PartialAsync("_maincontenttopbanner")
+									partialViewRendered = true;
+								}
+							}
+						</ul>
+						@if (Model.Reviews.Count > 10)
+						{
+							<p style="text-align: center;">
+								<button type="button" class="load-more-button" id="loadMoreBtn">Load More News</button>
+							</p>
+						}
+					}
+					else
+					{
+						<p>No reviews availabl for @Model.CollegeName.</p>
+						@await Html.PartialAsync("_maincontenttopbanner")
+					}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="news-ad-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Post a review for @Model.CollegeName</h2>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="review-form">
+						<form id="reviewForm">
+							<input type="hidden" id="CollegeId" name="CollegeId" value="@Model.CollegeId" />
+							<div class="row">
+								<div class="col-lg-3 col-md-3 col-sm-12">
+									<div class="fieldset">
+										<label>Your Name *</label>
+										<input type="text" id="ReviewName" name="Name" placeholder="Enter your full name" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-7 col-md-7 col-sm-12">
+									<div class="fieldset">
+										<label>What is your review of @Model.CollegeName? *</label>
+										<textarea id="ReviewComment" name="Comment" placeholder="Enter your feedback/comments here"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-7 col-md-7 col-sm-12">
+									<div class="fieldset">
+										<label>Rank this institution in 4 categories *</label>
+										<div class="top-box">
+											<div class="rating-box">
+												<strong>Academics</strong>
+												<div class="rating" id="academics-rating">
+													<ul id="stars-academics">
+														@for (int i = 1; i <= 5; i++)
+														{
+															<li class="star" data-value="@i">
+																<i class="fa"></i>
+															</li>
+														}
+													</ul>
+												</div>
+											</div>
+
+											<div class="rating-box">
+												<strong>Facilities</strong>
+												<div class="rating" id="facilities-rating">
+													<ul id="stars-facilities">
+														@for (int i = 1; i <= 5; i++)
+														{
+															<li class="star" data-value="@i">
+																<i class="fa"></i>
+															</li>
+														}
+													</ul>
+												</div>
+											</div>
+
+											<div class="rating-box">
+												<strong>Affordability</strong>
+												<div class="rating" id="affordability-rating">
+													<ul id="stars-affordability">
+														@for (int i = 1; i <= 5; i++)
+														{
+															<li class="star" data-value="@i">
+																<i class="fa"></i>
+															</li>
+														}
+													</ul>
+												</div>
+											</div>
+
+											<div class="rating-box">
+												<strong>Job Placement</strong>
+												<div class="rating" id="jobplacement-rating">
+													<ul id="stars-jobplacement">
+														@for (int i = 1; i <= 5; i++)
+														{
+															<li class="star" data-value="@i">
+																<i class="fa"></i>
+															</li>
+														}
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-4 col-md-4 col-sm-12">
+									<div class="fieldset">
+										<input type="submit" value="Submit" />
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bs-admission-sec">
+		<div class="container">
+			<div class="row">
+				@* <div class="col-lg-12">
+					<h2>More on @Model.CollegeName</h2>
+					<ul class="admission-nav">
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/home-icon.webp" alt="" /></figure>
+								<span>BS Chemistry Home</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/admission-icon.webp" alt="" /></figure>
+								<span>Admissions</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/lahore.webp" alt="" /></figure>
+								<span>Lahore</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/karachi.webp" alt="" /></figure>
+								<span>Karachi</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/isb.webp" alt="" /></figure>
+								<span>Islamabad</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/peshawar.webp" alt="" /></figure>
+								<span>Peshawar</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/multan.webp" alt="" /></figure>
+								<span>Multan</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/quetta.webp" alt="" /></figure>
+								<span>Quetta</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/sargodha.webp" alt="" /></figure>
+								<span>Sargodha</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<figure><img src="https://images.ishallwin.com/bs-chem/bahawalpur.webp" alt="" /></figure>
+								<span>Bahawalpur</span>
+							</a>
+						</li>
+					</ul>
+				</div> *@
+				<div class="inner-holder">
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<div class="box-left">
+							<h2>Become @Model.CollegeName <br> Expert on ilmkidunya</h2>
+							<figure>
+								<img src="/images-files/images/college-images/badge.png" alt="">
+							</figure>
+							<p>If you are a teacher or student at @Model.CollegeName you can join as ilmkidunya representative at your university.</p>
+							<p>The process is so simple: just send your brief details/CV on whatsapp 03-111-222-960 and our team will get back to you. </p>
+						</div>
+					</div>
+					<div class="col-lg-8 col-md-8 col-sm-12">
+						<div class="box-right">
+							<h2>Free Admission Advice for @Model.CollegeName</h2>
+							@Html.Partial("_SuggestionForm", new SuggestionViewModel())
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+		$(document).ready(function () {
+		// Capture star clicks for each category
+		var academicsRating = 0, facilitiesRating = 0, affordabilityRating = 0, jobPlacementRating = 0;
+
+		// Function to handle star click for each rating category
+		function handleStarClick(ratingClass, ratingValue) {
+			$(ratingClass).find('.star').removeClass('selected');  // Remove selected class from all stars
+			$(ratingClass).find('.star').each(function (index) {
+				if (index < ratingValue) {
+					$(this).addClass('selected'); // Add selected class to clicked stars
+				}
+			});
+		}
+
+		// Academics rating
+		$('#stars-academics .star').on('click', function () {
+			academicsRating = $(this).data('value');
+			handleStarClick('#stars-academics', academicsRating);
+		});
+
+		// Facilities rating
+		$('#stars-facilities .star').on('click', function () {
+			facilitiesRating = $(this).data('value');
+			handleStarClick('#stars-facilities', facilitiesRating);
+		});
+
+		// Affordability rating
+		$('#stars-affordability .star').on('click', function () {
+			affordabilityRating = $(this).data('value');
+			handleStarClick('#stars-affordability', affordabilityRating);
+		});
+
+		// Job Placement rating
+		$('#stars-jobplacement .star').on('click', function () {
+			jobPlacementRating = $(this).data('value');
+			handleStarClick('#stars-jobplacement', jobPlacementRating);
+		});
+
+		// Handle form submission via AJAX
+		$("#reviewForm").on("submit", function (e) {
+			e.preventDefault(); // Prevent the form from submitting the traditional way
+
+			var formData = {
+				Name: $("#ReviewName").val(),
+				Comment: $("#ReviewComment").val(),
+				Academics: academicsRating,  // Selected Academics rating
+				Facilities: facilitiesRating, // Selected Facilities rating
+				Afford: affordabilityRating, // Selected Affordability rating
+				JobPlacement: jobPlacementRating, // Selected Job Placement rating
+				InstId: $("#CollegeId").val()
+			};
+
+			// AJAX request to submit the review
+			$.ajax({
+				type: "POST",
+				url: "/Colleges/SubmitReview",  // Ensure this URL matches your controller's action
+				data: formData,
+				success: function (response) {
+					if (response.success) {
+						alert(response.message);  // Success message
+						// Optionally, you can dynamically update the reviews list here without reloading the page
+					} else {
+						alert(response.message);  // Error message
+					}
+				},
+				error: function () {
+					alert("Error submitting review.");
+				}
+			});
+		});
+	});
+
+</script>
+<script>
+	$(document).ready(function() {
+		// Handle form submission
+		$("#suggestion-form").submit(function(event) {
+			event.preventDefault(); // Prevent the form from submitting the usual way
+
+			var formData = $(this).serialize(); // Serialize form data to send it
+
+			// Make the AJAX request
+			$.ajax({
+				url: '@Url.Action("SubmitSuggestion", "Colleges")', // Ensure the URL matches the SubmitSuggestion action in the CollegesController
+				type: 'POST',
+				data: formData, // The form data to send
+				success: function (response) {
+					if (response.success) {
+						alert(response.message); // Success message
+						$("#suggestion-form")[0].reset(); // Clear the form
+					} else {
+						alert(response.message); // Show error message
+					}
+				},
+				error: function(xhr, status, error) {
+					alert("There was an error submitting the form.");
+				}
+			});
+		});
+	});
+</script>
+<script>
+	let currentPage = 1;
+
+	const loadMoreBtn = document.getElementById('loadMoreBtn');
+	const reviewList = document.getElementById('reviewList');
+	const collegeUrl = "@Model.CollegeUrl"; // Make sure this is defined server-side or replace with actual URL
+
+	if (loadMoreBtn && reviewList) {
+		loadMoreBtn.addEventListener('click', function () {
+			currentPage++; // Increment the page number
+			loadMoreBtn.innerHTML = 'Loading...'; // Change button text while loading
+			loadMoreBtn.disabled = true; // Disable the button to prevent multiple clicks
+
+			// Fetch new reviews via AJAX
+			fetch(`/colleges/reviews/${collegeUrl}?page=${currentPage}&pageSize=10`)
+				.then(response => response.text()) // Get the HTML response
+				.then(data => {
+					const tempContainer = document.createElement('div');
+					tempContainer.innerHTML = data;
+
+					// Find the new reviews in the response
+					const newReviewList = tempContainer.querySelector('#reviewList');
+
+					if (newReviewList && newReviewList.innerHTML.trim()) {
+						reviewList.insertAdjacentHTML('beforeend', newReviewList.innerHTML);
+						loadMoreBtn.innerHTML = 'Load More Reviews';
+						loadMoreBtn.disabled = false; // Re-enable the button
+					} else {
+						loadMoreBtn.innerHTML = 'No More Reviews';
+						loadMoreBtn.disabled = true; // Disable if no more reviews
+					}
+				})
+				.catch(error => {
+					console.error('Error loading more reviews:', error);
+					loadMoreBtn.innerHTML = 'Error loading Reviews';
+					loadMoreBtn.disabled = false;
+				});
+		});
+	}
+		document.addEventListener("DOMContentLoaded", function () {
+		document.querySelectorAll('a[href^="#"]').forEach(a => {
+			a.setAttribute("href", "javascript:void(0);");
+		});
+	});
+
+
+</script>

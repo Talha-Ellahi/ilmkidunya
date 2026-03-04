@@ -1,0 +1,142 @@
+﻿@using System.Globalization
+@model List<IKDFrontEnd.BookModels.Author>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/common/style-min.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+@section header {
+    <!-- Header Start -->
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                        else
+                        {
+                            <h1>Welcome to Pakistan's Largest Book Store</h1>
+                        }
+
+                        <p>Search from @ViewBag.AllAuthorCounts Authors</p>
+                    </div>
+                </div>
+                <div class="ss-col-lg-12">
+                    <form action="/store/search" method="get">
+                        <div class="banner-form" style="margin: 0 30%;">
+
+                            <div class="input-holder" style="width: 85%;">
+                                <input type="text" name="keyword" placeholder="Search Books here" style="width: 100%;">
+                            </div>
+                            <div class="btn-holder">
+                                <button type="submit">
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                @await Html.PartialAsync("_maincontenttopbanner")
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise" style="padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Featured Authors</h2>
+                    <ul class="writter-list">
+                        @foreach (var author in Model) // Model is List<Author>
+                        {
+                            var authorName = author.Name.Trim().ToLower().Replace(" ", "-");
+                            <li>
+                                <a href="/store/author/@authorName">
+                                    <figure>
+                                        <img src="@author.Image"
+                                             alt="@author.Name" />
+                                    </figure>
+                                    <span>@author.Name</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

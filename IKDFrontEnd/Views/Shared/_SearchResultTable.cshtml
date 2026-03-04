@@ -1,0 +1,28 @@
+﻿@model List<IKDFrontEnd.ViewModels.CollegeSearchResult>
+@{
+    int serial = ViewBag.SerialStart ?? 1; // start from given serial or 1
+}
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            <a href="/colleges/@(item.Url).aspx">
+                <span><img src="https://cdn.ilmkidunya.com/Inst/logos/@item.Logo" alt="" />@item.Name</span>
+            </a>
+        </td>
+        <td>@item.Address</td>
+        <td>@item.ContactNumber</td>
+        <td>@item.TotalCourses</td>
+        <td>
+            @{
+                var govt = item.IsGovt?.ToLower();
+                string display = (govt == "public" || govt == "government") ? "Public" : "Private";
+            }
+            @display
+        </td>
+
+        <td>@serial</td>
+        <td>@string.Format("{0:0.00}", item.Rating)</td>
+    </tr>
+    serial++;
+}

@@ -1,0 +1,283 @@
+﻿@model IKDFrontEnd.ViewModels.RamadanHomeViewModel
+@{
+    ViewData["Title"] = "Ramadan Calendar 2025 - Sehri & Iftar Timings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Safe TimeSpan formatting helper
+    string FormatTimeSpanSafe(TimeSpan timeSpan)
+    {
+        if (timeSpan == null || timeSpan.TotalMilliseconds <= 0)
+            return "00h 00m";
+
+        try
+        {
+            return timeSpan.ToString(@"hh\h mm\m");
+        }
+        catch
+        {
+            return "00h 00m";
+        }
+    }
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Heading != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                        }
+                        else
+                        {
+                            <h1>Worldwide Islamic Prayer Timings</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .ramadan-timing-wrapper {
+        display: flex;
+        gap: 0px 20px;
+        flex-wrap: wrap;
+    }
+
+    .prayer-times {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        min-width: 300px;
+        background: #ffffff;
+        border: 1px solid #15a18d;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        padding: 20px 30px;
+        margin: 10px auto 30px;
+        flex: 1 1 47%;
+    }
+
+    .prayer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 140px;
+        width: 100%;
+        gap: 10px;
+        position: relative;
+    }
+
+    .location-icon {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+        .location-icon p {
+            margin: 0;
+            font-size: 15px;
+        }
+
+    .prayer-name {
+        font-size: 22px;
+        font-weight: 600;
+        color: #15a18d;
+        margin: 20px 0px 5px;
+    }
+
+    .prayer-time {
+        font-size: 35px;
+        font-weight: 700;
+        margin-top: 20px;
+        color: #222;
+        line-height: 1;
+    }
+
+    .next-prayer-time {
+        max-width: 420px;
+        width: 100%;
+        padding: 10px 10px 0px;
+        justify-content: space-between;
+        border-top: 1px solid #15a18d;
+    }
+
+    .arabic,
+    .urdu-text {
+        font-family: 'Noto Sans Arabic', sans-serif;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    .urdu-text {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .translation-dua {
+        padding: 10px 20px;
+        background: #effcf4;
+        border-left: 3px solid #15a18d;
+        margin: 20px 0px;
+        font-size: 16px;
+        color: black;
+    }
+
+    @@media (max-width: 600px) {
+        .prayer-times {
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .prayer-item {
+            min-width: 100px;
+        }
+
+        .prayer-time {
+            font-size: 15px;
+        }
+    }
+</style>
+
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Dynamic CMS Content -->
+                    <div class="ckeditorcontent">
+                        @Html.Raw(ViewBag.CmsData?.Desc1)
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-12">
+                    <h2>Sehri &amp; Iftar Timings For Cities in @Model.Country.Name</h2>
+                    <div class="responsive-table">
+                        <figure class="table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Sehri (Hanafi)</th>
+                                        <th>Iftar (Hanafi)</th>
+                                        <th>Sehri (Jafaria)</th>
+                                        <th>Iftar (Jafaria)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var city in Model.PopularCitiesTimings)
+                                    {
+                                        var citySlug = city.CityName.ToLower().Replace(" ", "-");
+
+                                        if (
+                                        !string.IsNullOrEmpty(city.Sehri) &&
+                                        !string.IsNullOrEmpty(city.Iftar) &&
+                                        !string.IsNullOrEmpty(city.SehriJafaria) &&
+                                        !string.IsNullOrEmpty(city.IftarJafaria)
+                                        )
+                                        {
+                                            <tr>
+                                                <td><a href="/islam/@citySlug-ramadan-calendar">@city.CityName</a></td>
+                                                <td>@city.Sehri</td>
+                                                <td>@city.Iftar</td>
+                                                <td>@city.SehriJafaria</td>
+                                                <td>@city.IftarJafaria</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </figure>
+                    </div>
+                </div>
+                @await Html.PartialAsync("_GoogleAd")
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Countries List Section -->
+    <div class="content-sec level-wise" style="margin-bottom: 15px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Ramadan Timings for Other Cities in @Model.Country.Name</h2>
+                    <div class="subjects-tble2">
+                        <ul>
+                            @foreach (var city in Model.AllCities)
+                            {
+                                var citySlug = city.CityName.ToLower().Replace(" ", "-");
+                                <li><a href="/islam/@citySlug-ramadan-calendar" target="_blank">@city.CityName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 15px 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc3)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

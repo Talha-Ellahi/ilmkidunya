@@ -1,0 +1,64 @@
+﻿@model IKDFrontEnd.ViewModels.DateSheetCriteria
+@using System.Text.RegularExpressions
+
+@if (Model.ExpectedDate != null)
+{
+	<div class="main-table">
+
+
+
+		<table>
+			<thead>
+				<tr style="border:none;">
+					<th style="font-size: 18px;">Board</th>
+					<th style="font-size: 18px;">Exam Result</th>
+					<th style="font-size: 18px;">Status</th>
+					@if (!string.IsNullOrWhiteSpace(Model.ViewOnline))
+					{
+						<th style="font-size: 18px;">Action</th>
+					}
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="board-img">
+						<img src="https://ikddata.ilmkidunya.com/ResultApp/board/@Model.BoardImage" class="img-tab" alt="636348512920352846.jpg">
+						<span>
+							<b>@Model.BoardName</b>
+						</span>
+					</td>
+					<td>
+						<b>@Model.Heading</b>
+					</td>
+					<td>
+						<b>@Model.ExpectedDate</b>
+
+					</td>
+					@if (!string.IsNullOrWhiteSpace(Model.ViewOnline))
+					{
+						<td>
+							<a href="@Model.ViewOnline" class="btn-view" target="_blank">Check Online</a>
+
+						</td>
+					}
+
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	<div class="col-lg-12">
+		<div class="bNotice">
+			<label>
+
+				@if (Model.ArchiveNote != null)
+				{
+					<h4 style="color: red;">
+						<b>Notes:</b>
+					</h4>
+					@Html.Raw(Model.ArchiveNote)
+				}
+			</label>
+		</div>
+	</div>
+}

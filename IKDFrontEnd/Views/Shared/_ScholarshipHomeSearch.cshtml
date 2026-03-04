@@ -1,0 +1,49 @@
+﻿@model IKDFrontEnd.ViewModels.ScholarshipSearchViewModel
+
+@if (!Model.Results.Any())
+{
+    <p>No scholarships found.</p>
+}
+else
+{
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="scholorship-container">
+                        <h2>Scholarship 2025 For Pakistani Students</h2>
+                        @foreach (var item in Model.Results)
+                        {
+                            <div class="single-scholorship">
+                                <div class="scholorship-head">
+                                    <figure>
+                                        <img src="@item.SchImage" alt="Country Flag" />
+                                    </figure>
+                                    <div class="scholarship-info">
+                                        <div class="scholarship-left-info">
+                                            <h2>@item.SchName</h2>
+                                            <p>
+                                                <img src="https://resources.ilmkidunya.com/ikd-scholorships/assets/images/icons/signal.png" />
+                                                <span>
+                                                    @string.Join(", ", item.TblSchStudyLevelChildren.Select(x => x.SchStudyLevel.SchStudyLevelName))
+                                                </span>
+                                            </p>
+                                            <p>
+                                                <img src="https://resources.ilmkidunya.com/ikd-scholorships/assets/images/icons/deg-cap.png" />
+                                                <span>@item.Description1</span>
+                                            </p>
+                                        </div>
+                                        <div class="scholarship-right-info">
+                                            <p>Apply By</p>
+                                            <p class="sch-apply-date">@item.Deadline?.ToString("dd MMM yyyy")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

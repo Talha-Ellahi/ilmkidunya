@@ -1,0 +1,131 @@
+﻿@model IKDFrontEnd.ViewModels.DateSheetCriteria
+<style>
+	.result-update-alert-25 {
+		background: #fff;
+		padding: 20px;
+		margin: 15px 0;
+		border-radius: 10px;
+		box-shadow: 0px 2px 5px 3px rgba(0,0,0,0.2);
+	}
+
+		.result-update-alert-25 .alert-wrapper {
+			text-align: left;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+			.result-update-alert-25 .alert-wrapper h4 {
+				font-size: 20px;
+				margin: 0 0 10px 0;
+				line-height: 24px;
+			}
+
+			.result-update-alert-25 .alert-wrapper .alert-content {
+				width: 80%;
+			}
+
+			.result-update-alert-25 .alert-wrapper .alert-img {
+				width: 20%;
+				text-align: center;
+			}
+
+		.result-update-alert-25 form#resultform {
+			box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.2);
+			border-radius: 10px;
+			padding: 20px 0 0 0;
+			margin: 20px 0 0 0;
+			background: rgba(53, 232, 126, 0.1);
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+			.result-update-alert-25 form#resultform .half-box {
+				margin: 0 20px 20px;
+				width: 45%;
+			}
+
+				.result-update-alert-25 form#resultform .half-box lable {
+					color: #000;
+					font-size: 16px;
+					display: block;
+					margin: 0 0 8px;
+				}
+
+				.result-update-alert-25 form#resultform .half-box select#ForResult {
+					border: 1px solid #000;
+					color: #000;
+					appearance: none;
+					-webkit-appearance: none;
+					-moz-appearance: none;
+					background-image: url(https://www.ilmkidunya.com/css/assets/images/home-images/sort-grey.png);
+					background-repeat: no-repeat;
+					background-position: 96% center;
+					width: 100%;
+					height: 40px;
+					line-height: 40px;
+					padding: 0 10px;
+					border-radius: 8px;
+					background-color: white;
+				}
+
+				.result-update-alert-25 form#resultform .half-box input.alert-input {
+					border-radius: 8px;
+					border: 1px solid #000;
+					color: #000;
+					width: 100%;
+					height: 40px;
+					padding: 0 10px;
+					line-height: 40px;
+				
+				}
+
+				.result-update-alert-25 form#resultform .half-box button.btn-subscribe {
+		border-radius: 8px;
+		width: 100%;
+		border: 0;
+		height: 40px;
+		
+		background: #35e87e;
+		font-weight: bold;
+	
+				}
+</style>
+<div class="result-update-alert-25">
+    <div class="alert-wrapper">
+        <div class="alert-content">
+            <h4>Check @Model.BoardName Result Online</h4>
+            <p>Check Bise @Model.BoardName result online by typing your roll number carefully. If this method takes time, try checking your result by gazette in PDF below.</p>
+        </div>
+        <div class="alert-img">
+            <img src="https://ikddata.ilmkidunya.com/ResultApp/board/@Model.BoardImage " alt="">
+        </div>
+    </div>
+    <form id="resultform" class="alert-form">
+        <div class="half-box">
+            <label>Enter your Roll No</label>
+            <input type="text" class="alert-input" name="RollNo" placeholder="Your Roll#" required="">
+        </div>
+        <div class="half-box half-box-select">
+            <label>Select Year</label>
+            <select id="ForResult" required="">
+                <option value="#">2025</option>
+                <option value="#">2024</option>
+                <option value="#">2023</option>
+                <option value="#">2022</option>
+                <option value="#">2021</option>
+                <option value="#">2020</option>
+                <option value="#">2019</option>
+                <option value="#">2018</option>
+                <option value="#">2017</option>
+            </select>
+
+
+
+        </div>
+        <div class="half-box">
+            <button class="btn-subscribe" onclick="window.location.href = document.getElementById('ForResult').value;" type="button">View Result</button>
+        </div>
+    </form>
+</div>

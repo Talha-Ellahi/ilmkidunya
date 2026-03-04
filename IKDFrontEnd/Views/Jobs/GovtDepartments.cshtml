@@ -1,0 +1,129 @@
+﻿@model List<IKDFrontEnd.ViewModels.CompanyListItemViewModel>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+<!-- Main Start -->
+<div id="main">
+    <div class="main-content">
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    @* <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        @if (ViewBag.CmsData != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+
+                        }
+
+                        <h3 class="ss-profession"><img src="assets/images/icon-comp.png" alt="" /><span>Government Sector</span></h3>
+
+
+                        <ul class="ss-company-list jb-comp">
+                            @foreach (var company in Model)
+                            {
+                                var jobCompany = company.CompanyName?.ToLower().Replace(" ", "-");
+
+                                <li>
+                                    <a href="/jobs/@company.CompanyUrl">
+                                        <span>@company.CompanyName</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        <div class="share-box" style="padding-top: 20px;">
+                        </div>
+                    </div> *@
+                    @if (ViewBag.CmsData != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+
+                    }
+                    <div class="page-content pp-sec">
+                        <div class="flex-container job-pro">
+
+                            <div class="col-lg-12">
+
+
+                                <div class="table-of-content" style="margin-right:0; padding-bottom:15px; width:100%;">
+                                    <h3 class=""><span>Government Sector</span></h3>
+
+
+
+                                    <ul class="ss-company-list jb-comp">
+                                        @foreach (var company in Model)
+                                        {
+                                            var jobCompany = company.CompanyName?.ToLower().Replace(" ", "-");
+
+                                            <li>
+                                                <a href="/jobs/@company.CompanyUrl">
+                                                    @{
+                                                        var maxLength = "Ghulam Muhammad Mahar ".Length; // 33
+                                                        var displayName = company.CompanyName?.Length > maxLength
+                                                        ? company.CompanyName.Substring(0, maxLength) + "...."
+                                                        : company.CompanyName;
+                                                    }
+                                                    <span>@displayName</span>
+
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

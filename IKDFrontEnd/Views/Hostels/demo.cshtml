@@ -1,0 +1,414 @@
+﻿<div class="hostel-registration">
+    <h2>Enter Your Hostel Details</h2>
+    <div class="resgistration-form">
+        <div class="halfBox">
+            <label>Hostel Name</label>
+            <input type="text" placeholder="Enter hostel name">
+        </div>
+        <div class="halfBox">
+            <label>City</label>
+            <div class="ikd-select">
+                <select id="ddlCitySelect">
+                    <option value="1" selected="selected">Select City</option>
+                    <option value="38">Abbottabad</option>
+                    <option value="227">Abdul Hakim</option>
+                    <option value="227">Abdul Hakim</option>
+                    <option value="227">Abdul Hakim</option>
+                    <option value="227">Abdul Hakim</option>
+                    <option value="227">Abdul Hakim</option>
+                </select>
+            </div>
+        </div>
+        <div class="halfBox">
+            <label>Gender</label>
+            <select id="ddlGenderType">
+                <option value="1" selected="selected">Select Gender</option>
+                <option value="1">Male</option>
+                <option value="2" selected="selected">Female</option>
+            </select>
+        </div>
+        <div class="halfBox">
+            <label>Area</label>
+            <select id="ddlCityArea">
+                <option value="1" selected="selected">Select Area</option>
+                <option value="12">Gulberg</option>
+                <option value="12">Gulberg</option>
+                <option value="12">Gulberg</option>
+                <option value="12">Gulberg</option>
+                <option value="12">Gulberg</option>
+            </select>
+        </div>
+        <div class="halfBox full">
+            <label>Full Address</label>
+            <input type="text" placeholder="Enter hostel Full Address">
+        </div>
+        <div class="halfBox full btn-form">
+            <input class="hostal-btn" type="button" id="btnSearchLocation" value="Search">
+        </div>
+        <div class="halfBox full">
+            <label>Select Hostel Location On Map</label>
+            <div class="form-map">
+                <div>
+                    Click on the map to select your hostel location or use the
+                    search above
+                </div>
+                <div id="InitialMap">
+                    <!-- Map will be rendered here -->
+                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=31.5204,74.3587&amp;zoom=12&amp;size=800x300&amp;maptype=roadmap&amp;key=YOUR_API_KEY" alt="Map Preview" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <input id="latitude" name="Hostel.latitude" type="hidden" value="">
+                <input id="longitude" name="Hostel.longitude" type="hidden" value="">
+                <input id="zoomlvl" name="Hostel.zoomlevel" type="hidden" value="">
+            </div>
+        </div>
+        <div class="halfBox full">
+            <label class="control-label">Hostel Details</label>
+            <textarea class="form-control" id="hostelDetails" rows="4" placeholder="Provide some details that you want students to read about your hostel"></textarea>
+        </div>
+        <div class="halfBox full">
+            <label class="control-label">Hostel Features (Check all that apply)</label>
+            <div class="hostel-facilities-list">
+                <ul class="ikd-checkbox">
+
+                    <li>
+                        <label for="6" class="list-item ikd-checkbox">
+                            <input id="6" value="6" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-windows"></i>
+                                </div>
+                                <div class="list-item-title">Windows</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="2" class="list-item ikd-checkbox">
+                            <input id="2" value="2" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div class="list-item-title">Wifi</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="3" class="list-item ikd-checkbox">
+                            <input id="3" value="3" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-coffee"></i>
+                                </div>
+                                <div class="list-item-title">Breakfast</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="20" class="list-item ikd-checkbox">
+                            <input id="20" value="20" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-coffee"></i>
+                                </div>
+                                <div class="list-item-title">Common Area</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="4" class="list-item ikd-checkbox">
+                            <input id="4" value="4" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="list-item-title">Lunch</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="5" class="list-item ikd-checkbox">
+                            <input id="5" value="5" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="list-item-title">Dinner</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="7" class="list-item ikd-checkbox">
+                            <input id="7" value="7" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="list-item-title">Fans</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="8" class="list-item ikd-checkbox">
+                            <input id="8" value="8" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-bars"></i>
+                                </div>
+                                <div class="list-item-title">Fridge</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="9" class="list-item ikd-checkbox">
+                            <input id="9" value="9" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="list-item-title">Electricity Backup</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="10" class="list-item ikd-checkbox">
+                            <input id="10" value="10" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="list-item-title">Kitchen</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="11" class="list-item ikd-checkbox">
+                            <input id="11" value="11" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-parking"></i>
+                                </div>
+                                <div class="list-item-title">Parking</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="12" class="list-item ikd-checkbox">
+                            <input id="12" value="12" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-tv"></i>
+                                </div>
+                                <div class="list-item-title">Tv</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="13" class="list-item ikd-checkbox">
+                            <input id="13" value="13" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="list-item-title">Telephone</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="14" class="list-item ikd-checkbox">
+                            <input id="14" value="14" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-smoking"></i>
+                                </div>
+                                <div class="list-item-title">Smoking</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="15" class="list-item ikd-checkbox">
+                            <input id="15" value="15" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-cabinet-filing"></i>
+                                </div>
+                                <div class="list-item-title">Cupboards</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="16" class="list-item ikd-checkbox">
+                            <input id="16" value="16" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="list-item-title">Internet</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="17" class="list-item ikd-checkbox">
+                            <input id="17" value="17" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-ski-lift"></i>
+                                </div>
+                                <div class="list-item-title">Elevator</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="18" class="list-item ikd-checkbox">
+                            <input id="18" value="18" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div class="list-item-title">Security</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="19" class="list-item ikd-checkbox">
+                            <input id="19" value="19" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div class="list-item-title">Lockers</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="21" class="list-item ikd-checkbox">
+                            <input id="21" value="21" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas "></i>
+                                </div>
+                                <div class="list-item-title">Laundry Service</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="22" class="list-item ikd-checkbox">
+                            <input id="22" value="22" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <div class="list-item-title">Organize Activities</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="23" class="list-item ikd-checkbox">
+                            <input id="23" value="23" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="list-item-title">Tuck Shop Services</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="24" class="list-item ikd-checkbox">
+                            <input id="24" value="24" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-briefcase-medical"></i>
+                                </div>
+                                <div class="list-item-title">Medical Facility</div>
+                            </span>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="25" class="list-item ikd-checkbox">
+                            <input id="25" value="25" class="featureChkBox" type="checkbox">
+
+                            <span class="ikd-custom-label">
+                                <div class="list-item-icon">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="list-item-title">Ac/Heater</div>
+                            </span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h2>What room types do you offer at your hostel</h2>
+    <div class="resgistration-form">
+        <div class="halfBox med-width">
+            <label>Room Category</label>
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+        </div>
+        <div class="halfBox med-width" style="min-width: 350px;">
+            <label>Details of Room Type</label>
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+        </div>
+        <div class="halfBox med-width">
+            <label>Cost/month</label>
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+            <input class="border-btm" type="text" placeholder="">
+        </div>
+
+
+    </div>
+    <h2>Your Account Details</h2>
+    <div class="resgistration-form">
+        <div class="halfBox ">
+            <label>Name</label>
+            <input type="text" placeholder="">
+        </div>
+        <div class="halfBox ">
+            <label>Phone Number</label>
+            <input type="number" placeholder="">
+        </div>
+        <div class="halfBox full">
+            <label>Email</label>
+            <input type="number" placeholder="">
+        </div>
+        <div class="halfBox">
+            <label>Password</label>
+            <input type="password" placeholder="">
+        </div>
+        <div class="halfBox">
+            <label>Retype Retype Password</label>
+            <input type="password" placeholder="">
+        </div>
+        <div class="halfBox full btn-form">
+            <input type="button" class="hostal-btn" id="btnSearchLocation" value="Save Hostel Information">
+        </div>
+    </div>
+</div>

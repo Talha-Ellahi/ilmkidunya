@@ -1,0 +1,190 @@
+﻿@model IKDFrontEnd.ViewModels.HostelHomeViewModel
+
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var CityList = ViewBag.CitySelectList;
+    var citiesWithImages = ViewBag.CitiesWithImages;
+}
+
+@section MetaData {
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+    <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+    <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>@ViewBag.CmsData.MetaTitle</title>
+}
+
+@section header {
+
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                    </div>
+                </div>
+                <div class="ss-col-lg-12">
+                    <form id="cityForm" method="get">
+                        <div class="banner-form" style="margin: 0 30%;">
+
+                            <div class="input-holder" style="width: 85%;">
+                                <select id="citySelect" name="cityId" aria-label="State" style="width: 100%; padding: 0 20px;">
+                                    <option value="">Select City</option>
+                                    @foreach (var city in CityList)
+                                    {
+                                        <option value="@city.Text">@city.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="btn-holder">
+                                <button type="submit">
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <script>
+                        document.getElementById("cityForm").addEventListener("submit", function (e) {
+                            e.preventDefault(); // Stop normal form submit
+                            const selectedCity = document.getElementById("citySelect").value;
+
+                            if (selectedCity) {
+                                // Create slug: lowercase, replace spaces with hyphens
+                                const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+                                window.location.href = `/hostels/hostels-in-${citySlug}`;
+                            }
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-12">
+						@if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+						{
+							@Html.Raw(ViewBag.CmsData.Desc1)
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="my-ads">
+						<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Click on any city to view hostels and rooms</h2>
+					<div class="row">
+						<ul class="admission-nav">
+							@foreach (var city in Model.CitiesWithImages)
+							{
+								<li>
+									@{
+										var cityName = city.CityName.ToLower().Replace(" ", "-");
+									}
+									<a href="/hostels/hostels-in-@cityName">
+										<figure><img src="@city.ImagePath" alt="@city.CityName"></figure>
+										<span>@city.CityName</span>
+									</a>
+								</li>
+							}
+						</ul>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				@await Html.PartialAsync("_maincontenttopbanner")
+			</div>
+		</div>
+	</div>
+	<div class="g-add-sec" style="padding: 30px 0 0 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="g-ad-box">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding-bottom: 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box" style="padding-top: 0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+					{
+						@Html.Raw(ViewBag.CmsData.Desc3)
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

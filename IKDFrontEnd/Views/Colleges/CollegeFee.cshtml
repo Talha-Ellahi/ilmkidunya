@@ -1,0 +1,300 @@
+﻿@model IKDFrontEnd.ViewModels.CollegesViewModel
+@using IKDFrontEnd.ViewModels
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaTitle) ? ViewBag.CmsData.MetaTitle : Model.MetaTitle)" />
+    <meta property="og:description" content="@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaDesc) ? ViewBag.CmsData.MetaDesc : Model.MetaDesc)" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaDesc) ? ViewBag.CmsData.MetaDesc : Model.MetaDesc)">
+    <meta name="keywords" content="@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaKeys) ? ViewBag.CmsData.MetaKeys : Model.MetaKeyWords)">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaTitle) ? ViewBag.CmsData.MetaTitle : Model.MetaTitle)</title>
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/colleges/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt="image" />
+                    Universities & Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl).aspx">
+                    <img src="https://cdn.ilmkidunya.com/Inst/logos/@Model.CollegeImage" alt="image" />
+                    @Model.CollegeShortName
+                </a>
+            </li>
+
+            @if (ViewBag.ShowFeeStructure == true)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-fee-structure.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-3.webp" alt="image" />
+                        Fee Structure
+                    </a>
+                </li>
+            }
+            @if (ViewBag.ShowMeritList == true)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-merit-lists.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+                        Merit List
+                    </a>
+                </li>
+            }
+            @if (ViewBag.ShowAdmissions == true)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-admission.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+                        Admission
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Heading) ? ViewBag.CmsData.Heading : Model.CollegeShortName + " Fee Structure")</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Desc1))
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-sec fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Desc2))
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc2)
+                        <br />
+                    }
+
+                    @if (Model.GroupedCourses != null && Model.GroupedCourses.Any())
+                    {
+                        @foreach (var group in Model.GroupedCourses)
+                        {
+                            <h2>@Model.CollegeShortName Fee Structure @group.CourseLevel Programs</h2>
+
+                            <div class="responsive-table" style="margin-bottom: 30px;">
+                                <table class="table mid">
+                                    <thead>
+                                        <tr>
+                                            <th><span>Course/Program Name</span></th>
+                                            <th><span>Duration</span></th>
+                                            <th><span>Fee Structure</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (group.Courses != null && group.Courses.Any())
+                                        {
+                                            @foreach (var course in group.Courses)
+                                            {
+                                                <tr>
+                                                    <td><span>@course.Name</span></td>
+                                                    <td><span>@(!string.IsNullOrWhiteSpace(course.Duration) ? course.Duration : "N/A")</span></td>
+                                                    <td>
+                                                        <ul>
+                                                            @if (!string.IsNullOrEmpty(course.Fee))
+                                                            {
+                                                                <li>@course.Fee</li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li>No fee information available</li>
+                                                            }
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="3" style="text-align: center;">No courses available for this level</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <p>No fee structure information available for @Model.CollegeShortName at this time.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bs-admission-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>More on @Model.CollegeShortName</h3>
+                    <ul class="admission-nav">
+                        <li>
+                            <a href="/colleges/">
+                                <figure><img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt=""></figure>
+                                <span>Universities & Colleges</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/colleges/@(ViewBag.CollegeBaseUrl).aspx">
+                                <figure><img src="https://cdn.ilmkidunya.com/Inst/logos/@Model.CollegeImage" alt=""></figure>
+                                <span>@Model.CollegeShortName</span>
+                            </a>
+                        </li>
+
+                        @if (ViewBag.ShowAdmissions == true)
+                        {
+                            <li>
+                                <a href="/colleges/@ViewBag.CollegeBaseUrl-admission.aspx">
+                                    <figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Admission-Icon.png" alt=""></figure>
+                                    <span>Admissions</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (ViewBag.ShowFeeStructure == true)
+                        {
+                            <li>
+                                <a href="/colleges/@(ViewBag.CollegeBaseUrl)-fee-structure.aspx">
+                                    <figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Fees-Icon.png" alt=""></figure>
+                                    <span>Fees</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (ViewBag.ShowMeritList == true)
+                        {
+                            <li>
+                                <a href="/colleges/@(ViewBag.CollegeBaseUrl)-merit-lists.aspx">
+                                    <figure><img src="https://www.ilmkidunya.com/Content/CollegeMerit/images/Merit-List-Icon.png" alt=""></figure>
+                                    <span>Merit List</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="inner-holder">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div class="box-left">
+                            <h2>Become @Model.CollegeShortName <br> Expert on ilmkidunya</h2>
+                            <figure>
+                                <img src="/images-files/images/college-images/badge.png" alt="">
+                            </figure>
+                            <p>If you are a teacher or student at @Model.CollegeShortName @Model.City you can join as ilmkidunya representative at your university.</p>
+                            <p>The process is so simple: just send your brief details/CV on whatsapp 03-111-222-960 and our team will get back to you. </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <div class="box-right">
+                            <h2>Free Admission Advice for @Model.CollegeShortName</h2>
+                            @Html.Partial("_SuggestionForm", new SuggestionViewModel())
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="CollegeId" name="CollegeId" value="@Model.CollegeId" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Set current page URL in hidden field
+        $("#PageUrl").val(window.location.href);
+
+        // Handle form submission
+        $("#suggestion-form").submit(function (event) {
+            event.preventDefault(); // Prevent the form from submitting the usual way
+
+            var formData = $(this).serialize(); // Serialize form data
+
+            formData += "&CollegeId=" + $("#CollegeId").val();
+
+            $.ajax({
+                url: '/submitform/colleges',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $("#suggestion-form")[0].reset();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("There was an error submitting the form.");
+                }
+            });
+        });
+    });
+</script>

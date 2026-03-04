@@ -1,0 +1,610 @@
+body {
+    background: #fff;
+    color: #555;
+    font-size: 14px;
+    overflow-X: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.dark-veiw {
+    background: #111
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: #080808;
+    margin: 0 0 15px
+}
+.chapter-table table th p, .ds-table th p, .pp-sec h4, .responsive-table .table th strong, .responsive-table table th p, h4, table th p {
+    font-weight: 400;
+    font-size: 18px;
+}
+h1 {
+    font-weight: 400;
+    color: #080808;
+    font-size: 32px;
+    line-height: 44px
+}
+
+.bs-admission-sec .inner-holder .box-left figure,.bs-admission-sec h2,h3,p {
+    margin: 0 0 20px
+}
+
+.wrapper {
+    overflow: hidden;
+    width: 100%
+}
+
+.responsive-table,table {
+    overflow-x: auto
+}
+
+h2 {
+    font-size: 24px;
+    line-height: 34px
+}
+
+h3 {
+    font-size: 26px;
+    line-height: 28px;
+    font-weight: 700
+}
+
+.chapter-table table th p,.ds-table th p,.pp-sec h4,.responsive-table .table th strong,.responsive-table table th p,h4,table th p {
+    font-weight: 400;
+    font-size: 18px
+}
+
+p,ul li {
+    line-height: 26px;
+    font-size: 16px
+}
+
+a {
+    -moz-transition: .3s ease-in-out;
+    -ms-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+    -webkit-transition: .3s ease-in-out;
+    text-decoration: none;
+    transition: .3s ease-in-out;
+    color: #080808
+}
+
+a:active,a:focus,a:hover {
+    color: #15a18d;
+    outline: 0;
+    text-decoration: none
+}
+
+.college-news-sec .news-box .text-holder h4 a:hover,.flex-container .table-of-content h3 a,a.view-all:hover,div.single-general-test:hover div.desc,p,ul.contact-detail li p a,ul.feature-institue-list li a:hover .text-holder span,ul.latest-ScholarShips a:hover h4,ul.latest-ScholarShips2 a:hover h3 {
+    color: #080808
+}
+
+p a:hover,ul li a:hover {
+    text-decoration: none;
+    color: #080808
+}
+
+p strong,ul li strong {
+    font-weight: 600
+}
+
+ul li {
+    list-style: disc;
+    color: #080808
+}
+
+::-webkit-input-placeholder {
+    color: #666
+}
+
+:-moz-placeholder {
+    color: #666;
+    opacity: 1
+}
+
+::-moz-placeholder {
+    color: #b2bbc0;
+    opacity: 1
+}
+
+:-ms-input-placeholder {
+    color: #666
+}
+.ikd-grid .container {
+    padding: 0 7px;
+    width: 1200px;
+}
+.client-banner {
+    width: 177px;
+    margin: 0 15px;
+    height: 90px
+}
+
+.ikd-search-banner {
+    padding: 70px 0;
+    background: 0 0;
+    position: relative
+}
+
+.ikd-search-banner .sideimg {
+    position: absolute;
+    left: 0;
+    bottom: 0
+}
+
+.ss-banner-inner .with-img .img-holder figure,ul.ss-class-list li a {
+    box-shadow: -3px 0 0 0 #e12ccc;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none
+}
+
+.ss-banner-inner .with-img .img-holder figure figcaption,ul.ss-class-list.ss-book-list li a figure figcaption {
+    background: url(https://images.ishallwin.com/study-home/bg-book.webp) repeat-x;
+    padding: 60px 0 5px;
+    color: #080808;
+    position: absolute;
+    left: 0;
+    font-weight: 500
+}
+
+.ss-container {
+    width: 1170px;
+    margin: 0 auto;
+    padding: 0 15px
+}
+
+.ss-row {
+    margin: 0 -15px
+}
+
+.ss-row>div {
+    width: 33.33%;
+    display: inline-block;
+    margin: 0 -4px 0 0;
+    padding: 0 15px
+}
+
+.ss-row>div.ss-col-lg-12 {
+    width: 100%;
+    display: inline-block
+}
+
+.ss-banner-inner {
+    padding: 15px 0;
+    min-height: 234px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    background: -moz-linear-gradient(top,#76e1b6 0,#58e8ae 8%,#62dead 15%,#67dfb0 22%,#92f4cd 22%,#67dfb0 22%,#67dfb0 22%,#67dfb0 28%,#7de8bd 35%,#76e8ba 42%,#63e1b0 49%,#5edba9 56%,#52e5aa 63%,#5be5b0 70%,#58dead 74%,#53dba7 81%,#5adbab 86%,#5fd6a9 92%,#71dfb6 100%);
+    background: -webkit-linear-gradient(top,#76e1b6 0,#58e8ae 8%,#62dead 15%,#67dfb0 22%,#92f4cd 22%,#67dfb0 22%,#67dfb0 22%,#67dfb0 28%,#7de8bd 35%,#76e8ba 42%,#63e1b0 49%,#5edba9 56%,#52e5aa 63%,#5be5b0 70%,#58dead 74%,#53dba7 81%,#5adbab 86%,#5fd6a9 92%,#71dfb6 100%);
+    background: linear-gradient(to bottom,#76e1b6 0,#58e8ae 8%,#62dead 15%,#67dfb0 22%,#92f4cd 22%,#67dfb0 22%,#67dfb0 22%,#67dfb0 28%,#7de8bd 35%,#76e8ba 42%,#63e1b0 49%,#5edba9 56%,#52e5aa 63%,#5be5b0 70%,#58dead 74%,#53dba7 81%,#5adbab 86%,#5fd6a9 92%,#71dfb6 100%)
+}
+
+.ss-banner-inner .ss-text-holder h1 {
+    margin: 0 0 15px;
+    font-size: 35px;
+    line-height: 44px;
+    font-weight: 400;
+    color: #080808
+}
+
+.ss-banner-inner .ss-text-holder p {
+    color: #080808;
+    font-size: 15px;
+    line-height: 22px;
+    margin: 0
+}
+
+.ss-new-banners {
+    padding: 15px 0 0;
+    border-bottom: 3px solid #e3e3e3
+}
+
+.ss-new-banners a {
+    display: block;
+    margin: 0 0 10px
+}
+
+.ss-banner-inner .with-img .img-holder {
+    float: left;
+    margin: 0
+}
+
+.ss-banner-inner .with-img .img-holder figure {
+    display: block;
+    min-height: auto;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid #e12ccc;
+    color: #080808;
+    padding: 0 0 30px;
+    width: 100%
+}
+
+ul.ss-ads,ul.ss-class-list {
+    flex-wrap: wrap;
+    display: flex;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.ss-banner-inner .with-img .img-holder figure figcaption {
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 18px
+}
+.content-sec, .news-add-sec {
+    padding: 30px 0 20px;
+}
+.ckeditorcontent>ul {
+    margin: 10px 0 20px 10px;
+}
+.ckeditorcontent h2, .ckeditorcontent h3, .ckeditorcontent h4, .ckeditorcontent li, .ckeditorcontent p {
+    text-align: left !important;
+}
+#main h2 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 400;
+    color: rgb(8, 8, 8);
+    margin: 0px 0px 10px;
+}
+ul.ss-ads {
+    border-top: 1px solid #e3e3e3;
+    margin: 0 0 30px;
+    padding: 30px 0 15px;
+    justify-content: space-between;
+    border: 0;
+    padding-top: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+ul.ss-ads li {
+    list-style: none;
+    width: 21.1%;
+    padding: 0;
+    margin: 0 0 15px
+}
+ul.ss-ads li a img{
+    width: 100%;
+}
+.bs-admission-sec {
+    margin: 0;
+    padding: 30px 0;
+    background: #effcf4;
+}
+ul.admission-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    margin: 0;
+    padding: 0 0 15px;
+    border-bottom: 1px solid #d5e0d9
+}
+
+ul.admission-nav li {
+    list-style: none;
+    padding: 0 3px;
+    margin: 0 0 15px;
+    width: 10%
+}
+
+ul.admission-nav li a {
+    display: block;
+    cursor: pointer;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 10px 15px
+}
+.see-more a, ul.admission-nav li a {
+    background: #fff;
+    text-decoration: none;
+}
+ul.admission-nav li a figure {
+    display: flex;
+    height: 50px;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+ul.admission-nav li a figure img {
+    display: block;
+    object-fit: none
+}
+
+ul.admission-nav li a span {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    color: #080808;
+    text-align: center;
+    line-height: 18px;
+    align-items: center;
+    height: 30px;
+    font-weight: 500
+}
+
+ul.admission-nav li a:hover {
+    background: #15a18d;
+    border-color: #fff
+}
+.bs-admission-sec .inner-holder {
+    padding: 30px 0 0;
+    float: left
+}
+
+.bs-admission-sec .inner-holder .box-left {
+    padding: 0 10px 0 0
+}
+
+.bs-admission-sec .inner-holder .box-right {
+    padding: 0 0 0 20px;
+    border-left: 3px solid #656565
+}
+
+.bs-admission-sec .inner-holder .box-right h2,ul.admission-open-list li .uni-box .text-holder .box-left .datewise span:last-child em {
+    color: red
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder {
+    display: flex;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset {
+    padding: 0;
+    width: 48.3%;
+    margin: 0 0 20px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset label {
+    font-weight: 400;
+    font-size: 14px;
+    color: #080808;
+    line-height: 18px;
+    display: block;
+    margin: 0 0 5px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 15px;
+    color: #080808
+}
+
+input::-webkit-inner-spin-button,input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=submit] {
+    width: auto;
+    float: right;
+    color: #080808;
+    background: #36e57c;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 35px;
+    cursor: pointer
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=submit]:hover,.no-box input:hover,.review-form .fieldset input[type=submit]:hover {
+    background: #00c950;
+    color: #fff
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=checkbox] {
+    width: auto;
+    height: auto;
+    display: inline-block
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset label#checkopt {
+    display: inline-block;
+    padding: 0 0 0 5px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset select {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 15px;
+    color: #080808;
+    background: url(https://images.ishallwin.com/bs-chem/sel-arrow.webp) 99% 3px no-repeat #fff;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none
+}
+.feedback-sec {
+    padding: 0 0 30px;
+}
+.feedback-sec .feed-box {
+    border-left: 3px solid #bbc5be;
+    padding: 0 0 0 20px;
+}
+.feedback-sec .feed-box h3 {
+    font-size: 20px;
+    line-height: 28px;
+    margin: 0 0 20px;
+    font-weight: 500;
+    color: #080808
+}
+
+.fee-box .contact-admin .text-holder ul,ul.contact-detail,ul.yes-no {
+    margin: 0 0 20px;
+    padding: 0
+}
+
+ul.yes-no li {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    padding: 0;
+    list-style: none
+}
+
+ul.yes-no li a {
+    display: block;
+    padding: 0;
+    min-width: 70px;
+    font-size: 16px;
+    line-height: 32px;
+    color: #000;
+    text-decoration: none;
+    background: #36e57c;
+    border-radius: 20px;
+    text-align: center
+}
+
+ul.yes-no li a.active,ul.yes-no li a:hover {
+    box-shadow: 0 0 0 3px #000
+}
+
+ul.yes-no li:last-child a {
+    background: #ffa0a0
+}
+
+.feed-box p {
+    font-size: 16px;
+    color: #000;
+    line-height: 20px;
+    margin: 0
+}
+
+.no-box textarea {
+    border: 1px solid #000;
+    padding: 15px;
+    border-radius: 15px;
+    min-height: 150px;
+    width: 60%;
+    margin: 15px 0 10px
+}
+
+.no-box input {
+    width: auto;
+    color: #080808;
+    background: #36e57c;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 35px;
+    cursor: pointer
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box img {
+    float: left;
+    width: 70px;
+    border-radius: 7px;
+    margin: 0 15px 0 0
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box .text-box h4,.ss-banner-inner .with-img .ss-img-box .text-holder h4 {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    margin: 0 0 5px;
+    color: #000
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box .text-box p {
+    font-size: 13px;
+    line-height: 18px;
+    color: #6c726e
+}
+.main-footer {
+    background-image: url(https://images.ishallwin.com/bg-bottom.webp);
+    background-repeat: no-repeat;
+    background-position: 37% 25px;
+    padding-top: 58px;
+}
+.footer-logo {
+    padding-bottom: 30px;
+        margin-bottom: 20px;
+    text-align: center;
+}
+.footer-logo img {
+    height: 70px;
+}
+.ans-table td span em,.detail-img a,.footer-logo a,.latest-jobs,a.btn-view,div.other-quiz-tab-links img,div.single-nat-test ul.subj-listing a,div.special-test-elmnts div.single-general-test div.img img,h3.ss-profession img,ul.news-category li a img {
+    display: inline-block
+}
+
+.footer-cards,.ots-banners {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between
+}
+
+.footer-cards .f-card {
+    width: 20%;
+    padding: 15px 18px
+}
+
+.footer-cards .f-card .figure {
+    height: 50px;
+    width: 50px;
+    border-radius: 6px;
+    border: 1px solid #eaeaea;
+    align-items: center;
+    display: flex;
+    margin: auto auto 13px;
+    justify-content: center;
+    background-color: #fff
+}
+
+.footer-cards .f-card p {
+    font-size: 14px;
+    margin: 0 0 15px;
+    color: #080808;
+    line-height: 18px
+}
+
+.footer-cards a {
+    display: inline-block;
+    border: 1px solid #15a18d;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 0;
+    text-transform: uppercase;
+    width: 122px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #fff
+}
+
+.footer-cards a:hover {
+    background-color: #15a18d!important;
+    color: #fff!important
+}
+
+.copyright {
+    font-size: 14px;
+    color: #080808;
+    padding: 20px 0;
+    font-weight: 400;
+    margin: 0;
+    text-align: center
+}

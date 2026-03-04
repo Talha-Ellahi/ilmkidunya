@@ -1,0 +1,552 @@
+﻿@using IKDFrontEnd.ViewModels
+@model DynamicPrayerTimingViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+<style>
+    .islamic-date-show {
+        display: flex;
+        gap: 15px;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: #effcf4;
+        border-left: 3px solid #15a18d;
+        margin: 20px 0px;
+        font-size: 16px;
+        color: black;
+    }
+</style>
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@Model.PrayerName Prayer Time</h1>
+                        <p>Search @Model.PrayerName timings worldwide with fast country and city-based filters</p>
+                        <div class="banner-form" style="margin: 0 20%;">
+                            <div class="input-holder" style="width: 90%;">
+                                <div style="width: 50%; position: relative;">
+                                    <select class="form-select" name="country" id="countryDropdown">
+                                        <option value="">Select Country</option>
+                                        @if (ViewBag.Countries != null)
+                                        {
+                                            foreach (var country in ViewBag.Countries)
+                                            {
+                                                <option value="@country.Id">@country.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div style="width: 50%; position: relative;">
+                                    <select class="form-select" name="city" id="cityDropdown" disabled>
+                                        <option value="">Select City</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="btn-holder">
+                                <button type="button" id="searchBtn" disabled>
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                                </button>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Country dropdown change event
+                            document.getElementById('countryDropdown').addEventListener('change', function() {
+                                const countryId = this.value;
+                                const cityDropdown = document.getElementById('cityDropdown');
+                                const searchBtn = document.getElementById('searchBtn');
+
+                                // Reset city dropdown
+                                cityDropdown.innerHTML = '<option value="">Select City</option>';
+                                cityDropdown.disabled = true;
+                                searchBtn.disabled = true;
+
+                                if (countryId) {
+                                    // Fetch cities for selected country
+                                    fetch(`/islam/getAllCities/${countryId}`)
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(cities => {
+                                            // Populate city dropdown
+                                            cities.forEach(city => {
+                                                const option = document.createElement('option');
+                                                option.value = city.id;
+                                                option.textContent = city.cityName;
+                                                cityDropdown.appendChild(option);
+                                            });
+
+                                            cityDropdown.disabled = false;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching cities:', error);
+                                            alert('Error loading cities. Please try again.');
+                                        });
+                                }
+                            });
+
+                            // City dropdown change event
+                            document.getElementById('cityDropdown').addEventListener('change', function() {
+                                const searchBtn = document.getElementById('searchBtn');
+                                searchBtn.disabled = !this.value;
+                            });
+
+                            // Search button click event
+                            document.getElementById('searchBtn').addEventListener('click', function() {
+                                const cityDropdown = document.getElementById('cityDropdown');
+                                const selectedCityId = cityDropdown.value;
+                                const selectedCityName = cityDropdown.options[cityDropdown.selectedIndex].textContent;
+
+                                if (!selectedCityId) {
+                                    alert('Please select a city');
+                                    return;
+                                }
+
+                                // Convert city name to slug format
+                                const citySlug = selectedCityName.toLowerCase().replace(/\s+/g, '-');
+
+                                // Redirect to the prayer timing page
+                                window.location.href = `/islam/${citySlug}-namaz-timing`;
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- Header End -->
+<!-- Style For City Namaz Page -->
+<style>
+    .prayer-times {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        background: #ffffff;
+        border: 1px solid #15a18d;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        padding: 20px 30px;
+        margin: 30px auto;
+    }
+
+    .prayer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 140px;
+        width: 100%;
+        gap: 10px;
+        position: relative;
+    }
+
+    .location-icon {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+        .location-icon p {
+            margin: 0;
+            font-size: 15px;
+        }
+
+    .prayer-name {
+        font-size: 22px;
+        font-weight: 600;
+        color: #15a18d;
+        margin: 20px 0px 5px;
+    }
+
+    .prayer-time {
+        font-size: 35px;
+        font-weight: 700;
+        margin-top: 20px;
+        color: #222;
+        line-height: 1;
+    }
+
+    .next-prayer-time {
+        max-width: 420px;
+        width: 100%;
+        padding: 10px 10px 0px;
+        justify-content: space-between;
+        /* margin-top: 12px; */
+        border-top: 1px solid #15a18d;
+    }
+
+    @@media (max-width: 600px) {
+        .prayer-times
+
+    {
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .prayer-item {
+        min-width: 100px;
+    }
+
+    .prayer-time {
+        font-size: 15px;
+    }
+
+    }
+</style>
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                    <div class="prayer-times" style="display: block;">
+                        <div class="location-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <p>@Model.Country.Name, @Model.City.CityName</p>
+                        </div>
+                        <div class="prayer-item">
+                            <div class="prayer-time">@Model.HanafiTime</div>
+                            <div class="prayer-name">@Model.PrayerName</div>
+                            <div class="location-icon time-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <p id="hanafi-time-left">Time Left: --h --m</p>
+                            </div>
+                            <div class="location-icon time-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <p id="hanafi-islamic-date-english">Loading...</p>
+                            </div>
+                            <div class="location-icon next-prayer-time">
+                                <p>Next Prayer:</p>
+                                <p><span style="color: #15A18D;">@Model.NextPrayerName</span>, @Model.NextHanafiTime</p>
+                            </div>
+                        </div>
+                    </div>
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc2)
+                    }
+                    <div class="prayer-times" style="display: block;">
+                        <div class="location-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <p>@Model.Country.Name, @Model.City.CityName</p>
+                        </div>
+                        <div class="prayer-item">
+                            <div class="prayer-time">@Model.ShafiTime</div>
+                            <div class="prayer-name">@Model.PrayerName</div>
+                            <div class="location-icon time-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <p id="shafi-time-left">Time Left: --h --m</p>
+                            </div>
+                            <div class="location-icon time-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15A18D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <p id="shafi-islamic-date-english">Loading...</p>
+                            </div>
+                            <div class="location-icon next-prayer-time">
+                                <p>Next Prayer:</p>
+                                <p><span style="color: #15A18D;">@Model.NextPrayerName</span>, @Model.NextShafiTime</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    // -----------------------------
+                    // Time Left Calculation Functions
+                    // -----------------------------
+                    function parsePrayerTime(timeStr) {
+                        // Remove spaces and convert to uppercase for consistent parsing
+                        timeStr = timeStr.trim().toUpperCase();
+
+                        // Check if it's AM/PM format
+                        const hasAmPm = timeStr.includes('AM') || timeStr.includes('PM');
+
+                        if (hasAmPm) {
+                            // Extract time and period
+                            const timePart = timeStr.replace(/AM|PM/gi, '').trim();
+                            const period = timeStr.includes('PM') ? 'PM' : 'AM';
+
+                            let [hours, minutes] = timePart.split(':').map(Number);
+
+                            // Convert to 24-hour format
+                            if (period === 'PM' && hours !== 12) {
+                                hours += 12;
+                            } else if (period === 'AM' && hours === 12) {
+                                hours = 0;
+                            }
+
+                            return { hours, minutes };
+                        } else {
+                            // Assume 24-hour format
+                            const [hours, minutes] = timeStr.split(':').map(Number);
+                            return { hours, minutes };
+                        }
+                    }
+
+                    function updateTimeLeft(prayerTime, elementId) {
+                        const now = new Date();
+                        const { hours, minutes } = parsePrayerTime(prayerTime);
+
+                        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+                        let diffMs = prayerDate - now;
+
+                        if (diffMs < 0) {
+                            // If prayer already passed today, set to next day's prayer
+                            prayerDate.setDate(prayerDate.getDate() + 1);
+                            diffMs = prayerDate - now;
+                        }
+
+                        const totalMinutes = Math.floor(diffMs / (1000 * 60));
+                        const h = Math.floor(totalMinutes / 60);
+                        const m = totalMinutes % 60;
+
+                        document.getElementById(elementId).textContent = `Time Left: ${h}h ${m}m`;
+                    }
+
+                    function updateAllTimeLeft() {
+                        const hanafiPrayerTime = "@Model.HanafiTime";
+                        const shafiPrayerTime = "@Model.ShafiTime";
+
+                        updateTimeLeft(hanafiPrayerTime, "hanafi-time-left");
+                        updateTimeLeft(shafiPrayerTime, "shafi-time-left");
+                    }
+
+                    // Initial call for both prayer times
+                    updateAllTimeLeft();
+
+                    // Update every minute
+                    setInterval(updateAllTimeLeft, 60000);
+
+                    // -----------------------------
+                    // Islamic Date Calculation
+                    // -----------------------------
+                    async function getIslamicDateByCoordinates(latitude, longitude) {
+                        try {
+                            const apiUrl = `https://api.aladhan.com/v1/gToH?latitude=${latitude}&longitude=${longitude}`;
+                            const response = await fetch(apiUrl);
+                            if (response.ok) {
+                                const data = await response.json();
+                                if (data.code === 200 && data.data) {
+                                    const hijri = data.data.hijri;
+                                    const islamicDate = `${hijri.day} ${hijri.month.en} ${hijri.year} ${hijri.designation.abbreviated}`;
+                                    // Set the same Islamic date for both sections
+                                    document.getElementById("hanafi-islamic-date-english").textContent = islamicDate;
+                                    document.getElementById("shafi-islamic-date-english").textContent = islamicDate;
+                                    return;
+                                }
+                            }
+                            fallbackToIntl();
+                        } catch (error) {
+                            console.log("Islamic API failed:", error);
+                            fallbackToIntl();
+                        }
+                    }
+
+                    function fallbackToIntl() {
+                        const today = new Date();
+                        const islamic = new Intl.DateTimeFormat('en-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(today);
+                        const day = islamic.find(p => p.type === 'day').value;
+                        const month = islamic.find(p => p.type === 'month').value;
+                        const year = islamic.find(p => p.type === 'year').value;
+                        const islamicDate = `${day} ${month} ${year} AH`;
+
+                        // Set the same Islamic date for both sections
+                        document.getElementById("hanafi-islamic-date-english").textContent = islamicDate;
+                        document.getElementById("shafi-islamic-date-english").textContent = islamicDate;
+                    }
+
+                    const latitude = @Model.City.Latitude ?? 0;
+                    const longitude = @Model.City.Longitude ?? 0;
+
+                    if (latitude && longitude) {
+                        getIslamicDateByCoordinates(latitude, longitude);
+                    } else {
+                        fallbackToIntl();
+                    }
+                </script>
+
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        <h2>Top City Wise Prayer Timings</h2>
+                        <div class="responsive-table">
+                            <figure class="table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>City</th>
+                                            <th>@Model.PrayerName (Fiqh Hanafi)</th>
+                                            <th>@Model.PrayerName (Fiqh Shafi‘i)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var city in Model.FavouriteCitiesPrayerTimes)
+                                        {
+                                            <tr>
+                                                <td>@city.CityName</td>
+                                                <td>@city.HanafiTime</td>
+                                                <td>@city.ShafiTime</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise" style="margin-bottom: 15px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Top Countries</h2>
+                    <div class="subjects-tble2">
+                        <ul>
+                            <li><a href="/islam/indonesia-namaz-timing">Indonesia</a></li>
+                            <li><a href="/islam/pakistan-namaz-timing">Pakistan</a></li>
+                            <li><a href="/islam/india-namaz-timing">India</a></li>
+                            <li><a href="/islam/bangladesh-namaz-timing">Bangladesh</a></li>
+                            <li><a href="/islam/nigeria-namaz-timing">Nigeria</a></li>
+                            <li><a href="/islam/egypt-namaz-timing">Egypt</a></li>
+                            <li><a href="/islam/iran-namaz-timing">Iran</a></li>
+                            <li><a href="/islam/turkey-namaz-timing">Turkey</a></li>
+                            <li><a href="/islam/algeria-namaz-timing">Algeria</a></li>
+                            <li><a href="/islam/afghanistan-namaz-timing">Afghanistan</a></li>
+                            <li><a href="/islam/sudan-namaz-timing">Sudan</a></li>
+                            <li><a href="/islam/iraq-namaz-timing">Iraq</a></li>
+                            <li><a href="/islam/morocco-namaz-timing">Morocco</a></li>
+                            <li><a href="/islam/saudi-arabia-namaz-timing">Saudi Arabia</a></li>
+                            <li><a href="/islam/uzbekistan-namaz-timing">Uzbekistan</a></li>
+                            <li><a href="/islam/yemen-namaz-timing">Yemen</a></li>
+                            <li><a href="/islam/syria-namaz-timing">Syria</a></li>
+                            <li><a href="/islam/malaysia-namaz-timing">Malaysia</a></li>
+                            <li><a href="/islam/niger-namaz-timing">Niger</a></li>
+                            <li><a href="/islam/senegal-namaz-timing">Senegal</a></li>
+                            <li><a href="/islam/tunisia-namaz-timing">Tunisia</a></li>
+                            <li><a href="/islam/somalia-namaz-timing">Somalia</a></li>
+                            <li><a href="/islam/ghana-namaz-timing">Ghana</a></li>
+                            <li><a href="/islam/chad-namaz-timing">Chad</a></li>
+                            <li><a href="/islam/kazakhstan-namaz-timing">Kazakhstan</a></li>
+                            <li><a href="/islam/mali-namaz-timing">Mali</a></li>
+                            <li><a href="/islam/azerbaijan-namaz-timing">Azerbaijan</a></li>
+                            <li><a href="/islam/burkina-faso-namaz-timing">Burkina Faso</a></li>
+                            <li><a href="/islam/tajikistan-namaz-timing">Tajikistan</a></li>
+                            <li><a href="/islam/guinea-namaz-timing">Guinea</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 15px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc3)
+                        }
+                    </div>
+                    <h2>Other Prayer Timings</h2>
+                    <div class="responsive-table">
+                        <figure class="table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Namaz</th>
+                                        <th>Time (Fiqh Hanafi)</th>
+                                        <th>Time (Fiqh Shafi‘i)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var prayer in Model.OtherPrayersTimes)
+                                    {
+                                        <tr>
+                                            <td><a href="@prayer.Link">@prayer.PrayerName</a></td>
+                                            <td>@prayer.HanafiTime</td>
+                                            <td>@prayer.ShafiTime</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main End -->

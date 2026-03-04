@@ -1,0 +1,294 @@
+﻿@using System.Net
+@using IKDFrontEnd.ViewModels
+@model ArticlesPageViewModel
+
+<style>
+	.news-feaurtred-img {
+		
+		margin: 20px auto;
+		display: block;
+	}
+
+		.news-feaurtred-img img {
+			width: 100%;
+		}
+
+	.news-holder-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 30px 70px;
+		margin: 20px 0px;
+	}
+
+		.news-holder-wrapper .news-holder-bx {
+			width: calc(50% - 35px);
+			min-width: 300px;
+		}
+
+			.news-holder-wrapper .news-holder-bx a {
+				display: flex;
+				gap: 15px;
+			}
+
+		.news-holder-wrapper .img-holder {
+			width: 170px;
+		}
+
+			.news-holder-wrapper .img-holder img {
+				width: 100%;
+				height: 115px;
+				object-fit: cover;
+			}
+
+		.news-holder-wrapper .text-holder {
+			flex: 1;
+			align-content: center;
+		}
+
+			.news-holder-wrapper .text-holder span {
+				font-size: 14px;
+				color: black;
+			}
+
+			.news-holder-wrapper .text-holder h3 {
+				font-size: 18px;
+				line-height: 1.3;
+				margin: 6px 0px 0px;
+				color: #5AB8AB;
+				transition: all 0.3s ease;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+		.news-holder-wrapper .news-holder-bx a:hover .text-holder h3 {
+			color: black;
+		}
+
+	@@media screen and (max-width: 980px) {
+		.news-holder-wrapper .img-holder img {
+			height: 90px;
+		}
+
+		.news-holder-wrapper .img-holder {
+			width: 110px;
+		}
+
+		.news-holder-wrapper .news-holder-bx {
+			width: 100%;
+		}
+
+		.news-holder-wrapper .text-holder span {
+			font-size: 13px;
+		}
+
+		.news-holder-wrapper .text-holder h3 {
+			font-size: 17px;
+			margin-top: 3px;
+		}
+	}
+</style>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section header {
+
+
+				<div class="col-lg-11">
+					<ul class="navigation">
+						<li>
+							<a aria-label="link" href="/articles/">
+								<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+								Home
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/education.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-education.webp" alt="image" />
+								Education
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/information-technology.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-information.webp" alt="image" />
+								Technology
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/relationships-and-society.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-relationship-society.webp" alt="image" />
+								Relationship
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/history.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-history.webp" alt="image" />
+								History
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/business-and-economy.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-business.webp" alt="image" />
+								Business
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/careers.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-careers.webp" alt="image" />
+								Career
+							</a>
+						</li>
+						<li>
+							<a aria-label="link" href="/articles/article-categories/religion-and-spirituality.aspx">
+								<img src="https://images.ishallwin.com/nav-icons/icon-religion.webp" alt="image" />
+								Religion
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+
+}
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@Model.MetaTitle" />
+	<meta property="og:description" content="@Model.MetaDescription" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@Model.MetaDescription">
+	<meta name="keywords" content="@Model.MetaKeywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@Model.MetaTitle</title>
+}
+@section innerbanner {
+	<div class="ss-banner-inner college-banner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.PageTitle</h1>
+						<p>
+							Article Submitted By <strong>@Model.ArticleSenderName</strong> |
+							<span>@Model.PostDate</span> |
+							Views: <strong>@Model.ArticleViews</strong>
+						</p>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="college-news-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="news-feaurtred-img">
+
+						@if (!string.IsNullOrWhiteSpace(Model.ArticleImage))
+						{
+
+							<figure>
+								<img src="https://cdn.ilmkidunya.com/articles/articlesImages/medium/@Model.ArticleImage"
+									 alt="ilmkidunya" />
+							</figure>
+						}
+
+
+						<div class="share-sec">
+							<div class="col-lg-12">
+								<div class="share-box" style="float: left; padding-top: 30px;">
+									<!-- ShareThis BEGIN -->
+									<div class="sharethis-inline-share-buttons" style="margin-bottom: 20px;">
+									</div>
+									<!-- ShareThis END -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- News Content Section  -->
+	<div class="college-news-sec">
+		<div class="container">
+			<div class="row">
+				<!-- news page Content Start  -->
+				<div class="category-single-page">
+					<div class="col-lg-12">
+						@Html.RenderWithAds(Model.ArticleDetail)
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Share Buttons  -->
+	<div class="share-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="share-box" style="float: left; padding-top: 30px;">
+						<!-- ShareThis BEGIN -->
+						<div class="sharethis-inline-share-buttons" style="margin-bottom: 20px;"></div>
+						<!-- ShareThis END -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Add Banner  -->
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Related News  -->
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Related Articles</h2>
+					<div class="news-holder-wrapper">
+						@foreach (var related in Model.RelatedArticles)
+						{
+
+						var	imageUrl = $"https://cdn.ilmkidunya.com/articles/articlesImages/thumb/{related.PictureThumbnail}";
+							
+							<div class="news-holder-bx">
+								<a href="/articles/@related.RewriteUrl">
+									<div class="img-holder">
+										<img src="@imageUrl"
+											 alt=""
+											 class="news-thumbnail">
+									</div>
+									<div class="text-holder">
+										<span>@related.Dated?.ToString("dd/MMM/yyyy")</span>
+										<h3>@related.Title</h3>
+									</div>
+								</a>
+							</div>
+						}
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

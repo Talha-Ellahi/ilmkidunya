@@ -1,0 +1,41 @@
+﻿@model List<IKDFrontEnd.ViewModels.ScholarshipApiViewModel>
+
+
+<div class="scholorship-container">
+   
+
+    @foreach (var item in Model)
+    {
+        <a href="/scholarships/@item.Url" class="text-decoration-none text-dark">
+            <div class="single-scholorship">
+                <div class="scholorship-head">
+                    <figure>
+                        <img src="https://cdn.ilmkidunya.com/ScholarshipImages/127X127/@item.Image" alt="Country Flag">
+                    </figure>
+                    <div class="scholarship-info">
+                        <div class="scholarship-left-info">
+                            <h2>@item.SchName</h2>
+                            <p>
+                                <img src="https://resources.ilmkidunya.com/ikd-scholorships/assets/images/icons/deg-cap.png" alt="Level">
+                                <span>@string.Join(", ", item.StudyLevels)</span>
+                            </p>
+                            <p>
+                                <img src="https://resources.ilmkidunya.com/ikd-scholorships/assets/images/icons/signal.png" alt="Field">
+                                <span>@string.Join(", ", item.FieldsOfStudy)</span>
+                            </p>
+                        </div>
+                        <div class="scholarship-right-info">
+                            <p>Apply By</p>
+                            <p class="sch-apply-date">@item.Deadline?.ToString("dd MMM yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        }
+    </div>
+
+
+
+

@@ -1,0 +1,1345 @@
+﻿@using System.Globalization
+@model IKDFrontEnd.ViewModels.CriteriaWithLongQuestionSetsVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var firstChapter = Model.Chapters.FirstOrDefault();
+    var chapterName = firstChapter?.ChapterName ?? "Chapter";
+    var chapterNumber = firstChapter?.ChapterNumber ?? 0;
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Online Long Questions Preparations</h1>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div id="main">
+
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent otsckcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <style>
+                    .shortquestion-box {
+                        position: fixed;
+                        right: -100%;
+                        top: 0px;
+                        opacity: 0;
+                        visibility: hidden;
+                        z-index: -999;
+                        transition: 0.3s ease-in-out;
+                    }
+
+                    .visible-pol {
+                        position: fixed;
+                        right: 0px;
+                        top: 0px;
+                        opacity: 1;
+                        visibility: visible;
+                        z-index: 9999;
+                        transition: 0.3s ease-in-out;
+                    }
+
+                    .shortquestion-box .short-qestion-holder {
+                        min-height: 250px;
+                    }
+
+                    #quest-holder {
+                        min-height: 320px;
+                        height: fit-content;
+                        padding-top: 20px;
+                        padding-bottom: 20px;
+                    }
+
+                    .short-qestion-holder ul li {
+                        margin-bottom: 12px !important;
+                        margin-right: 10px !important;
+                        padding: 15px !important;
+                        border: 1px solid #eaeaea;
+                        border-radius: 4px;
+                        line-height: 22px;
+                    }
+
+                        .short-qestion-holder ul li span {
+                            font-size: 17px;
+                            font-weight: 600;
+                            padding-right: 6px;
+                        }
+
+                    .short-qestion-holder .holder-question ul {
+                        min-height: 250px;
+                        padding-bottom: 30px;
+                    }
+
+                    .all-test-box {
+                        padding: 20px 0 0;
+                    }
+
+                        .all-test-box ul {
+                            margin: 0 -10px;
+                            padding: 15px 0 0 0;
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: flex-start;
+                        }
+
+                            .all-test-box ul li {
+                                padding: 15px;
+                                background: rgba(54, 229, 124, 0.1);
+                                border: 1px solid #36e57c;
+                                border-radius: 10px;
+                                width: 18.2%;
+                                margin: 0 10px 20px;
+                            }
+
+                                .all-test-box ul li h3 {
+                                    font-size: 20px;
+                                }
+
+                                .all-test-box ul li p {
+                                    margin: 0 0 10px 0;
+                                }
+
+                                .all-test-box ul li a {
+                                    display: inline-block;
+                                    background: #36e57c;
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    padding: 8px 30px;
+                                    margin: 0;
+                                    font-weight: 600;
+                                    color: #000;
+                                }
+
+                    .disabled {
+                        pointer-events: none;
+                        background-color: #E7EDE9;
+                    }
+                </style>
+                @*                 <style>
+                    .holder-question {
+                        padding-bottom: 60px; /* height of .last-box */
+                    }
+
+                    .last-box {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        background: #fff;
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 10px;
+                    }
+
+                    .question-box .mid-box1 {
+                        padding: 30px 0 0 30px;
+                    }
+
+                        .question-box .mid-box1 ul li {
+                            display: block;
+                            list-style: none;
+                            padding: 0;
+                            margin: 0 0 10px;
+                        }
+
+                    .ans-box {
+                        height: 580px;
+                        overflow-x: scroll;
+                    }
+
+                    .wrong .radio-container {
+                        transform: scale(1.1);
+                    }
+
+                        .wrong .radio-container .checkmark {
+                            background-color: #f00;
+                        }
+
+                    .correct .radio-container .checkmark {
+                        background-color: #0f0;
+                    }
+                </style>
+                <style>
+                    div#pol-answer-mode {
+                        position: fixed;
+                        right: -100%;
+                        top: 0px;
+                        opacity: 0;
+                        visibility: hidden;
+                        z-index: 999;
+                        transition: 0.3s ease-in-out;
+                    }
+
+                        div#pol-answer-mode.visible {
+                            position: fixed;
+                            right: 0px;
+                            top: 0px;
+                            opacity: 1;
+                            visibility: visible;
+                            z-index: 999;
+                            transition: 0.3s ease-in-out;
+                        }
+
+
+                    #quest-holder {
+                        min-height: 320px;
+                        height: fit-content;
+                        padding-top: 20px;
+                        padding-bottom: 20px;
+                    }
+
+                    .letter-circle {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        background: #007bff;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        font-size: 20px;
+                    }
+
+                    .all-test-box {
+                        padding: 20px 0 0;
+                    }
+
+                        .all-test-box ul {
+                            margin: 0 -10px;
+                            padding: 15px 0 0 0;
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: flex-start;
+                        }
+
+                            .all-test-box ul li {
+                                padding: 15px;
+                                background: rgba(54, 229, 124, 0.1);
+                                border: 1px solid #36e57c;
+                                border-radius: 10px;
+                                width: 18.2%;
+                                margin: 0 10px 20px;
+                            }
+
+                                .all-test-box ul li h3 {
+                                    font-size: 20px;
+                                }
+
+                                .all-test-box ul li p {
+                                    margin: 0 0 10px 0;
+                                }
+
+                                .all-test-box ul li a {
+                                    display: inline-block;
+                                    background: #36e57c;
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    padding: 8px 30px;
+                                    margin: 0;
+                                    font-weight: 600;
+                                    color: #000;
+                                }
+
+                    .correct .radio-container {
+                        transform: scale(1.1);
+                    }
+
+                        .correct .radio-container .checkmark {
+                            background-color: #36e57c;
+                            ;
+                        }
+                </style> *@
+                @*                 <div class="col-lg-12">
+                    <h2>@Model.SubjectName @Model.TestName</h2>
+                    <p>Try the @Model.SubjectName @Model.TestName.</p>
+                    <ul class="contact-detail">
+                        <li>
+                            <p><span>Total Questions</span>@Model.QuestionSets.FirstOrDefault()?.TotalQuestions</p>
+                        </li>
+                        <li>
+                            <p><span>Time Allowed</span>@(Model.QuestionSets.FirstOrDefault()?.TotalQuestions * 60)</p>
+                        </li>
+                    </ul>
+                    <a href="javascript:void(0)" id="singleTest-launch-btn" onclick="singleTest_launchTest()" class="text-btn">Start Test</a>
+
+                    <div class="question-side" id="singleTest-pol"
+                         style="position: fixed; right: -100%; top: 0; opacity: 0; visibility: hidden; z-index: 999; transition: 0.3s ease-in-out;">
+                        <div class="question-box">
+                            <div class="top-box">
+                                <h2 id="singleTest-current-set-title">@Model.SubjectName @Model.TestName</h2>
+
+                                <div class="stopwatch">
+                                    <div id="singleTest-display">00:00</div>
+                                </div>
+                                <div class="close-btn">
+                                    <a href="#" class="close-btn">
+                                        <img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="holder-question" id="singleTest-questions-container">
+                                <!-- Questions will be loaded here dynamically -->
+                            </div>
+
+                            <div class="last-box">
+                                <a href="#" class="prev"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                <a href="#" class="next active"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                            </div>
+
+                            <a href="#" class="text-btn get-result" style="margin: 30px 0 0 30px;">Submit</a>
+
+                            <div class="ans-question" style="display: none;">
+                                <div class="ans-box">
+                                    <!-- JavaScript will insert results here -->
+                                </div>
+                                <a href="#" id="singleTest-download-result" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="all-test-box">
+                        <h2>Prepare All @Model.SubjectName @Model.TestName MCQs With Answers</h2>
+                        <ul>
+                            @foreach (var set in Model.QuestionSets)
+                            {
+                                var safeSetName = set.SetName.Replace(" ", "_"); // ensure no spaces in id
+                                                                                 <li>
+                                                                                     <h3>@set.SetName</h3>
+                                                                                     <p>@set.TotalQuestions Questions</p>
+                                                                                     <a href="javascript:void(0)" class="launch-test-btn text-btn" data-set="@safeSetName">Start Test</a>
+
+                                    <div class="question-side" id="pol-@safeSetName"
+                                         style="position: fixed; right: -100%; top: 0px; opacity: 0; visibility: hidden; z-index: 999; transition: 0.3s ease-in-out;">
+                                        <div class="question-box">
+                                            <div class="top-box">
+                                                <h2 id="current-set-title-@safeSetName">@Model.SubjectName @Model.TestName - @set.SetName</h2>
+
+                                                <div class="stopwatch">
+                                                    <div id="display-@safeSetName">00:00</div>
+                                                </div>
+                                                <div class="close-btn">
+                                                    <a href="#" class="close-btn" data-set="@safeSetName">
+                                                        <img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="holder-question" id="questions-container-@safeSetName"></div>
+
+                                            <div class="last-box">
+                                                <a href="#" class="prev" data-set="@safeSetName"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                                <a href="#" class="next active" data-set="@safeSetName"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                            </div>
+
+
+                                            <div class="ans-question" id="ans-question-@safeSetName" style="display: none;">
+                                                <div class="ans-box"></div>
+                                                <a href="#" id="download-result-@safeSetName" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div> *@
+
+
+
+
+
+                <div class="content-sec level-wise">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2>Online Long Questions For Chapter @Model.Chapters.FirstOrDefault()?.ChapterName  "@Model.TestName "</h2>
+                                <p>Try The Long Questions For @Model.TestName</p>
+                                <ul class="contact-detail">
+                                    <li>
+                                        <p><span>Total Questions</span>@Model.CriteriaDetail.TotalQuestions</p>
+                                    </li>
+                                    @if (Model.CanCreateSets)
+                                    {
+                                        <li>
+                                            <p><span>Available Sets</span>@Model.ActualNumberOfSets</p>
+                                        </li>
+                                    }
+                                </ul>
+                                <div class="teststartbtn">
+                                    <a href="javascript:void(0)" id="launch-test-btn" onclick="shortQuestionPolOpen(0)" class="text-btn">Start Test</a>
+                                    <a href="/questions/download-questions/@Model.Url" class="text-btn" target="_blank">
+                                        Download PDF
+                                    </a>
+                                </div>
+
+                                <!-- Main Question Popup -->
+                                <div class="question-side shortquestion-box" id="pol-mode">
+                                    <div class="question-box">
+                                        <div class="top-box">
+                                            <h2>@Model.SubjectName - @Model.TestName</h2>
+
+                                            <div class="close-btn">
+                                                <a href="javascript:void(0)" id="close"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt=""></a>
+                                            </div>
+                                        </div>
+                                        <div class="holder-question short-qestion-holder">
+                                            @for (int i = 0; i < Model.QuestionSets[0].Questions.Count; i++)
+                                            {
+                                                var question = Model.QuestionSets[0].Questions[i];
+                                                <div class="mid-box" data-question-number="@(i + 1)" style="display: @(i == 0 ? "block" : "none");">
+                                                    <strong>Question # @(i + 1)</strong>
+                                                    <h3>
+                                                        @Html.Raw(question.QuestionDescription)
+                                                    </h3>
+                                                    @if (!string.IsNullOrWhiteSpace(question.QuestionImage))
+                                                    {
+                                                        <img src="https://ikddata.ilmkidunya.com/images/long-question/Q_@(question.QuestionId)_@(question.QuestionImage)" alt="pic" />
+                                                    }
+                                                    <ul>
+                                                        @for (int j = 0; j < question.Answers.Count; j++)
+                                                        {
+                                                            var answer = question.Answers[j];
+                                                            <li>
+                                                                <span>Ans @(j + 1):</span> @Html.Raw(answer.ChoiceDescription)
+                                                                @if (!string.IsNullOrWhiteSpace(answer.ChoiceImage))
+                                                                {
+                                                                    <img src="https://ikddata.ilmkidunya.com/images/long-question/Ans_@(answer.ChoiceId)_Q_@(question.QuestionId)_@(answer.ChoiceImage)" alt="pic" />
+                                                                }
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="last-box">
+                                            <a href="javascript:void(0)" class="prev disabled" style="background-color: rgb(204, 204, 204);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                            <a href="javascript:void(0)" class="next" style="background-color: rgb(111, 229, 125);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                        </div>
+
+                                        <!-- Fake Submit -->
+                                        <a href="javascript:void(0)" class="text-btn" style="margin: 30px 0 0 30px;">Submit</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="all-test-box">
+                                    <h2>
+                                        Prepare Complete Set Wise Questions For Chapter @Model.Chapters.FirstOrDefault()?.ChapterName  "@Model.TestName "
+                                    </h2>
+                                    <ul>
+                                        @for (int i = 0; i < Model.QuestionSets.Count; i++)
+                                        {
+                                            var set = Model.QuestionSets[i];
+                                            <li>
+                                                <h3>@set.SetName</h3>
+                                                <p>@set.TotalQuestions Questions</p>
+                                                <a href="javascript:void(0)" onclick="openAnsMode(@i)" class="text-btn set-launch-btn" data-set-index="@i">
+                                                    Start
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Set-wise Question Popups -->
+                @for (int setIndex = 0; setIndex < Model.QuestionSets.Count; setIndex++)
+                {
+                    var questionSet = Model.QuestionSets[setIndex];
+                    <div class="question-side shortquestion-box set-popup" id="set-pol-mode-@setIndex" data-set-index="@setIndex">
+                        <div class="question-box">
+                            <div class="top-box">
+                                <h2>@Model.TestName - @questionSet.SetName</h2>
+
+                                <div class="close-btn">
+                                    <a href="javascript:void(0)" class="setclose" data-set-index="@setIndex"><img src="https://images.ishallwin.com/ot-images/red-cross.webp" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="holder-question short-qestion-holder">
+                                @for (int i = 0; i < questionSet.Questions.Count; i++)
+                                {
+                                    var question = questionSet.Questions[i];
+                                    <div class="mid-box" data-question-number="@(i + 1)" style="display: @(i == 0 ? "block" : "none");">
+                                        <strong>Question # @(i + 1)</strong>
+                                        <h3>@Html.Raw(question.QuestionDescription)</h3>
+                                        @if (!string.IsNullOrWhiteSpace(question.QuestionImage))
+                                        {
+                                            <img src="https://ikddata.ilmkidunya.com/images/long-question/Q_@(question.QuestionId)_@(question.QuestionImage)" alt="pic" />
+                                        }
+                                        <ul>
+                                            @for (int j = 0; j < question.Answers.Count; j++)
+                                            {
+                                                var answer = question.Answers[j];
+                                                <li>
+                                                    <span>Ans @(j + 1):</span> @Html.Raw(answer.ChoiceDescription)
+                                                    @if (!string.IsNullOrWhiteSpace(answer.ChoiceImage))
+                                                    {
+                                                        <img src="https://ikddata.ilmkidunya.com/images/long-question/Ans_@(answer.ChoiceId)_Q_@(question.QuestionId)_@(answer.ChoiceImage)" alt="pic" />
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <div class="last-box">
+                                <a href="javascript:void(0)" class="prev disabled" style="background-color: rgb(204, 204, 204);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                                <a href="javascript:void(0)" class="next" style="background-color: rgb(111, 229, 125);"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt=""></a>
+                            </div>
+
+                            <!-- Fake Submit -->
+                            <a href="javascript:void(0)" class="text-btn" style="margin: 30px 0 0 30px;">Submit</a>
+                        </div>
+                    </div>
+                }
+
+                <style>
+                    .question-side {
+                        position: fixed;
+                        right: -100%;
+                        top: 0;
+                        opacity: 0;
+                        visibility: hidden;
+                        z-index: 999;
+                        transition: 0.3s ease-in-out;
+                        width: 800px;
+                        height: 100vh;
+                        overflow-y: auto;
+                        background: #fff;
+                    }
+
+                        .question-side.visible-pol {
+                            right: 0;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                    .set-popup {
+                        display: none;
+                    }
+
+                        .set-popup.visible-pol {
+                            display: block;
+                        }
+                </style>
+
+                <script>
+                    const targetBox = document.getElementById("pol-mode");
+                    const closeBtn = document.getElementById("close");
+
+                    // First popup - main set
+                    function shortQuestionPolOpen(setIndex) {
+                        targetBox.classList.toggle("visible-pol");
+                    }
+
+                    closeBtn.addEventListener("click", () => {
+                        targetBox.classList.remove("visible-pol");
+                    });
+
+                    document.addEventListener("click", (e) => {
+                        if (targetBox.classList.contains("visible-pol") &&
+                            !targetBox.contains(e.target) &&
+                            !e.target.matches("#launch-test-btn")) {
+                            targetBox.classList.remove("visible-pol");
+                        }
+                    });
+
+                    // Set-wise popups
+                    function openAnsMode(setIndex) {
+                        // Hide all set popups first
+                        document.querySelectorAll('.set-popup').forEach(popup => {
+                            popup.classList.remove('visible-pol');
+                        });
+
+                        // Show the selected set popup
+                        const selectedPopup = document.getElementById(`set-pol-mode-${setIndex}`);
+                        if (selectedPopup) {
+                            selectedPopup.classList.add('visible-pol');
+                        }
+                    }
+
+                    document.querySelectorAll('.setclose').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const setIndex = this.getAttribute('data-set-index');
+                            const popup = document.getElementById(`set-pol-mode-${setIndex}`);
+                            if (popup) {
+                                popup.classList.remove('visible-pol');
+                            }
+                        });
+                    });
+
+                    document.addEventListener("click", (e) => {
+                        if (e.target.matches('.set-launch-btn')) {
+                            return; // Don't close if clicking on launch button
+                        }
+
+                        document.querySelectorAll('.set-popup').forEach(popup => {
+                            if (popup.classList.contains('visible-pol') &&
+                                !popup.contains(e.target) &&
+                                !e.target.matches('.set-launch-btn')) {
+                                popup.classList.remove('visible-pol');
+                            }
+                        });
+                    });
+
+                    // Navigation for all popups
+                    document.addEventListener("DOMContentLoaded", function () {
+                        function initPopupNavigation(popupElement) {
+                            if (!popupElement) return;
+
+                            let midBoxes = popupElement.querySelectorAll(".mid-box");
+                            let nextBtn = popupElement.querySelector(".next");
+                            let prevBtn = popupElement.querySelector(".prev");
+                            let currentIndex = 0;
+
+                            // Hide all first
+                            midBoxes.forEach((box) => (box.style.display = "none"));
+
+                            // Show first question
+                            if (midBoxes.length > 0) {
+                                midBoxes[0].style.display = "block";
+                            }
+
+                            function showBox(index) {
+                                midBoxes.forEach((box, i) => {
+                                    box.style.display = i === index ? "block" : "none";
+                                });
+
+                                // Reset buttons
+                                prevBtn.classList.remove("disabled");
+                                nextBtn.classList.remove("disabled");
+                                prevBtn.style.backgroundColor = "#6FE57D";
+                                nextBtn.style.backgroundColor = "#6FE57D";
+
+                                // Disable prev on first
+                                if (index === 0) {
+                                    prevBtn.classList.add("disabled");
+                                    prevBtn.style.backgroundColor = "#ccc";
+                                }
+                                // Disable next on last
+                                if (index === midBoxes.length - 1) {
+                                    nextBtn.classList.add("disabled");
+                                    nextBtn.style.backgroundColor = "#ccc";
+                                }
+                            }
+
+                            // Next button
+                            if (nextBtn) {
+                                nextBtn.addEventListener("click", function () {
+                                    if (currentIndex < midBoxes.length - 1) {
+                                        currentIndex++;
+                                        showBox(currentIndex);
+                                    }
+                                });
+                            }
+
+                            // Prev button
+                            if (prevBtn) {
+                                prevBtn.addEventListener("click", function () {
+                                    if (currentIndex > 0) {
+                                        currentIndex--;
+                                        showBox(currentIndex);
+                                    }
+                                });
+                            }
+
+                            // Initial state
+                            showBox(currentIndex);
+                        }
+
+                        // Init navigation for main popup
+                        initPopupNavigation(document.getElementById("pol-mode"));
+
+                        // Init navigation for all set popups
+                        document.querySelectorAll('.set-popup').forEach(popup => {
+                            initPopupNavigation(popup);
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ckeditorcontent otsckcontent">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc2)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add in <head> or before closing </body> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @* 
+    <script>
+        // Store all question sets in a JavaScript object
+        const singleTest_questionSets = {};
+        @foreach (var set in Model.QuestionSets)
+        {
+                <text>
+                singleTest_questionSets['@set.SetName'] = {
+                    setName: '@set.SetName',
+                    totalQuestions: @set.TotalQuestions,
+                    questions: [
+                        @foreach (var question in set.Questions)
+                        {
+                                <text>
+                                {
+                                    questionId: '@question.QuestionId',
+                                    questionDescription: `@Html.Raw(question.QuestionDescription)`,
+                                    answers: [
+                                        @foreach (var answer in question.Answers)
+                                        {
+                                                <text>
+                                                {
+                                                    choiceDescription: `@Html.Raw(answer.ChoiceDescription)`,
+                                                },
+                                                </text>
+                                        }
+                                    ]
+                                },
+                                </text>
+                        }
+                    ]
+                };
+                </text>
+        }
+
+        let singleTest_currentSetName = '';
+        let singleTest_currentQuestions = [];
+        let singleTest_currentIndex = 0;
+        let singleTest_timer;
+        let singleTest_isRunning = false;
+        let singleTest_elapsedTime = 0;
+        let singleTest_startTime;
+
+        window.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('close').addEventListener('click', function (event) {
+                singleTest_closePoll();
+                event.preventDefault();
+            });
+
+            document.addEventListener('click', function (event) {
+                var pol = document.getElementById('pol');
+                if (!pol.contains(event.target) && event.target !== document.getElementById('launch-test-btn')) {
+                    singleTest_closePoll();
+                }
+            });
+
+            // Initialize navigation
+            singleTest_initNavigation();
+        });
+
+        function singleTest_closePoll() {
+            var pol = document.getElementById('pol');
+            pol.style.right = '-100%';
+            pol.style.opacity = '0';
+            pol.style.visibility = 'hidden';
+
+            // Reset timer
+            if (singleTest_isRunning) {
+                singleTest_resetTimer();
+            }
+        }
+
+        function singleTest_launchTest() {
+            // Use the first set by default
+            const firstSetName = Object.keys(singleTest_questionSets)[0];
+            singleTest_launchSpecificSet(firstSetName);
+        }
+
+        function singleTest_launchSpecificSet(setName) {
+            singleTest_currentSetName = setName;
+            singleTest_currentQuestions = singleTest_questionSets[setName].questions;
+
+            // Update the set title
+            document.getElementById('singleTest-current-set-title').textContent =
+                '@Model.SubjectName @Model.TestName - ' + setName;
+
+            // Load questions
+            singleTest_loadQuestions();
+
+            // Show the test panel
+            var pol = document.getElementById('singleTest-pol');
+            pol.style.right = '0';
+            pol.style.opacity = '1';
+            pol.style.visibility = 'visible';
+
+            // Uncheck all radio buttons to prevent preselection
+            document.querySelectorAll(".mid-box input[type='radio']").forEach(r => r.checked = false);
+
+            // Reset and start timer
+            singleTest_resetTimer();
+            singleTest_startTimer();
+        }
+
+        function singleTest_loadQuestions() {
+            const container = document.getElementById('singleTest-questions-container');
+            container.innerHTML = '';
+
+            singleTest_currentQuestions.forEach((question, i) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'mid-box';
+                questionElement.dataset.questionNumber = i + 1;
+                questionElement.style.display = i === 0 ? 'block' : 'none';
+                questionElement.style.transition = 'opacity 0.3s ease-in-out';
+                questionElement.style.opacity = i === 0 ? '1' : '0';
+
+                let answersHtml = '';
+                question.answers.forEach((answer, j) => {
+                    const letter = String.fromCharCode(65 + j); // A, B, C, D, etc.
+                    answersHtml += `
+                        <li>
+                            <label class="radio-container d-flex align-items-start">
+                                <span class="q-detiel">
+                                    ${answer.choiceDescription}
+                                </span>
+                                <input type="radio" name="radio-${i}" value="${letter}" data-question-id="${question.questionId}" data-correct="${answer.isCorrect}">
+                                <span class="label">${letter}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>
+                    `;
+                });
+
+                questionElement.innerHTML = `
+                    <strong>Question # ${i + 1}</strong>
+                    <h3>${question.questionDescription}</h3>
+                    <ul>${answersHtml}</ul>
+                `;
+
+                container.appendChild(questionElement);
+            });
+
+            // Reset navigation
+            singleTest_currentIndex = 0;
+            singleTest_updateNavigation();
+        }
+
+        function singleTest_initNavigation() {
+            document.querySelector(".next").addEventListener("click", function (e) {
+                e.preventDefault();
+                if (singleTest_currentIndex < singleTest_currentQuestions.length - 1) {
+                    singleTest_currentIndex++;
+                    singleTest_showQuestion(singleTest_currentIndex);
+                }
+            });
+
+            document.querySelector(".prev").addEventListener("click", function (e) {
+                e.preventDefault();
+                if (singleTest_currentIndex > 0) {
+                    singleTest_currentIndex--;
+                    singleTest_showQuestion(singleTest_currentIndex);
+                }
+            });
+
+            document.querySelector(".get-result").addEventListener("click", function (e) {
+                e.preventDefault();
+                singleTest_calculateResults();
+            });
+        }
+
+        function singleTest_showQuestion(index) {
+            const questions = document.querySelectorAll(".mid-box");
+            questions.forEach((box, i) => {
+                if (i === index) {
+                    box.style.display = "block";
+                    setTimeout(() => {
+                        box.style.opacity = "1";
+                    }, 200);
+                } else {
+                    box.style.opacity = "0";
+                    setTimeout(() => {
+                        box.style.display = "none";
+                    }, 300);
+                }
+            });
+
+            singleTest_updateNavigation();
+        }
+
+        function singleTest_updateNavigation() {
+            const prevBtn = document.querySelector(".prev");
+            const nextBtn = document.querySelector(".next");
+
+            prevBtn.classList.toggle("active", singleTest_currentIndex > 0);
+            nextBtn.classList.toggle("active", singleTest_currentIndex < singleTest_currentQuestions.length - 1);
+        }
+
+        function singleTest_startTimer() {
+            if (!singleTest_isRunning) {
+                singleTest_startTime = Date.now() - singleTest_elapsedTime;
+                singleTest_timer = setInterval(() => {
+                    singleTest_elapsedTime = Date.now() - singleTest_startTime;
+                    const totalSeconds = Math.floor(singleTest_elapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    document.getElementById('singleTest-display').textContent = `${minutes}:${seconds}`;
+                }, 1000);
+                singleTest_isRunning = true;
+            }
+        }
+
+        function singleTest_resetTimer() {
+            clearInterval(singleTest_timer);
+            singleTest_elapsedTime = 0;
+            document.getElementById('singleTest-display').textContent = '00:00';
+            singleTest_isRunning = false;
+        }
+
+        function singleTest_calculateResults() {
+            const durationInSeconds = Math.floor(singleTest_elapsedTime / 1000);
+            const questionBoxes = document.querySelectorAll(".mid-box");
+            let resultHTML = "";
+            let correctCount = 0;
+
+            questionBoxes.forEach((box, index) => {
+                const questionNumber = box.dataset.questionNumber;
+                const questionText = box.querySelector("h3").innerHTML;
+                const inputs = box.querySelectorAll("input[type='radio']");
+                const selected = box.querySelector("input[type='radio']:checked");
+                const selectedVal = selected ? selected.value : null;
+
+                let correctAnswer = null;
+                inputs.forEach(input => {
+                    if (input.dataset.correct === "true") {
+                        correctAnswer = input.value;
+                    }
+                });
+
+                const isCorrect = selectedVal === correctAnswer;
+                if (isCorrect) correctCount++;
+
+                let optionsHTML = "";
+                inputs.forEach(input => {
+                    const label = input.value;
+                    const optionText = input.closest("label").querySelector(".q-detiel").innerHTML;
+                    let liClass = "";
+
+                    if (label === correctAnswer) liClass = "correct";
+                    if (label === selectedVal && !isCorrect) liClass = "wrong";
+
+                    optionsHTML += `
+                        <li class="${liClass}">
+                            <label class="radio-container">
+                                <span class="q-detiel">${optionText}</span>
+                                <input type="radio" disabled ${label === selectedVal ? 'checked' : ''}>
+                                <span class="label">${label}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>`;
+                });
+
+                resultHTML += `
+                    <div class="mid-box1">
+                        <strong>Question # ${questionNumber}</strong>
+                        <h3>${questionText}</h3>
+                        <ul>${optionsHTML}</ul>
+                        <p>Your answer: ${selectedVal || 'Not answered'} | Correct answer: ${correctAnswer}</p>
+                        <p>${isCorrect ? 'Correct!' : 'Incorrect!'}</p>
+                    </div>`;
+            });
+
+            // Stop timer
+            singleTest_resetTimer();
+
+            // Show results
+            document.querySelector(".ans-box").innerHTML = resultHTML;
+            document.querySelector(".holder-question").style.display = "none";
+            document.querySelector(".last-box").style.display = "none";
+            document.querySelector(".get-result").style.display = "none";
+            document.querySelector(".ans-question").style.display = "block";
+
+            // Save results (you can implement this part)
+            singleTest_saveResults(correctCount, durationInSeconds);
+        }
+
+        function singleTest_saveResults(correctCount, durationInSeconds) {
+            // Implement your result saving logic here
+            console.log(`Correct answers: ${correctCount}/${singleTest_currentQuestions.length}`);
+            console.log(`Time taken: ${durationInSeconds} seconds`);
+
+            // Example API call (disabled)
+            /*
+            fetch('/online-test/save-result', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    TestId: testId,
+                    TestTitle: testTitle,
+                    SetName: singleTest_currentSetName,
+                    TotalQuestions: singleTest_currentQuestions.length,
+                    CorrectAnswers: correctCount,
+                    Duration: durationInSeconds
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.savedTestResultId = data.testResultId;
+            })
+            .catch(error => console.error('Error:', error));
+            */
+        }
+    </script>
+
+    <script>
+        const questionSets = {};
+        @foreach (var set in Model.QuestionSets)
+        {
+                var safeSetName = set.SetName.Replace(" ", "_");
+                <text>
+                questionSets['@safeSetName'] = {
+                    setName: '@set.SetName',
+                    safeName: '@safeSetName',
+                    totalQuestions: @set.TotalQuestions,
+                    questions: [
+                        @foreach (var question in set.Questions)
+                        {
+                                <text>
+                                {
+                                    questionId: '@question.QuestionId',
+                                    questionDescription: `@Html.Raw(question.QuestionDescription)`,
+                                    answers: [
+                                        @foreach (var answer in question.Answers)
+                                        {
+                                                <text>
+                                                {
+                                                    choiceDescription: `@Html.Raw(answer.ChoiceDescription)`,
+                                                },
+                                                </text>
+                                        }
+                                    ]
+                                },
+                                </text>
+                        }
+                    ]
+                };
+                </text>
+        }
+
+        // State per test set
+        const state = {};
+
+        window.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.launch-test-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const set = btn.dataset.set;
+                    launchSpecificSet(set);
+                });
+            });
+
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const set = btn.dataset.set;
+                    closePoll(set);
+                });
+            });
+        });
+
+        // Close all open polls
+        function closeAllPolls() {
+            document.querySelectorAll('.question-side').forEach(pol => {
+                pol.style.right = '-100%';
+                pol.style.opacity = '0';
+                pol.style.visibility = 'hidden';
+            });
+
+            // stop timers for all sets
+            Object.keys(state).forEach(set => {
+                if (state[set]?.timer) {
+                    resetTimer(set);
+                }
+            });
+        }
+
+        function closePoll(set) {
+            const pol = document.getElementById('pol-' + set);
+            pol.style.right = '-100%';
+            pol.style.opacity = '0';
+            pol.style.visibility = 'hidden';
+
+            if (state[set]?.timer) {
+                resetTimer(set);
+            }
+        }
+
+        function launchSpecificSet(set) {
+            const qSet = questionSets[set];
+
+            // Close any previously open poll before opening new one
+            closeAllPolls();
+
+            state[set] = {
+                questions: qSet.questions,
+                currentIndex: 0,
+                elapsedTime: 0,
+                isRunning: false,
+                timer: null
+            };
+
+            // Load questions
+            loadQuestions(set);
+
+            // Show panel
+            const pol = document.getElementById('pol-' + set);
+            pol.style.right = '0';
+            pol.style.opacity = '1';
+            pol.style.visibility = 'visible';
+
+            resetTimer(set);
+            startTimer(set);
+            initNavigation(set);
+        }
+
+        function loadQuestions(set) {
+            const container = document.getElementById('questions-container-' + set);
+            container.innerHTML = '';
+
+            const questions = state[set].questions;
+            questions.forEach((question, i) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'mid-box';
+                questionElement.dataset.questionNumber = i + 1;
+                questionElement.style.display = i === 0 ? 'block' : 'none';
+                questionElement.style.opacity = i === 0 ? '1' : '0';
+
+                let answersHtml = '';
+                question.answers.forEach((answer, j) => {
+                    const letter = String.fromCharCode(65 + j);
+                    answersHtml += `
+                        <li>
+                            <label class="radio-container d-flex align-items-start">
+                                <span class="q-detiel">${answer.choiceDescription}</span>
+                                <input type="radio" name="radio-${set}-${i}" value="${letter}" data-question-id="${question.questionId}" data-correct="${answer.isCorrect}">
+                                <span class="label">${letter}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>`;
+                });
+
+                questionElement.innerHTML = `
+                    <strong>Question # ${i + 1}</strong>
+                    <h3>${question.questionDescription}</h3>
+                    <ul>${answersHtml}</ul>
+                `;
+
+                container.appendChild(questionElement);
+            });
+        }
+
+        function initNavigation(set) {
+            const prevBtn = document.querySelector(`.prev[data-set="${set}"]`);
+            const nextBtn = document.querySelector(`.next[data-set="${set}"]`);
+            const resultBtn = document.querySelector(`.get-result[data-set="${set}"]`);
+
+            prevBtn.onclick = (e) => {
+                e.preventDefault();
+                if (state[set].currentIndex > 0) {
+                    state[set].currentIndex--;
+                    showQuestion(set, state[set].currentIndex);
+                }
+            };
+
+            nextBtn.onclick = (e) => {
+                e.preventDefault();
+                if (state[set].currentIndex < state[set].questions.length - 1) {
+                    state[set].currentIndex++;
+                    showQuestion(set, state[set].currentIndex);
+                }
+            };
+
+            resultBtn.onclick = (e) => {
+                e.preventDefault();
+                calculateResults(set);
+            };
+        }
+
+        function showQuestion(set, index) {
+            const questions = document.querySelectorAll(`#questions-container-${set} .mid-box`);
+            questions.forEach((box, i) => {
+                if (i === index) {
+                    box.style.display = 'block';
+                    setTimeout(() => box.style.opacity = '1', 200);
+                } else {
+                    box.style.opacity = '0';
+                    setTimeout(() => box.style.display = 'none', 300);
+                }
+            });
+        }
+
+        function startTimer(set) {
+            if (!state[set].isRunning) {
+                state[set].startTime = Date.now() - state[set].elapsedTime;
+                state[set].timer = setInterval(() => {
+                    state[set].elapsedTime = Date.now() - state[set].startTime;
+                    const totalSeconds = Math.floor(state[set].elapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    document.getElementById('display-' + set).textContent = `${minutes}:${seconds}`;
+                }, 1000);
+                state[set].isRunning = true;
+            }
+        }
+
+        function resetTimer(set) {
+            clearInterval(state[set].timer);
+            state[set].elapsedTime = 0;
+            document.getElementById('display-' + set).textContent = '00:00';
+            state[set].isRunning = false;
+        }
+
+        function calculateResults(set) {
+            const questions = state[set].questions;
+            const container = document.querySelector(`#questions-container-${set}`);
+            const boxes = container.querySelectorAll('.mid-box');
+            let resultHTML = '';
+            let correctCount = 0;
+
+            boxes.forEach((box, idx) => {
+                const questionText = box.querySelector('h3').innerHTML;
+                const inputs = box.querySelectorAll('input[type="radio"]');
+                const selected = box.querySelector('input[type="radio"]:checked');
+                const selectedVal = selected ? selected.value : null;
+
+                let correctAnswer = null;
+                inputs.forEach(input => {
+                    if (input.dataset.correct === 'true') correctAnswer = input.value;
+                });
+
+                const isCorrect = selectedVal === correctAnswer;
+                if (isCorrect) correctCount++;
+
+                let optionsHTML = '';
+                inputs.forEach(input => {
+                    const label = input.value;
+                    const optionText = input.closest('label').querySelector('.q-detiel').innerHTML;
+                    let liClass = '';
+                    if (label === correctAnswer) liClass = 'correct';
+                    if (label === selectedVal && !isCorrect) liClass = 'wrong';
+
+                    optionsHTML += `
+                        <li class="${liClass}">
+                            <label class="radio-container">
+                                <span class="q-detiel">${optionText}</span>
+                                <input type="radio" disabled ${label === selectedVal ? 'checked' : ''}>
+                                <span class="label">${label}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>`;
+                });
+
+                resultHTML += `
+                    <div class="mid-box1">
+                        <strong>Question # ${idx + 1}</strong>
+                        <h3>${questionText}</h3>
+                        <ul>${optionsHTML}</ul>
+                        <p>Your answer: ${selectedVal || 'Not answered'} | Correct answer: ${correctAnswer}</p>
+                        <p>${isCorrect ? 'Correct!' : 'Incorrect!'}</p>
+                    </div>`;
+            });
+
+            resetTimer(set);
+
+            const pol = document.getElementById('pol-' + set);
+            pol.querySelector('.ans-box').innerHTML = resultHTML;
+            pol.querySelector('.holder-question').style.display = 'none';
+            pol.querySelector('.last-box').style.display = 'none';
+            pol.querySelector('.get-result').style.display = 'none';
+            pol.querySelector('.ans-question').style.display = 'block';
+        }
+    </script> *@
+
+
+</div>
+
+
+
+
+
+

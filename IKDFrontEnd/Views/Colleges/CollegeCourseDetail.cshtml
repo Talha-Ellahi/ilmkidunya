@@ -1,0 +1,380 @@
+﻿@using IKDFrontEnd.ViewModels
+@model CollegeCourseDetailViewModel
+<style>
+    .contact-admin {
+        display: flex;
+        align-items: flex-start;
+        gap: 30px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 800px;
+    }
+
+        .contact-admin .img-holder {
+            text-align: center;
+            width: 200px;
+        }
+
+            .contact-admin .img-holder img {
+                width: 100%;
+                border-radius: 8px;
+            }
+
+            .contact-admin .img-holder p {
+                margin: 10px 0 0;
+                font-weight: bold;
+            }
+
+            .contact-admin .img-holder span {
+                display: block;
+                font-weight: normal;
+                color: #666;
+                margin-top: 4px;
+            }
+
+        .contact-admin .text-holder ul {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-collapse: collapse;
+        }
+
+        .contact-admin .text-holder li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+            .contact-admin .text-holder li span {
+                font-weight: 600;
+                flex: 1;
+            }
+
+            .contact-admin .text-holder li i {
+                flex: 2;
+                font-style: normal;
+            }
+</style>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+@section header {
+
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/colleges/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt="image" />
+                    Universities & Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl).aspx">
+                    <img src="https://cdn.ilmkidunya.com/Inst/logos/@Model.College.Logo" alt="image" />
+                    @Model.College.Name
+                </a>
+            </li>
+            @if (ViewBag.ShowFeeStructure)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-fee-structure.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-3.webp" alt="image" />
+                        Fee Structure
+                    </a>
+                </li>
+            }
+            @if (ViewBag.ShowMeritList)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-merit-lists.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+                        Merit List
+                    </a>
+                </li>
+            }
+            @if (ViewBag.ShowAdmissions)
+            {
+                <li>
+                    <a aria-label="link" href="/colleges/@(ViewBag.CollegeBaseUrl)-admission.aspx">
+                        <img src="https://images.ishallwin.com/nav-icons/chem-nav-9.webp" alt="image" />
+                        Admission
+                    </a>
+                </li>
+            }
+
+        </ul>
+
+
+    </div>
+
+}
+@section innerbanner {
+    <div class="ss-banner-inner college-banner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="with-img">
+
+                        <div class="ss-text-holder">
+                            <h1>@Model.Course.Name</h1>
+                            <ul>
+                                <li><span>Duration</span><em>@Model.Course.Duration</em></li>
+                                <li><span>Fee(PKR)</span><em>@Model.Course.TotalFees</em></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="main">
+    <br />
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+
+
+    @if (ViewBag.ShowAdmissions == true)
+    {
+        <div class="news-ad-sec">
+            <div class="container" id="courses">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>Admissions in @Model.Course.Name at @Model.College.Name <a href="/colleges/@ViewBag.CollegeBaseUrl-admission.aspx"> View All Admissions</a></h2>
+                    </div>
+                    <div class="col-lg-12">
+                        <ul class="news-date">
+                            @if (Model.AdmissionInfo != null)
+                            {
+                                <li>
+                                    <span>Admission Announced</span>
+                                    @(Model.AdmissionInfo.Dated?.ToString("dd-MMM-yyyy") ?? "Not Available")
+                                </li>
+
+                                <li>
+                                    <span>Last Date to Apply</span>
+                                    @(Model.AdmissionInfo.LastDate?.ToString("dd-MMM-yyyy") ?? "Not Available")
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="news-ad">
+                            <div class="img-holder">
+                                <figure>
+                                    @if (!string.IsNullOrWhiteSpace(Model.AdmissionLogo))
+                                    {
+                                        var imageUrl = $"https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{Model.AdmissionLogo}";
+                                        <a href="@($"{Model.College.Url}-admission.aspx")" target="_blank">
+                                            <img src="@imageUrl" alt="Admission Image" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        var fallbackUrl = "https://cdn.traliv.com/wwwroot/images/not-available.png";
+                                        <a href="@($"{Model.College.Url}-admission.aspx")" target="_blank">
+                                            <img src="@fallbackUrl" alt="No Image Available" />
+                                        </a>
+                                    }
+                                </figure>
+                            </div>
+
+                            <div class="text-holder">
+                                <h3>More Information on Admissions</h3>
+                                <p>Best ways to get latest information on all admissions by @Model.College.Name is as below:</p>
+                                <ul>
+                                    <li>Visit <a href="/colleges/@ViewBag.CollegeBaseUrl-admission.aspx">admission page for @Model.College.Name on ilmkidunya</a> </li>
+                                    <li>Visit <a href="https://@Model.College.Website" target="_blank">@Model.College.Website official website of @Model.College.Name</a></li>
+                                    <li>Call them on phone @Model.College.ContactNumber</li>
+                                    <li>Visit the campus at: @Model.College.Address</li>
+                                    <li>Fill our <a href="#Form">free admission advice form</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontentlowerbanner")
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="contact-sec fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Latest Merit List at @Model.College.Name</h2>
+                    <div class="responsive-table" style="margin-bottom: 30px;">
+                        <table class="table mid">
+                            <thead>
+                                <tr>
+                                    <th><span>Date</span></th>
+                                    <th><span>Courses/Programs</span></th>
+                                    <th><span>Merit List</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var merit in Model.MeritLists)
+                                {
+                                    <tr>
+                                        <td data-label="Date Posted">@merit.AddedDate?.ToString("dd-MMM-yyyy")</td>
+
+                                        <td data-label="Courses/Programs">
+                                            @merit.CourseName
+                                        </td>
+
+                                        <td data-label="Admission Notice">
+
+                                            <a src="https://ikddata.ilmkidunya.com/images/MeritListFiles/@merit.FileName">
+                                                @merit.MeritListName
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="contact-sec fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Other Institutes that offer addmissions in @Model.Course.Name</h2>
+                    <div class="responsive-table" style="margin-bottom: 30px;">
+                        <table class="table mid">
+                            <thead>
+                                <tr>
+                                    <th><span>Institute</span></th>
+                                    <th><span>Courses/Programs</span></th>
+                                    <th><span>Duration</span></th>
+                                    <th><span>Fees</span></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var institute in Model.RelatedColleges)
+                                {
+                                    <tr>
+                                        <td data-label="Date Posted">
+                                            <a src="/colleges/@institute.College.Url">
+                                                @(institute.College?.Name ?? "N/A")
+                                            </a>
+                                        </td>
+
+                                        <td data-label="Courses/Programs">
+                                            @(institute.Courses?.FirstOrDefault()?.Name ?? "N/A")
+                                        </td>
+
+                                        <td data-label="Admission Notice">
+                                            @(institute.Courses?.FirstOrDefault()?.Duration ?? "N/A")
+                                        </td>
+
+                                        <td data-label="Admission Notice">
+                                            @(institute.Courses?.FirstOrDefault()?.TotalFee?.ToString() ?? "N/A")
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Handle form submission
+        $("#suggestion-form").submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting the usual way
+
+            var formData = $(this).serialize(); // Serialize form data to send it
+
+            // Make the AJAX request
+            $.ajax({
+                url: '@Url.Action("SubmitSuggestion", "Colleges")', // Ensure the URL matches the SubmitSuggestion action in the CollegesController
+                type: 'POST',
+                data: formData, // The form data to send
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message); // Success message
+                        $("#suggestion-form")[0].reset(); // Clear the form
+                    } else {
+                        alert(response.message); // Show error message
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("There was an error submitting the form.");
+                }
+            });
+        });
+    });
+</script>
+
+

@@ -1,0 +1,348 @@
+﻿@using IKDFrontEnd.ViewModels
+@model PastPaperPageViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["PageTitle2"] = Model.PageTitle2;
+}
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@Model.PageTitle2" />
+	<meta property="og:description" content="@(Model.PastPapers.FirstOrDefault()?.MetaDesc ?? "Past Paper")" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@(Model.PastPapers.FirstOrDefault()?.MetaDesc ?? "Past Paper")">
+	<meta name="keywords" content="@(Model.PastPapers.FirstOrDefault()?.MetaKeywords ?? "Past Paper")">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@Model.PageTitle2</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.PageTitle2</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+
+
+<!-- Main Start -->
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ckeditorcontent">
+						@if (Model.PastPapers.Any())
+						{
+							var paper = Model.PastPapers.First();
+							@Html.Raw(paper.Description)
+							
+						}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@* @await Html.PartialAsync("_maincontenttopbanner") *@
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="downloadBtn">
+							<img src="https://images.ishallwin.com/download.webp" alt="" /> Download This Paper
+						</button>
+						<button type="button" class="load-more-button" id="printBtn">
+							<img src="https://images.ishallwin.com/print.webp" alt="" /> Print This Paper
+						</button>
+					</p>
+				</div>
+				<div class="col-lg-12">
+					<p class="dwn-img">
+						@if (Model.PastPapers.Any())
+						{
+							var paper = Model.PastPapers.First();
+							
+							<img src="@paper.ImageUrl" alt="Paper Image" id="paperImage" />
+						}
+						else
+						{
+						<p>No past papers found.</p>
+						}
+					</p>
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+
+					@await Html.PartialAsync("_maincontenttopbanner")
+					<div class="page-content pp-sec">
+
+						<h2 class="ss-profession">Matric / Inter Past Papers</h2>
+						<div class="row">
+							<div class="flex-container">
+								<div class="col-lg-4">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										<h4>Punjab Educational Boards Past Papers:</h4>
+										<ul class="citywise-list">
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/lahore-board-past-papers.aspx">BISE Lahore</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/gujranwala-board-past-papers.aspx">BISE Gujranwala</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/multan-board-past-papers.aspx">BISE Multan</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/faisalabad-board-past-papers.aspx">BISE Faisalabad</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/sahiwal-board-past-papers.aspx">BISE Sahiwal</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/sargodha-board-past-papers.aspx">BISE Sargodha</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/rawalpindi-board-past-papers.aspx">BISE Rawalpinidi</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/bahawalpur-board-past-papers.aspx">BISE Bahawalpur</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/dg-khan-board-past-papers.aspx">BISE DG Khan</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/federal-board-islamabad-past-papers.aspx">BISE Federal</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										<h4>KPK Educational Boards Past Papers:</h4>
+										<ul class="citywise-list">
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/peshawar-board-past-papers.aspx">BISE Peshawar</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/swat-board-past-papers.aspx">BISE Swat</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/kohat-board-past-papers.aspx">BISE Kohat</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/mardan-board-past-papers.aspx">BISE Mardan</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/malakand-board-past-papers.aspx">BISE Malakand</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/abbottabad-board-past-papers.aspx">BISE Abbottabad</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/bannu-board-past-papers.aspx">BISE Bannu</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/di-khan-board-past-papers.aspx">BISE DI Khan</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="flex-container">
+								<div class="col-lg-4">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										<h4>University Past Papers</h4>
+										<ul class="citywise-list">
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/punjab-university-lahore-past-papers.aspx">Punjab University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/karachi-university-past-papers.aspx">Karachi University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/peshawar-university-past-papers.aspx">Peshawar University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/bzu-multan-past-papers.aspx">Bahauddin Zakariya University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/sargodha-university-past-papers.aspx">Sargodha University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/islamia-university-bahawalpur-past-papers.aspx">Islamia University Bahawalpur</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/ajk-university-past-papers.aspx">AJK University</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/university-of-health-sciences-lahore-past-papers.aspx">University of Health Sciences</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/virtual-university-past-papers.aspx">Virtual University</a>
+											</li>
+											<li>
+												<a href="https://www.ilmkidunya.com/past_papers/quetta-university-past-papers.aspx">Quetta University</a>
+											</li>
+											<li>
+												<a href="https://www.ilmkidunya.com/past_papers/university-of-balochistan-past-papers.aspx">University of Balochistan</a>
+											</li>
+											<li>
+												<a href="http://www.ilmkidunya.com/past_papers/allama-iqbal-open-university-past-papers.aspx">Allama Iqbal Open University</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+										<h4>Class Wise Past Papers</h4>
+										<ul class="citywise-list">
+											<li>
+												<a href="https://www.ilmkidunya.com/past_papers/9th-past-papers.aspx">9th Class</a>
+											</li>
+											<li>
+												<a href="https://www.ilmkidunya.com/past_papers/10th-past-papers.aspx">10th Class</a>
+											</li>
+											<li>
+												<a href="https://www.ilmkidunya.com/past_papers/11th-past-papers.aspx">11th Class</a>
+											</li>
+											<li style="background: none;">
+												<a href="https://www.ilmkidunya.com/past_papers/12th-past-papers.aspx">12th Class</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="page-content pp-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2 class="ss-profession">Past Papers</h2>
+					<div class="row">
+						<div class="flex-container">
+							<div class="col-lg-4">
+								<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+									<h4>Class Wise Past Papers</h4>
+									<ul class="citywise-list">
+										<li>
+											<a href="https://www.ilmkidunya.com/past_papers/9th-past-papers.aspx">9th Class</a>
+										</li>
+										<li>
+											<a href="https://www.ilmkidunya.com/past_papers/10th-past-papers.aspx">10th Class</a>
+										</li>
+										<li>
+											<a href="https://www.ilmkidunya.com/past_papers/11th-past-papers.aspx">11th Class</a>
+										</li>
+										<li style="background: none;">
+											<a href="https://www.ilmkidunya.com/past_papers/12th-past-papers.aspx">12th Class</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+									<h4>Entry Test Past Papers</h4>
+									<ul class="citywise-list">
+										<li><a href="https://www.ilmkidunya.com/past_papers/ecat-past-papers.aspx"><span>ECAT Test</span></a></li>
+										<li><a href="https://www.ilmkidunya.com/past_papers/mcat-past-papers.aspx"><span>MDCAT Test</span></a></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+									<h4>Competitive Exams Past Papers</h4>
+									<ul class="citywise-list">
+										<li><a href="https://www.ilmkidunya.com/past_papers/ppsc-all-departments-past-papers.aspx"><span>PPSC</span></a></li>
+										<li><a href="https://www.ilmkidunya.com/past_papers/css-past-papers.aspx"><span>CSS</span></a></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+									<h4>Technical Education Exams Past Papers</h4>
+									<ul class="citywise-list">
+										<li><a href="https://www.ilmkidunya.com/past_papers/punjab-board-of-techinal-education-past-papers.aspx"><span>Punjab Board</span></a></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="table-of-content" style="width: 100%; margin-right: 0; padding-bottom: 15px;">
+									<h4>Punjab Examination Commission Past Papers</h4>
+									<ul class="citywise-list">
+										<li><a href="https://www.ilmkidunya.com/past_papers/pec-5th-class-past-papers.aspx"><span>5th Class</span></a></li>
+										<li><a href="https://www.ilmkidunya.com/past_papers/pec-8th-class-past-papers.aspx"><span>8th Class</span></a></li>
+									</ul>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<h2>Past Papers feedback:</h2>
+					<p>If you want to share some information with other students regarding past papers, you can send your valued feedback to <a href="#">ilmkidunya.com</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	// Download the image in a new tab when "Download This Paper" is clicked
+	document.getElementById('downloadBtn').onclick = function () {
+		var imageUrl = document.getElementById('paperImage').src;
+		if (imageUrl) {
+			var a = document.createElement('a');
+			a.href = imageUrl;
+			a.download = 'PastPaper.jpg';  // Set the name of the file to be downloaded
+			a.click();  // Trigger the download
+		}
+	};
+
+	// Print the image when "Print This Paper" is clicked
+	document.getElementById('printBtn').addEventListener('click', function () {
+		const imgSrc = document.getElementById('paperImage').src;
+		const printWindow = window.open('', '_blank');
+		printWindow.document.write(`<img src="${imgSrc}" style="max-width: 100%;"/>`);
+		printWindow.document.close();
+		printWindow.print();
+	});
+</script>

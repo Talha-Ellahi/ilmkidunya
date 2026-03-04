@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace IKDFrontEnd.Models;
+
+public partial class TblLongQuestionAnswerChoice
+{
+    public int ChoiceId { get; set; }
+
+    public int? QuestionId { get; set; }
+
+    public string? ChoiceDescription { get; set; }
+
+    public string? ChoiceImage { get; set; }
+}

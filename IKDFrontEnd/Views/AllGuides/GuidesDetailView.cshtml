@@ -1,0 +1,492 @@
+﻿@using IKDFrontEnd.Services
+@using IKDFrontEnd.ViewModels
+@model IKDFrontEnd.ViewModels.GuidePageViewModel
+
+@inject BannerService BannerService
+
+@{
+    var banners = await BannerService.GetBannersAsync();
+    ViewBag.Banners = banners;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var courseName = ViewBag.Course != null
+        ? ViewBag.Course.ToString().Replace("-", " ")
+        : "Course";
+}
+<style>
+    .ss-banner-inner {
+        /* Ensure proper loading */
+        content-visibility: auto;
+        contain-intrinsic-size: 400px;
+    }
+
+    .ss-text-holder h1 {
+        /* Prevent layout shifts */
+        min-height: 1em;
+        /* Optimize font loading */
+        font-display: swap;
+    }
+
+    /* Ensure images in banner are optimized */
+    .ss-banner-inner img {
+        width: 100%;
+        height: auto;
+        loading: eager; /* If you have critical images */
+    }
+
+    @@media screen and (max-width: 980px) {
+        .responsive-table .table.mid span img {
+            display: none;
+        }
+    }
+
+</style>
+
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@Model.GuideDetail?.MetaTitle" />
+    <meta property="og:description" content="@Model.GuideDetail?.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@Model.GuideDetail?.MetaDesc">
+    <meta name="keywords" content="@Model.GuideDetail?.MetaKeyword">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@Model.GuideDetail?.MetaTitle</title>
+}
+
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            @if (ViewBag.HomeUrl != null)
+            {
+                <li>
+                    <a href="/@ViewBag.HomeUrl" class="menu_main">
+                        <div class="child">
+                            <img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png">
+                            <span>Home</span>
+                        </div>
+                    </a>
+                </li>
+            }
+            @if (Model.MenuItems != null)
+            {
+                foreach (var item in Model.MenuItems)
+                {
+                    <li>
+                        <a href="@item.Url" class="menu_main">
+                            <div class="child">
+                                <img class="lazyload" alt="" src="https://cdn.ilmkidunya.com/guidesheadericons/icons/@item.HeaderIcon">
+                                <span>@item.HeaderName</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <!-- LCP + CLS Optimized H1 -->
+                        <h1>
+                            @Model.GuideDetail?.Heading?.Replace("-", " ")
+                        </h1>
+
+                        <p>
+                            @Model.GuideDetail?.HeadingDesc?.Replace("-", " ")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+<div id="main">
+
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @Html.RenderWithAds(Model.GuideDetail?.Detail)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                @if (Model.CityList != null && Model.CityList.Any())
+                {
+                    <div class="flex-container">
+                        <div class="col-lg-4">
+                            <div class="table-of-content" style="margin-right:0; padding-bottom:15px; width:100%;">
+                                <h3>
+                                    Cities with
+                                    @Model.CityList.FirstOrDefault()?.ItemType
+                                    in
+                                    @(Model.Guide != null && Model.Guide.Abrevation != null ? Model.Guide.Abrevation : courseName)
+                                </h3>
+
+
+                                @if (Model.CityList != null && Model.CityList.Any())
+                                {
+                                    <ul>
+                                        @foreach (var city in Model.CityList)
+                                        {
+                                            var cityUrl = city.CityName.ToLower().Replace(" ", "-");
+                                            var courseUrl = courseName.ToLower().Replace(" ", "-"); // Assuming you have this property
+                                            var routeType = city.ItemType.ToLower() == "admissions" ? "admissions-in" : "universities-in";
+
+                                            <li class="citywise-list">
+                                                <a href="/@courseUrl/@routeType-@cityUrl">
+                                                    @city.CityName (@city.ItemCount)
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p>No cities found.</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (Model.GuideDetail.Detail2 != null)
+                        {
+                            @Html.RenderWithAds(Model.GuideDetail?.Detail2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bs-admission-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>
+                        More on
+                        @(Model.Guide != null && Model.Guide.Abrevation != null
+                                                ? Model.Guide.Abrevation
+                                                : ViewBag.HomeUrl.ToString().Replace("-", " "))
+                    </h2>
+
+                    <ul class="admission-nav">
+                        @if (ViewBag.HomeUrl != null)
+                        {
+                            <li>
+                                <a href="/@ViewBag.HomeUrl">
+                                    <figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png" alt=""></figure>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Model.MenuItems != null)
+                        {
+                            foreach (var item in Model.MenuItems)
+                            {
+                                <li>
+                                    <a href="@item.Url">
+                                        <figure><img src="https://cdn.ilmkidunya.com/guidesheadericons/icons/@item.HeaderIcon" alt=""></figure>
+                                        <span>@item.HeaderName</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+                <div class="inner-holder">
+                    @if (ViewBag.ShowInqueryForm)
+
+                    {
+                        <div class="col-lg-12">
+                            <div class="box-right" id="Form" style="border:none; padding:0;">
+                                <h2>Free Admission Advice for @ViewBag.HomeUrl.ToString().Replace("-", " ")</h2>
+                                @Html.Partial("_SuggestionFormGuides", new SuggestionViewModel())
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+
+</div>
+
+@{
+    // Get WhatsApp group data passed from controller
+    var whatsappGroup = ViewBag.ShowWatsupLink;
+}
+
+@if (whatsappGroup != null && !string.IsNullOrEmpty(whatsappGroup.GroupLink))
+{
+    <a href="@whatsappGroup.GroupLink" target="_blank" title="Join WhatsApp Group">
+        <img src="https://www.ilmkidunya.com/guidewtg.gif" alt="Join WhatsApp Group" class="whatsapp-group-img" />
+    </a>
+}
+
+<style>
+    .whatsapp-group-img {
+        position: fixed;
+        left: auto;
+        right: 5px;
+        top: 60%;
+        transform: translateY(-50%);
+        z-index: 999;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        object-fit: cover;
+    }
+
+        .whatsapp-group-img:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+</style>
+@* 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Handle form submission
+        $("#PageUrl").val(window.location.href);
+        $("#suggestion-form").submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting the usual way
+
+            var formData = $(this).serialize(); // Serialize form data to send it
+
+            // Make the AJAX request
+            $.ajax({
+                url: '/submitform/colleges',
+                type: 'POST',
+                data: formData, // The form data to send
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message); // Success message
+                        $("#suggestion-form")[0].reset(); // Clear the form
+                    } else {
+                        alert(response.message); // Show error message
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("There was an error submitting the form.");
+                }
+            });
+        });
+    });
+</script>
+<script>
+    // Load More functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('load-more-btn')) {
+            const button = e.target;
+            const type = button.getAttribute('data-type');
+            const course = button.getAttribute('data-course');
+            const page = parseInt(button.getAttribute('data-page'));
+            const layout = button.getAttribute('data-layout');
+            const city = button.getAttribute('data-city');
+
+            console.log('Load More Clicked:', { type, course, page, layout, city });
+
+            // Disable button and show loading
+            button.disabled = true;
+            button.textContent = 'Loading...';
+
+            fetch('/AllGuides/LoadMoreData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    type: type,
+                    course: course,
+                    page: page,
+                    City: city,
+                    layout: layout
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then(html => {
+                console.log('HTML received:', html);
+                if (html.trim() !== '') {
+                    if (layout === 'table') {
+                        const table = button.closest('.responsive-table').querySelector('table tbody');
+                        console.log('Table found:', table);
+                        table.insertAdjacentHTML('beforeend', html);
+                    } else if (layout === 'list') {
+                        // FIXED: Insert the new list items INSIDE the ul element, not before the container
+                        const list = document.getElementById('mobileCollegesList');
+                        if (list) {
+                            list.insertAdjacentHTML('beforeend', html);
+                            console.log('List items added INSIDE mobileCollegesList');
+                        } else {
+                            console.error('Mobile list container not found');
+                        }
+                    }
+
+                    button.setAttribute('data-page', page + 1);
+                    button.textContent = 'Load More';
+                    button.disabled = false;
+                } else {
+                    console.log('No more data');
+                    button.textContent = 'No More Data';
+                    button.style.display = 'none';
+
+                    // Show "no more" message for mobile
+                    if (layout === 'list') {
+                        const noMoreElement = document.getElementById('noMoreMobileColleges');
+                        if (noMoreElement) {
+                            noMoreElement.textContent = 'No more universities available.';
+                            noMoreElement.style.display = 'block';
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.textContent = 'Error Loading';
+                button.disabled = false;
+            });
+        }
+    });
+</script> *@
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // Set page URL
+        const pageUrlInput = document.getElementById("PageUrl");
+        if (pageUrlInput) {
+            pageUrlInput.value = window.location.href;
+        }
+
+        // Handle form submission
+        const form = document.getElementById("suggestion-form");
+        if (form) {
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault(); // Prevent normal form submit
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch("/submitform/colleges", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        alert(data.message);
+                        form.reset();
+                    } else {
+                        alert(data.message);
+                    }
+
+                } catch (error) {
+                    alert("There was an error submitting the form.");
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
+    document.addEventListener('click', function (e) {
+        if (!e.target.classList.contains('load-more-btn')) return;
+
+        const button = e.target;
+        const type = button.dataset.type;
+        const course = button.dataset.course;
+        const page = parseInt(button.dataset.page);
+        const layout = button.dataset.layout;
+        const city = button.dataset.city;
+
+        // Disable button
+        button.disabled = true;
+        button.textContent = "Loading...";
+
+        fetch('/AllGuides/LoadMoreData', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                type,
+                course,
+                page,
+                City: city,
+                layout
+            })
+        })
+        .then(res => res.text())
+        .then(html => {
+            if (html.trim() !== "") {
+
+                if (layout === "table") {
+                    const table = button.closest('.responsive-table')?.querySelector("table tbody");
+                    table?.insertAdjacentHTML("beforeend", html);
+                }
+                else if (layout === "list") {
+                    const list = document.getElementById("mobileCollegesList");
+                    if (list) {
+                        list.insertAdjacentHTML("beforeend", html);
+                    }
+                }
+
+                // Update page number
+                button.dataset.page = page + 1;
+                button.textContent = "Load More";
+                button.disabled = false;
+            }
+            else {
+                // No more data
+                button.textContent = "No More Data";
+                button.style.display = "none";
+
+                if (layout === "list") {
+                    const msg = document.getElementById('noMoreMobileColleges');
+                    if (msg) {
+                        msg.style.display = "block";
+                        msg.textContent = "No more universities available.";
+                    }
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            button.textContent = "Error Loading";
+            button.disabled = false;
+        });
+    });
+</script>

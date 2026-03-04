@@ -1,0 +1,168 @@
+﻿@model IKDFrontEnd.ViewModels.GuideDetailViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css-files/style/studyabroad.css" rel="stylesheet" async>
+@section MetaData {
+	@{
+		var metaTitle = Model?.MetaTitle ?? "";
+		var metaDescription = Model?.MetaDesc ?? "";
+		var metaKeywords = Model?.MetaKeyword ?? "";
+	}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@metaTitle" />
+	<meta property="og:description" content="@metaDescription" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@metaDescription">
+	<meta name="keywords" content="@metaKeywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@metaTitle</title>
+}
+@section header {
+
+	<div class="col-lg-11">
+
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/studyabroad/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+
+
+			<li>
+				<a aria-label="link" href="/studyabroad/country-guides.aspx">
+					<img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+						 alt="image" />
+					Guides
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/consultants/">
+					<img src="https://www.ilmkidunya.com/icons/tutor.png"
+						 alt="image" />
+					Consultants
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/scholarships/topscholarship">
+					<img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+						 alt="image" />
+					Top Scholarship
+				</a>
+			</li>
+		</ul>
+
+
+	</div>
+
+}
+@section innerbanner {
+
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="study-abrd-main">
+						<div class="ss-text-holder">
+							<h1>So where do you want to study abroad?</h1>
+						</div>
+						<div class="std-country-list">
+							<a href="/studyabroad/study-abroad-in-australia.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/aus.jpg"
+									 alt="flag-round-Australia" class=" lazyloaded">
+								<span>Australia</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-canada.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/canada.jpg"
+									 alt="flag-round-Canada" class=" lazyloaded">
+								<span>Canada</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-germany.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/germany.jpg"
+									 alt="flag-round-Germany" class=" lazyloaded">
+								<span>Germany</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-uk.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/uk.jpg"
+									 alt="flag-round-UK" class=" lazyloaded">
+								<span>UK</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-usa.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/usa.jpg"
+									 alt="flag-round-USA" class=" lazyloaded">
+								<span>USA</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-china.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/China.jpg"
+									 alt="flag-round-China" class=" lazyloaded">
+								<span>China</span>
+							</a>
+							<a href="/studyabroad/study-abroad-in-malaysia.aspx"
+							   class="sgle-country-box">
+								<img src="https://ikddata.ilmkidunya.com/images/flags/Malaysia.jpg"
+									 alt="flag-round-Malaysia" class=" lazyloaded">
+								<span>Malaysia</span>
+							</a>
+						</div>
+						<a href="/studyabroad/country-guides.aspx" class="std-view-all-btn">
+							<span>+</span>
+							View All Countries
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+}
+
+<div id="main">
+
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>@(Model?.Heading ?? "")</h2>
+					@Html.Raw((Model?.Detail ?? "").Replace("https://invent.ilmkidunya.com", ""))
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw((Model?.Detail2 ?? "").Replace("https://invent.ilmkidunya.com", ""))
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+
+</div>
+
+

@@ -1,0 +1,171 @@
+﻿@model List<IKDFrontEnd.Models.TblCollege>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+					City Wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+					Level wise colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/college-category">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+					Category wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+					Featured colleges
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+<div class="ss-banner-inner">
+	<div class="ss-container">
+		<div class="ss-row">
+			<div class="ss-col-lg-12">
+				<div class="ss-text-holder">
+						<h1>@ViewBag.CmsData.Heading</h1>
+						<p>List of all featured colleges and universities in Pakistan</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(ViewBag.CmsData.Desc1)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="feature-sec">
+		<div class="container">
+			<div class="row" id="collegeList">
+			    @foreach (var data in Model)
+				{  
+					<div class="col-lg-6 col-sm-12">
+					    <div class="feature-box">
+							<div class="img-holder">
+								<figure><img src="https://cdn.ilmkidunya.com/Inst/logos/@data.Logo" alt="" /></figure>
+							</div>
+							<div class="text-holder">
+								<a href="/colleges/@(data.Url).aspx">
+									<h4>@data.Name</h4>
+								</a>
+								<span>@data.Address</span>
+								<span>Contact: @data.ContactNumber</span>
+								<ul>
+									<li><a href="/colleges/@(data.Url)-admission.aspx">Admissions</a></li>
+									<li><a href="/colleges/@(data.Url)-merit-lists.aspx">Merit Lists</a></li>
+									<li><a href="/colleges/@(data.Url)-fee-structure.aspx">Fee Structure</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				}
+
+			</div>
+			<p style="text-align: center;">
+				<button type="button" class="load-more-button" id="loadMoreBtn">Load More Colleges & Universities</button>
+			</p>
+		</div>
+	</div>
+	<div class="news-ad-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Suggest a Great College or University to add to Featured List</h2>
+					<p>If you think there is a college or university we should add to our featured lists, please share your suggestion at our whatsapp. <a href="#">0315-4000792</a> </p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+					<div class="share-box" style="padding-top: 30px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	let currentPage = 1;
+
+	const loadMoreBtn = document.getElementById('loadMoreBtn');
+	const collegeList = document.getElementById('collegeList');
+
+	if (loadMoreBtn && collegeList) {
+		loadMoreBtn.addEventListener('click', function () {
+			currentPage++; // Increment the page number
+			loadMoreBtn.innerHTML = 'Loading...'; // Change button text while loading
+			loadMoreBtn.disabled = true; // Disable the button to prevent multiple clicks
+
+			// Fetch new reviews via AJAX
+			fetch(`/colleges/featured-listing-of-colleges.aspx?page=${currentPage}&pageSize=10`)
+				.then(response => response.text()) // Get the HTML response
+				.then(data => {
+					const tempContainer = document.createElement('div');
+					tempContainer.innerHTML = data;
+
+					
+					const newcollegeList = tempContainer.querySelector('#collegeList');
+
+					if (newcollegeList && newcollegeList.innerHTML.trim()) {
+						collegeList.insertAdjacentHTML('beforeend', newcollegeList.innerHTML);
+						loadMoreBtn.innerHTML = 'Load More Colleges';
+						loadMoreBtn.disabled = false; 
+					} else {
+						loadMoreBtn.innerHTML = 'No More Colleges';
+						loadMoreBtn.disabled = true;
+					}
+				})
+				.catch(error => {
+					console.error('Error loading more reviews:', error);
+					loadMoreBtn.innerHTML = 'Error loading Colleges';
+					loadMoreBtn.disabled = false;
+				});
+				});
+				}
+				</script>

@@ -1,0 +1,125 @@
+﻿@model List<IKDFrontEnd.ViewModels.ProfessionGroupViewModel>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+<!-- Main Start -->
+<div id="main">
+    <div class="main-content">
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    @if (ViewBag.CmsData != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+
+                    @*                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        @foreach (var group in Model)
+                        {
+                            <h3 class="ss-profession"><span>@group.JobTypeName</span></h3>
+
+                            @if (group.SubCategories.Any())
+                            {
+                                <ul class="ss-company-list">
+                                    @foreach (var sub in group.SubCategories)
+                                    {
+                                        var subName = sub.ToLower().Replace(" ", "-")+"-jobs";
+                                        <li>
+                                            <a href="/jobs/professions/@subName">
+                                                <span>@sub</span>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+
+                        <div class="share-box" style="padding-top: 20px;"></div>
+                    </div>
+ *@
+
+                    <div class="page-content pp-sec">
+                        <div class="flex-container job-pro">
+                            @foreach (var group in Model)
+                            {
+                                <div class="col-lg-12">
+                                    <div class="table-of-content" style="margin-right:0; padding-bottom:15px; width:100%;">
+                                        <h3>
+
+                                            @group.JobTypeName
+
+                                        </h3>
+
+                                        @if (group.SubCategories != null && group.SubCategories.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var sub in group.SubCategories)
+                                                {
+                                                    var subName = sub.ToLower().Replace(" ", "-") + "-jobs";
+                                                    <li>
+                                                        <a href="/jobs/professions/@subName">
+                                                            <span>@sub</span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

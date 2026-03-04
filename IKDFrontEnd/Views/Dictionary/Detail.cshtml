@@ -1,0 +1,1305 @@
+﻿@model IKDFrontEnd.ViewModels.DictionaryViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://www.ilmkidunya.com/css-files/style/dictionary.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder" id="coursesHeading">
+                        <h1>@Model.Word Meaning In @Model.CompleteLanguage </h1>
+
+                    </div>
+                </div>
+                <div class="ss-col-lg-12">
+                    <div class="banner-form" style="margin: 0 20%; position: relative;">
+                        <div class="input-holder" style="width: 90%;">
+                            <div style="width: 60%; position: relative;">
+                                <input type="text" placeholder="Type Your Word Here" value="@Model.Word">
+                            </div>
+
+                            <div class="custom-select-wrapper" style="width: 40%;">
+                                <div class="custom-select" id="customSelectSearch">
+                                    <span class="selected" data-value="@Model.TranslatedLanguage.ToLower()">
+                                        @char.ToUpper(Model.TranslatedLanguage[0])@Model.TranslatedLanguage.Substring(1).ToLower()
+                                    </span>
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="custom-options">
+                                    <div class="search-box">
+                                        <input type="text" id="optionSearchHeader" placeholder="Search...">
+                                    </div>
+                                    <span data-value="Afrikaans">Afrikaans</span>
+                                    <span data-value="Albanian">Albanian</span>
+                                    <span data-value="Amharic">Amharic</span>
+                                    <span data-value="Arabic">Arabic</span>
+                                    <span data-value="Armenian">Armenian</span>
+                                    <span data-value="Azerbaijani">Azerbaijani</span>
+                                    <span data-value="Basque">Basque</span>
+                                    <span data-value="Belarusian">Belarusian</span>
+                                    <span data-value="Bengali">Bengali</span>
+                                    <span data-value="Bosnian">Bosnian</span>
+                                    <span data-value="Bulgarian">Bulgarian</span>
+                                    <span data-value="Catalan">Catalan</span>
+                                    <span data-value="Cebuano">Cebuano</span>
+                                    <span data-value="Chinese (Simplified)">Chinese</span>
+                                    <span data-value="Croatian">Croatian</span>
+                                    <span data-value="Czech">Czech</span>
+                                    <span data-value="Danish">Danish</span>
+                                    <span data-value="Dutch">Dutch</span>
+                                    <span data-value="English">English</span>
+                                    <span data-value="Esperanto">Esperanto</span>
+                                    <span data-value="Estonian">Estonian</span>
+                                    <span data-value="Finnish">Finnish</span>
+                                    <span data-value="French">French</span>
+                                    <span data-value="Galician">Galician</span>
+                                    <span data-value="Georgian">Georgian</span>
+                                    <span data-value="German">German</span>
+                                    <span data-value="Greek">Greek</span>
+                                    <span data-value="Gujarati">Gujarati</span>
+                                    <span data-value="Haitian Creole">Haitian Creole</span>
+                                    <span data-value="Hausa">Hausa</span>
+                                    <span data-value="Hebrew">Hebrew</span>
+                                    <span data-value="Hindi">Hindi</span>
+                                    <span data-value="Hungarian">Hungarian</span>
+                                    <span data-value="Icelandic">Icelandic</span>
+                                    <span data-value="Indonesian">Indonesian</span>
+                                    <span data-value="Irish">Irish</span>
+                                    <span data-value="Italian">Italian</span>
+                                    <span data-value="Japanese">Japanese</span>
+                                    <span data-value="Javanese">Javanese</span>
+                                    <span data-value="Kannada">Kannada</span>
+                                    <span data-value="Kazakh">Kazakh</span>
+                                    <span data-value="Khmer">Khmer</span>
+                                    <span data-value="Korean">Korean</span>
+                                    <span data-value="Kurdish">Kurdish</span>
+                                    <span data-value="Kyrgyz">Kyrgyz</span>
+                                    <span data-value="Lao">Lao</span>
+                                    <span data-value="Latin">Latin</span>
+                                    <span data-value="Latvian">Latvian</span>
+                                    <span data-value="Lithuanian">Lithuanian</span>
+                                    <span data-value="Macedonian">Macedonian</span>
+                                    <span data-value="Malagasy">Malagasy</span>
+                                    <span data-value="Malay">Malay</span>
+                                    <span data-value="Malayalam">Malayalam</span>
+                                    <span data-value="Maltese">Maltese</span>
+                                    <span data-value="Maori">Maori</span>
+                                    <span data-value="Marathi">Marathi</span>
+                                    <span data-value="Mongolian">Mongolian</span>
+                                    <span data-value="Burmese">Burmese</span>
+                                    <span data-value="Nepali">Nepali</span>
+                                    <span data-value="Norwegian">Norwegian</span>
+                                    <span data-value="Persian (Farsi)">Persian</span>
+                                    <span data-value="Polish">Polish</span>
+                                    <span data-value="Portuguese">Portuguese</span>
+                                    <span data-value="Punjabi">Punjabi</span>
+                                    <span data-value="Romanian">Romanian</span>
+                                    <span data-value="Russian">Russian</span>
+                                    <span data-value="Serbian">Serbian</span>
+                                    <span data-value="Sinhala">Sinhala</span>
+                                    <span data-value="Slovak">Slovak</span>
+                                    <span data-value="Slovenian">Slovenian</span>
+                                    <span data-value="Somali">Somali</span>
+                                    <span data-value="Spanish">Spanish</span>
+                                    <span data-value="Sundanese">Sundanese</span>
+                                    <span data-value="Swahili">Swahili</span>
+                                    <span data-value="Swedish">Swedish</span>
+                                    <span data-value="Tagalog">Tagalog</span>
+                                    <span data-value="Tajik">Tajik</span>
+                                    <span data-value="Tamil">Tamil</span>
+                                    <span data-value="Telugu">Telugu</span>
+                                    <span data-value="Thai">Thai</span>
+                                    <span data-value="Turkish">Turkish</span>
+                                    <span data-value="Ukrainian">Ukrainian</span>
+                                    <span data-value="Urdu">Urdu</span>
+                                    <span data-value="Uzbek">Uzbek</span>
+                                    <span data-value="Vietnamese">Vietnamese</span>
+                                    <span data-value="Welsh">Welsh</span>
+                                    <span data-value="Xhosa">Xhosa</span>
+                                    <span data-value="Yiddish">Yiddish</span>
+                                    <span data-value="Yoruba">Yoruba</span>
+                                    <span data-value="Zulu">Zulu</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-holder">
+                            <button type="button" id="searchBtnHeader">
+                                <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<!-- Header End -->
+<!-- Main Start -->
+
+<div id="main">
+    <div class="college-news-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+
+                    @if (Model.CurrentLanguage != Model.TranslatedLanguage)
+                    {
+                        <!-- Word Title -->
+                        <div class="ckeditorcontent">
+                            <h2>
+                                <span class="dictionary-word" id="wordTitle">@Model.Word</span>
+                                Meaning in <span id="translatedLanguage">@Model.CompleteLanguage</span>
+                            </h2>
+                        </div>
+
+                        <div class="dictionary-row">
+                            <div class="dictionary-boxes">
+                                <div class="dictionary-speaker">
+                                    <h2 id="wordHeading">@Model.Word</h2>
+                                </div>
+
+                                <span class="pronociation" id="pronunciation" style="display:none;"></span>
+
+
+
+                                <span class="spk-icon" id="speakerIcon" style="cursor:pointer;" onclick="playAudio()">
+                                    <svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5
+                                                         3c0-1.77-1.02-3.29-2.5-4.03v8.05
+                                                         c1.48-.73 2.5-2.25 2.5-4.02zM14
+                                                         3.23v2.06c2.89.86 5 3.54 5
+                                                         6.71s-2.11 5.85-5 6.71v2.06c4.01-.91
+                                                         7-4.49 7-8.77s-2.99-7.86-7-8.77z">
+                                        </path>
+                                    </svg>
+                                </span>
+
+                                <!-- hidden audio element -->
+                                <audio id="customAudio" style="display:none;"></audio>
+                            </div>
+
+                            <!-- Translation Box -->
+                            <div class="dictionary-boxes search-dict" style="padding-top: 5px;">
+
+
+                                <div class="translation-result">
+                                    <div class="translation-result">
+                                        <p class="urdu" id="translatedText">
+                                            @if (!string.IsNullOrEmpty(Model.ExistingMeaning))
+                                            {
+                                                <!-- Debug Information -->
+                                                <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; display: none;" id="debugInfo">
+                                                    <strong>Debug Info:</strong><br />
+                                                    Raw from Model: @Model.ExistingMeaning<br />
+                                                    Contains &amp;#x: @Model.ExistingMeaning.Contains("&#x")<br />
+                                                    Length: @Model.ExistingMeaning.Length<br />
+                                                    First 20 chars: @Model.ExistingMeaning.Substring(0, Math.Min(20, Model.ExistingMeaning.Length))<br />
+                                                    After HtmlDecode: @System.Net.WebUtility.HtmlDecode(Model.ExistingMeaning)<br />
+                                                    After HtmlDecode Contains &amp;#x: @System.Net.WebUtility.HtmlDecode(Model.ExistingMeaning).Contains("&#x")
+                                                </div>
+
+                                                @Model.ExistingMeaning
+                                            }
+                                            else
+                                            {
+                                                <span class="loading">Loading translation...</span>
+                                            }
+                                        </p>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                function fixEncodedText() {
+                                                    const translatedElement = document.getElementById('translatedText');
+                                                    if (translatedElement) {
+                                                        const currentContent = translatedElement.innerHTML;
+
+                                                        // Check if content is encoded
+                                                        if (currentContent.includes('&amp;#x') || currentContent.includes('&#x')) {
+                                                            console.log('Fixing encoded text from response compression...');
+
+                                                            // Decode the HTML entities
+                                                            const textArea = document.createElement('textarea');
+                                                            textArea.innerHTML = currentContent;
+                                                            const decodedContent = textArea.value;
+
+                                                            // Update the content
+                                                            translatedElement.innerHTML = decodedContent;
+                                                        }
+                                                    }
+                                                }
+
+                                                // Run immediately
+                                                fixEncodedText();
+
+                                                // Run again after a short delay in case content loads async
+                                                setTimeout(fixEncodedText, 100);
+                                            });
+                                        </script>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    }
+                    <!-- Definitions -->
+                    <div class="ckeditorcontent" id="definitionsSection" style="display:none;">
+                        <h3 id="definitionsTitle">Definitions</h3>
+                        <div id="definitionsList">
+                            @if (!string.IsNullOrEmpty(Model.ExistingDefinition))
+                            {
+                                <p><em>@Model.ExistingPartOfSpeech</em>. @Model.ExistingDefinition</p>
+                            }
+                        </div>
+                        <p id="sourceLink" style="display:none;"><strong>Source:</strong> <a id="sourceUrl" target="_blank"></a></p>
+                    </div>
+
+                    <!-- Synonyms -->
+                    <div id="synonymsSection" style="display:none;">
+                        <h3 id="synonymsTitle">Synonyms</h3>
+                        <div class="dictionary-synonyms-list" id="synonymsList">
+                            @if (!string.IsNullOrEmpty(Model.ExistingSynonyms))
+                            {
+                                var synonyms = Model.ExistingSynonyms.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s));
+                                if (synonyms.Any())
+                                {
+                                    foreach (var syn in synonyms.Take(20))
+                                    {
+                                        <a href="/dictionary/@syn.Replace(" ", "-")-meaning-in-@Model.TranslatedLanguage">@syn</a>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Antonyms -->
+                    <div id="antonymsSection" style="display:none;">
+                        <h3 id="antonymsTitle">Antonyms</h3>
+                        <div class="dictionary-synonyms-list" id="antonymsList">
+                            @if (!string.IsNullOrEmpty(Model.ExistingAntonyms))
+                            {
+                                var antonyms = Model.ExistingAntonyms.Split(',').Select(a => a.Trim()).Where(a => !string.IsNullOrEmpty(a));
+                                if (antonyms.Any())
+                                {
+                                    foreach (var ant in antonyms.Take(20))
+                                    {
+                                        <a href="/dictionary/@ant.Replace(" ", "-")-meaning-in-@Model.TranslatedLanguage">@ant</a>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content-sec level-wise" style="margin-bottom: 30px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Explore the Meaning of Words with the Best Complies Dictionary</h2>
+                    <div class="subjects-tble2 diclinkclr">
+                        <ul>
+                            <li>
+                                <a href="/dictionary/english-to-english-dictionary">
+                                    <span>
+                                        English To English Dictionary
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/dictionary/english-to-urdu-dictionary">
+                                    <span>
+                                        English To Urdu Dictionary
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/dictionary/english-to-hindi-dictionary">
+                                    <span>
+                                        English To Hindi Dictionary
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/dictionary/urdu-to-english-dictionary">
+                                    <span>
+                                        Urdu To English Dictionary
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/dictionary/urdu-to-hindi-dictionary">
+                                    <span>
+                                        Urdu To Hindi Dictionary
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/dictionary/english-to-urdu-translator">
+                                    <span>
+                                        Translate English To Urdu
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/dictionary/urdu-to-english-translator">
+                                    <span>
+                                        Translate Urdu To English
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level fee-box" style="margin: 0px 0px 30px; padding-top: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>@Model.Word Meaning In @Model.CompleteLanguage with Detail</h2>
+                    <p id="description">
+                        @if (!string.IsNullOrEmpty(Model.ExistingDescription))
+                        {
+                            @Html.Raw(Model.ExistingDescription)
+                        }
+                        else
+                        {
+                            <text>Loading...</text>
+                        }
+                    </p>
+                </div>
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Global variables
+    let currentWord = '@Model.Word';
+    let currentLanguage = '@Model.CurrentLanguage';
+    let translatedLanguage = '@Model.TranslatedLanguageCode';
+    let SecondlanguageName = '@Model.TranslatedLanguage'
+    let englishWord = '';
+    let selectedLanguageMain = '';
+    let selectedLanguageHeader = '';
+    let hasExistingData = @Json.Serialize(Model.HasExistingData);
+
+    // Track what data we need to fetch
+    let needsDefinition = true;
+    let needsSynonyms = true;
+    let needsAntonyms = true;
+    let needsDescription = true;
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadWordData();
+        if(translatedLanguage != currentLanguage){
+            initializeHeaderCustomSelect();
+        }
+        initializeHeaderCustomSelect();
+    });
+
+    async function loadWordData() {
+        try {
+            // Step 1: Get translation
+            await getTranslation();
+
+            // Step 2: Check what data we already have
+            await checkExistingDataSeparately();
+
+            // Step 3: Get missing data from APIs
+            await fetchMissingData();
+
+        } catch (error) {
+            console.error('Error loading word data:', error);
+            document.getElementById('translatedText').textContent = 'Error loading translation';
+        }
+    }
+
+
+    function initializeHeaderCustomSelect() {
+        const customSelectHeader = document.getElementById('customSelectSearch');
+        const customOptionsHeader = customSelectHeader.nextElementSibling; // The .custom-options div right after customSelectSearch
+        const optionSearchHeader = document.getElementById('optionSearchHeader');
+        const optionsHeader = customOptionsHeader.querySelectorAll('span[data-value]');
+        const selectedSpanHeader = customSelectHeader.querySelector('.selected');
+        const searchBtnHeader = document.getElementById('searchBtnHeader');
+        const wordInputHeader = document.querySelector('.ss-banner-inner .banner-form input[type="text"]');
+        const customSelectWrapperHeader = customSelectHeader.parentElement;
+
+        console.log('Initializing header search bar:', { customSelectHeader, customOptionsHeader, optionSearchHeader, options: optionsHeader.length });
+
+        // Toggle dropdown using CSS classes
+        customSelectHeader.addEventListener('click', function(e) {
+            e.stopPropagation();
+            customSelectWrapperHeader.classList.toggle('active');
+            customOptionsHeader.classList.toggle('active');
+
+                @* if (customOptionsHeader.classList.contains('active')) {
+          optionSearchHeader.focus();
+        } *@
+        });
+
+        // Handle option selection
+        optionsHeader.forEach(option => {
+            option.addEventListener('click', function() {
+                selectedLanguageHeader = this.getAttribute('data-value');
+                const languageName = this.textContent;
+                selectedSpanHeader.textContent = languageName;
+
+                // Close dropdown
+                customSelectWrapperHeader.classList.remove('active');
+                customOptionsHeader.classList.remove('active');
+
+                console.log('Header search bar selected:', selectedLanguageHeader);
+            });
+        });
+
+        // Search filter functionality
+        optionSearchHeader.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            let hasVisibleOptions = false;
+
+            optionsHeader.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    option.style.display = 'block';
+                    hasVisibleOptions = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Show a message if no options match
+            const noResults = customOptionsHeader.querySelector('.no-results');
+            if (!hasVisibleOptions && !noResults) {
+                const noResultsMsg = document.createElement('div');
+                noResultsMsg.className = 'no-results';
+                noResultsMsg.textContent = 'No languages found';
+                noResultsMsg.style.padding = '10px 15px';
+                noResultsMsg.style.color = '#666';
+                noResultsMsg.style.fontStyle = 'italic';
+                customOptionsHeader.appendChild(noResultsMsg);
+            } else if (hasVisibleOptions && noResults) {
+                noResults.remove();
+            }
+        });
+
+        // Search button functionality - requires new word
+        searchBtnHeader.addEventListener('click', function() {
+            performHeaderSearch();
+        });
+
+        // Allow Enter key to trigger search in both search box and word input
+        optionSearchHeader.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performHeaderSearch();
+            }
+        });
+
+        wordInputHeader.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performHeaderSearch();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            customSelectWrapperHeader.classList.remove('active');
+            customOptionsHeader.classList.remove('active');
+        });
+    }
+
+    // Check each data type separately
+    async function checkExistingDataSeparately() {
+        // Use proper null checking with JSON serialization
+        const existingDefinition = @Html.Raw(Json.Serialize(Model.ExistingDefinition)) || '';
+        const existingSynonyms = @Html.Raw(Json.Serialize(Model.ExistingSynonyms)) || '';
+        const existingAntonyms = @Html.Raw(Json.Serialize(Model.ExistingAntonyms)) || '';
+        const existingDescription = @Html.Raw(Json.Serialize(Model.ExistingDescription)) || '';
+
+        console.log('🔍 Checking existing data separately...');
+        console.log('Existing synonyms:', existingSynonyms);
+        console.log('Existing antonyms:', existingAntonyms);
+
+        // Check definition
+        if (existingDefinition && existingDefinition.trim() !== '' && existingDefinition !== 'null') {
+            console.log('✅ Using existing definition from database');
+            const definitionsList = document.getElementById('definitionsList');
+            const partOfSpeech = '@Html.Raw(Model.ExistingPartOfSpeech)' || '';
+
+            if (!definitionsList.innerHTML.trim()) {
+                definitionsList.innerHTML = `<p><em>${partOfSpeech}</em>. ${existingDefinition}</p>`;
+            }
+            document.getElementById('definitionsSection').style.display = 'block';
+            needsDefinition = false;
+        } else {
+            console.log('❌ Definition not found in database');
+            needsDefinition = true;
+        }
+
+        // Check synonyms - FIXED: Proper null/empty string checking
+        if (existingSynonyms && existingSynonyms.trim() !== '' && existingSynonyms !== 'null' && existingSynonyms !== '[]') {
+            console.log('✅ Using existing synonyms from database');
+            const synonymsList = document.getElementById('synonymsList');
+            const synonymsArray = existingSynonyms.split(',').map(s => s.trim()).filter(s => s && s !== 'null' && s.trim() !== '');
+
+            if (synonymsArray.length > 0) {
+                // Clear existing content if any
+                synonymsList.innerHTML = '';
+
+                synonymsArray.slice(0, 20).forEach(syn => {
+                    if (syn && syn.trim() !== '') {
+                        const link = document.createElement('a');
+                        link.href = `/dictionary/${syn.replace(/\s+/g, "-")}-meaning-in-${SecondlanguageName}`;
+                        link.textContent = syn;
+                        synonymsList.appendChild(link);
+                    }
+                });
+
+                if (synonymsList.children.length > 0) {
+                    document.getElementById('synonymsSection').style.display = 'block';
+                    document.getElementById('synonymsTitle').textContent = `Synonyms For ${currentWord}, Words Similar to ${currentWord}`;
+                    needsSynonyms = false;
+                } else {
+                    console.log('❌ Synonyms array is empty after filtering');
+                    needsSynonyms = true;
+                }
+            } else {
+                console.log('❌ No valid synonyms found in database');
+                needsSynonyms = true;
+            }
+        } else {
+            console.log('❌ Synonyms not found in database');
+            needsSynonyms = true;
+        }
+
+        // Check antonyms - FIXED: Proper null/empty string checking
+        if (existingAntonyms && existingAntonyms.trim() !== '' && existingAntonyms !== 'null' && existingAntonyms !== '[]') {
+            console.log('✅ Using existing antonyms from database');
+            const antonymsList = document.getElementById('antonymsList');
+            const antonymsArray = existingAntonyms.split(',').map(a => a.trim()).filter(a => a && a !== 'null' && a.trim() !== '');
+
+            if (antonymsArray.length > 0) {
+                // Clear existing content if any
+                antonymsList.innerHTML = '';
+
+                antonymsArray.slice(0, 20).forEach(ant => {
+                    if (ant && ant.trim() !== '') {
+                        const link = document.createElement('a');
+                        link.href = `/dictionary/${ant.replace(/\s+/g, "-")}-meaning-in-${SecondlanguageName}`;
+                        link.textContent = ant;
+                        antonymsList.appendChild(link);
+                    }
+                });
+
+                if (antonymsList.children.length > 0) {
+                    document.getElementById('antonymsSection').style.display = 'block';
+                    document.getElementById('antonymsTitle').textContent = `Antonyms For ${currentWord}, Words Opposite to ${currentWord}`;
+                    needsAntonyms = false;
+                } else {
+                    console.log('❌ Antonyms array is empty after filtering');
+                    needsAntonyms = true;
+                }
+            } else {
+                console.log('❌ No valid antonyms found in database');
+                needsAntonyms = true;
+            }
+        } else {
+            console.log('❌ Antonyms not found in database');
+            needsAntonyms = true;
+        }
+
+        // Check description
+        if (existingDescription && existingDescription.trim() !== '' && existingDescription !== 'null') {
+            console.log('✅ Using existing description from database');
+            const descriptionElement = document.getElementById('description');
+            if (descriptionElement.textContent.includes('Loading...') || descriptionElement.innerHTML.includes('Loading...')) {
+                descriptionElement.innerHTML = existingDescription;
+            }
+            needsDescription = false;
+        } else {
+            console.log('❌ Description not found in database');
+            needsDescription = true;
+        }
+
+        console.log(`📊 Data needs: Definition=${needsDefinition}, Synonyms=${needsSynonyms}, Antonyms=${needsAntonyms}, Description=${needsDescription}`);
+    }
+
+    // Fetch only the missing data
+    async function fetchMissingData() {
+        if (!englishWord) {
+            console.log('No English word available, skipping API calls');
+            return;
+        }
+
+        const hasMissingData = needsDefinition || needsSynonyms || needsAntonyms || needsDescription;
+
+        if (!hasMissingData) {
+            console.log('🎉 All data already exists in database, no API calls needed');
+            return;
+        }
+
+        console.log('🔄 Fetching missing data from APIs...');
+
+        // Fetch dictionary data if needed
+        if (needsDefinition || needsSynonyms || needsAntonyms) {
+            console.log('📚 Fetching dictionary data...');
+            await getDictionaryDetails();
+        }
+
+        // Fetch description if needed
+        if (needsDescription) {
+            console.log('🌐 Fetching DBPedia description...');
+            await getDbPediaDescription();
+        }
+
+        console.log('✅ All missing data fetched successfully');
+    }
+
+    async function getTranslation() {
+        // Check if we already have an existing meaning from the server
+        const existingMeaning = '@Html.Raw(Model.ExistingMeaning)';
+        if (existingMeaning && existingMeaning.trim() !== '' && existingMeaning !== 'null') {
+            console.log('✅ Using existing meaning from database:', existingMeaning);
+            document.getElementById('translatedText').textContent = existingMeaning;
+
+            if (currentLanguage === 'en-gb') {
+                englishWord = currentWord.toLowerCase();
+            } else if (translatedLanguage !== 'en-gb') {
+                await getEnglishTranslation(existingMeaning);
+            } else {
+                englishWord = existingMeaning.toLowerCase();
+            }
+            return;
+        }
+
+        console.log('🌐 No existing meaning found, calling translation API...');
+
+        // First translation using Google Translate API
+        let translationUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${currentLanguage}&tl=${translatedLanguage}&dt=t&q=${encodeURIComponent(currentWord)}`;
+
+        try {
+            let response = await fetch(translationUrl);
+            let data = await response.json();
+
+            let translatedText = '';
+            if (data && data[0] && data[0][0] && data[0][0][0]) {
+                translatedText = data[0][0][0];
+
+                // Save the main translation to database
+                if (translatedText && translatedText !== currentWord) {
+                    await saveWordAndMeaning(currentWord, currentLanguage, translatedText, translatedLanguage);
+                }
+            }
+
+            if (currentLanguage != translatedLanguage) {
+                document.getElementById('translatedText').textContent = translatedText || 'Translation not available';
+            }
+
+            // Determine English word
+            if (currentLanguage === 'en-gb') {
+                englishWord = currentWord.toLowerCase();
+            } else if (translatedLanguage !== 'en-gb') {
+                await getEnglishTranslation(translatedText);
+            } else {
+                englishWord = translatedText;
+            }
+        } catch (error) {
+            console.error('Translation error:', error);
+            document.getElementById('translatedText').textContent = 'Translation failed';
+            englishWord = currentWord.toLowerCase();
+        }
+    }
+
+    // Helper function to get English translation
+    async function getEnglishTranslation(translatedText) {
+        const translationUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${translatedLanguage}&tl=en-gb&dt=t&q=${encodeURIComponent(translatedText)}`;
+        const response = await fetch(translationUrl);
+        const data = await response.json();
+
+        if (data && data[0] && data[0][0] && data[0][0][0]) {
+            englishWord = data[0][0][0].toLowerCase();
+
+            if (englishWord && englishWord !== translatedText) {
+                await saveWordAndMeaning(translatedText, translatedLanguage, englishWord, 'en');
+            }
+        } else {
+            englishWord = translatedText;
+        }
+    }
+
+    // Updated getDictionaryDetails to only fetch missing data
+    async function getDictionaryDetails() {
+        if (!englishWord) return;
+
+        // Only proceed if we need dictionary data
+        if (!needsDefinition && !needsSynonyms && !needsAntonyms) {
+            console.log('✅ All dictionary data already available, skipping API call');
+            return;
+        }
+
+        console.log(`📚 Fetching dictionary details for: ${englishWord}`);
+        console.log(`🔍 Needed: Definition=${needsDefinition}, Synonyms=${needsSynonyms}, Antonyms=${needsAntonyms}`);
+
+        try {
+            let cleanWord = englishWord.split(' ')[0].replace(/[^a-zA-Z]/g, '').toLowerCase();
+            if (!cleanWord) return;
+
+            // Use Free Dictionary API
+            const dictionaryUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${cleanWord}`;
+
+            try {
+                const response = await fetch(dictionaryUrl);
+                if (!response.ok) {
+                    throw new Error('Dictionary API not available');
+                }
+
+                const data = await response.json();
+                console.log('Dictionary API response:', data);
+
+                // Process the dictionary data
+                await processDictionaryData(data, cleanWord);
+
+            } catch (apiError) {
+                console.error('Dictionary API error:', apiError);
+                // Fallback to other methods if needed
+                await fallbackDictionaryLookup(cleanWord);
+            }
+
+        } catch (error) {
+            console.error('Error fetching dictionary details:', error);
+            // Only show error if we don't have existing data
+            if (needsDefinition) {
+                document.getElementById('definitionsSection').style.display = 'block';
+                document.getElementById('definitionsList').innerHTML = '<p>No dictionary definitions found.</p>';
+            }
+        }
+    }
+
+    // Process dictionary API response - only update what's needed
+    async function processDictionaryData(data, cleanWord) {
+        if (!data || data.length === 0) {
+            console.log('No dictionary data found from API');
+            // Show empty state messages for missing data
+            if (needsDefinition) {
+                document.getElementById('definitionsSection').style.display = 'block';
+                document.getElementById('definitionsList').innerHTML = '<p>No definition found.</p>';
+            }
+            return;
+        }
+
+        const wordData = data[0];
+        let definition = '';
+        let partOfSpeech = '';
+        let synonyms = [];
+        let antonyms = [];
+        let example = '';
+
+        // Extract data from the first meaning
+        if (wordData.meanings && wordData.meanings.length > 0) {
+            const firstMeaning = wordData.meanings[0];
+            partOfSpeech = firstMeaning.partOfSpeech || '';
+
+            // Get the first definition and example
+            if (firstMeaning.definitions && firstMeaning.definitions.length > 0) {
+                definition = firstMeaning.definitions[0].definition || '';
+                example = firstMeaning.definitions[0].example || '';
+            }
+
+            // Collect all synonyms and antonyms from all meanings
+            wordData.meanings.forEach(meaning => {
+                if (meaning.synonyms && Array.isArray(meaning.synonyms)) {
+                    const validSynonyms = meaning.synonyms.filter(s => s && s.trim() !== '');
+                    synonyms = [...synonyms, ...validSynonyms];
+                }
+                if (meaning.antonyms && Array.isArray(meaning.antonyms)) {
+                    const validAntonyms = meaning.antonyms.filter(a => a && a.trim() !== '');
+                    antonyms = [...antonyms, ...validAntonyms];
+                }
+            });
+
+            // Remove duplicates
+            synonyms = [...new Set(synonyms)];
+            antonyms = [...new Set(antonyms)];
+        }
+
+        console.log('Extracted from API:', {
+            definition: definition,
+            synonymsCount: synonyms.length,
+            antonymsCount: antonyms.length
+        });
+
+        // Update UI only for missing data
+        if (needsDefinition) {
+            if (definition) {
+                updateDefinitionUI(definition, partOfSpeech);
+            } else {
+                // Show message if no definition found
+                document.getElementById('definitionsSection').style.display = 'block';
+                document.getElementById('definitionsList').innerHTML = '<p>No definition found.</p>';
+            }
+        }
+
+        if (needsSynonyms) {
+            if (synonyms.length > 0) {
+                updateSynonymsUI(synonyms);
+            } else {
+                // Don't show synonyms section if no synonyms found
+                console.log('No synonyms found from API');
+                // Optionally, you can show a message:
+                // document.getElementById('synonymsSection').style.display = 'block';
+                // document.getElementById('synonymsList').innerHTML = '<p>No synonyms found.</p>';
+            }
+        }
+
+        if (needsAntonyms) {
+            if (antonyms.length > 0) {
+                updateAntonymsUI(antonyms);
+            } else {
+                // Don't show antonyms section if no antonyms found
+                console.log('No antonyms found from API');
+                // Optionally, you can show a message:
+                // document.getElementById('antonymsSection').style.display = 'block';
+                // document.getElementById('antonymsList').innerHTML = '<p>No antonyms found.</p>';
+            }
+        }
+
+        // Save only the data we fetched to database
+        await saveCompleteWordData(cleanWord, definition, partOfSpeech, synonyms, antonyms, example);
+    }
+
+    // Update definition in UI
+    function updateDefinitionUI(definition, partOfSpeech) {
+        const definitionsList = document.getElementById('definitionsList');
+        const definitionsSection = document.getElementById('definitionsSection');
+
+        if (definition && !definitionsList.innerHTML.includes(definition)) {
+            definitionsList.innerHTML = `<p><em>${partOfSpeech}</em>. ${definition}</p>`;
+            definitionsSection.style.display = 'block';
+            console.log('✅ Definition updated in UI');
+        }
+    }
+
+    // Update synonyms in UI
+    function updateSynonymsUI(synonyms) {
+        const synonymsList = document.getElementById('synonymsList');
+        const synonymsSection = document.getElementById('synonymsSection');
+
+        // Filter out any null or empty synonyms
+        const validSynonyms = synonyms.filter(syn => syn && syn.trim() !== '');
+
+        if (validSynonyms.length > 0) {
+            // Clear existing content
+            synonymsList.innerHTML = '';
+
+            validSynonyms.slice(0, 20).forEach(syn => {
+                const link = document.createElement('a');
+                link.href = `/dictionary/${syn.replace(/\s+/g, "-")}-meaning-in-${SecondlanguageName}`;
+                link.textContent = syn;
+                synonymsList.appendChild(link);
+            });
+
+            synonymsSection.style.display = 'block';
+            document.getElementById('synonymsTitle').textContent = `Synonyms For ${currentWord}, Words Similar to ${currentWord}`;
+            console.log('✅ Synonyms updated in UI');
+        } else {
+            console.log('No valid synonyms to display');
+            // Optionally hide the section or show a message
+            // synonymsSection.style.display = 'none';
+        }
+    }
+
+    // Update antonyms in UI
+    function updateAntonymsUI(antonyms) {
+        const antonymsList = document.getElementById('antonymsList');
+        const antonymsSection = document.getElementById('antonymsSection');
+
+        // Filter out any null or empty antonyms
+        const validAntonyms = antonyms.filter(ant => ant && ant.trim() !== '');
+
+        if (validAntonyms.length > 0) {
+            // Clear existing content
+            antonymsList.innerHTML = '';
+
+            validAntonyms.slice(0, 20).forEach(ant => {
+                const link = document.createElement('a');
+                link.href = `/dictionary/${ant.replace(/\s+/g, "-")}-meaning-in-${SecondlanguageName}`;
+                link.textContent = ant;
+                antonymsList.appendChild(link);
+            });
+
+            antonymsSection.style.display = 'block';
+            document.getElementById('antonymsTitle').textContent = `Antonyms For ${currentWord}, Words Opposite to ${currentWord}`;
+            console.log('✅ Antonyms updated in UI');
+        } else {
+            console.log('No valid antonyms to display');
+            // Optionally hide the section or show a message
+            // antonymsSection.style.display = 'none';
+        }
+    }
+
+    // Save complete word data using the UpdateCompleteWordData method
+    async function saveCompleteWordData(cleanWord, definition, partOfSpeech, synonyms, antonyms, example) {
+        try {
+            // Filter out empty strings from arrays
+            const validSynonyms = synonyms.filter(s => s && s.trim() !== '');
+            const validAntonyms = antonyms.filter(a => a && a.trim() !== '');
+
+            const synonymsText = validSynonyms.length > 0 ? validSynonyms.join(', ') : null;
+            const antonymsText = validAntonyms.length > 0 ? validAntonyms.join(', ') : null;
+
+            // Only send data that we actually fetched
+            const requestData = {
+                word: cleanWord,
+                languageCode: 'en'
+            };
+
+            // Only include fields that we have new data for
+            if (needsDefinition && definition) requestData.definition = definition;
+            if (needsDefinition && partOfSpeech) requestData.partOfSpeech = partOfSpeech;
+            if (needsSynonyms && synonymsText) requestData.synonyms = synonymsText;
+            if (needsAntonyms && antonymsText) requestData.antonyms = antonymsText;
+            if (example) requestData.example = example;
+
+            console.log('💾 Saving dictionary data to database:', requestData);
+
+            // Only send request if we have actual data to save
+            if (Object.keys(requestData).length > 2) { // More than just word and languageCode
+                const response = await fetch('/dictionary/update-complete-word-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Dictionary data saved successfully to database');
+                    const result = await response.json();
+                    console.log('Save result:', result);
+                } else {
+                    console.error('❌ Failed to save dictionary data');
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                }
+            } else {
+                console.log('📭 No new dictionary data to save');
+            }
+        } catch (error) {
+            console.error('❌ Error saving dictionary data:', error);
+        }
+    }
+
+    // Fallback dictionary lookup
+    async function fallbackDictionaryLookup(cleanWord) {
+        console.log('Using fallback dictionary lookup for:', cleanWord);
+        // You can implement additional fallback APIs here
+    }
+
+    async function getDbPediaDescription() {
+        // Only fetch if we need description
+        if (!needsDescription) {
+            console.log('✅ Description already available, skipping DBPedia API');
+            return;
+        }
+
+        if (!englishWord) return;
+
+        try {
+            let cleanWord = englishWord.split(' ')[0].replace(/[^a-zA-Z]/g, '').toLowerCase();
+            if (!cleanWord) return;
+
+            console.log('🌐 Fetching DBPedia description for:', cleanWord);
+
+            const dbPediaUrl = `https://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=${cleanWord}`;
+            const response = await fetch(dbPediaUrl);
+
+            if (!response.ok) {
+                throw new Error('DBPedia API not available');
+            }
+
+            const xmlText = await response.text();
+            const description = parseDbPediaDescription(xmlText);
+
+            if (description) {
+                // Use innerHTML to set the description in case it contains HTML
+                const descriptionElement = document.getElementById('description');
+                descriptionElement.innerHTML = description;
+
+                // Save description using the complete word data method
+                await saveDescriptionToDatabase(cleanWord, description);
+                console.log('✅ Description fetched and saved');
+            } else {
+                document.getElementById('description').textContent = `Meaning of ${cleanWord} in ${translatedLanguage}`;
+                console.log('❌ No description found from DBPedia');
+            }
+
+        } catch (error) {
+            console.error('Error fetching DBPedia description:', error);
+            document.getElementById('description').textContent = `Meaning of ${cleanWord} in ${translatedLanguage}`;
+        }
+    }
+
+    // Save description to database - updated to use complete word data method
+    async function saveDescriptionToDatabase(cleanWord, description) {
+        try {
+            const response = await fetch('/dictionary/update-complete-word-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    word: cleanWord,
+                    languageCode: 'en',
+                    description: description
+                    // Only send description, other fields will remain unchanged
+                })
+            });
+
+            if (response.ok) {
+                console.log('✅ Description saved successfully to database');
+            } else {
+                console.error('❌ Failed to save description');
+            }
+        } catch (error) {
+            console.error('❌ Error saving description:', error);
+        }
+    }
+
+    // Save word and meaning to database using your existing API method
+    async function saveWordAndMeaning(sourceWord, sourceLangCode, targetWord, targetLangCode) {
+        try {
+            // Decode any HTML entities in the targetWord before sending
+            let decodedTargetWord = targetWord;
+            if (targetWord && (targetWord.includes('&amp;#x') || targetWord.includes('&#x'))) {
+                console.log('Decoding HTML entities in target word before saving...');
+                const textArea = document.createElement('textarea');
+                textArea.innerHTML = targetWord;
+                decodedTargetWord = textArea.value;
+                console.log('Original target word:', targetWord);
+                console.log('Decoded target word:', decodedTargetWord);
+            }
+
+            const requestData = {
+                sourceWord: sourceWord,
+                sourceLanguageCode: sourceLangCode,
+                targetWord: decodedTargetWord,
+                targetLanguageCode: targetLangCode
+            };
+
+            console.log('Saving word and meaning to database:', requestData);
+
+            const response = await fetch('/dictionary/save-word-with-meaning', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save word data: ' + response.status);
+            }
+
+            const result = await response.json();
+            console.log('✅ Word and meaning saved successfully to database:', result);
+            return result;
+
+        } catch (error) {
+            console.error('❌ Error saving word and meaning:', error);
+            return { success: false, message: error.message };
+        }
+    }
+
+    function parseDbPediaDescription(xmlText) {
+        try {
+            // Parse the XML to extract the first description
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+            // Get all Result elements
+            const results = xmlDoc.getElementsByTagName("Result");
+
+            if (results.length > 0) {
+                // Get the first result's Description
+                const firstResult = results[0];
+                const descriptionElement = firstResult.getElementsByTagName("Description")[0];
+
+                if (descriptionElement && descriptionElement.textContent) {
+                    let description = descriptionElement.textContent.trim();
+
+                    // Remove any trailing incomplete sentences
+                    const lastPeriod = description.lastIndexOf('.');
+                    if (lastPeriod !== -1) {
+                        description = description.substring(0, lastPeriod + 1);
+                    }
+
+                    return description;
+                }
+            }
+
+            return null;
+        } catch (error) {
+            console.error('Error parsing DBPedia XML:', error);
+            return null;
+        }
+    }
+
+    function playAudio() {
+        const audio = document.getElementById("customAudio");
+        if (audio) {
+            if (!audio.paused) {
+                audio.currentTime = 0;
+            }
+            audio.play().catch(e => console.error('Error playing audio:', e));
+        }
+    }
+
+    function onLanguageChange(select) {
+        const newLanguage = select.value;
+        if (newLanguage) {
+            // Redirect to new language page
+            window.location.href = `/dictionary/${currentWord}-meaning-in-${newLanguage}`;
+        }
+    }
+
+    // Add missing performHeaderSearch function
+    function performHeaderSearch() {
+        const wordInput = document.querySelector('.ss-banner-inner .banner-form input[type="text"]');
+        const searchWord = wordInput.value.trim();
+
+        if (!searchWord) {
+            alert('Please enter a word to search');
+            return;
+        }
+
+        if (!selectedLanguageHeader) {
+            alert('Please select a language');
+            return;
+        }
+
+        // Redirect to the search page with the selected language
+        window.location.href = `/dictionary/${searchWord}-meaning-in-${selectedLanguageHeader}`;
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const wrappers = document.querySelectorAll(".custom-select-wrapper");
+
+        function closeAll(except = null) {
+            wrappers.forEach(w => {
+                if (w !== except) w.classList.remove("open");
+            });
+        }
+
+        wrappers.forEach(wrapper => {
+            const customSelect = wrapper.querySelector(".custom-select");
+            const searchInput = wrapper.querySelector(".search-box input");
+            const optionItems = Array.from(wrapper.querySelectorAll(".custom-options span[data-value]"));
+            const selected = wrapper.querySelector(".custom-select .selected");
+
+            // Toggle on header click
+            customSelect.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const willOpen = !wrapper.classList.contains("open");
+                closeAll(willOpen ? wrapper : null);
+                wrapper.classList.toggle("open");
+                if (willOpen && searchInput) {
+                    // focus search when opened
+                    setTimeout(() => searchInput.focus(), 0);
+                }
+            });
+
+            // Delegate clicks inside wrapper: only option clicks close+select
+            wrapper.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const option = e.target.closest("span[data-value]");
+                if (option && wrapper.contains(option)) {
+                    selected.textContent = option.textContent;
+                    wrapper.dataset.value = option.dataset.value;
+                    wrapper.classList.remove("open");
+                }
+                // other clicks inside wrapper (like search input) do nothing => dropdown stays open
+            });
+
+            // Live search (filter only this wrapper's options)
+            if (searchInput) {
+                searchInput.addEventListener("input", function () {
+                    const filter = this.value.toLowerCase().trim();
+                    optionItems.forEach(option => {
+                        option.style.display = option.textContent.toLowerCase().includes(filter) ? "" : "none";
+                    });
+                    // keep it open while typing
+                    if (!wrapper.classList.contains("open")) wrapper.classList.add("open");
+                });
+            }
+        });
+
+        // Click outside any wrapper closes all
+        document.addEventListener("click", function (e) {
+            if (!e.target.closest(".custom-select-wrapper")) {
+                closeAll();
+            }
+        });
+
+        // Optional: close on Escape
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeAll();
+        });
+    });
+
+</script>
+
+<!-- Main End -->

@@ -1,0 +1,279 @@
+﻿@model IKDFrontEnd.ViewModels.HomeScholarshipViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.d-none {
+		display: none !important;
+	}
+</style>
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Scholarships for Pakistani students to study abroad" />
+    <meta property="og:description" content="Get all the latest fully funded scholarships for Pakistani students scholarships here to study abroad at your dream destination" />
+	<meta property="og:image" content="" />
+    <meta name="description" content="Get all the latest fully funded scholarships for Pakistani students scholarships here to study abroad at your dream destination">
+    <meta name="keywords" content="study abroad, scholarships for pakistani students, fully funded scholarships">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <title>Scholarships for Pakistani students to study abroad</title>
+    <style>
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+
+    </style>
+}
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/scholarships/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a aria-label="link" href="/studyabroad/">
+                    <img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+                         alt="image" />
+                    Studyabroad
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/studyabroad/country-guides.aspx">
+                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+                         alt="image" />
+                    Guides
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/consultants/">
+                    <img src="https://www.ilmkidunya.com/icons/tutor.png"
+                         alt="image" />
+                    Consultants
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/scholarships/topscholarship">
+                    <img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+                         alt="image" />
+                    Top Scholarship
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>Search Scholarship by Your Choice</h1>
+					</div>
+				</div>
+                <form id="searchForm" action="/scholarship/search" method="get">
+                    <div class="ss-col-lg-12">
+                        <div class="banner-form" style="margin: 0 20%;">
+                            <div class="input-holder" style="width: 90%;">
+                                <div style="width: 50%; position: relative;">
+                                    <select name="studyLevelName" aria-label="Study Level" style="width: 100%; border-left: 0;">
+                                        <option value="">Level you want to study?</option>
+                                        @if (Model?.StudyLevels != null && Model.StudyLevels.Any())
+                                        {
+                                            foreach (var level in Model.StudyLevels)
+                                            {
+                                                <option value="@level.SchStudyLevelName">@level.SchStudyLevelName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option disabled>No study levels available</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div style="width: 50%; position: relative;">
+                                    <select name="countryName" aria-label="Country" style="width: 100%;">
+                                        <option value="">Select Country</option>
+                                        @if (Model?.Countries != null && Model.Countries.Any())
+                                        {
+                                            foreach (var country in Model.Countries)
+                                            {
+                                                <option value="@country.Name">@country.Name</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option disabled>No countries available</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="btn-holder">
+                                <button type="submit">
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="Search" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+			</div>
+		</div>
+	</div>
+    <!-- Add spinner overlay -->
+    <div class="spinner-overlay" id="spinner">
+        <div class="spinner"></div>
+    </div>
+}
+
+
+<div id="main">
+ 
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        <h2> Latest Scholarships for Pakistani Students</h2>
+                      <p>
+                            Obtaining a scholarship is significant in achieving wide educational opportunities and for development of academic skills. Whether you are striving to earn a scholarship for a full time degree or a short term course in abroad, there are many opportunities from private organizations, universities and government sectors. Each scholarship programme has exclusive eligibility criterion specific for different countries. The Pakistani students searching for scholarships to study in abroad can get access to a varied range of scholarship programme through our website and attain information about eligibility criterion, requirements, deadlines for application and application procedure. Students can also find fully funded scholarships for Pakistani students and can find scholarships in Pakistan.
+
+                            To apply for a fee grant at a post graduate or under graduate level, government offered financial aid for students, university offered scholarships,&nbsp;<a href="https://web.archive.org/web/20250615092336/https://www.ilmkidunya.com/scholarship/" style="box-sizing: border-box; color: rgb(56, 138, 224); text-decoration-line: none; background-color: transparent; cursor: pointer; outline: 0px;">Country Wise Scholarships, Popular Scholarships, Course Wise Scholarships</a>, scholarships offered to students with excellent academic records explore categorically here from our inclusive database of scholarships in abroad for Pakistani students.
+
+                        </p>
+              </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Latest Scholarships</h2>
+                    <ul class="latest-ScholarShips">
+                        @if (Model?.LatestScholarships != null && Model.LatestScholarships.Any())
+                        {
+                            foreach (var sch in Model.LatestScholarships)
+                            {
+                                <li>
+                                    <a href="/scholarships/@(sch?.Url ?? "#")">
+                                        <div class="ScholarShips-img-holder">
+                                            <img src="https://cdn.ilmkidunya.com/scholarshipimages/127X127/@(sch?.SchImage ?? "default.png")"
+                                                 alt="@sch?.SchName">
+                                        </div>
+
+                                        <span class="date">@sch?.Deadline?.ToString("dd-MMM-yyyy")</span>
+                                        <h4>@(sch?.SchName ?? "Unnamed Scholarship")</h4>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li><span>No scholarships available at this time.</span></li>
+                        }
+                    </ul>
+
+                    <h2>Top Scholarships for Pakistani Students</h2>
+                    <ul class="ss-company-list">
+                        @if (Model?.Countries != null && Model.Countries.Any())
+                        {
+                            foreach (var country in Model.Countries)
+                            {
+                                <li>
+                                    <a href="/scholarships/scholarships-in-@(country?.Url ?? "unknown").aspx">
+                                        <img alt="@country?.Name"
+                                             src="https://ishallwin.com/images/Flags/Thumb/@(country?.ImageName ?? "no-flag.png")"
+                                             style="width: 50px; height: auto;">
+                                        <span>@(country?.Name ?? "Unknown Country")</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li><span>No countries found.</span></li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+      // Show spinner when form is submitted
+    document.getElementById('searchForm').addEventListener('submit', function() {
+        document.getElementById('spinner').style.display = 'flex';
+    });
+
+    // Hide spinner when page finishes loading (fallback in case AJAX isn't used)
+    window.addEventListener('load', function() {
+        document.getElementById('spinner').style.display = 'none';
+    });
+</script>
+
+
+

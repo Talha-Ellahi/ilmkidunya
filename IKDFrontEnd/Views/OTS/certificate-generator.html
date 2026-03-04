@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luxurious+Script&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .certificate-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+            .btn:hover {
+                background: #0056b3;
+            }
+
+        .preview-area {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        #certificate-container {
+            transform-origin: top center;
+            transform: scale(0.6);
+        }
+
+        #result-image {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="certificate-wrapper">
+            <div class="controls">
+                <h2 style="margin-top: 0; text-align: center;">Certificate Generator</h2>
+                <div id="form-container">
+                    <!-- Form will be loaded dynamically -->
+                    <div class="loading">Loading form...</div>
+                </div>
+            </div>
+
+            <div class="preview-area">
+                <div id="preview-container">
+                    <div id="certificate-container">
+                        <!-- Certificate HTML will be inserted here -->
+                    </div>
+                    <div id="image-result" style="display: none;">
+                        <h3>Generated Certificate:</h3>
+                        <img id="result-image" alt="Certificate" />
+                        <div style="margin-top: 15px;">
+                            <button onclick="downloadImage()" class="btn" style="background: #28a745;">
+                                Download Certificate
+                            </button>
+                            <button onclick="copyToClipboard()" class="btn" style="background: #17a2b8; margin-left: 10px;">
+                                Copy Image URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load html2canvas -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <script>
+        let generatedImageData = null;
+
+        // Function to load form from URL parameters
+        function loadForm() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const resultData = {};
+
+            // Get all parameters
+            for (const [key, value] of urlParams.entries()) {
+                resultData[key] = decodeURIComponent(value);
+            }
+
+            // Parse JSON data if present
+            if (resultData.json) {
+                try {
+                    const jsonData = JSON.parse(resultData.json);
+                    Object.assign(resultData, jsonData);
+                    delete resultData.json;
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                }
+            }
+
+            // Set default values
+            const defaults = {
+                testTitle: 'Test Certificate',
+                userName: 'Student',
+                correctAnswers: '0',
+                totalQuestions: '0',
+                dated: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+                isPassed: 'false'
+            };
+
+            const finalData = { ...defaults, ...resultData };
+
+            // Update the form
+            const formHtml = `
+                <div class="form-group">
+                    <label>Test Title:</label>
+                    <input type="text" id="testTitle" value="${finalData.testTitle}" />
+                </div>
+                <div class="form-group">
+                    <label>Student Name:</label>
+                    <input type="text" id="userName" value="${finalData.userName}" />
+                </div>
+                <div class="form-group">
+                    <label>Correct Answers:</label>
+                    <input type="number" id="correctAnswers" value="${finalData.correctAnswers}" />
+                </div>
+                <div class="form-group">
+                    <label>Total Questions:</label>
+                    <input type="number" id="totalQuestions" value="${finalData.totalQuestions}" />
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="text" id="dated" value="${finalData.dated}" />
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <select id="isPassed">
+                        <option value="true" ${finalData.isPassed === 'true' ? 'selected' : ''}>Passed</option>
+                        <option value="false" ${finalData.isPassed === 'false' ? 'selected' : ''}>Failed</option>
+                    </select>
+                </div>
+                <div style="text-align: center;">
+                    <button onclick="updatePreview()" class="btn">Update Preview</button>
+                    <button onclick="generateCertificate()" class="btn" style="background: #28a745; margin-left: 10px;">
+                        Generate Certificate
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('form-container').innerHTML = formHtml;
+
+            // Generate initial preview
+            updatePreview();
+        }
+
+        // Function to create certificate HTML
+        function createCertificateHTML(data) {
+            const isPassed = data.isPassed === 'true';
+
+            const bgImage = isPassed
+                ? 'https://resources.ilmkidunya.com/online-test/assets/images/bg-certificates.jpg'
+                : 'https://images.ishallwin.com/certi/bg-certificates-fail.jpg';
+
+            const badgeImage = isPassed
+                ? 'https://images.ishallwin.com/certi/high-scorrers.png'
+                : 'https://images.ishallwin.com/certi/img-fail.png';
+
+            return `
+                <div class="certifcate-box" id="certificate-template" style="
+                    width: 960px;
+                    min-height: 630px;
+                    background: url('${bgImage}') 0 0/100% no-repeat #f7e8eb;
+                    position: relative;
+                    font-family: 'Open Sans', sans-serif;
+                    box-sizing: border-box;
+                ">
+                    <div class="inner-box" style="
+                        padding: 210px 100px 0;
+                        text-align: center;
+                    ">
+                        <h2 style="
+                            text-transform: uppercase;
+                            font-size: 34px;
+                            line-height: 42px;
+                            font-weight: 600;
+                            letter-spacing: 1px;
+                            margin: 0 0 10px;
+                            color: #000;
+                        ">${data.testTitle}</h2>
+
+                        <h3 style="
+                            font-size: 24px;
+                            font-weight: 500;
+                            letter-spacing: 2px;
+                            text-transform: uppercase;
+                            line-height: 30px;
+                            margin: 0 0 20px 0;
+                            color: #000;
+                        ">${isPassed ? 'Congratulations!' : 'Better Luck Next Time'}</h3>
+
+                        <div class="name-certi" style="
+                            display: block;
+                            margin: 0 50px 20px;
+                            border-bottom: 2px solid #000;
+                        ">
+                            <h1 style="
+                                font-size: 70px;
+                                letter-spacing: 2px;
+                                text-transform: capitalize;
+                                font-family: 'Luxurious Script', cursive;
+                                margin: 0 0 5px 0;
+                                color: #000;
+                            ">${data.userName}</h1>
+                        </div>
+
+                        <div class="marks-box" style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin: 0 0 10px 0;
+                        ">
+                            <span style="
+                                font-size: 50px;
+                                padding: 0 20px;
+                                color: ${isPassed ? 'green' : 'red'};
+                            ">${data.correctAnswers}</span>
+                            <span style="
+                                font-size: 20px;
+                                color: #000;
+                                text-align: left;
+                                line-height: 26px;
+                                font-weight: 500;
+                            ">Marks <br> Out of ${data.totalQuestions}</span>
+                        </div>
+
+                        <div class="last-certi" style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 5px 0 10px;
+                        ">
+                            <div class="box" style="width: 32%;">
+                                <img src="https://cdn.ilmkidunya.com/logo.svg"
+                                     alt="Logo"
+                                     style="height: 70px; max-width: 100%;" />
+                            </div>
+
+                            <div class="box" style="width: 32%; text-align: center;">
+                                <img src="${badgeImage}"
+                                     alt="${isPassed ? 'High Scorer' : 'Fail'}"
+                                     style="height: 70px; max-width: 100%;" />
+                            </div>
+
+                            <div class="box" style="width: 32%; text-align: right;">
+                                <span style="
+                                    display: block;
+                                    color: #000;
+                                    font-size: 20px;
+                                    line-height: 26px;
+                                ">${data.dated}</span>
+                                <em style="
+                                    color: #000;
+                                    font-size: 16px;
+                                    line-height: 26px;
+                                    font-style: normal;
+                                    display: inline-block;
+                                    padding: 3px 25px 0;
+                                    border-top: 1px solid #000;
+                                    margin: 10px 0 0 0;
+                                ">Issue date</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to update preview
+        function updatePreview() {
+            const data = getFormData();
+            const certificateHtml = createCertificateHTML(data);
+            document.getElementById('certificate-container').innerHTML = certificateHtml;
+        }
+
+        // Function to get form data
+        function getFormData() {
+            return {
+                testTitle: document.getElementById('testTitle').value,
+                userName: document.getElementById('userName').value,
+                correctAnswers: document.getElementById('correctAnswers').value,
+                totalQuestions: document.getElementById('totalQuestions').value,
+                dated: document.getElementById('dated').value,
+                isPassed: document.getElementById('isPassed').value
+            };
+        }
+
+        // Function to generate certificate
+        async function generateCertificate() {
+            const data = getFormData();
+            const certificateElement = document.getElementById('certificate-template');
+
+            if (!certificateElement) {
+                alert('Please wait for preview to load');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('preview-container').innerHTML = `
+                <div class="loading">
+                    <h3>Generating certificate...</h3>
+                    <p>This may take a few seconds</p>
+                </div>
+            `;
+
+            try {
+                // Generate certificate image
+                const canvas = await html2canvas(certificateElement, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    width: 960,
+                    height: 630,
+                    logging: false,
+                    imageTimeout: 10000
+                });
+
+                generatedImageData = canvas.toDataURL('image/png', 1.0);
+
+                // Show result
+                document.getElementById('preview-container').innerHTML = `
+                    <div id="image-result">
+                        <h3>Generated Certificate:</h3>
+                        <img id="result-image" src="${generatedImageData}" alt="Certificate" />
+                        <div style="margin-top: 15px;">
+                            <button onclick="downloadImage()" class="btn" style="background: #28a745;">
+                                Download Certificate
+                            </button>
+                            <button onclick="copyToClipboard()" class="btn" style="background: #17a2b8; margin-left: 10px;">
+                                Copy Image URL
+                            </button>
+                            <button onclick="showCertificatePreview()" class="btn" style="background: #6c757d; margin-left: 10px;">
+                                Show Preview Again
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Send message back to parent if in iframe
+                if (window.parent !== window) {
+                    window.parent.postMessage({
+                        type: 'certificate_generated',
+                        imageData: generatedImageData,
+                        certificateData: data
+                    }, '*');
+                }
+
+            } catch (error) {
+                console.error('Error generating certificate:', error);
+                document.getElementById('preview-container').innerHTML = `
+                    <div class="error">
+                        <h3>Error generating certificate</h3>
+                        <p>${error.message}</p>
+                        <button onclick="showCertificatePreview()" class="btn">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to download image
+        function downloadImage() {
+            if (!generatedImageData) {
+                alert('No certificate generated yet');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = generatedImageData;
+            link.download = `certificate_${getFormData().userName.replace(/\s+/g, '_')}_${Date.now()}.png`;
+            link.click();
+        }
+
+        // Function to copy image URL to clipboard
+        async function copyToClipboard() {
+            if (!generatedImageData) {
+                alert('No certificate generated yet');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(generatedImageData);
+                alert('Image URL copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Could not copy to clipboard. Please try again.');
+            }
+        }
+
+        // Function to show preview again
+        function showCertificatePreview() {
+            updatePreview();
+            document.getElementById('preview-container').innerHTML = `
+                <div id="certificate-container"></div>
+                <div id="image-result" style="display: none;"></div>
+            `;
+            updatePreview();
+        }
+
+        // Load form when page loads
+        document.addEventListener('DOMContentLoaded', loadForm);
+
+        // Listen for messages from parent
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'generate_certificate') {
+                // Fill form with received data
+                const data = event.data.certificateData;
+
+                if (data.testTitle) document.getElementById('testTitle').value = data.testTitle;
+                if (data.userName) document.getElementById('userName').value = data.userName;
+                if (data.correctAnswers) document.getElementById('correctAnswers').value = data.correctAnswers;
+                if (data.totalQuestions) document.getElementById('totalQuestions').value = data.totalQuestions;
+                if (data.dated) document.getElementById('dated').value = data.dated;
+                if (data.isPassed) document.getElementById('isPassed').value = data.isPassed;
+
+                updatePreview();
+                generateCertificate();
+            }
+        });
+    </script>
+</body>
+</html>

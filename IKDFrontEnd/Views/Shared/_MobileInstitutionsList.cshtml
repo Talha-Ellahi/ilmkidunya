@@ -1,0 +1,25 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+
+@foreach (var institution in Model.Colleges)
+{
+    <li>
+        <figure>
+            <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';">
+        </figure>
+        <div class="text-box">
+            <a href="/colleges/@(institution.College.Url).aspx" target="_blank">
+                @institution.College.Name
+            </a>
+            <span>
+                @{
+                    var isGovt = institution.College.IsGovt?.ToLower();
+                    string displayText = isGovt == null ? "N/A"
+                    : (isGovt == "public" || isGovt == "government") ? "Public"
+                    : isGovt == "private" ? "Private"
+                    : isGovt;
+                }
+                Sector: @displayText
+            </span>
+        </div>
+    </li>
+}

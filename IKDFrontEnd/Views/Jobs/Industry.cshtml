@@ -1,0 +1,110 @@
+﻿@model List<IKDFrontEnd.ViewModels.IndustryViewModel>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <div class="col-lg-11">
+        <partial name="_JobsNavBar" />
+    </div>
+}
+<!-- Header End -->
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+<!-- Main Start -->
+<div id="main">
+    <div class="main-content">
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <p>Here you can see the list of job categories with www.ilmkidunya.com. Each category of job has hundreds of jobs throughout Pakistan. Click on any category name to view related jobs.</p>
+                       
+                        <h3>Jobs by Catagory</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ss-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Desc1</h1>
+                        }
+                        @functions {
+                            public string Slugify(string input)
+                            {
+                                if (string.IsNullOrWhiteSpace(input)) return "unknown";
+
+                                var cleaned = System.Text.RegularExpressions.Regex.Replace(input.ToLower(), @"[^a-z0-9\s-]", ""); // remove special chars
+                                return cleaned.Replace(" ", "-"); // replace spaces with hyphens
+                            }
+                        }
+                        <ul class="ss-company-list industry">
+                            @foreach (var industry in Model)
+                            {
+
+
+                                <li>
+                                    @{
+                                        var industryUrl = industry?.Url;
+
+                                        var imageUrl = $"https://cdn.ilmkidunya.com/jobs/jobsCategories/{industry?.ImageName}";
+                                    }
+                                    <a href="/jobs/industry/@industryUrl">
+                                        <img src="@imageUrl" onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" />
+                                        <span>@industry?.Name</span>
+                                    </a>
+                                </li>
+
+                            }
+                        </ul>
+                        <div class="share-box" style="padding-top: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

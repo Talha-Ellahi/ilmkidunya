@@ -1,0 +1,163 @@
+﻿@using System.Globalization
+@model IKDFrontEnd.ViewModels.BookStoreAuthor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/common/style-min.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner college-banner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="with-img">
+                        <div class="ss-img-box">
+                            <div class="img-holder">
+                                @if (Model.aut.Image != null && Model.aut.Image != "")
+                                {
+                                    <img src="http://bookstore.campus.pk/Resources/Authors/@Model.aut.Image" style="height:150px;" alt="">
+                                }
+                                else
+                                {
+                                    <img src="https://resources.ilmkidunya.com/images/imgpsh_fullsize_anim.jpg" style="height:150px;" alt="">
+                                }
+
+                            </div>
+                        </div>
+                        <div class="ss-text-holder">
+                            <h1>@Model.aut.Name</h1>
+                            <ul style="width: 65%;">
+                                <li>@Model.Books.Count() Titles</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+@*     <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="my-ads">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Books By Authors</h2>
+                    <ul class="books-list sml-list">
+                        @if (Model.Books != null && Model.Books.Any())
+                        {
+                            foreach (var book in Model.Books)
+                            {
+                                <li>
+                                    <a href="/store/@book.Url">
+                                        <figure>
+                                            <img src="@(string.IsNullOrEmpty(book.Image)                                                                                                                                    ? "/images/no-image.png"  // fallback if no image
+                                                                                                                                       : book.Image)"
+                                         alt="@book.Name" />
+                                        </figure>
+                                        <strong>@book.Name</strong>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                <strong>No books available for this author.</strong>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

@@ -1,0 +1,272 @@
+﻿@model IKDFrontEnd.ViewModels.HostelDetailViewModel
+
+
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async>
+<link href="https://www.ilmkidunya.com/css-files/common/style-min.css" rel="stylesheet" async="">
+
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var random = new Random();
+    var colorClasses = new[] { "sh-green", "sh-blue", "sh-purple", "sh-red" };
+}
+
+@section MetaData {
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@ViewBag.CmsData.MetaTitle</title> 
+}
+
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+}
+
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="my-ads">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8866825487085085" data-ad-slot="7449924963" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hostel-detail">
+                        <div class="detail-with-img">
+                            <div class="img-holder">
+                                <span class="hostel-icon">
+                                    <img alt="image" src="@($"/images/hostel-features/{(Model.Gender == true ? "icon-b-hostel" : "icon-f-hostel")}.png")" />
+                                </span>
+                                <figure><img alt="image" src="@Url.Content("/images/hostel-features/hostel-icon.png")"></figure>
+                                <div class="h-details">
+                                    <h3>@Model.HostelName</h3>
+                                    <p>@Model.FullAddress</p>
+                                    <ul>
+                                        @if (!string.IsNullOrEmpty(Model.Email))
+                                        {
+                                            <li><a href="#"><img alt="image" src="@Url.Content("/images/hostel-features/mail.png")"> @Model.Email</a></li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                        {
+                                            <li><a href="#"><img alt="image" src="@Url.Content("/images/hostel-features/phone.png")"> @Model.PhoneNumber</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="h-map-box">
+                                <iframe src="https://maps.google.com/maps?q=@Model.Latitude,@Model.Longitude&hl=es&z=14&amp;output=embed"
+                                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+
+                        <h2>Hostel Pictures</h2>
+                        <ul class="popup-gallery">
+                            @foreach (var img in Model.ImagePaths)
+                            {
+                                <li>
+                                    <a href="@img" title="@Model.HostelName">
+                                        <img src="@img" width="110" height="80">
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                        <h2>Hostel Facilities</h2>
+                        <ul class="h-facility">
+                            @foreach (var feature in Model.Features)
+                            {
+                                <li>
+                                    <span><img src="@Url.Content(feature.IconPath)" alt=""></span>
+                                    @feature.FeatureName
+                                </li>
+                            }
+                        </ul>
+
+                        <h2>Room Types at @Model.HostelName @Model.CityName</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    @foreach (var room in Model.RoomTypes)
+                                    {
+                                        <tr>
+                                            <td>@room.RoomTypeName</td>
+                                            <td>@room.Details</td>
+                                            <td>Rs. @((room.Cost ?? 0).ToString("N0"))/month</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>
+                            Need more information, call now<br>
+                            <a href="#">Contact: @Model.PhoneNumber</a>
+                        </p>
+                    </div>
+
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <ul class="ss-ads" style="border: 0; padding-top: 35px;">
+                    <li>
+                        <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/1.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/2.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/3.webp" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/4.webp" alt=""></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Click on any city to view hostels and rooms</h2>
+                    <ul class="admission-nav">
+                        @foreach (var city in Model.CityList)
+                        {
+
+                            var cityName = city.CityName.ToLower().Replace(" ", "-");
+
+                            <li>
+                                <a href="/hostels/hostels-in-@cityName">
+                                    <figure><img src="@city.ImagePath" alt="@city.CityName"></figure>
+                                    <span>@city.CityName</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <a href="https://ikd.ishallwin.com/hostels-detail.html#" class="load-more">More Cities</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="g-ad-box">
+                        <figure>
+                            <img src="./IKDHostelDetail_files/g-add-m.webp" alt="">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="ss-ads" style="border: 0; padding-top: 35px;">
+                        <li>
+                            <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/5.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/6.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/7.webp" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="https://ikd.ishallwin.com/hostels-detail.html#" aria-label="ads"><img src="./IKDHostelDetail_files/8.webp" alt=""></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

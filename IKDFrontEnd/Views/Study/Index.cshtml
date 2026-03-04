@@ -1,0 +1,189 @@
+﻿@model List<IKDFrontEnd.ViewModels.LectureClassViewModel>
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="google-signin-client_id" content="104983047817-ahbomi25h88rsehbee4652msao9g9as6.apps.googleusercontent.com">
+	<title>#1 Educational news platform in Pakistan to find course, admissions & universities</title>
+	
+	<meta name="description" content="One point resource to discover latest updates in education, university admission, scholarships on the leading educational website." />
+	<meta name="keywords" content="Top educational website in pakistan, best education website, university admissions in pakistan," />
+	
+	<meta property="og:image:width" content="300" />
+	<meta property="og:image:height" content="300" />
+	<meta property="og:site_name" content="ilmkidunya.com" />
+	<meta property="fb:app_id" content="168405456658643" />
+	<meta property="og:url" content="https://www.ilmkidunya.com/" />
+	<meta property="og:description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+	<meta property="og:title" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya" />
+	<meta property="og:type" content="website">
+	<link rel="canonical" href="https://www.ilmkidunya.com/" />
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="ilmkidunya">
+	<meta name="twitter:image" content="https://wwww.ilmkidunya.com/images/ilmkidunya-logo-2.jpg">
+	<meta name="twitter:title" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya">
+	<meta name="twitter:description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges.">
+
+
+	<meta name="robots" content="index,follow" />
+
+	<meta name="publisher" content="ilmkidunya.com" />
+
+
+	<meta name="Robots" content="ALL" />
+	<meta name="googlebot" content="archive" />
+}
+@section header {
+
+	
+				<div class="col-lg-11">
+					<partial name="_NavBarPartial" />
+				</div>
+				
+		
+	
+
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>Free Online Videos Lectures for Pakistani Students</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="ss-class-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<ul class="ss-class-list">
+						@foreach (var lectureClass in Model)
+						{
+							var classUrl = lectureClass.ClassUrl;
+
+							if (!string.IsNullOrEmpty(classUrl))
+							{
+								var modifiedClassUrl = classUrl;
+
+								if (modifiedClassUrl.Contains("mdcat-class"))
+									modifiedClassUrl = modifiedClassUrl.Replace("mdcat-class", "mdcat-test");
+								else if (modifiedClassUrl.Contains("ecat-class"))
+									modifiedClassUrl = modifiedClassUrl.Replace("ecat-class", "ecat-test");
+								if (modifiedClassUrl.Contains("ba-part-1-class"))
+									modifiedClassUrl = modifiedClassUrl.Replace("ba-part-1-class", "ba-part-1");
+								if (modifiedClassUrl.Contains("ba-part-2-class"))
+									modifiedClassUrl = modifiedClassUrl.Replace("ba-part-2-class", "ba-part-2");
+
+								modifiedClassUrl = modifiedClassUrl.Replace("-", " ");
+								modifiedClassUrl = System.Globalization.CultureInfo.CurrentCulture.TextInfo
+								.ToTitleCase(modifiedClassUrl.ToLower());
+
+								if (modifiedClassUrl.Contains("Th"))
+									modifiedClassUrl = modifiedClassUrl.Replace("Th", "th");
+
+								<li>
+									<a href="@Url.Action("ClassDetails", "Study", new {
+                    classSlug = classUrl.Contains("mdcat-class") ?
+                                classUrl.Replace("mdcat-class", "mdcat-test") :
+                                (classUrl.Contains("ecat-class") ?
+                                classUrl.Replace("ecat-class", "ecat-test") :
+                                classUrl)
+                })">
+										<div class="inner-text">
+											<span>Online Lecture</span>
+											<strong>@modifiedClassUrl</strong>
+										</div>
+									</a>
+								</li>
+							}
+						}
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h3>
+						<strong>Study and its purpose</strong>
+					</h3>
+					<p>
+						Basically education is the procedure of facilitating learning, or the attainment of knowledge, abilities, values, beliefs as well as habits. The educational techniques involve the storytelling, discussion, teaching, training and also the directed research.
+
+						Normally the education takes place under the supervision of educators however the learners might also educate themselves. The education might be take place in formal or informal settings and any knowledge that has a determinative effect on the way one thinks, feels, or acts might be deliberated educational. The procedure of teaching is called pedagogy.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-sec" style="margin-bottom: 30px;">
+		<div class="accordion-image">
+			<img src="https://images.ishallwin.com/home/ikd-teachers.webp" alt="teachers Image">
+		</div>
+		<div class="home-accordion-wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<ul class="ss-otp-list">
+							<li>
+								<div class="text-holder">
+									<h3>Pakistan’s Top Favourite Lectures</h3>
+									<p>ilmkidunya’s lectures are the most viewed lectures in Pakistan. So far more than 100 million hours of watch time done by students.</p>
+								</div>
+							</li>
+							<li>
+								<div class="text-holder">
+									<h3>Full Books &Syllabus</h3>
+									<p>The best part is that you get the maxium number of lectures for most subjects for various education levels in Pakistan from school or college.</p>
+								</div>
+							</li>
+							<li>
+								<div class="text-holder">
+									<h3>Multiple Teacher Options</h3>
+									<p>The most interesting part is that for one subject there are option of various teacher. So study from a teacher that you like the most.</p>
+								</div>
+							</li>
+							<li>
+								<div class="text-holder">
+									<h3>Experienced Teachers</h3>
+									<p>
+										Study from Pakistan’s best teachers who have skill and experience of teaching in the most well-known colleges and academies of Pakistan.
+									</p>
+								</div>
+							</li>
+						</ul>
+						<br />
+						<br />
+						@await Html.PartialAsync("_maincontentlowerbanner")
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>

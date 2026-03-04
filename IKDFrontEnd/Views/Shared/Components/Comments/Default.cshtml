@@ -1,0 +1,1119 @@
+﻿@using IKDFrontEnd.ViewComponents
+@model CommentViewModel
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="commentsystemForm">
+                <div class="comment-section">
+                    <h4>Share your comments & questions here</h4>
+
+                    <!-- Comment Input Area -->
+                    <div class="comment-input">
+                        <!-- Always show input area -->
+                        <div class="inputArea">
+                            <div class="main-input">
+                                @if (Model.IsAuthenticated)
+                                {
+                                    <div class="avatar">
+                                        <img src="@Model.UserPicture" alt="@Model.UserName" width="100%"
+                                             onerror="this.src='https://resources.ilmkidunya.com/images/avatar.png'">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="avatar">
+                                        <img src="https://resources.ilmkidunya.com/images/avatar.png" alt="Guest" width="100%">
+                                    </div>
+                                }
+                                <input type="text"
+                                       name="commentText"
+                                       placeholder="@(Model.IsAuthenticated ? "Add Your Comments..." : "Sign in to post a comment")"
+                                       id="commentInput"
+                                       maxlength="1000"
+                                       @if (!Model.IsAuthenticated)
+                                       {
+                                    <text>readonly onclick="showLoginModal()"</text>
+                                }
+                                >
+                            </div>
+                        </div>
+
+                        @if (Model.IsAuthenticated)
+                        {
+                            <button type="button" class="btn btn-primary" id="postCommentBtn">Post Comment</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" onclick="showLoginModal()">Sign in to Comment</button>
+                        }
+
+                        <!-- Hidden fields (only for authenticated users) -->
+                        @if (Model.IsAuthenticated)
+                        {
+                            <input type="hidden" id="pageUrl" value="@Model.PageUrl" />
+                            <input type="hidden" id="pageTitle" value="@Model.PageTitle" />
+                            <input type="hidden" id="userId" value="@Model.UserId" />
+                            <input type="hidden" id="userName" value="@Model.UserName" />
+                            <input type="hidden" id="userPicture" value="@Model.UserPicture" />
+
+                            <!-- Anti-Forgery Token -->
+                            @Html.AntiForgeryToken()
+                        }
+                    </div>
+
+                    <!-- Comments List -->
+                    <div class="commnetsLists">
+                        <div class="commnentBox">
+                            <ul id="commentsList" class="commnetsLists" style="display:block">
+                                @if (!Model.Comments.Any())
+                                {
+                                    <li>
+                                        <div class="no-comments">
+                                            <p>No comments yet. Be the first to comment!</p>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    @foreach (var comment in Model.Comments)
+                                    {
+                                        <li>
+                                            <div class="single-commnet" data-comment-id="@comment.CommentId">
+                                                <div class="comment-header">
+                                                    <div class="image">
+                                                        <img src="@(comment.UserProfilePicture ?? "https://resources.ilmkidunya.com/images/avatar.png")"
+                                                             alt="@comment.UserName"
+                                                             width="100%"
+                                                             onerror="this.src='https://resources.ilmkidunya.com/images/avatar.png'">
+                                                    </div>
+                                                    <div class="desc-top">
+                                                        <div class="top-left">
+                                                            <h4>@comment.UserName</h4>
+                                                            <span class="time">@comment.CreatedDate.ToString("dd MMM yyyy")</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="desc">
+                                                    <div class="desc-detail">
+                                                        <p>@comment.CommentText</p>
+                                                    </div>
+                                                    <div class="commentAction">
+                                                        <div class="likeBx"
+                                                             id="likeBtn_@comment.CommentId"
+                                                             data-comment-id="@comment.CommentId"
+                                                             data-is-authenticated="@Model.IsAuthenticated.ToString().ToLower()"
+                                                             style="@(comment.HasLiked ? "background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center; color: #15a18d;" : "")">
+                                                            <span>Like</span>
+                                                            <span class="like-count" id="likeCount_@comment.CommentId" style="margin-left: 5px;">
+                                                                @comment.LikeCount
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="replyBx"
+                                                             data-comment-id="@comment.CommentId"
+                                                             data-is-authenticated="@Model.IsAuthenticated.ToString().ToLower()">
+                                                            <input type="hidden" id="parentcommentid" value="@comment.CommentId">
+                                                            <span>Reply</span>
+                                                            @if (comment.Replies.Any())
+                                                            {
+                                                                <span class="reply-count" style="margin-left: 5px; font-size: 12px; color: #666;">
+                                                                    (@comment.Replies.Count)
+                                                                </span>
+                                                            }
+                                                        </div>
+
+                                                        @if (Model.IsAuthenticated && comment.UserId == Model.UserId)
+                                                        {
+                                                            <div class="deleteBx"
+                                                                 style="margin-left: 15px; color: #ff4444; cursor: pointer; font-size: 14px;"
+                                                                 data-comment-id="@comment.CommentId">
+                                                                <span>Delete</span>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    <!-- Replies Container (Hidden by default) -->
+                                                    <div class="replies-container" id="repliesContainer_@comment.CommentId" style="display: none; margin-top: 15px; padding-left: 20px; border-left: 2px solid #eaeaea;">
+                                                        <!-- Existing Replies -->
+                                                        <div class="existing-replies" id="existingReplies_@comment.CommentId">
+                                                            @foreach (var reply in comment.Replies)
+                                                            {
+                                                                <div class="single-reply" data-reply-id="@reply.CommentId" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">
+                                                                    <div class="reply-header" style="display: flex; align-items: center; margin-bottom: 8px;">
+                                                                        <div class="image" style="width: 40px; height: 40px; margin-right: 10px; border-radius: 50%; overflow: hidden;">
+                                                                            <img src="@(reply.UserProfilePicture ?? "https://resources.ilmkidunya.com/images/avatar.png")"
+                                                                                 alt="@reply.UserName"
+                                                                                 width="100%"
+                                                                                 onerror="this.src='https://resources.ilmkidunya.com/images/avatar.png'">
+                                                                        </div>
+                                                                        <div class="reply-details">
+                                                                            <div style="font-weight: 500; font-size: 14px;">@reply.UserName</div>
+                                                                            <div style="font-size: 12px; color: #888;">@reply.CreatedDate.ToString("dd MMM yyyy HH:mm")</div>
+                                                                        </div>
+                                                                        @if (Model.IsAuthenticated && reply.UserId == Model.UserId)
+                                                                        {
+                                                                            <div class="delete-reply"
+                                                                                 style="margin-left: auto; color: #ff4444; cursor: pointer; font-size: 12px;"
+                                                                                 data-reply-id="@reply.CommentId">
+                                                                                Delete
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                    <div class="reply-body" style="font-size: 14px; line-height: 1.4;">
+                                                                        @reply.CommentText
+                                                                    </div>
+                                                                    <div class="reply-actions" style="margin-top: 8px; display: flex; align-items: center;">
+                                                                        <div class="likeBx reply-like"
+                                                                             style="font-size: 12px; padding-left: 20px;"
+                                                                             id="likeBtnReply_@reply.CommentId"
+                                                                             data-reply-id="@reply.CommentId"
+                                                                             data-is-authenticated="@Model.IsAuthenticated.ToString().ToLower()">
+                                                                            <span>Like</span>
+                                                                            <span class="like-count" id="likeCountReply_@reply.CommentId" style="margin-left: 5px;">
+                                                                                @reply.LikeCount
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+
+                                                        <!-- Reply Input Box (Hidden by default, shows when clicking Reply) -->
+                                                        @if (Model.IsAuthenticated)
+                                                        {
+                                                            <div class="reply-input-container" id="replyInputContainer_@comment.CommentId" style="display: none; margin-top: 15px;">
+                                                                <div class="comment-input" style="display: flex;">
+                                                                    <div class="inputArea" style="flex: 1;">
+                                                                        <input type="text"
+                                                                               id="replyInput_@comment.CommentId"
+                                                                               placeholder="Write your reply..."
+                                                                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                                                    </div>
+                                                                    <button class="btn btn-primary reply-submit-btn"
+                                                                            style="margin-left: 10px; padding: 8px 15px;"
+                                                                            data-comment-id="@comment.CommentId">
+                                                                        <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/paper-plane.png"
+                                                                             alt="Send" width="16" height="16">
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="reply-input-container" id="replyInputContainer_@comment.CommentId" style="display: none; margin-top: 15px; text-align: center;">
+                                                                <button class="btn btn-primary" onclick="showLoginModal()" style="padding: 8px 20px;">
+                                                                    Sign in to Reply
+                                                                </button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- Load More Button -->
+                        @if (Model.TotalCount > Model.Comments.Count)
+                        {
+                            <div class="load-more-container" style="text-align: center; margin-top: 20px;">
+                                <button id="loadMoreBtn"
+                                        class="btn btn-outline-primary"
+                                        data-skip="@Model.Skip"
+                                        data-page-url="@Model.PageUrl"
+                                        data-total-count="@Model.TotalCount"
+                                        data-current-count="@Model.Comments.Count"
+                                        style="padding: 8px 20px;">
+                                    Load More Comments (@(Model.TotalCount - Model.Comments.Count) remaining)
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Your existing CSS stays the same */
+    .main-input {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .likeBx.liked {
+        background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center !important;
+        color: #15a18d !important;
+    }
+
+    .like-count {
+        font-size: 12px;
+        color: #666;
+        margin-left: 5px;
+    }
+
+    .avatar {
+        height: 50px;
+        width: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+        background-color: #eaeaea;
+        overflow: hidden;
+        flex: 0 0 auto;
+        object-fit: cover;
+    }
+
+    .comment-input .inputArea {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .commnetsLists .sort {
+        text-align: right;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .commnentBox {
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+    }
+
+    .commnetsLists li {
+        width: 100%;
+        list-style: none !important;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .commnetsLists li:after {
+            position: absolute;
+            content: '';
+            left: 27px;
+            width: 1px;
+            top: 90px;
+            bottom: 10px;
+            background-color: #d5d5d5;
+        }
+
+    .commnetsLists .single-commnet .comment-header {
+        display: flex;
+    }
+
+    .commnetsLists .single-commnet .image {
+        width: 54px;
+        height: 54px;
+        flex: 0 0 auto;
+        margin-right: 10px;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+    .commnetsLists .single-commnet .desc-top {
+        display: flex;
+        margin: auto 0;
+    }
+
+    .commnetsLists .single-commnet h4 {
+        margin-bottom: 0;
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .commnetsLists .single-commnet .time {
+        font-size: 14px;
+        color: gray;
+        margin-left: 10px;
+    }
+
+    .commnetsLists .single-commnet .desc {
+        padding-left: 64px;
+    }
+
+        .commnetsLists .single-commnet .desc .desc-detail p {
+            font-size: 18px !important;
+            margin: 10px 0px;
+        }
+
+    .commnetsLists div.commentAction {
+        display: flex;
+        align-items: center;
+    }
+
+        .commnetsLists div.commentAction div.likeBx {
+            float: none;
+            width: auto;
+            padding-left: 25px;
+            margin-right: 15px;
+            align-items: center;
+            display: flex;
+            font-size: 14px;
+            background-position: 0 0;
+            cursor: pointer;
+            background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-black.png') no-repeat left center;
+            font-weight: 600;
+        }
+
+    div.commentAction div.likeBx:hover {
+        background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center;
+        color: #15a18d;
+    }
+
+    .commnetsLists div.commentAction div.replyBx {
+        float: none;
+        width: auto;
+        padding-left: 25px;
+        margin-right: 15px;
+        font-size: 14px;
+        cursor: pointer;
+        background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-replay-black.png') no-repeat left center;
+    }
+
+        .commnetsLists div.commentAction div.replyBx:hover {
+            background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-replay-green.png') no-repeat left center;
+            color: #15a18d;
+        }
+
+    .comment-input {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    #commentInput {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+        #commentInput[readonly] {
+            cursor: pointer;
+            background-color: #f5f5f5;
+        }
+
+            #commentInput[readonly]:hover {
+                background-color: #eee;
+            }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+    .btn-primary {
+        background: #11a48a;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: #0d8c76;
+        }
+
+    .btn-outline-primary {
+        background: white;
+        color: #11a48a;
+        border: 1px solid #11a48a;
+    }
+
+        .btn-outline-primary:hover {
+            background: #11a48a;
+            color: white;
+        }
+
+    .no-comments {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Replies styling */
+    .replies-container {
+        margin-top: 15px;
+        padding-left: 20px;
+        border-left: 2px solid #eaeaea;
+    }
+
+    .single-reply {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+        .reply-header .image {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+    .reply-details {
+        flex: 1;
+    }
+
+        .reply-details div:first-child {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .reply-details div:last-child {
+            font-size: 12px;
+            color: #888;
+        }
+
+    .reply-body {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .reply-actions {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .reply-like {
+        font-size: 12px;
+        padding-left: 20px;
+        background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-black.png') no-repeat left center;
+        cursor: pointer;
+    }
+
+        .reply-like:hover {
+            background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center;
+            color: #15a18d;
+        }
+
+        .reply-like.liked {
+            background: url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center;
+            color: #15a18d;
+        }
+
+    .reply-count {
+        margin-left: 5px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .delete-reply {
+        margin-left: auto;
+        color: #ff4444;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+        .delete-reply:hover {
+            text-decoration: underline;
+        }
+
+
+    @@media screen and (max-width: 980px) {
+        .comment-input button.btn.btn-primary {
+            width: 140px;
+            height: 40px;
+        }
+
+        #commentsList, .comment-input {
+            padding: 0;
+        }
+
+        .commnetsLists .single-commnet .desc {
+            padding-left: 40px;
+        }
+
+        .commnetsLists li:after {
+            padding-left: 15px;
+        }
+
+        .comment-input .inputArea {
+            margin: 0;
+        }
+    }
+</style>
+
+<script>
+        // Show login modal
+        function showLoginModal() {
+            window.open('/account/google-login?returnUrl=' + encodeURIComponent(window.location.href),
+                       'LoginPopup',
+                       'width=500,height=600,scrollbars=yes');
+        }
+
+        // Listen for login success message from popup
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.success === true) {
+                console.log('Login successful, reloading page');
+                location.reload();
+            }
+        });
+
+        // Authentication check functions
+        function handleLikeClick(commentId, isAuthenticated) {
+            if (!isAuthenticated) {
+                showLoginModal();
+                return;
+            }
+            likeComment(commentId);
+        }
+
+        function handleReplyClick(commentId, isAuthenticated) {
+            if (!isAuthenticated) {
+                showLoginModal();
+                return;
+            }
+
+            // Toggle replies and show reply input
+            toggleReplies(commentId);
+        }
+
+        function handleReplyLikeClick(replyId, isAuthenticated) {
+            if (!isAuthenticated) {
+                showLoginModal();
+                return;
+            }
+            likeReply(replyId);
+        }
+
+        // Global functions
+        async function likeComment(commentId) {
+            console.log(`Liking comment ${commentId}`);
+            try {
+                const response = await fetch(`/Comment/LikeComment/${commentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        const likeBtn = document.getElementById(`likeBtn_${commentId}`);
+                        const likeCount = document.getElementById(`likeCount_${commentId}`);
+
+                        if (result.liked) {
+                            likeBtn.classList.add('liked');
+                            likeBtn.style.background = "url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-green.png') no-repeat left center";
+                            likeBtn.style.color = "#15a18d";
+                        } else {
+                            likeBtn.classList.remove('liked');
+                            likeBtn.style.background = "url('https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/ic-like-black.png') no-repeat left center";
+                            likeBtn.style.color = "#000";
+                        }
+
+                        if (likeCount) {
+                            likeCount.textContent = result.likeCount;
+                        }
+                    } else {
+                        console.log(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Error liking comment:', error);
+            }
+        }
+
+        async function likeReply(replyId) {
+            console.log(`Liking reply ${replyId}`);
+            try {
+                const response = await fetch(`/Comment/LikeComment/${replyId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        const likeBtn = document.getElementById(`likeBtnReply_${replyId}`);
+                        const likeCount = document.getElementById(`likeCountReply_${replyId}`);
+
+                        if (result.liked) {
+                            likeBtn.classList.add('liked');
+                        } else {
+                            likeBtn.classList.remove('liked');
+                        }
+
+                        if (likeCount) {
+                            likeCount.textContent = result.likeCount;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error liking reply:', error);
+            }
+        }
+
+       // Update the toggleReplies function in your main view:
+    function toggleReplies(commentId) {
+        console.log(`Toggling replies for comment ${commentId}`);
+
+        const repliesContainer = document.getElementById(`repliesContainer_${commentId}`);
+
+        if (!repliesContainer) {
+            console.error(`Replies container not found for comment ${commentId}`);
+            return;
+        }
+
+        // Get the current display state using getComputedStyle to handle inline style="display: none"
+        const currentDisplay = window.getComputedStyle(repliesContainer).display;
+        console.log(`Current computed display: ${currentDisplay}`);
+
+        if (currentDisplay === 'none') {
+            // SHOW everything
+            repliesContainer.style.display = 'block';
+
+            // Show the reply input container
+            const replyInputContainer = document.getElementById(`replyInputContainer_${commentId}`);
+            if (replyInputContainer) {
+                replyInputContainer.style.display = 'block';
+
+                // Focus on the input field
+                const replyInput = document.getElementById(`replyInput_${commentId}`);
+                if (replyInput) {
+                    replyInput.focus();
+                }
+            }
+
+            // Load replies if needed
+            loadReplies(commentId);
+        } else {
+            // HIDE everything
+            repliesContainer.style.display = 'none';
+
+            // Also hide the reply input container
+            const replyInputContainer = document.getElementById(`replyInputContainer_${commentId}`);
+            if (replyInputContainer) {
+                replyInputContainer.style.display = 'none';
+            }
+        }
+    }
+
+        async function loadReplies(commentId) {
+            try {
+                const response = await fetch(`/Comment/GetReplies/${commentId}`, {
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const replies = await response.json();
+                    displayReplies(commentId, replies);
+                }
+            } catch (error) {
+                console.error('Error loading replies:', error);
+            }
+        }
+
+        function displayReplies(commentId, replies) {
+            const currentUserId = @((int?)Model.UserId ?? 0);
+
+            const existingRepliesContainer = document.getElementById(`existingReplies_${commentId}`);
+            if (!existingRepliesContainer) return;
+
+            if (!replies || replies.length === 0) {
+                existingRepliesContainer.innerHTML = '<div style="color: #666; font-style: italic; padding: 10px;">No replies yet</div>';
+                return;
+            }
+
+            let repliesHtml = '';
+            replies.forEach(reply => {
+                const isAuthenticated = @Model.IsAuthenticated.ToString().ToLower();
+                const replyAuthorId = reply.userId || reply.UserId;
+                const isOwner = currentUserId > 0 && Number(replyAuthorId) === Number(currentUserId);
+
+                console.log(`Reply ID: ${reply.commentId}, Author ID: ${replyAuthorId}, Current User: ${currentUserId}, isOwner: ${isOwner}`);
+
+                repliesHtml += `
+                    <div class="single-reply" data-reply-id="${reply.commentId}" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">
+                        <div class="reply-header" style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div class="image" style="width: 40px; height: 40px; margin-right: 10px; border-radius: 50%; overflow: hidden;">
+                                <img src="${reply.userPicture || 'https://resources.ilmkidunya.com/images/avatar.png'}"
+                                     alt="${reply.userName}"
+                                     width="100%"
+                                     onerror="this.src='https://resources.ilmkidunya.com/images/avatar.png'">
+                            </div>
+                            <div class="reply-details">
+                                <div style="font-weight: 500; font-size: 14px;">${reply.userName}</div>
+                                <div style="font-size: 12px; color: #888;">${reply.createdDate}</div>
+                            </div>
+                            ${isOwner ? `
+                            <div class="delete-reply"
+                                 style="margin-left: auto; color: #ff4444; cursor: pointer; font-size: 12px;"
+                                 data-reply-id="${reply.commentId}">
+                                Delete
+                            </div>` : ''}
+                        </div>
+                        <div class="reply-body" style="font-size: 14px; line-height: 1.4;">
+                            ${reply.commentText}
+                        </div>
+                        <div class="reply-actions" style="margin-top: 8px; display: flex; align-items: center;">
+                            <div class="likeBx reply-like"
+                                 style="font-size: 12px; padding-left: 20px;"
+                                 id="likeBtnReply_${reply.commentId}"
+                                 data-reply-id="${reply.commentId}"
+                                 data-is-authenticated="${isAuthenticated}">
+                                <span>Like</span>
+                                <span class="like-count" id="likeCountReply_${reply.commentId}" style="margin-left: 5px;">
+                                    ${reply.likeCount || 0}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            existingRepliesContainer.innerHTML = repliesHtml;
+            updateReplyCount(commentId, replies.length);
+        }
+
+        async function postReply(commentId) {
+            console.log(`Posting reply to comment ${commentId}`);
+            const replyInput = document.getElementById(`replyInput_${commentId}`);
+            if (!replyInput) {
+                console.error(`Reply input not found for comment ${commentId}`);
+                return;
+            }
+
+            const replyText = replyInput.value.trim();
+
+            if (!replyText) {
+                console.log('Please write a reply');
+                return;
+            }
+
+            const formData = {
+                pageUrl: document.getElementById('pageUrl')?.value || window.location.pathname + window.location.search,
+                pageTitle: document.getElementById('pageTitle')?.value || document.title,
+                commentText: replyText,
+                parentCommentId: commentId
+            };
+
+            console.log("Reply FormData: ", formData);
+
+            try {
+                const response = await fetch('/Comment/AddReply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: JSON.stringify(formData),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        // Clear input
+                        replyInput.value = '';
+                        // Refresh replies
+                        await loadReplies(commentId);
+                    } else {
+                        console.log('Failed to post reply: ' + result.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Error posting reply:', error);
+            }
+        }
+
+        async function deleteComment(commentId) {
+            if (!confirm('Are you sure you want to delete this comment?')) return;
+
+            try {
+                const response = await fetch(`/Comment/DeleteComment/${commentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        // Remove comment from UI
+                        const commentElement = document.querySelector(`.single-commnet[data-comment-id="${commentId}"]`);
+                        if (commentElement) {
+                            commentElement.closest('li').remove();
+                        }
+                        updateCommentCount();
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting comment:', error);
+            }
+        }
+
+        async function deleteReply(replyId) {
+            if (!confirm('Are you sure you want to delete this reply?')) return;
+
+            try {
+                const response = await fetch(`/Comment/DeleteComment/${replyId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        // Remove reply from UI
+                        const replyElement = document.querySelector(`.single-reply[data-reply-id="${replyId}"]`);
+                        if (replyElement) {
+                            const repliesContainer = replyElement.closest('.replies-container');
+                            replyElement.remove();
+
+                            // Update reply count
+                            if (repliesContainer) {
+                                const commentId = repliesContainer.id.replace('repliesContainer_', '');
+                                const remainingReplies = repliesContainer.querySelectorAll('.single-reply').length;
+                                updateReplyCount(commentId, remainingReplies);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting reply:', error);
+            }
+        }
+
+        function updateReplyCount(commentId, count) {
+            const replyBtn = document.querySelector(`.replyBx[data-comment-id="${commentId}"]`);
+            if (replyBtn) {
+                let replyCountSpan = replyBtn.querySelector('.reply-count');
+
+                if (count > 0) {
+                    if (!replyCountSpan) {
+                        replyCountSpan = document.createElement('span');
+                        replyCountSpan.className = 'reply-count';
+                        replyCountSpan.style.cssText = 'margin-left: 5px; font-size: 12px; color: #666;';
+                        replyBtn.appendChild(replyCountSpan);
+                    }
+                    replyCountSpan.textContent = `(${count})`;
+                } else if (replyCountSpan) {
+                    replyCountSpan.remove();
+                }
+            }
+        }
+
+        function updateCommentCount() {
+            const commentCount = document.querySelectorAll('.single-commnet').length;
+            console.log(`Total comments: ${commentCount}`);
+        }
+
+        // DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Comments script loaded');
+
+            // Post comment functionality
+            const postCommentBtn = document.getElementById('postCommentBtn');
+            if (postCommentBtn) {
+                postCommentBtn.addEventListener('click', async function() {
+                    const commentText = document.getElementById('commentInput').value.trim();
+                    if (!commentText) {
+                        console.log('Please write a comment');
+                        return;
+                    }
+
+                    const formData = {
+                        pageUrl: document.getElementById('pageUrl').value,
+                        pageTitle: document.getElementById('pageTitle').value || document.title,
+                        commentText: commentText
+                    };
+
+                    console.log('Comment FormData:', formData);
+
+                    try {
+                        const response = await fetch('/Comment/AddComment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: JSON.stringify(formData),
+                            credentials: 'include'
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log('AddComment result:', result);
+
+                            if (result.success) {
+                                document.getElementById('commentInput').value = '';
+                                location.reload(); // Reload to show new comment
+                            } else {
+                                console.log('Failed to post comment: ' + result.message);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error posting comment:', error);
+                    }
+                });
+            }
+
+            // Enter key to post comment
+            const commentInput = document.getElementById('commentInput');
+            if (commentInput && postCommentBtn) {
+                commentInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        postCommentBtn.click();
+                    }
+                });
+            }
+
+            // Load more comments
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', async function() {
+                    const skip = parseInt(this.getAttribute('data-skip'));
+                    const pageUrl = this.getAttribute('data-page-url');
+                    const totalCount = parseInt(this.getAttribute('data-total-count'));
+
+                    this.disabled = true;
+                    this.textContent = 'Loading...';
+
+                    try {
+                        const response = await fetch(`/Comment/LoadMoreComments?pageUrl=${encodeURIComponent(pageUrl)}&skip=${skip}`, {
+                            credentials: 'include'
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const html = await response.text();
+
+                        if (html) {
+                            const noComments = document.querySelector('.no-comments');
+                            if (noComments) noComments.remove();
+
+                            const commentsList = document.getElementById('commentsList');
+                            commentsList.insertAdjacentHTML('beforeend', html);
+
+                            // Update skip value by 10
+                            const newSkip = skip + 10;
+                            this.setAttribute('data-skip', newSkip);
+
+                            // Calculate remaining comments
+                            const loadedCommentsCount = commentsList.querySelectorAll('.single-commnet').length;
+                            const remaining = totalCount - loadedCommentsCount;
+
+                            // Update button text or hide if no more comments
+                            if (remaining <= 0) {
+                                this.parentElement.style.display = 'none';
+                            } else {
+                                this.textContent = `Load More Comments (${remaining} remaining)`;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error loading more comments:', error);
+                        this.textContent = 'Error loading comments';
+                    } finally {
+                        this.disabled = false;
+                    }
+                });
+            }
+
+            // Event delegation for all interactions
+            document.addEventListener('click', function(e) {
+                // Handle like buttons (Comment)
+                if (e.target.closest('.likeBx') && !e.target.closest('.reply-like')) {
+                    const btn = e.target.closest('.likeBx');
+                    const commentId = btn.dataset.commentId;
+                    const isAuthenticated = btn.dataset.isAuthenticated === 'true';
+
+                    console.log(`Like clicked for comment ${commentId}, Auth: ${isAuthenticated}`);
+                    if (commentId) {
+                        handleLikeClick(parseInt(commentId), isAuthenticated);
+                    }
+                }
+
+                // Handle reply buttons
+                if (e.target.closest('.replyBx')) {
+                    const btn = e.target.closest('.replyBx');
+                    const commentId = btn.dataset.commentId;
+                    const isAuthenticated = btn.dataset.isAuthenticated === 'true';
+
+                    console.log(`Reply clicked for comment ${commentId}, Auth: ${isAuthenticated}`);
+                    if (commentId) {
+                        handleReplyClick(parseInt(commentId), isAuthenticated);
+                    }
+                }
+
+                // Handle reply like buttons
+                if (e.target.closest('.reply-like')) {
+                    const btn = e.target.closest('.reply-like');
+                    const replyId = btn.dataset.replyId;
+                    const isAuthenticated = btn.dataset.isAuthenticated === 'true';
+
+                    console.log(`Like clicked for reply ${replyId}, Auth: ${isAuthenticated}`);
+                    if (replyId) {
+                        handleReplyLikeClick(parseInt(replyId), isAuthenticated);
+                    }
+                }
+
+                // Handle reply submit buttons
+                if (e.target.closest('.reply-submit-btn')) {
+                    const btn = e.target.closest('.reply-submit-btn');
+                    const commentId = btn.dataset.commentId;
+
+                    console.log(`Reply submit clicked for comment ${commentId}`);
+                    if (commentId) {
+                        postReply(parseInt(commentId));
+                    }
+                }
+
+                // Handle comment delete buttons
+                if (e.target.closest('.deleteBx')) {
+                    const btn = e.target.closest('.deleteBx');
+                    const commentId = btn.dataset.commentId;
+                    if (commentId) {
+                        deleteComment(parseInt(commentId));
+                    }
+                }
+
+                // Handle reply delete buttons
+                if (e.target.closest('.delete-reply')) {
+                    const btn = e.target.closest('.delete-reply');
+                    const replyId = btn.dataset.replyId;
+                    if (replyId) {
+                        deleteReply(parseInt(replyId));
+                    }
+                }
+            });
+
+            // Handle Enter key in reply inputs for dynamically loaded content
+            document.addEventListener('keypress', function(e) {
+                if (e.target.matches('input[id^="replyInput_"]') && e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    const commentId = e.target.id.replace('replyInput_', '');
+                    postReply(parseInt(commentId));
+                }
+            });
+        });
+</script>

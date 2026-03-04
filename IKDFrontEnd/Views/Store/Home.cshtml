@@ -1,0 +1,301 @@
+﻿@using System.Globalization
+@model IKDFrontEnd.ViewModels.BookHomePageViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/common/style-min.css" rel="stylesheet" async="">
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+<!-- Header End -->
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                        else
+                        {
+                            <h1>Welcome to Pakistan's Largest Book Store</h1>
+                        }
+
+                        <p>Search from @Model.TotalBooksCount books</p>
+                    </div>
+                </div>
+                <div class="ss-col-lg-12">
+                    <form action="/store/search" method="get">
+                        <div class="banner-form" style="margin: 0 30%;">
+
+                            <div class="input-holder" style="width: 85%;">
+                                <input type="text" name="keyword" placeholder="Search Books here" style="width: 100%;">
+                            </div>
+                            <div class="btn-holder">
+                                <button type="submit">
+                                    <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Main Start -->
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Most Demanding Books</h2>
+                    <p>Here’s a list of most demanding books across genres, based on consistent global popularity, critical acclaim, and reader demand (as of recent years):</p>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            @if (Model.FirstBook != null)
+                            {
+                                <div class="main-book">
+                                    <a href="/store/@Model.FirstBook.Url">
+                                        <figure>
+                                            <img src="@Model.FirstBook.Image" alt="@Model.FirstBook.Name" />
+                                        </figure>
+                                        <strong>@Model.FirstBook.Name <span>by: @Model.FirstBook.AuthorId</span></strong>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-lg-9">
+                            <ul class="books-list">
+                                @foreach (var book in Model.HomePageBooks)
+                                {
+                                    <li>
+                                        <a href="/store/@book.Url">
+                                            <figure>
+                                                <img src="@book.Image" alt="@book.Name" />
+                                            </figure>
+                                            <strong>@book.Name</strong>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                @await Html.PartialAsync("_maincontenttopbanner")
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Book Categories</h2>
+                    <div class="tabs-holder">
+                        <div class="vertical-tab">
+                            @foreach (var parent in Model.Categories.Where(c => c.ParentCategoryId == null).Select((cat, index) => new { cat, index }))
+                            {
+                                var tabId = "Tab" + parent.cat.Id;
+                                var activeClass = parent.index == 0 ? "each-tab active" : "each-tab";
+                                <div class="@activeClass" onclick="showCategory('@tabId', event)">
+                                    <div class="title">@parent.cat.CategoryName</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="tabs-content">
+                            @foreach (var parent in Model.Categories.Where(c => c.ParentCategoryId == null).Select((cat, index) => new { cat, index }))
+                            {
+                                var tabId = "Tab" + parent.cat.Id;
+                                var displayStyle = parent.index == 0 ? "display:block;" : "display:none;";
+                                <div id="@tabId" class="vertical-tab-content" style="@displayStyle">
+                                    <ul>
+                                        @foreach (var child in Model.Categories.Where(c => c.ParentCategoryId == parent.cat.Id))
+                                        {
+                                            var name = child.CategoryName.ToLower().Replace(" ", "-");
+                                            <li><a href="/store/category/@name">@child.CategoryName</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+
+                    <script>
+                        function showCategory(tabId, event) {
+                            var contents = document.getElementsByClassName("vertical-tab-content");
+                            var tabs = document.getElementsByClassName("each-tab");
+
+                            // Hide all tab contents
+                            for (var i = 0; i < contents.length; i++) {
+                                contents[i].style.display = "none";
+                            }
+
+                            // Remove active class from all tabs
+                            for (var i = 0; i < tabs.length; i++) {
+                                tabs[i].classList.remove("active");
+                            }
+
+                            // Show selected tab content if exists
+                            var selectedContent = document.getElementById(tabId);
+                            if (selectedContent) {
+                                selectedContent.style.display = "block";
+                            } else {
+                                console.error("No element found with id:", tabId);
+                            }
+
+                            // Mark this tab as active
+                            event.currentTarget.classList.add("active");
+                        }
+                    </script>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Latest Releases <a href="/store/all-books">(View All Books)</a> </h2>
+                    <ul class="books-list sml-list">
+                        @foreach (var book in Model.LatestReleases)
+                        {
+                            <li>
+                                <a href="@book.Url">
+                                    <figure>
+                                        <img src="@book.Image" alt="@book.Name" />
+                                    </figure>
+                                    <strong>
+                                        @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(book.Name)
+                                    </strong>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="share-box">
+
+                        <div class="sharethis-inline-share-buttons st-center st-has-labels  st-inline-share-buttons st-animated" style="margin-bottom: 20px;" id="st-1">
+                            <div class="st-total st-hidden">
+                                <span class="st-label"></span>
+                                <span class="st-shares">
+                                    Shares
+                                </span>
+                            </div><div class="st-btn st-first st-hide-label" data-network="whatsapp" style="display: inline-block;">
+                                <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg">
+                                <span class="st-label"></span>
+                            </div><div class="st-btn st-hide-label" data-network="facebook" style="display: inline-block;">
+                                <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg">
+                                <span class="st-label"></span>
+                            </div><div class="st-btn st-hide-label" data-network="twitter" style="display: inline-block;">
+                                <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg">
+                                <span class="st-label"></span>
+                            </div><div class="st-btn st-hide-label" data-network="linkedin" style="display: inline-block;">
+                                <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg">
+                                <span class="st-label"></span>
+                            </div><div class="st-btn st-hide-label" data-network="pinterest" style="display: inline-block;">
+                                <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg">
+                                <span class="st-label"></span>
+                            </div><div class="st-btn st-last st-hide-label" data-network="email" style="display: inline-block;">
+                                <img alt="email sharing button" src="https://platform-cdn.sharethis.com/img/email.svg">
+                                <span class="st-label"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Featured Authors <a href="/store/allauthors">(View All Authors)</a> </h2>
+                    <ul class="writter-list">
+                        @foreach (var author in Model.Authors)
+                        {
+                            var authorName = author.Name.Trim().ToLower().Replace(" ", "-");
+                            <li>
+                                <a href="/store/author/@authorName">
+                                    <figure>
+                                        <img src="@author.Image"
+                                             alt="@author.Name" />
+                                    </figure>
+                                    <span>@author.Name</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec fee-box" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc3 != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc3)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main End -->

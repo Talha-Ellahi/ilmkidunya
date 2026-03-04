@@ -1,0 +1,239 @@
+﻿@using System.Net
+@using IKDFrontEnd.ViewModels
+@model LecturePageViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["PageTitle2"] = Model.PageTitle2;
+}
+@section header {
+
+
+				<div class="col-lg-11">
+					<partial name="_NavBarPartial" />
+				</div>
+
+
+}
+@section MetaData
+{
+	@if (Model != null && !string.IsNullOrEmpty(Model.MetaTitle) && !string.IsNullOrEmpty(Model.MetaDescription))
+	{
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@Model.MetaTitle" />
+		<meta property="og:description" content="@Model.MetaDescription" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/{@Model.MetaImage}" />
+		<meta name="description" content="@Model.MetaDescription">
+		<meta name="keywords" content="@Model.MetaKeywords">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@Model.MetaTitle</title>
+	}
+	else
+	{
+		string modifiedPageTitle2 = Model.ClassName;
+
+		// Remove hyphens from the PageTitle2
+		modifiedPageTitle2 = modifiedPageTitle2.Replace("-", " ");
+
+		// Check and replace specific parts of the PageTitle2
+		if (modifiedPageTitle2.Contains("mdcat class"))
+		{
+			modifiedPageTitle2 = modifiedPageTitle2.Replace("mdcat class", "Mdcat Test");
+		}
+		else if (modifiedPageTitle2.Contains("ecat class"))
+		{
+			modifiedPageTitle2 = modifiedPageTitle2.Replace("ecat class", "Ecat Test");
+		}
+
+		// Capitalize the first letter of each word
+		modifiedPageTitle2 = modifiedPageTitle2.ToLower();
+		modifiedPageTitle2 = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(modifiedPageTitle2);
+
+		// Correct "Th" to "th"
+		modifiedPageTitle2 = modifiedPageTitle2.Replace("Th", "th");
+
+		<title>@modifiedPageTitle2 @Model.CurrentSubjectSlug.Replace("-", " ") Video Lectures - @Model.CurrentSubjectSlug.Replace("-", " ") @modifiedPageTitle2 Lectures</title>
+
+		<meta name="description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+		<meta name="keywords" content="ilmkidunya, education, educational, news, colleges, universities, result, admission, jobs, scholarship, visa, study, abroad, courses, pakistan, pakistani, information" />
+		<meta property="og:image" content="https://ikddata.ilmkidunya.com/images/ilmkidunya-logo-2.jpg" />
+		<meta property="og:image:width" content="200" />
+		<meta property="og:image:height" content="200" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	}
+}
+@section innerbanner
+{
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="with-img">
+						<div class="img-holder">
+							<figure>
+								<img src="https://cdn.ilmkidunya.com/lectures/subject/@Model.SubjectImage" alt="" width="313" height="151" />
+								<figcaption>@Model.PageTitle2</figcaption>
+							</figure>
+						</div>
+						<div class="ss-text-holder">
+							@if (!string.IsNullOrEmpty(Model.PageHeading))
+							{
+								<h1>@Model.PageHeading</h1>
+								@* <p>@Model.MetaDescription</p> *@
+							}
+							else
+							{
+								// If PageHeading is null, use PageTitle2 with transformations
+								string modifiedPageTitle2 = Model.ClassName;
+
+								// Remove hyphens from the PageTitle2
+								modifiedPageTitle2 = modifiedPageTitle2.Replace("-", " ");
+
+								// Check and replace specific parts of the PageTitle2
+								if (modifiedPageTitle2.Contains("mdcat class"))
+								{
+									modifiedPageTitle2 = modifiedPageTitle2.Replace("mdcat class", "Mdcat Test");
+								}
+								else if (modifiedPageTitle2.Contains("ecat class"))
+								{
+									modifiedPageTitle2 = modifiedPageTitle2.Replace("ecat class", "Ecat Test");
+								}
+
+								// Capitalize the first letter of each word
+								modifiedPageTitle2 = modifiedPageTitle2.ToLower();
+								modifiedPageTitle2 = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(modifiedPageTitle2);
+
+								// Correct "Th" to "th"
+								modifiedPageTitle2 = modifiedPageTitle2.Replace("Th", "th");
+								var readableSubject = string.Join(" ", Model.CurrentSubjectSlug
+								.Replace("-", " ")
+								.Split(' ')
+								.Select(word => char.ToUpper(word[0]) + word.Substring(1)));
+								// Display the transformed PageTitle2
+								<h1>Free @modifiedPageTitle2 @readableSubject Online Video Lectures in Urdu - @DateTime.Now.Year</h1>
+								@* <p>Free @modifiedPageTitle2 @Model.CurrentSubjectSlug Online Video Lectures in Urdu - @DateTime.Now.Year</p> *@
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+<div id="main">
+	<div class="ss-class-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<ul class="ss-class-list ss-chapter">
+						@foreach (var chapter in Model.LectureChapters)
+						{
+							var chapterClass = chapter.Id % 2 == 0 ? "sh-red" : "sh-blue";
+							string chapterText;
+							string chapterNameDisplay;
+
+							if (chapter.ChNumber == 0)
+							{
+								chapterText = "Full Book Introduction";
+								chapterNameDisplay = chapter.ChName;
+							}
+							else if (chapter.ChName.Trim().ToLower() == "paper pattern")
+							{
+								chapterText = "Paper Pattern";
+								chapterNameDisplay = "Paper Pattern Lectures";
+							}
+							else
+							{
+								chapterText = "Chapter " + chapter.ChNumber;
+								chapterNameDisplay = chapter.ChName;
+							}
+
+							<li class="@chapterClass">
+								<a href="@("/study/" + Model.CurrentClassSlug + "-" + Model.CurrentSubjectSlug + "/" + chapter.ChName.Replace(" ","-").ToLower() + ".aspx")">
+									<div class="inner-text">
+										<strong>@chapterText</strong>
+										<span>@chapterNameDisplay</span>
+									</div>
+								</a>
+							</li>
+						}
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(Model.PageDescription1)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 0 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<p>@Html.Raw(WebUtility.HtmlDecode(Model.PageDescription2))</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ss-instractor">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Class @Model.ClassName @Model.PageTitle2 Instructors</h2>
+				</div>
+
+				@foreach (var teacher in Model.Teachers)
+				{
+					<div class="col-lg-6 col-md-6 col-lg-12">
+						<div class="istractor-box">
+							<div class="img-holder">
+								<figure>
+									@if (!string.IsNullOrEmpty(teacher.Image))
+									{
+										<img src="@($"https://cdn.ilmkidunya.com/lectures/teachers/{teacher.Image}")" alt="" width="363" height="201" />
+									}
+									else
+									{
+										<img src="@($"https://cdn.ilmkidunya.com/lectures/teachers/No-image.jpg")" alt="" width="363" height="201" />
+									}
+									
+								</figure>
+							</div>
+							
+							<div class="text-holder">
+								<h3>@teacher.Name</h3>
+								<strong>
+									@teacher.Qualification
+									
+								</strong>
+								<p>@teacher.Description</p>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+
+</div>

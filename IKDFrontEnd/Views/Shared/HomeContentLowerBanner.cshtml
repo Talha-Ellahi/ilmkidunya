@@ -1,0 +1,56 @@
+﻿
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8866825487085085"
+     data-ad-slot="9990874736"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+@* @if (ViewBag.Banners != null)
+{
+
+    var banners = ViewBag.Banners as List<IKDFrontEnd.Models.Banner>
+    ;
+    var bannerSortOrder10 = banners?.FirstOrDefault(b => b.SortOrder == 10);
+    var bannerSortOrder11 = banners?.FirstOrDefault(b => b.SortOrder == 11);
+    var bannerSortOrder12 = banners?.FirstOrDefault(b => b.SortOrder == 12);
+
+
+
+
+    @if (bannerSortOrder10 != null)
+    {
+        <div class="banner-box">
+            <a aria-label="link" href="@bannerSortOrder10.Url" class="banner-link" target="_blank">
+                <img class="lazy-load" alt="image" style="width: 300px; height: 250px;" src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder10.Image">
+            </a>
+        </div>
+    }
+    @if (bannerSortOrder11 != null)
+    {
+        <div class="banner-box">
+            <a aria-label="link" href="@bannerSortOrder11.Url" class="banner-link" target="_blank">
+                <img class="lazy-load" alt="image" style="width: 300px; height: 250px;" src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder11.Image">
+            </a>
+        </div>
+    }
+    @if (bannerSortOrder12 != null)
+    {
+        <div class="banner-box">
+            <a aria-label="link" href="@bannerSortOrder12.Url" class="banner-link" target="_blank">
+                <img class="lazy-load" alt="image" style="width: 300px; height: 250px;" src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder12.Image">
+            </a>
+        </div>
+    }
+
+
+}
+
+
+ *@

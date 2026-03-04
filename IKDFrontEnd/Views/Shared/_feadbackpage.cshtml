@@ -1,0 +1,25 @@
+﻿<div class="feedback-sec">
+	<div class="container">
+		<div class="col-lg-12">
+			<div class="feed-box">
+				<h3>Is this page helpful?</h3>
+				<ul class="yes-no">
+					<li><a href="javascript:void(0)" data-box="yes-box">Yes</a></li>
+					<li><a href="javascript:void(0)" data-box="no-box">No</a></li>
+				</ul>
+				<div id="yes-box" class="yes-box" style="display: none;">
+					<p>Thank you for your feedback. We are happy our work helped you.</p>
+					<p>Now, please consider sharing this page to your friends/class-fellows. Thank you</p>
+				</div>
+				<div id="no-box" class="no-box" style="display: none;">
+					<p>We are sorry to know you could not find your required information.</p>
+					<p>Please take a moment to let us know about your feedback.</p>
+					<textarea id="Comments" placeholder="Please write your feedback about this page here."></textarea><br>
+					<input type="hidden" id="PageUrl" value="/bs-english/">
+					<input type="button" onclick="getfeedback()" value="Submit">
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

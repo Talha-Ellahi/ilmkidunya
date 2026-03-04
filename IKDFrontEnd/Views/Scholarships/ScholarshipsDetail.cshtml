@@ -1,0 +1,168 @@
+﻿@model IKDFrontEnd.Models.TblSch
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ @section MetaData {
+    @{
+        var metaTitle = Model?.MetaTitle ?? "";
+        var metaDescription = Model?.MetaDescription ?? "";
+        var metaKeywords = Model?.MetaKeyword ?? "";
+    }
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@metaTitle" />
+    <meta property="og:description" content="@metaDescription" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@metaDescription">
+    <meta name="keywords" content="@metaKeywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@metaTitle</title>
+}
+
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/scholarships/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a aria-label="link" href="/studyabroad/">
+                    <img src="https://www.ilmkidunya.com/icons/study-abroad.png"
+                         alt="image" />
+                    Studyabroad
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/studyabroad/country-guides.aspx">
+                    <img src="https://resources.ilmkidunya.com/ikd-guides/assets/images/icons/adm-icon.png"
+                         alt="image" />
+                    Guides
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/consultants/">
+                    <img src="https://www.ilmkidunya.com/icons/tutor.png"
+                         alt="image" />
+                    Consultants
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/scholarships/topscholarship">
+                    <img src="https://ikddata.ilmkidunya.com/icons/ic-courses-nav-colleges-2.png"
+                         alt="image" />
+                    Top Scholarship
+                </a>
+            </li>
+        </ul>
+    </div>
+    }
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@(Model?.SchName ?? "")</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        
+                            @if (!string.IsNullOrEmpty(Model?.Description2))
+                            {
+                                @Html.RenderWithAds(Model.Description2)
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model?.Description3))
+                            {
+                                @Html.RenderWithAds(Model.Description3)
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model?.Description1))
+                            {
+                                @Html.RenderWithAds(Model.Description1)
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model?.UniLogoImage))
+                            {
+                                    <img src="@($"https://cdn.ilmkidunya.com/scholarshipimages/detailimages/{Model.UniLogoImage}")" alt="University Logo" />
+                            }
+                       
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Related ScholarShips</h2>
+                        @{
+                            var related = ViewBag.RelatedScholarships as List<IKDFrontEnd.Models.TblSch>;
+                        }
+
+                        @if (related != null && related.Any())
+                        {
+                            <ul class="latest-ScholarShips">
+                                @foreach (var item in related)
+                                {
+                                    <li>
+                                        <a href="/scholarships/@item.Url?.Replace(".aspx", "")">
+                                            <div class="ScholarShips-img-holder">
+                                                        <img src="https://cdn.ilmkidunya.com/scholarshipimages/127X127/@item.SchImage" alt="@item.SchName">
+                                            </div>
+
+                                            <span class="date">@item.Deadline?.ToString("dd-MMM-yyyy")</span>
+                                            <h4>@item.SchName</h4>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+
+                    <div class="share-box" style="padding-top: 30px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                        @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

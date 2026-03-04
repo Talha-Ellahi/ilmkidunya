@@ -1,0 +1,38 @@
+﻿@if (ViewBag.Banners != null)
+{
+
+	var banners = ViewBag.Banners as List<IKDFrontEnd.Models.Banner>;
+	var bannerSortOrder10 = banners?.FirstOrDefault(b => b.SortOrder == 10);
+	var bannerSortOrder11 = banners?.FirstOrDefault(b => b.SortOrder == 11);
+	var bannerSortOrder12 = banners?.FirstOrDefault(b => b.SortOrder == 12);
+	var bannerSortOrder13 = banners?.FirstOrDefault(b => b.SortOrder == 13);
+
+
+	<ul class="ss-ads" style="border: 0; padding-top: 0; margin: 0;">
+		<li>
+			@if (bannerSortOrder10 != null)
+			{
+				<a href="@bannerSortOrder10.Url" class="banner-link decode-banner-url" target="_blank" aria-label="ads"><img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder10.Image" alt="" /></a>
+			}
+		</li>
+		<li>
+			@if (bannerSortOrder11 != null)
+			{
+				<a href="@bannerSortOrder11.Url" class="banner-link decode-banner-url" target="_blank" aria-label="ads"><img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder11.Image" alt="" /></a>
+			}
+		</li>
+		<li>
+			@if (bannerSortOrder12 != null)
+			{
+				<a href="@bannerSortOrder12.Url" class="banner-link decode-banner-url" target="_blank" aria-label="ads"><img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder12.Image" alt="" /></a>
+			}
+		</li>
+		<li>
+			@if (bannerSortOrder13 != null)
+			{
+				<a href="@bannerSortOrder13.Url" class="banner-link decode-banner-url" target="_blank" aria-label="ads"><img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder13.Image" alt="" /></a>
+			}
+		</li>
+	</ul>
+
+}

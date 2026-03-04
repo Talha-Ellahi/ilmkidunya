@@ -1,0 +1,1421 @@
+.ss-banner-inner.college-banner .with-img .ss-img-box {
+    width: 16%;
+    padding: 0;
+    border: 0
+}
+
+.ss-banner-inner.college-banner .with-img .ss-img-box .img-holder {
+    width: auto
+}
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder {
+    overflow: hidden;
+    text-align: left;
+    width: 84%
+}
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder ul {
+    margin: 0;
+    width: 34%;
+    display: inline-block;
+    vertical-align: top
+}
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder ul li {
+    width: 100%;
+    vertical-align: top
+}
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder ul li em {
+    font-style: normal;
+    overflow: hidden;
+    width: 60%;
+    display: inline-block
+}
+
+.ss-banner-inner.college-banner .with-img .ss-text-holder ul li span {
+    float: left;
+    width: 40%
+}
+
+.college-news-sec,
+.contact-sec.fee-box,
+.fee-box .contact-admin .text-holder,
+.galler-sec,
+.gallery-holder .box-1,
+.gallery-holder .box-2 {
+    padding: 0
+}
+
+.gallery-holder {
+    display: flex;
+    padding: 0
+}
+
+.gallery-holder .box-1 figure {
+    overflow: hidden;
+    margin: 0;
+    border-radius: 10px 0 0 10px
+}
+
+.gallery-holder .box-2 figure {
+    overflow: hidden;
+    position: relative;
+    margin: 0 0 2px 2px
+}
+
+.gallery-holder .box-2 figure:last-child {
+    margin-bottom: 0
+}
+
+.gallery-holder .box-2 figure figcaption {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 18px;
+    line-height: 34px;
+    text-decoration: underline;
+    text-align: center;
+    font-weight: 600;
+    padding: 30% 0
+}
+
+.college-news-sec .news-box .img-holder img,
+.contact-admin .img-holder img,
+.feature-box .img-holder figure img,
+.g-add-sec .g-ad-box figure img,
+.gallery-holder figure img,
+.medical-box .text-holder ul.list-with-img li,
+ul.feature-institue-list li a .img-holder figure img,
+ul.study-institue-list li .img-holder figure img {
+    width: 100%
+}
+
+.page-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start
+}
+
+.table-of-content {
+    border: 0;
+    padding: 15px 15px 15px;
+    width: 48%;
+    margin-right: 15px
+}
+
+.table-of-content ul li {
+    position: relative;
+    padding: 2px 0 2px 25px;
+    margin: 0
+}
+
+.table-of-content ul li:after,
+ul.list-bullet li:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 10px;
+    height: 10px;
+    background: #46bd74
+}
+
+.news-ad .text-holder ul li:before,
+.table-of-content ul li:before,
+ul.list-bullet li:before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 17px;
+    width: 1px;
+    height: 100%;
+    background: #46bd74
+}
+
+.news-ad .text-holder ul li:last-child:before,
+ .table-of-content ul li:last-child:before,
+ul.list-bullet li:last-child:before {
+    display: none
+}
+
+ .table-of-content ul li a {
+    text-decoration: none;
+    border-right: 0 !important;
+}
+
+.college-news-sec .news-box {
+    padding: 0 0 30px
+}
+
+.college-news-sec .news-box .img-holder {
+    margin: 0 0 10px
+}
+
+.college-news-sec .news-box .img-holder figure {
+    overflow: hidden;
+    margin: 0;
+    border-radius: 15px 15px 0 0
+}
+
+.college-news-sec .news-box .text-holder,
+.ss-banner-inner.left-align .ss-text-holder ul,
+ul.contact-detail li p {
+    margin: 0
+}
+
+.college-news-sec .news-box .text-holder h4 {
+    font-weight: normal;
+}
+
+.college-news-sec .news-box .text-holder h4 a:hover,
+a.view-all:hover,
+ul.contact-detail li p a,
+ul.feature-institue-list li a:hover .text-holder span {
+    color: #080808
+}
+
+.g-add-sec {
+    margin: 0 0 30px
+}
+
+.g-add-sec .g-ad-box {
+    display: block;
+    text-align: center
+}
+
+.box-right .top-box .rating-box .rating ul>li.star,
+.g-add-sec .g-ad-box figure {
+    display: inline-block;
+    margin: 0
+}
+
+.review-sec {
+    background: #effcf4;
+    padding: 30px 0
+}
+
+.contact-sec h2,
+.review-sec h2 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    color: #080808
+}
+
+div.review-slide {
+    margin: 0;
+    padding: 0 15% 25px 0;
+    display: none
+}
+
+div.review-slide .draggable,
+ul.study-institue-list li .img-holder figure {
+    overflow: hidden
+}
+
+div.review-slide .inner-slide {
+    float: left;
+    padding: 0 0 20px;
+    margin: 0;
+    list-style: none
+}
+
+div.review-slide .inner-slide p {
+    margin: 0 0 5px;
+    font-size: 14px;
+    line-height: 26px
+}
+
+div.review-slide .inner-slide strong {
+    color: #969696;
+    font-size: 14px;
+    line-height: 26px;
+    font-weight: 400
+}
+
+div.review-slide>button {
+    font-size: 0;
+    background: url(https://images.ishallwin.com/college-images/prev.webp) no-repeat;
+    width: 35px;
+    height: 35px;
+    border: 0;
+    margin: 0 5px 0 0;
+    line-height: 0;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    bottom: 0
+}
+
+div.review-slide>button.slick-next {
+    background: url(https://images.ishallwin.com/college-images/next.webp) no-repeat;
+    left: 40px
+}
+
+div.review-slide>div button:hover {
+    opacity: .7
+}
+
+.btn-review {
+    color: #46bd74;
+    font-size: 18px;
+    display: inline-block;
+    margin: 15px 0 0
+}
+
+ul.rating-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0
+}
+
+ul.rating-list li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 372px
+}
+
+ul.rating-list li:first-child {
+    width: 173px
+}
+
+ul.rating-list li .all-rating {
+    background: #fff;
+    border: 1px solid #b8c2bc;
+    border-radius: 10px;
+    height: 173px;
+    width: 173px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 26px;
+    color: #737373;
+    padding: 28px 0 0;
+    letter-spacing: -.5px
+}
+
+ul.rating-list li .all-rating span {
+    width: 100%;
+    text-align: center;
+    display: block;
+    font-size: 65px;
+    line-height: 1;
+    color: #000;
+    padding: 10px 0
+}
+
+ul.rating-list li .side-rating {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 0 0 0 20px
+}
+
+ul.rating-list li .side-rating .rating-box {
+    width: 50%;
+    padding: 0 0 0 5px;
+    font-size: 18px;
+    line-height: 1;
+    border-bottom: 2px solid #a3e0ba;
+    margin: 0 0 15px
+}
+
+ul.rating-list li .side-rating .rating-box span {
+    display: block;
+    font-size: 40px;
+    padding: 10px 0 15px;
+    line-height: 1
+}
+
+ul.rating-list li .side-rating .rating-box:last-child {
+    border: 0
+}
+
+.contact-sec {
+    padding: 30px 0 40px
+}
+
+.fee-box .contact-admin .text-holder ul,
+ul.contact-detail {
+    margin: 0 0 20px;
+    padding: 0
+}
+
+ul.contact-detail li,
+ul.uni-list li {
+    list-style: none;
+    margin: 0
+}
+
+ul.contact-detail li p span {
+    display: inline-block;
+    margin: 0 15px 0 0;
+    width: 15%
+}
+
+.contact-sec.fee-box .table>tbody>tr>td a.load-more,
+.contact-sec.fee-box .table>tbody>tr>td a.simple-link,
+.contact-sec.fee-box .table>tbody>tr>td ul li a:hover,
+ul.citywise-list li a:hover,
+ul.college-medi-list li a:hover,
+ul.contact-detail li p a:hover,
+ul.institute-list li a:hover .author,
+ul.study-institue-list li a:hover .text-holder span {
+    color: #15a18d
+}
+
+.contact-admin {
+    padding: 0;
+    overflow: hidden
+}
+
+.contact-admin .img-holder {
+    float: left;
+    width: 154px;
+    margin: 0 0 15px
+}
+
+.contact-admin .img-holder figure {
+    display: block;
+    border-radius: 15px;
+    overflow: hidden
+}
+
+.contact-admin .img-holder figcaption {
+    text-align: center;
+    font-size: 16px;
+    color: #000;
+    line-height: 22px;
+    padding: 10px 0 0
+}
+
+.contact-admin .img-holder figcaption span {
+    display: block;
+    font-size: 14px
+}
+
+.contact-admin .text-holder {
+    overflow: hidden;
+    padding: 0 0 0 30px
+}
+
+.contact-admin .text-holder ul,
+.contact-sec.fee-box .table>tbody>tr>td ul,
+.news-ad .text-holder ul,
+ul.collage-reviews {
+    margin: 0;
+    padding: 0
+}
+
+.contact-admin .text-holder ul li {
+    list-style: none;
+    border-bottom: 1px solid #ddd;
+    padding: 7px 0;
+    font-size: 15px;
+    margin: 0
+}
+
+.contact-admin .text-holder ul li span {
+    display: inline-block;
+    width: 43%;
+    vertical-align: top
+}
+
+.contact-admin .text-holder ul li em {
+    display: inline-block;
+    width: 56%;
+    font-style: normal
+}
+
+.contact-admin .text-holder ul li:first-child {
+    border-top: 1px solid #ddd
+}
+
+.news-ad-sec {
+    padding: 30px 0 0;
+    border-top: 1px solid #c2cfc7;
+    background: linear-gradient(to bottom, #e6f6ec 0, #fff 54%)
+}
+
+.news-ad-sec h2 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    color: #080808;
+    overflow: hidden
+}
+
+.news-ad-sec h2 a {
+    float: right;
+    font-size: 16px;
+    font-weight: 400
+}
+
+.contact-sec.fee-box .table>tbody>tr>td a.load-more:hover,
+.contact-sec.fee-box .table>tbody>tr>td a.simple-link:hover,
+.news-ad-sec h2 a:hover {
+    color: #000
+}
+
+.news-ad-sec ul.news-date {
+    margin: 0 0 15px;
+    padding: 0
+}
+
+.news-ad-sec ul.news-date li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 500
+}
+
+.news-ad-sec ul.news-date li span {
+    display: inline-block;
+    width: 16%;
+    font-weight: 400
+}
+
+.news-ad {
+    overflow: hidden;
+    margin: 0;
+    padding: 0
+}
+
+.news-ad .img-holder {
+    float: left;
+    width: auto;
+    margin: 0 0 15px
+}
+
+.news-ad .text-holder {
+    overflow: hidden;
+    padding: 0 0 0 25px;
+    margin: 0
+}
+
+.news-ad .text-holder h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #000
+}
+
+.news-ad .text-holder p {
+    color: #000;
+    margin: 0 0 10px;
+    font-size: 14px;
+    line-height: 22px
+}
+
+.news-ad .text-holder ul li {
+    position: relative;
+    padding: 2px 0 2px 20px;
+    list-style: none;
+    font-size: 14px;
+    line-height: 22px
+}
+
+.news-ad .text-holder ul li:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    background: #46bd74
+}
+
+.fee-box .contact-admin .text-holder ul li em {
+    text-align: right
+}
+
+.fee-box ul.contact-detail {
+    margin: 0 0 20px;
+    padding: 0 15% 0 0
+}
+
+.fee-box ul.contact-detail li {
+    margin: 0 0 15px
+}
+
+.fee-box ul.contact-detail li p span {
+    width: 35%
+}
+
+.contact-sec.fee-box .table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 0;
+    background: #effcf4;
+    color: #000;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px
+}
+
+.contact-sec.fee-box .table>tbody>tr>td {
+    border-bottom: 1px solid #ddd;
+    border-top: 0;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: #000
+}
+
+.contact-sec.fee-box .table>tbody>tr>td ul li {
+    list-style: none;
+    font-size: 16px;
+    line-height: 28px;
+    margin: 0;
+    padding: 0
+}
+
+.contact-sec.fee-box .table>tbody>tr>td ul li a {
+    color: #000;
+    font-size: 16px;
+    display: block
+}
+
+.ss-banner-inner.left-align .ss-text-holder {
+    text-align: left
+}
+
+.ss-banner-inner.left-align .ss-text-holder ul li {
+    display: block
+}
+
+.ss-banner-inner.left-align .ss-text-holder ul li span {
+    width: 30%
+}
+
+.ss-banner-inner.left-align .ss-text-holder ul li em {
+    font-style: normal
+}
+
+.contact-sec.fee-box .table.mid>tbody>tr>td {
+    height: 40px;
+    vertical-align: middle
+}
+
+.contact-sec .g-ad-box {
+    text-align: center;
+    padding: 0 0 30px
+}
+
+ul.list-bullet {
+    margin: 0 0 35px;
+    padding: 0
+}
+
+ul.list-bullet li {
+    position: relative;
+    padding: 2px 0 2px 25px;
+    margin: 0;
+    list-style: none
+}
+
+.level-wise {
+    background: #effcf4;
+    padding: 30px 0 20px
+}
+
+.level-wise ul.ss-class-list {
+    justify-content: flex-start;
+    border: 0
+}
+
+.level-wise ul.ss-class-list li {
+    width: 12.5%;
+    margin: 0 20px 15px 0 !important
+}
+
+.level-wise ul.ss-class-list li a {
+    background: #fff
+}
+
+select.show-list {
+    float: right;
+    border-radius: 30px;
+    padding: 0 10px;
+    font-size: 15px;
+    line-height: 28px;
+    height: 28px;
+    cursor: pointer
+}
+
+.contact-sec.fee-box.level .table>thead>tr>th {
+    white-space: nowrap
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td {
+    vertical-align: top;
+    border-left: 1px solid #ddd
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td:first-child {
+    width: 25%;
+    border-left: 0
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td:nth-child(2) {
+    width: 21%
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td:nth-child(3) {
+    width: 15%
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td a,
+ul.feature-institue-list li a {
+    display: block;
+    overflow: hidden
+}
+
+.contact-sec.fee-box.level .table.mid>tbody>tr>td a img {
+    float: left;
+    margin: 0 10px 0 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ddd
+}
+
+.content-sec.level-wise ul.admission-nav {
+    justify-content: flex-start;
+    margin: 0 -10px;
+    padding: 0 0 15px;
+    border-bottom: 0
+}
+
+.content-sec.level-wise ul.admission-nav li {
+    padding: 0 10px;
+    width: 14.2%
+}
+
+.content-sec.level-wise ul.admission-nav li a span {
+    font-size: 15px
+}
+
+.medical-box {
+    margin: 0;
+    padding: 0 0 20px;
+    overflow: hidden
+}
+
+.medical-box .img-holder {
+    margin: 0;
+    padding: 0;
+    float: left
+}
+
+.medical-box .img-holder figure {
+    margin: 0;
+    display: 0
+}
+
+.feature-box .text-holder,
+.medical-box .text-holder {
+    overflow: hidden;
+    padding: 0 0 0 25px
+}
+
+.medical-box .text-holder ul {
+    margin: 0;
+    padding: 0 0 15px
+}
+
+.medical-box .text-holder ul li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 60%
+}
+
+.medical-box .text-holder ul li span {
+    display: inline-block;
+    width: 58%;
+    padding: 0 20px 0 0
+}
+
+.medical-box .text-holder ul:last-child li:first-child {
+    border-top: 1px solid #ddd;
+    padding-top: 15px
+}
+
+ul.college-medi-list {
+    margin: 0;
+    padding: 0 0 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.college-medi-list li {
+    width: 33%;
+    padding: 0 20px 0 0;
+    list-style: none;
+    margin: 0
+}
+
+ul.college-medi-list li a {
+    display: block;
+    color: #080808;
+    font-size: 16px;
+    line-height: 26px
+}
+
+ul.citywise-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.citywise-list li {
+    width: 20%;
+    padding: 0 15px 2px 0;
+    margin: 0;
+    list-style: none
+}
+
+.pp-sec ul.citywise-list li {
+    width: 50%;
+}
+
+.pp-sec h4 {
+    font-weight: normal;
+    font-size: 18px;
+}
+
+ul.citywise-list li a {
+    display: block;
+    color: #080808;
+    font-size: 16px;
+    line-height: 26px;
+    border-right: 2px dashed #ccc
+}
+
+ul.citywise-list li:nth-child(5n+5) a {
+    border-right: 0
+}
+
+.total-colleges {
+    padding: 85px 0 0;
+    margin: 0;
+    position: relative
+}
+
+.total-colleges:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 175px;
+    width: 100%;
+    background-image: linear-gradient(45deg, #33e37f, #16a38d) !important
+}
+
+.total-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+    align-items: center
+}
+
+.total-list .list-box {
+    width: 350px;
+    background: #fff;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 0;
+    height: 190px;
+    margin: 0 15px;
+    flex-direction: column;
+    justify-content: center;
+    display: flex
+}
+
+.total-list .list-box strong {
+    display: block;
+    color: #15a18d;
+    font-size: 50px;
+    margin: 0;
+    line-height: 70px;
+    font-weight: 400
+}
+
+.total-list .list-box span {
+    display: block;
+    line-height: 28px;
+    font-size: 20px;
+    color: #0c0b0b;
+    margin: 0;
+    font-weight: 600
+}
+
+ul.institute-list {
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -7px 15px;
+    padding: 0
+}
+
+ul.institute-list li {
+    width: 25%;
+    padding: 0 7px;
+    list-style: none;
+    margin: 0
+}
+
+ul.institute-list li a {
+    display: flex;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 0;
+    color: #080808
+}
+
+ul.institute-list li a .img-holder {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+ul.institute-list li a .author {
+    width: calc(100% - 60px);
+    padding: 0 10px;
+    margin: auto 0;
+    font-size: 14px;
+    font-weight: 400;
+    background: none;
+    border: 0;
+}
+
+.banner-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 10%;
+    padding: 15px 0
+}
+
+.banner-form .input-holder {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 9px 0;
+    height: 52px;
+    width: 93%
+}
+
+.banner-form .input-holder input[type=text],
+.banner-form .input-holder select {
+    border: 0;
+    padding: 8px 20px;
+    color: #8d8d8d;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    font-size: 14px
+}
+
+.banner-form .input-holder input[type=text] {
+    width: 65%;
+    background-position: 97% center
+}
+
+.banner-form .input-holder select {
+    width: 100%;
+    border-left: 1px solid #c8c8c8;
+    background-position: 94% center;
+    appearance: none;
+    background-image: url(https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/sort-grey.png)
+}
+
+.banner-form .btn-holder {
+    width: 52px;
+    height: 52px;
+    border-radius: 6px;
+    background-color: #15a18d;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px
+}
+
+.banner-form .btn-holder button {
+    border: 0;
+    background: 0 0
+}
+
+.banner-form .btn-holder button img {
+    filter: invert(1)
+}
+
+ul.feature-institue-list {
+    margin: 0;
+    padding: 10px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.feature-institue-list li {
+    width: 25%;
+    margin: 0;
+    padding: 0 20px 20px 0;
+    list-style: none
+}
+
+ul.feature-institue-list li a .img-holder {
+    width: 97px;
+    float: left
+}
+
+ul.feature-institue-list li a .img-holder figure {
+    border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    overflow: hidden
+}
+
+ul.feature-institue-list li a .text-holder,
+ul.study-institue-list li .text-holder {
+    overflow: hidden;
+    padding: 0 0 0 20px
+}
+
+ul.feature-institue-list li a .text-holder span {
+    display: block;
+    font-size: 19px;
+    line-height: 24px;
+    color: #15a18d
+}
+
+a.view-all {
+    font-size: 18px;
+    line-height: 24px;
+    color: #15a18d;
+    display: block;
+    margin: -10px 0 0
+}
+
+ul.study-institue-list {
+    margin: 0 -10px;
+    padding: 15px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.study-institue-list li {
+    width: 16.6%;
+    margin: 0;
+    padding: 0 10px 20px;
+    list-style: none
+}
+
+ul.study-institue-list li a {
+    display: block;
+    margin: 0
+}
+
+ul.study-institue-list li .img-holder {
+    float: left;
+    width: 50px
+}
+
+ul.study-institue-list li .text-holder span {
+    display: block;
+    color: #080808;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500
+}
+
+ul.uni-list {
+    margin: 0 0 30px;
+    padding: 0
+}
+
+.feature-sec {
+    padding: 0 0 20px;
+    margin: 0
+}
+
+.feature-box {
+    overflow: hidden;
+    margin: 0 0 25px
+}
+
+.feature-box .img-holder {
+    float: left;
+    width: 150px
+}
+
+.feature-box .img-holder figure {
+    border: 1px solid #b2b2b2;
+    border-radius: 10px;
+    overflow: hidden
+}
+
+.feature-box .text-holder h4 {
+    color: #15a18d;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 400;
+    margin: 0 0 5px
+}
+
+.feature-box .text-holder span {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    color: #080808
+}
+
+.feature-box .text-holder ul {
+    padding: 5px 0 0;
+    margin: 0
+}
+
+.feature-box .text-holder ul li {
+    list-style: none
+}
+
+
+
+ul.list-bullet .info_content {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: #f2f2f2;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 999;
+    transition: .3s ease-in-out;
+    padding: 50px 20px
+}
+
+ul.list-bullet .info_content.open {
+    right: 0;
+    opacity: 1;
+    visibility: visible
+}
+
+ul.collage-reviews li {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 35px
+}
+
+ul.collage-reviews li .reivew-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.collage-reviews li .reivew-box .box-left {
+    width: 10%;
+    margin: 0 20px 0 0
+}
+
+ul.collage-reviews li .reivew-box .box-left span {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000
+}
+
+ul.collage-reviews li .reivew-box .box-left span em {
+    font-style: normal;
+    display: block;
+    line-height: 26px
+}
+
+ul.collage-reviews li .reivew-box .box-left strong {
+    font-weight: 400;
+    font-size: 46px;
+    display: block;
+    text-align: center;
+    padding: 15px 0 0;
+    line-height: 46px
+}
+
+ul.collage-reviews li .reivew-box .box-right {
+    width: 85%;
+    margin: 0
+}
+
+ul.collage-reviews li .reivew-box .box-right p {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0
+}
+
+ul.collage-reviews li .reivew-box .box-right .top-box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start
+}
+
+ul.collage-reviews li .reivew-box .box-right .top-box .rating-box {
+    width: 20%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    padding: 0 0 0 10px;
+    border-left: 1px solid #d3d3d3
+}
+
+ul.collage-reviews li .reivew-box .box-right .top-box .rating-box strong {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 400;
+    display: block;
+    margin: 0 0 10px
+}
+
+.review-form .fieldset .top-box .rating-box .rating,
+ul.collage-reviews li .reivew-box .box-right .top-box .rating-box .rating {
+    position: relative;
+    display: flex;
+    padding: 0
+}
+
+.box-right .top-box .rating-box .rating ul {
+    list-style-type: none;
+    padding: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none
+}
+
+.box-right .top-box .rating-box .rating ul>li.star>i.fa,
+.review-form .fieldset .top-box .rating-box .rating ul>li.star>i.fa {
+    color: #ccc;
+    width: 25px;
+    height: 23px;
+    display: inline-block;
+    background: url(https://images.ishallwin.com//college-images/r-star.webp) no-repeat
+}
+
+.box-right .top-box .rating-box .rating ul>li.star.hover>i.fa,
+.box-right .top-box .rating-box .rating ul>li.star.selected>i.fa,
+.review-form .fieldset .top-box .rating-box .rating ul>li.star.hover>i.fa,
+.review-form .fieldset .top-box .rating-box .rating ul>li.star.selected>i.fa {
+    background: url(https://images.ishallwin.com//college-images/a-star.webp) no-repeat
+}
+
+.review-form .fieldset {
+    margin-bottom: 15px
+}
+
+.review-form .fieldset label {
+    font-weight: 400;
+    font-size: 16px;
+    color: #080808;
+    line-height: 18px;
+    display: block;
+    margin: 0 0 10px
+}
+
+.review-form .fieldset input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 15px;
+    color: #080808
+}
+
+.review-form .fieldset textarea {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 26px;
+    height: 150px;
+    padding: 0 15px;
+    color: #080808
+}
+
+.review-form .fieldset input[type=submit] {
+    width: auto;
+    color: #080808;
+    background: #36e57c;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 35px;
+    cursor: pointer
+}
+
+.review-form .fieldset input[type=submit]:hover {
+    background: #00c950;
+    color: #fff
+}
+
+.review-form .fieldset .top-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px 0 0
+}
+
+.review-form .fieldset .top-box .rating-box {
+    width: 23%;
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    justify-content: center;
+    overflow: hidden
+}
+
+.review-form .fieldset .top-box .rating-box strong {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 400;
+    display: block;
+    margin: 0 0 10px;
+    background: #e6f6ec;
+    width: 100%;
+    text-align: center;
+    color: #000;
+    padding: 10px 0
+}
+
+.review-form .fieldset .top-box .rating-box .rating ul {
+    list-style-type: none;
+    padding: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none
+}
+
+.review-form .fieldset .top-box .rating-box .rating ul>li.star {
+    display: inline-block;
+    margin: 0;
+    cursor: pointer
+}
+
+ .table-of-content .contact-admin ul li:after,
+.table-of-content .contact-admin ul li:before {
+    display: none;
+}
+
+ .table-of-content .contact-admin .text-holder {
+    padding: 0;
+}
+
+.table-of-content .contact-admin ul li:last-child {
+    border: 0;
+    padding-bottom: 20px;
+}
+
+.pp-sec .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 15px;
+    gap: 15px;
+    /* Add spacing between boxes */
+}
+
+.flex-container>.col-lg-4 {
+    flex: 1 1 calc(33.333% - 15px);
+    /* 3 columns with a gap adjustment */
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container .table-of-content ul li:nth-last-child(2):before {
+    display: none;
+}
+
+ul.list-bullet.bullet-1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+ul.list-bullet.bullet-1 li {
+    width: 25%;
+}
+
+ul.list-bullet.bullet-1 li:nth-last-child(2):before,
+ul.list-bullet.bullet-1 li:nth-last-child(3):before,
+ul.list-bullet.bullet-1 li:nth-last-child(4):before {
+    display: none;
+}
+
+.flex-container.result>.col-lg-4 {
+    flex: 1 1 calc(50% - 15px);
+    /* 3 columns with a gap adjustment */
+}
+
+.flex-container .table-of-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Ensure full height of the flex parent */
+    margin: 0 0 10px 0;
+}
+
+.flex-container .table-of-content h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.flex-container .table-of-content ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* Push items to fill the space */
+}
+
+.flex-container .table-of-content ul li {
+    margin-bottom: 8px;
+    padding: 2px 0 2px 25px;
+}
+
+.flex-container .table-of-content ul li a {
+    text-decoration: none;
+}
+
+
+@media (max-width: 768px) {
+    .flex-container>.col-lg-4 {
+        flex: 1 1 100%;
+        /* Full width on smaller screens */
+    }
+}

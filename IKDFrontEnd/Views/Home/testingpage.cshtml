@@ -1,0 +1,589 @@
+﻿@model List<IKDFrontEnd.ViewModels.CategoryCoursesViewModel>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="#1 Educational news platform in Pakistan to find course, admissions & universities" />
+    <meta property="og:description" content="One point resource to discover latest updates in education, university admission, scholarships on the leading educational website." />
+    <meta property="og:image" content="https://www.ilmkidunya.com/ikd-default-og.png" />
+    <meta name="description" content="One point resource to discover latest updates in education, university admission, scholarships on the leading educational website.">
+    <meta name="keywords" content="Top educational website in pakistan, best education website, university admissions in pakistan">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/images-files/images/ikd-favicon.png">
+    <title>#1 Educational news platform in Pakistan to find course, admissions & universities </title>
+  
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .page-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            .page-header p {
+                font-size: 1.1rem;
+                text-align: center;
+                max-width: 700px;
+                margin: 0 auto;
+                opacity: 0.9;
+            }
+
+        /* Existing Banner Styles */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            width: 220px;
+            height: 82px;
+        }
+
+            .logo img {
+                width: 100%;
+                height: auto;
+            }
+
+        .client-banner, .header-add {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+            .client-banner img, .header-add img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .new-banners {
+            padding: 15px 0 20px 0;
+        }
+
+            .new-banners .row {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0 -10px;
+            }
+
+            .new-banners .col-lg-4 {
+                padding: 0 10px;
+                flex: 0 0 33.333%;
+                max-width: 33.333%;
+            }
+
+            .new-banners img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+        /* Main Content Styles */
+        .feature-insti {
+            margin-bottom: 60px;
+        }
+
+        /* Tabs Section */
+        .tab-container {
+            display: flex;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+            background: #f1f5f9;
+            padding: 25px 0;
+        }
+
+        .tab {
+            padding: 14px 20px;
+            margin: 0 15px 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .tab i {
+                font-size: 1.1rem;
+                width: 20px;
+            }
+
+            .tab:hover {
+                background: #e2e8f0;
+                transform: translateX(5px);
+            }
+
+            .tab.active {
+                background: white;
+                color: #3b82f6;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+                transform: translateX(5px);
+            }
+
+        .more-tab {
+            background: #3b82f6;
+            color: white;
+            margin-top: auto;
+            justify-content: center;
+            text-align: center;
+        }
+
+            .more-tab:hover {
+                background: #2563eb;
+                transform: translateX(5px);
+            }
+
+        /* Content Box */
+        .tab-content {
+            flex: 1;
+            padding: 30px;
+            display: none;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+            .tab-content.active {
+                display: flex;
+                animation: fadeIn 0.5s ease;
+            }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+
+        ul.insti-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+            ul.insti-list li {
+                margin: 0;
+                padding: 0 15px 15px 0;
+                font-size: 16px;
+                line-height: 24px;
+                color: #334155;
+                list-style: none;
+                width: 33.33%;
+            }
+
+                ul.insti-list li a {
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: #334155;
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                    background: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                }
+
+                    ul.insti-list li a:hover {
+                        background: #3b82f6;
+                        color: white;
+                        transform: translateY(-3px);
+                        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+                    }
+
+                    ul.insti-list li a i {
+                        margin-right: 10px;
+                        font-size: 0.9rem;
+                    }
+
+        /* Accordion Section */
+        .accordion-insti {
+            display: none;
+            margin-bottom: 40px;
+        }
+
+        .accordion-item {
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .accordion-header {
+            position: relative;
+            padding: 18px 20px;
+            background: #3b82f6;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+            .accordion-header:hover {
+                background: #2563eb;
+            }
+
+            .accordion-header::after {
+                content: '\f078';
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                transition: transform 0.3s ease;
+            }
+
+        .accordion-item.active .accordion-header::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            background: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+        }
+
+        .accordion-content ul {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .accordion-content ul li {
+                list-style: none;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+                .accordion-content ul li a {
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: #475569;
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    transition: all 0.2s ease;
+                }
+
+                    .accordion-content ul li a:hover {
+                        background: #f1f5f9;
+                        color: #3b82f6;
+                    }
+
+                    .accordion-content ul li a i {
+                        margin-right: 10px;
+                        font-size: 0.8rem;
+                        color: #3b82f6;
+                    }
+
+        /* Responsive */
+        @@media screen and (max-width: 980px) {
+            .tab-container
+
+        {
+            display: none;
+        }
+
+        .accordion-insti {
+            display: block;
+        }
+
+        ul.insti-list li {
+            width: 100%;
+        }
+
+        .header-top {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .client-banner, .header-add {
+            width: 100%;
+        }
+
+        .new-banners .col-lg-4 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 15px;
+        }
+
+        }
+
+        @@media screen and (max-width: 768px) {
+            .page-header h1
+
+        {
+            font-size: 2rem;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+        }
+
+        }
+
+        /* Footer */
+        .page-footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+            .page-footer p {
+                margin: 0;
+            }
+    </style>
+</head>
+<body>
+    <!-- Your Existing Banner Structure -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner-header">
+                    <div class="header-top">
+                        <div class="logo">
+                            <a aria-label="link" href="/">
+                                <img src="https://www.ilmkidunya.com/ikd-logo.jpg"
+                                     alt="ilmkidunya logo"
+                                     width="220"
+                                     decoding="async"
+                                     fetchpriority="high" />
+                            </a>
+                        </div>
+
+                        <div class="client-banner">
+                            <!-- Desktop Banner -->
+                            <a aria-label="link"
+                               class="dsk-ad banner-link decode-banner-url"
+                               href='https://www.studyabroad.pk/'>
+                                <img src="https://cdn.ilmkidunya.com/images/Banners/Banner .gif"
+                                     alt="banner-1" />
+                            </a>
+                        </div>
+
+                        <div class="header-add">
+                            <a aria-label="link"
+                               class="banner-link decode-banner-url"
+                               data-url='aHR0cHM6Ly9jdXR0Lmx5L0JyYmN5SDBy'>
+                                <img src="https://cdn.ilmkidunya.com/images/Banners/Superior 2.jpg"
+                                     alt="banner-2" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-banners">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <a aria-label="link"
+                       class="banner-link decode-banner-url"
+                       data-url='aHR0cDovL2N1dGx5LmluLzNYdWsyMw=='>
+                        <img src="https://cdn.ilmkidunya.com/images/Banners/umt-banner.jpg"
+                             alt="image" />
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <a aria-label="link"
+                       class="banner-link decode-banner-url"
+                       data-url='aHR0cHM6Ly9jdXR0Lmx5L3ByVGNqSWN3'>
+                        <img src="https://cdn.ilmkidunya.com/images/Banners/Afro institute.png"
+                             alt="image" />
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <a aria-label="link"
+                       class="banner-link decode-banner-url"
+                       href='https://www.studyabroad.pk/scholarships/'>
+                        <img src="https://cdn.ilmkidunya.com/images/Banners/study.gif"
+                             alt="image" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Explore Courses by Category</h1>
+            <p>Browse our comprehensive collection of courses organized by subject area</p>
+        </div>
+    </header>
+
+    <div class="container">
+    <div class="feature-insti">
+        <!-- Tabs Section -->
+        <div class="tab-container">
+            <div class="tabs">
+                @foreach (var category in Model)
+                {
+                    var id = category.CategoryName.ToLower().Replace(" ", "");
+                    <div class="tab @(Model.First() == category ? "active" : "")"
+                         onclick="toggleTab('@id')">
+                        <i class="fas fa-folder"></i>
+                        @category.CategoryName
+                    </div>
+                }
+
+                <a href="/Courses" style="text-decoration: none;">
+                    <div class="tab more-tab">
+                        <i class="fas fa-arrow-right"></i>
+                        View All Courses
+                    </div>
+                </a>
+            </div>
+
+            @foreach (var category in Model)
+            {
+                var id = category.CategoryName.ToLower().Replace(" ", "");
+                <div id="@id" class="tab-content @(Model.First() == category ? "active" : "")">
+                    <ul class="insti-list">
+                        @foreach (var guide in category.Guides)
+                        {
+                            <li>
+                                <a href="@guide.GuideMainUrl">
+                                    <i class="fas fa-book"></i>
+                                    @guide.GuideName
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+
+        <!-- Accordion Section -->
+        <div class="accordion-insti">
+            @foreach (var category in Model)
+            {
+                <div class="accordion-item @(Model.First() == category ? "active" : "")">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        @category.CategoryName
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            @foreach (var guide in category.Guides)
+                            {
+                                <li>
+                                    <a href="@guide.GuideMainUrl">
+                                        <i class="fas fa-book"></i>
+                                        @guide.GuideName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>&copy; 2023 Course Catalog. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTab(id) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            const activeTab = document.querySelector(`.tab[onclick="toggleTab('${id}')"]`);
+            const activeContent = document.getElementById(id);
+
+            if (activeTab && activeContent) {
+                activeTab.classList.add('active');
+                activeContent.classList.add('active');
+            }
+        }
+
+        function toggleAccordion(header) {
+            const accordionItem = header.parentElement;
+            const isActive = accordionItem.classList.contains('active');
+
+            // Close all accordion items
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // If it wasn't active, open it
+            if (!isActive) {
+                accordionItem.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

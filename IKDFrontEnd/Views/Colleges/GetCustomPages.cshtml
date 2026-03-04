@@ -1,0 +1,273 @@
+﻿@model List<IKDFrontEnd.ViewModels.CustomPagesCollegeViewModel>
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+	<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+	<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>@ViewBag.CmsData.MetaTitle</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/colleges/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+					City Wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+					Level wise colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/college-category">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+					Category wise Colleges
+				</a>
+			</li>
+			<li>
+				<a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+					Featured colleges
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@ViewBag.CmsData.Heading</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(@ViewBag.CmsData.Desc1)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec level fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					<h2>
+						List of Colleges & Universities
+						
+					</h2>
+					<div class="responsive-table">
+						<table class="table mid">
+							<thead>
+								<tr>
+									<th style="width: 35%;"><span>Institution Name</span></th>
+									<th style="width: 30%;"><span>Location</span></th>
+									<th style="width: 20%;"><span>Contact #</span></th>
+									
+									<th style="width: 15%;"><span>Sector</span></th>
+									<th><span>Popularity Score</span></th>
+									
+								</tr>
+							</thead>
+							<tbody id="institutionList">
+								@{
+									int serialCollege = ViewBag.CollegeSerialStart ?? 1;
+								}
+								@foreach (var institution in Model)
+								{
+									<tr>
+										<td>
+											<a href="/colleges/@(institution.Url).aspx">
+												<span>
+													<img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.LogoUrl" alt="" />
+													@institution.Name
+												</span>
+											</a>
+										</td>
+										<td><span>@institution.Address</span></td>
+										<td><span>@institution.ContactNumber</span></td>
+										<td>
+											<span>
+												@{
+													var isGovt = institution.Sector?.ToLower();
+													string displayText = isGovt == null ? "N/A"
+													: (isGovt == "public" || isGovt == "government") ? "Public"
+													: isGovt == "private" ? "Private"
+													: isGovt;
+												}
+												@displayText
+											</span>
+										</td>
+										<td>@serialCollege</td>
+										
+									</tr>
+									serialCollege++;
+								}
+							</tbody>
+
+						</table>
+					</div>
+
+					<p style="text-align: center;">
+						<button type="button" class="load-more-button" id="loadMoreBtn">Load More Colleges</button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@Html.Raw(@ViewBag.CmsData.Desc2)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					
+						@await Html.PartialAsync("_maincontentlowerbanner")
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec level-wise">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Colleges/Universities</h2>
+					<p>Study Level Wise</p>
+				</div>
+				<div class="col-lg-12">
+					<ul class="ss-class-list" style="padding-bottom: 20px;">
+						<li class="inter">
+							<a href="/colleges/intermediate">
+								<div class="inner-text">
+									<span>Colleges for</span>
+									<strong>Inter</strong>
+								</div>
+							</a>
+						</li>
+						<li class="bachelor">
+							<a href="/colleges/bachelors" class="sh-red">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Bachelor</strong>
+								</div>
+							</a>
+						</li>
+						<li class="master">
+							<a href="/colleges/masters" class="sh-green">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Master</strong>
+								</div>
+							</a>
+						</li>
+						<li class="mphill">
+							<a href="/colleges/mphil" class="sh-purple">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>M.Phil</strong>
+								</div>
+							</a>
+						</li>
+						<li class="phd">
+							<a href="/colleges/phd" class="sh-blue">
+								<div class="inner-text">
+									<span>University for</span>
+									<strong>Ph.D</strong>
+								</div>
+							</a>
+						</li>
+					</ul>
+					<div class="share-box" style="padding-top: 20px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	let currentPage = 1;
+
+	const loadMoreBtn = document.getElementById('loadMoreBtn');
+	const institutionList = document.getElementById('institutionList');
+	const collegeUrl = "@ViewBag.UrlSlug";
+
+	if (loadMoreBtn && institutionList) {
+		loadMoreBtn.addEventListener('click', function () {
+			currentPage++; // Increment the page number
+			loadMoreBtn.innerHTML = 'Loading...'; // Change button text while loading
+			loadMoreBtn.disabled = true; // Disable the button to prevent multiple clicks
+
+			// Fetch new Colleges via AJAX
+			fetch(`/colleges/testing/${collegeUrl}?page=${currentPage}&pageSize=10`)
+				.then(response => response.text()) // Get the HTML response
+				.then(data => {
+					const tempContainer = document.createElement('div');
+					tempContainer.innerHTML = data;
+
+					// Find the new Colleges in the response
+					const newInstitutionList =          tempContainer.querySelector('#institutionList');
+
+					if (newInstitutionList && newInstitutionList.innerHTML.trim()) {
+						institutionList.insertAdjacentHTML('beforeend', newInstitutionList.innerHTML);
+						loadMoreBtn.innerHTML = 'Load More Colleges';
+						loadMoreBtn.disabled = false; // Re-enable the button
+					} else {
+						loadMoreBtn.innerHTML = 'No More Colleges';
+						loadMoreBtn.disabled = true;
+					}
+				})
+				.catch(error => {
+					console.error('Error loading more Colleges:', error);
+					loadMoreBtn.innerHTML = 'Error loading Colleges';
+					loadMoreBtn.disabled = false;
+				});});}</script>
+
+

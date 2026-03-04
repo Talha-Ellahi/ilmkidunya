@@ -1,0 +1,14 @@
+﻿@model (string Desc1, string Desc2)
+
+@try
+{
+    var adHtml = (await Component.InvokeAsync("GoogleAd", new { adSlot = "9990874736" })).ToString();
+    @Html.Raw(adHtml)
+}
+catch
+{
+    Html.Raw("Google Ad Service unavailable");
+}
+
+
+

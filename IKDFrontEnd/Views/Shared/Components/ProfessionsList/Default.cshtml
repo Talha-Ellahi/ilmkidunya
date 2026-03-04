@@ -1,0 +1,13 @@
+﻿@model List<string>
+
+<div class="subjects-tble2 diclinkclr">
+    <ul>
+        @foreach (var p in Model)
+        {
+            var slug = p.ToLower().Replace(" ", "-");
+            <li>
+                <a href="/jobs/professions/@slug"><span>@p.Replace("-", " ") Jobs</span></a>
+            </li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,399 @@
+﻿@model IKDFrontEnd.ViewModels.CityInstitutionsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@(ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaTitle) ? ViewBag.CmsData.MetaTitle : "IlmKiDunya")" />
+    <meta property="og:description" content="@(ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaDesc) ? ViewBag.CmsData.MetaDesc : "Latest Colleges and University Information")" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@(ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaDesc) ? ViewBag.CmsData.MetaDesc : "")">
+    <meta name="keywords" content="@(ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaKeys) ? ViewBag.CmsData.MetaKeys : "")">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@(ViewBag.CmsData != null && !string.IsNullOrWhiteSpace(ViewBag.CmsData.MetaTitle) ? ViewBag.CmsData.MetaTitle : "IlmKiDunya")</title>
+}
+
+@section header {
+    <div class="col-lg-11">
+        <ul class="navigation">
+            <li>
+                <a aria-label="link" href="/colleges/">
+                    <img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+                    Home
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/city-wise-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-2.webp" alt="image" />
+                    City Wise Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/level-wise-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-3.webp" alt="image" />
+                    Level wise colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/college-category">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-4.webp" alt="image" />
+                    Category wise Colleges
+                </a>
+            </li>
+            <li>
+                <a aria-label="link" href="/colleges/featured-listing-of-colleges.aspx">
+                    <img src="https://images.ishallwin.com/nav-icons/menu-icon-5.webp" alt="image" />
+                    Featured colleges
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        <h1>@(ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Heading) ? ViewBag.CmsData.Heading : "Colleges & Universities")</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.Raw(
+                                        (ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Desc1))
+                                        ? ViewBag.CmsData.Desc1
+                                        : "<p></p>"
+                                        )
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="news-ad-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.Raw(
+                                        (ViewBag.CmsData != null  && !string.IsNullOrWhiteSpace(ViewBag.CmsData.Desc3))
+                                        ? ViewBag.CmsData.Desc3
+                                        : "<p></p>"
+                                        )
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="city-data" data-city-name="@Model.CityName" style="display:none;"></div>
+                    <h2>
+                        List of Institutions for @ViewBag.LevelName Level Programs in Pakistan
+                        <select class="form-control" name="cityId" id="cityId">
+                            <option value="">-- Select City --</option>
+                            @foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+                            {
+                                <option value="@city.CityName"
+                                        selected="@(Model.CityName != null && Model.CityName == city.CityName ? "selected" : null)">
+                                    @city.CityName
+                                </option>
+                            }
+                        </select>
+                    </h2>
+                    <div class="responsive-table desktop-view">
+                        <table class="table mid">
+                            <thead>
+                                <tr>
+                                    <th><span>Institution Name</span></th>
+                                    <th><span>Location</span></th>
+                                    <th><span>Contact #</span></th>
+                                    <th><span>Total Courses</span></th>
+                                    <th><span>Sector</span></th>
+                                    <th><span>Popularity Score</span></th>
+                                    <th><span>Rating</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="institutionList">
+                                @await Html.PartialAsync("_CityInstitutionsTable")
+                            </tbody>
+                        </table>
+                        <p style="text-align: center;">
+                            <button type="button" class="load-more-button" id="loadMoreBtnDesktop">Load More Institutions</button>
+                        </p>
+                        <div id="noMoreDesktop" style="display: none; text-align: center; margin-top: 20px;"></div>
+                    </div>
+
+                    <div class="admission-mobile">
+                        <ul class="admission-list" id="mobileInstitutionList">
+                            @foreach (var institution in Model.Colleges)
+                            {
+                                <li>
+                                    <figure> <img src="https://cdn.ilmkidunya.com/Inst/logos/@institution.College.Logo" alt="" onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/no-colleege-thumb.jpg';"> </figure>
+                                    <div class="text-box">
+                                        <a href="/colleges/@(institution.College.Url).aspx" target="_blank">
+                                            @institution.College.Name
+                                        </a>
+                                        <span>
+                                            @{
+                                                var isGovt = institution.College.IsGovt?.ToLower();
+                                                string displayText = isGovt == null ? "N/A"
+                                                : (isGovt == "public" || isGovt == "government") ? "Public"
+                                                : isGovt == "private" ? "Private"
+                                                : isGovt;
+                                            }
+                                            Sector: @displayText
+                                        </span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <div class="load-more-container" style="text-align: center; margin-top: 20px;">
+                            <button type="button" class="load-more-button" id="loadMoreBtnMobile">Load More Institutions</button>
+                        </div>
+                        <div id="noMoreMobile" style="display: none; text-align: center; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="ss-ads" style="border: 0; padding:15px 0; margin: 0;">
+                        @await Html.PartialAsync("_maincontentlowerbanner")
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Colleges/Universities</h2>
+                    <p>Study Level Wise</p>
+                </div>
+                <div class="col-lg-12">
+                    <ul class="ss-class-list" style="padding-bottom: 20px;">
+                        <li class="inter">
+                            <a href="/colleges/intermediate">
+                                <div class="inner-text">
+                                    <span>Colleges for</span>
+                                    <strong>Inter</strong>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="bachelor">
+                            <a href="/colleges/bachelors" class="sh-red">
+                                <div class="inner-text">
+                                    <span>University for</span>
+                                    <strong>Bachelor</strong>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="master">
+                            <a href="/colleges/masters" class="sh-green">
+                                <div class="inner-text">
+                                    <span>University for</span>
+                                    <strong>Master</strong>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mphill">
+                            <a href="/colleges/mphil" class="sh-purple">
+                                <div class="inner-text">
+                                    <span>University for</span>
+                                    <strong>M.Phil</strong>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="phd">
+                            <a href="/colleges/phd" class="sh-blue">
+                                <div class="inner-text">
+                                    <span>University for</span>
+                                    <strong>Ph.D</strong>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="share-box" style="padding-top: 20px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentPageDesktop = 1;
+    let currentPageMobile = 1;
+    let selectedCity = "@Model.CityName" || "lahore";
+    const levelUrl = "@ViewBag.LevelUrl";
+
+    const loadMoreBtnDesktop = document.getElementById('loadMoreBtnDesktop');
+    const loadMoreBtnMobile = document.getElementById('loadMoreBtnMobile');
+    const institutionList = document.getElementById('institutionList');
+    const mobileInstitutionList = document.getElementById('mobileInstitutionList');
+    const noMoreDesktop = document.getElementById('noMoreDesktop');
+    const noMoreMobile = document.getElementById('noMoreMobile');
+
+    // City change handler - updates both desktop and mobile
+    document.getElementById('cityId')?.addEventListener('change', function () {
+        selectedCity = this.value;
+        currentPageDesktop = 1;
+        currentPageMobile = 1;
+
+        // Reset both views
+        loadMoreBtnDesktop.innerHTML = 'Loading...';
+        loadMoreBtnDesktop.disabled = true;
+        loadMoreBtnMobile.innerHTML = 'Loading...';
+        loadMoreBtnMobile.disabled = true;
+
+        institutionList.innerHTML = '';
+        mobileInstitutionList.innerHTML = '';
+        noMoreDesktop.style.display = 'none';
+        noMoreMobile.style.display = 'none';
+
+        // Load desktop view
+        fetch(`/colleges/${levelUrl}?cityName=${selectedCity}&page=1&viewType=desktop`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            institutionList.innerHTML = data;
+            loadMoreBtnDesktop.innerHTML = 'Load More Institutions';
+            loadMoreBtnDesktop.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error loading colleges:', error);
+            loadMoreBtnDesktop.innerHTML = 'Error loading colleges';
+            loadMoreBtnDesktop.disabled = false;
+        });
+
+        // Load mobile view separately
+        updateMobileView(1);
+    });
+
+    // Load more for desktop
+    loadMoreBtnDesktop?.addEventListener('click', function () {
+        currentPageDesktop++;
+        loadMoreBtnDesktop.innerHTML = 'Loading...';
+        loadMoreBtnDesktop.disabled = true;
+
+        fetch(`/colleges/${levelUrl}?cityName=${selectedCity}&page=${currentPageDesktop}&viewType=desktop`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.trim() === '' || data.includes('no-row') || data.includes('no institutions')) {
+                // No more data
+                noMoreDesktop.innerHTML = 'No more institutions available.';
+                noMoreDesktop.style.display = 'block';
+                loadMoreBtnDesktop.style.display = 'none';
+            } else {
+                institutionList.insertAdjacentHTML('beforeend', data);
+                loadMoreBtnDesktop.innerHTML = 'Load More Institutions';
+                loadMoreBtnDesktop.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more institutions:', error);
+            loadMoreBtnDesktop.innerHTML = 'Error loading institutions';
+            loadMoreBtnDesktop.disabled = false;
+            currentPageDesktop--; // Revert page on error
+        });
+    });
+
+    // Load more for mobile
+    loadMoreBtnMobile?.addEventListener('click', function () {
+        currentPageMobile++;
+        loadMoreBtnMobile.innerHTML = 'Loading...';
+        loadMoreBtnMobile.disabled = true;
+
+        fetch(`/colleges/${levelUrl}?cityName=${selectedCity}&page=${currentPageMobile}&viewType=mobile`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.trim() === '' || data.includes('no institutions')) {
+                // No more data
+                noMoreMobile.innerHTML = 'No more institutions available.';
+                noMoreMobile.style.display = 'block';
+                loadMoreBtnMobile.style.display = 'none';
+            } else {
+                // Directly append the list items (no conversion needed)
+                mobileInstitutionList.insertAdjacentHTML('beforeend', data);
+                loadMoreBtnMobile.innerHTML = 'Load More Institutions';
+                loadMoreBtnMobile.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more institutions:', error);
+            loadMoreBtnMobile.innerHTML = 'Error loading institutions';
+            loadMoreBtnMobile.disabled = false;
+            currentPageMobile--; // Revert page on error
+        });
+    });
+
+    // Helper function to update mobile view
+    function updateMobileView(page) {
+        fetch(`/colleges/${levelUrl}?cityName=${selectedCity}&page=${page}&viewType=mobile`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            mobileInstitutionList.innerHTML = data;
+            loadMoreBtnMobile.innerHTML = 'Load More Institutions';
+            loadMoreBtnMobile.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error loading mobile colleges:', error);
+            loadMoreBtnMobile.innerHTML = 'Error loading colleges';
+            loadMoreBtnMobile.disabled = false;
+        });
+    }
+
+    // Remove the createMobileListItems function since it's no longer needed
+</script>

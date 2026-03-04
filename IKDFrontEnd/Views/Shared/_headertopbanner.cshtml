@@ -1,0 +1,185 @@
+﻿@if (ViewBag.Banners != null)
+{
+    var banners = ViewBag.Banners as List<IKDFrontEnd.Models.Banner>;
+    var bannerSortOrder1 = banners?.FirstOrDefault(b => b.SortOrder == 1);
+    var bannerSortOrder2 = banners?.FirstOrDefault(b => b.SortOrder == 2);
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner-header">
+                    <ul class="login-option formobileop">
+                        <li>
+                            <a aria-label="link">
+                                <img src="https://images.ishallwin.com/nav-icons/search-icon.webp"
+                                     alt="image"
+                                     width="20"
+                                     height="20" />
+                            </a>
+                        </li>
+                        @await Html.PartialAsync("_LoginNavbar")
+                    </ul>
+                  <div class="header-top">
+    <div class="logo">
+        <a href="/" aria-label="Ilmkidunya Home">
+            <img src="https://www.ilmkidunya.com/ikd-logo.jpg"
+                 alt="Ilmkidunya logo" />
+        </a>
+    </div>
+
+    <div class="client-banner">
+        @if (bannerSortOrder1 != null)
+        {
+            var url1 = bannerSortOrder1.Url;
+
+            <!-- Desktop Banner -->
+            <a aria-label="link"
+               class="dsk-ad banner-link decode-banner-url"
+               data-url='@url1'
+               onclick="handleBannerClick(this); return false;"
+               onmouseover="clearStatusBar()"
+               target="_blank">
+                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
+                     alt="banner-1" />
+            </a>
+
+            <!-- Mobile Banner -->
+            <a aria-label="link"
+               class="mob-ad decode-banner-url"
+               data-url='@url1'
+               onclick="handleBannerClick(this); return false;"
+               onmouseover="clearStatusBar()"
+               target="_blank">
+                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
+                     width="90" height="36"
+                     alt="banner-1-mobile" />
+            </a>
+        }
+    </div>
+
+    @if (bannerSortOrder2 != null)
+    {
+        var url2 = bannerSortOrder2.Url;
+
+        <div class="header-add">
+            <a aria-label="link" 
+               class="banner-link-2"
+               data-url='@url2'
+               onclick="handleBannerClick(this); return false;"
+               onmouseover="clearStatusBar()"
+               target="_blank">
+                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder2.Image"
+                     alt="image" />
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="header-add" style="width:728px;height:90px;overflow:hidden;position:relative;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px"
+                 data-ad-client="ca-pub-8866825487085085"
+                 data-ad-slot="9990874736"
+                 data-full-width-responsive="false"></ins>
+
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    }
+
+
+<script>
+// Function to handle banner clicks
+function handleBannerClick(element) {
+    var url = element.getAttribute('data-url');
+    
+    // If URL is base64 encoded, decode it
+    if (url && url.startsWith("aHR0")) {
+        try {
+            // Decode base64 URL
+            url = atob(url);
+        } catch(e) {
+            console.error('Error decoding URL:', e);
+            return false;
+        }
+    }
+    
+    // Open in new tab if URL exists
+    if (url) {
+        window.open(url, '_blank');
+    }
+    
+    return false; // Prevent default link behavior
+}
+
+// Function to clear status bar on hover
+function clearStatusBar() {
+    window.status = '';
+    return true;
+}
+
+// Alternative: Add event listeners for all banner links
+document.addEventListener('DOMContentLoaded', function() {
+    // Clear status bar on mouseover for all banner links
+    var bannerLinks = document.querySelectorAll('.decode-banner-url, .banner-link-2');
+    bannerLinks.forEach(function(link) {
+        link.addEventListener('mouseover', function() {
+            window.status = '';
+        });
+        
+        // Add hover effect for visual feedback
+        link.style.cursor = 'pointer';
+        
+        // Add title/aria-label for accessibility
+        if (!link.getAttribute('title')) {
+
+        }
+    });
+});
+
+// Prevent middle-click and right-click context menu from showing URL
+document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.decode-banner-url, .banner-link-2')) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+
+<style>
+.decode-banner-url:hover,
+.banner-link-2:hover {
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+}
+
+/* Ensure links look clickable */
+.decode-banner-url,
+.banner-link-2 {
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+/* Hide focus outline for better appearance (but keep accessibility) */
+.decode-banner-url:focus,
+.banner-link-2:focus {
+    outline: 2px solid #4a90e2;
+    outline-offset: 2px;
+}
+</style>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+

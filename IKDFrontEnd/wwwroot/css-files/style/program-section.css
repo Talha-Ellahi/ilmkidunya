@@ -1,0 +1,355 @@
+.bs-admission-sec h2, .content-sec h2, .college-news-sec h2 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #080808;
+    line-height: 30px
+}
+
+.content-sec ul, .content-sec ul li {
+    padding: 0;
+    margin: 0
+}
+
+.content-sec h2 {
+    margin: 0 0 10px
+}
+
+.content-sec ul li {
+    list-style: none
+}
+
+.bs-admission-sec {
+    margin: 0;
+    padding: 30px 0;
+    background: #effcf4
+}
+
+.bs-admission-sec h2 {
+    margin: 0 0 20px
+}
+
+ul.admission-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 0 15px;
+    border-bottom: 1px solid #d5e0d9
+}
+
+ul.admission-nav li {
+    list-style: none;
+    padding: 0 3px;
+    margin: 0 0 15px;
+    width: 10%
+}
+
+ul.admission-nav li a {
+    display: block;
+    cursor: pointer;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-decoration: none
+}
+
+ul.admission-nav li a figure {
+    display: flex;
+    height: 50px;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+ul.admission-nav li a figure img {
+    display: block;
+    object-fit: none
+}
+
+ul.admission-nav li a span {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    color: #080808;
+    text-align: center;
+    line-height: 18px;
+    align-items: center;
+    height: 30px;
+    font-weight: 500
+}
+
+ul.admission-nav li a:hover {
+    background: #15a18d;
+    border-color: #fff
+}
+
+ul.admission-nav li a:hover span {
+    color: #fff
+}
+
+ul.admission-nav li a:hover figure img {
+    filter: brightness(0) saturate(100%) invert(99%) sepia(2%) saturate(3292%) hue-rotate(286deg) brightness(122%) contrast(100%)
+}
+
+.bs-admission-sec .inner-holder {
+    padding: 30px 0 0;
+    float: left
+}
+
+.bs-admission-sec .inner-holder .box-left {
+    padding: 0 10px 0 0
+}
+
+.bs-admission-sec .inner-holder .box-left figure {
+    margin: 0 0 20px
+}
+
+.bs-admission-sec .inner-holder .box-right {
+    padding: 0 0 0 20px;
+    border-left: 3px solid #656565
+}
+
+.bs-admission-sec .inner-holder .box-right h2 {
+    color: red
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder {
+    display: flex;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset {
+    padding: 0;
+    width: 48.3%;
+    margin: 0 0 20px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset label {
+    font-weight: 400;
+    font-size: 14px;
+    color: #080808;
+    line-height: 18px;
+    display: block;
+    margin: 0 0 5px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 15px;
+    color: #080808
+}
+
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=submit] {
+    width: auto;
+    float: right;
+    color: #080808;
+    background: #36e57c;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 35px;
+    cursor: pointer
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=submit]:hover, .no-box input:hover {
+    background: #00c950;
+    color: #fff
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset input[type=checkbox] {
+    width: auto;
+    height: auto;
+    display: inline-block
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset label#checkopt {
+    display: inline-block;
+    padding: 0 0 0 5px
+}
+
+.bs-admission-sec .inner-holder .box-right .form-holder .fieldset select {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 50px;
+    height: 50px;
+    padding: 0 15px;
+    color: #080808;
+    background: url(https://images.ishallwin.com/bs-chem/sel-arrow.webp) 99% 3px no-repeat #fff;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none
+}
+
+.feedback-sec {
+    padding: 0 0 30px
+}
+
+.feedback-sec .feed-box {
+    border-left: 3px solid #bbc5be;
+    padding: 0 0 0 20px
+}
+
+.feedback-sec .feed-box h3 {
+    font-size: 20px;
+    line-height: 28px;
+    margin: 0 0 20px;
+    font-weight: 500;
+    color: #080808
+}
+
+ul.yes-no {
+    margin: 0 0 20px;
+    padding: 0
+}
+
+ul.yes-no li {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    padding: 0;
+    list-style: none
+}
+
+ul.yes-no li a {
+    display: block;
+    padding: 0;
+    min-width: 70px;
+    font-size: 16px;
+    line-height: 32px;
+    color: #000;
+    text-decoration: none;
+    background: #36e57c;
+    border-radius: 20px;
+    text-align: center
+}
+
+ul.yes-no li a.active, ul.yes-no li a:hover {
+    box-shadow: 0 0 0 3px #000
+}
+
+ul.yes-no li:last-child a {
+    background: #ffa0a0
+}
+
+.feed-box p {
+    font-size: 16px;
+    color: #000;
+    line-height: 20px;
+    margin: 0
+}
+
+.no-box {
+    padding: 0
+}
+
+.no-box textarea {
+    border: 1px solid #000;
+    padding: 15px;
+    border-radius: 15px;
+    min-height: 150px;
+    width: 60%;
+    margin: 15px 0 10px
+}
+
+.no-box input {
+    width: auto;
+    color: #080808;
+    background: #36e57c;
+    border-radius: 5px;
+    border: 1px solid #a5aea8;
+    font-size: 18px;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 35px;
+    cursor: pointer
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box, .bs-admission-sec .inner-holder .box-left .img-box .text-box {
+    overflow: hidden
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box img {
+    float: left;
+    width: 70px;
+    border-radius: 7px;
+    margin: 0 15px 0 0
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box .text-box h4, .ss-banner-inner .with-img .ss-img-box .text-holder h4 {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    margin: 0 0 5px;
+    color: #000
+}
+
+.bs-admission-sec .inner-holder .box-left .img-box .text-box p {
+    font-size: 13px;
+    line-height: 18px;
+    color: #6c726e
+}
+
+.ss-banner-inner .with-img {
+    padding: 0;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 -15px
+}
+
+.ss-banner-inner .with-img .ss-text-holder {
+    text-align: left;
+    padding: 0;
+    width: 70%
+}
+
+.ss-banner-inner .with-img .ss-img-box {
+    width: 150px;
+    padding: 0 0 10px 0;
+    border-left: 0
+}
+.ss-banner-inner .with-img .ss-img-box h3 {
+    font-size: 22px;
+    line-height: 30px;
+    color: #000;
+    margin: 0 0 10px;
+    font-weight: 500
+}
+.ss-banner-inner .with-img .ss-img-box .img-holder {
+    float: left;
+    width: 70px;
+    border-radius: 8px;
+    overflow: hidden
+}
+.ss-banner-inner .with-img .ss-img-box .img-holder img {
+    width: 100%
+}
+.ss-banner-inner .with-img .ss-img-box .text-holder {
+    overflow: hidden;
+    padding: 0 0 0 15px
+}
+.ss-banner-inner .with-img .ss-img-box .text-holder p {
+    font-size: 14px;
+    line-height: 18px;
+    color: #6c726e
+}

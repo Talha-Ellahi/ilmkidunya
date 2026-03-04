@@ -1,0 +1,138 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var random = new Random();
+    var colorClasses = new[] { "sh-green", "sh-blue", "sh-purple", "sh-red" };
+}
+
+
+
+@* <link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async> *@
+
+@section MetaData {
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+    <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+    <meta property="og:image" content="" />
+    <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+    <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>@ViewBag.CmsData.MetaTitle</title>
+}
+
+
+@section header {
+
+
+    <div class="main-nav">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-11">
+                    <partial name="_NavBarPartial" />
+                </div>
+                <div class="col-lg-1">
+                    <ul class="login-option">
+                        <li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/search-icon.webp" alt="image" /></a></li>
+                        <li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/user-icon.webp" alt="image" /></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (ViewBag.CmsData != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+
+
+<div class="row mid-mrgn-top top-cls">
+    <div class="left-culm">
+        <div class="section-paragraph lrg-mrgn-top">
+        </div>
+        <div class="body-row" id="HeadingDiv">
+            <div class="section-heading">
+            </div>
+        </div>
+
+
+
+
+
+
+        <link href="https://web.archive.org/web/20241224170134cs_/https://resources.ilmkidunya.com/css/common-css/ikd-common-css.css" rel="stylesheet">
+        <div class="section-heading-line x-large">
+            <h1>
+                Privacy Policy For ilmkidunya.com &amp; its Apps
+            </h1>
+        </div>
+
+        <div class="body-row section-paragraph">
+            @if (ViewBag.CmsData != null)
+            {
+                @Html.Raw(ViewBag.CmsData.Desc1)
+            }
+        </div>
+
+    </div>
+    <div class="right-culm">
+        <div id="show">
+
+            <!-- Section Top To Place Inquiry Control on Right Panel on Top-->
+
+
+        </div>
+
+        <div class="clr">
+        </div>
+        <div class="right-culm-content" id="RightDiv">
+
+
+            <div style="text-align: center">
+            </div>
+        </div>
+
+
+
+        <div id="Feature" class="right-culm-content" style="margin-top: 15px;">
+        </div>
+        <div id="sidebar">
+            <div id="catcher">
+                <img src="https://web.archive.org/web/20241224170134im_/https://ikddata.ilmkidunya.com/images/blank_img.jpg">
+            </div>
+            <div style="display: none">
+                <div id="sticky">
+                </div>
+            </div>
+            <div id="sticky12" class="sticky">
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="clr">
+    </div>
+</div>

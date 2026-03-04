@@ -1,0 +1,900 @@
+﻿@model IKDFrontEnd.ViewModels.HomePageViewModel3
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="google-signin-client_id" content="104983047817-ahbomi25h88rsehbee4652msao9g9as6.apps.googleusercontent.com">
+	<title>#1 Educational news platform in Pakistan to find course, admissions & universities</title>
+	
+	<meta name="description" content="One point resource to discover latest updates in education, university admission, scholarships on the leading educational website." />
+	<meta name="keywords" content="Top educational website in pakistan, best education website, university admissions in pakistan," />
+	
+	<meta property="og:image:width" content="300" />
+	<meta property="og:image:height" content="300" />
+	<meta property="og:site_name" content="ilmkidunya.com" />
+	<meta property="fb:app_id" content="168405456658643" />
+	<meta property="og:url" content="https://www.ilmkidunya.com/" />
+	<meta property="og:description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges." />
+	<meta property="og:title" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya" />
+	<meta property="og:type" content="website">
+	<link rel="canonical" href="https://www.ilmkidunya.com/" />
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="ilmkidunya">
+	<meta name="twitter:image" content="https://wwww.ilmkidunya.com/images/ilmkidunya-logo-2.jpg">
+	<meta name="twitter:title" content="Pakistan Education News Colleges Scholarship Result Admission Jobs | ilmkidunya">
+	<meta name="twitter:description" content="Latest updates about Pakistan colleges universities, study visa, scholarships and study abroad information. Get information about courses, admission and result of all Pakistani universities and colleges.">
+
+
+	<meta name="robots" content="index,follow" />
+
+	<meta name="publisher" content="ilmkidunya.com" />
+
+
+	<meta name="Robots" content="ALL" />
+	<meta name="googlebot" content="archive" />
+}
+@section header {
+
+	<div class="main-nav">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-11">
+
+					<partial name="_NavBarPartial" />
+				</div>
+				<div class="col-lg-1">
+					<ul class="login-option">
+						<li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/search-icon.webp" alt="image" /></a></li>
+						<li><a aria-label="link" href="#"><img class="lazy-load" data-src="https://images.ishallwin.com/nav-icons/user-icon.webp" alt="image" /></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+}
+@section innerbanner {
+
+
+	<div class="desktop-view">
+		<div class="main-slides">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-5 col-md-5 col-sm-12">
+						<div class="main-slider">
+							@foreach (var sliders in Model.Sliders)
+							{
+								<div class="inner-slide">
+									<a aria-label="link" href="@sliders.Url" target="_blank">
+										<img src="https://www.ilmkidunya.com/images/sliders/@sliders.Image" alt="image" />
+									</a>
+								</div>
+							}
+
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-12">
+						<ul class="sm-news-list news-without-adds">
+							@foreach (var news in Model.LatestNews)
+							{
+								var month = news.Dated?.Month;
+								var year = news.Dated?.Year;
+								<li>
+									<a aria-label="link" href="edunews/@news.RewriteUrl">
+										<div class="img-holder">
+											<img class="lazy-load" data-src="https://cdn.ilmkidunya.com/news/newsImages/@year/@month/thumb/@news.PictureThumbnail" alt="image" />
+										</div>
+										<div class="text-holder">
+											<span>
+												<img src="https://images.ishallwin.com/icons/calendar-green.webp" alt="image" />
+												@news.Dated?.ToString("dd-MMM-yyyy")
+											</span>
+											<p>@news.MainHeading</p>
+										</div>
+									</a>
+								</li>
+							}
+
+
+
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="new-banners" style="background:#ededed; padding:10px 0 0 0;">
+			<div class="container">
+				<div class="row">
+					@await Html.PartialAsync("_headerlowerbannerhome")
+					<div class="col-lg-12 col-col-md-12 col-sm-12">
+						<div class="trending-keywords">
+							<ul>
+								<li><a aria-label="link" href="/results/9th-class-result.aspx">9th Class Result 2025</a></li>
+								<li><a aria-label="link" href="/results/10th-class-result.aspx">10th Class Result 2025</a></li>
+								<li><a aria-label="link" href="/results/11th-class-result.aspx">11th Class Result 2025</a></li>
+								<li><a aria-label="link" href="/results/12th-class-result.aspx">12th Class Result 2025</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mobile-view">
+		<div class="main-slides">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-5 col-md-5 col-sm-12">
+						<div class="main-slider">
+							@foreach (var sliders in Model.Sliders)
+							{
+								<div class="inner-slide">
+									<a aria-label="link" href="@sliders.Url" target="_blank">
+										<img src="https://www.ilmkidunya.com/images/sliders/@sliders.Image" alt="image" />
+									</a>
+								</div>
+							}
+
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-12">
+						<ul class="sm-news-list news-without-adds">
+							@foreach (var news in Model.LatestNews.Take(2))
+							{
+								var month = news.Dated?.Month;
+								var year = news.Dated?.Year;
+								<li>
+									<a aria-label="link" href="edunews/@news.RewriteUrl">
+										<div class="img-holder">
+											<img class="lazy-load" data-src="https://cdn.ilmkidunya.com/news/newsImages/@year/@month/thumb/@news.PictureThumbnail" alt="image" />
+										</div>
+										<div class="text-holder">
+											<span>
+												<img src="https://images.ishallwin.com/icons/calendar-green.webp" alt="image" />
+												@news.Dated?.ToString("dd-MMM-yyyy")
+											</span>
+											<p>@news.MainHeading</p>
+										</div>
+									</a>
+								</li>
+							}
+
+
+
+
+
+						</ul>
+						<div class="new-banners" style="background:#ededed; padding:10px 0 0 0;">
+							<div class="container">
+								<div class="row">
+									@await Html.PartialAsync("_headerlowerbannerhome")
+									<div class="col-lg-12 col-col-md-12 col-sm-12">
+										<div class="trending-keywords">
+											<ul>
+												<li><a aria-label="link" href="/results/9th-class-result.aspx">9th Class Result 2025</a></li>
+												<li><a aria-label="link" href="/results/10th-class-result.aspx">10th Class Result 2025</a></li>
+												<li><a aria-label="link" href="/results/11th-class-result.aspx">11th Class Result 2025</a></li>
+												<li><a aria-label="link" href="/results/12th-class-result.aspx">12th Class Result 2025</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul class="sm-news-list news-without-adds">
+							@foreach (var news in Model.LatestNews.Skip(2).Take(2))
+							{
+								var month = news.Dated?.Month;
+								var year = news.Dated?.Year;
+								<li>
+									<a aria-label="link" href="edunews/@news.RewriteUrl">
+										<div class="img-holder">
+											<img class="lazy-load" data-src="https://cdn.ilmkidunya.com/news/newsImages/@year/@month/thumb/@news.PictureThumbnail" alt="image" />
+										</div>
+										<div class="text-holder">
+											<span>
+												<img src="https://images.ishallwin.com/icons/calendar-green.webp" alt="image" />
+												@news.Dated?.ToString("dd-MMM-yyyy")
+											</span>
+											<p>@news.MainHeading</p>
+										</div>
+									</a>
+								</li>
+							}
+
+
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	}
+<div id="main">
+	<div class="news-add-sec">
+		<div class="container">
+			<div class="row">
+				<div class="homebanner">
+					<div class="col-lg-6">
+						<div class="side-news">
+							<ul class="sm-news-list">
+								@foreach (var article in Model.Articles)
+								{
+									<li>
+										<a aria-label="link" href="/articles/@article.RewriteUrl">
+											<div class="img-holder">
+												<img class="lazy-load"
+													 data-src="https://cdn.ilmkidunya.com/articles/articlesImages/thumb/@article.PictureThumbnail" />
+											</div>
+
+											<div class="text-holder">
+												<span>
+													<img src="https://images.ishallwin.com/icons/calendar-green.webp" alt="calendar icon" />
+													@article.Dated?.ToString("dd-MMM-yyyy")
+												</span>
+
+
+												<p>@article.Title</p>
+											</div>
+										</a>
+									</li>
+								}
+
+
+
+							</ul>
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="home-banner">
+
+							@await Html.PartialAsync("_HomeContentTopBanner")
+
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="ikd-search-banner">
+		<img class="sideimg lazy-load" data-src="https://images.ishallwin.com/home/side-img-1.webp" alt="image">
+		<img class="sideimg right lazy-load" data-src="https://www.ilmkidunya.com/images/side-img-2.webp" alt="image">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@{
+						var data = Model.Courses;
+					}
+					<div id="courseResults"></div>
+
+					<div class="banner-search-form">
+						<div class="banner-heading">
+							<h2 class="banner-title">Find your dream course/university</h2>
+							<p>by using Pakistan’s leading course search system</p>
+						</div>
+						<form class="banner-form" id="form-id" method="post">
+							<div class="banner-inputs">
+								<select aria-label="State" class="big-select" id="ddlCity" style="width:24%">
+									<option value="-1">Select City</option>
+									@foreach (var city in data.Cities)
+									{
+										<option value="@city.CityId">@city.CityName</option>
+									}
+								</select>
+
+								<select aria-label="State" class="big-select" id="ddlLevel" style="width:36%">
+									<option value="-1">Select Achieved Education Level</option>
+									@foreach (var level in data.Levels)
+									{
+										<option value="@level.Id">@level.Name</option>
+									}
+								</select>
+								<select aria-label="State" class="big-select" id="catUlList" style="width:40%">
+									<option value="-1">Select category</option>
+									@foreach (var category in data.Categories)
+									{
+										<option value="@category.Id">@category.Name</option>
+									}
+								</select>
+
+							</div>
+							<button id="searchBtn" type="button" value="Show Courses" class="btn-search" onclick="return LoadBackEnd();" aria-label="Name" style="position: relative;">
+								<img style="left: 17px; bottom: 17px;" class="lazy-load" data-src="https://images.ishallwin.com/icons/search.webp" alt="image">
+								<span>Search</span>
+							</button>
+						</form>
+						<div class="banner-heading">
+							<p>Searches from 3736 colleges &amp; universities and 63547 courses</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<style>
+		.ikd-search-banner img {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+		}
+
+			.ikd-search-banner img:nth-child(2) {
+				left: auto;
+				right: 0;
+			}
+
+		.side-news li a {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			text-decoration: none;
+			color: inherit;
+			position: relative;
+			z-index: 1;
+		}
+
+			.side-news li a * {
+				pointer-events: none; /* Make children ignore pointer, so parent <a> gets the click */
+			}
+
+	</style>
+
+
+	<div class="content-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9 col-md-9 col-sm-12">
+					<h2>Featured Institutions</h2>
+					<div class="institute-list">
+						<ul>
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/superior-university.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/superior.jpg" alt="Superior University">
+									</div>
+									<div class="author">Superior University</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/the-university-of-faisalabad.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/tuf.jpg" alt="The University of Faisalabad">
+									</div>
+									<div class="author">The University of Faisalabad</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/green-international-university-lahore-giu.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/giu-logo-featuree.png" alt="Green International University">
+									</div>
+									<div class="author">Green International University</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/afro-asian-institute-lahore.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/afroo.png" alt="Afro Asian Institute">
+									</div>
+									<div class="author">Afro Asian Institute</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/institute-of-science-and-technology-szabist-islamabad-admission.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/szabsit-logo (1).jpg" alt="SZABIST University Islamabad">
+									</div>
+									<div class="author">SZABIST University Islamabad</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.ilmkidunya.com/colleges/rashid-latif-khan-university-rklu.aspx">
+									<div class="figure">
+										<img class="lazyloaded"
+											 src="https://cdn.ilmkidunya.com/images/Section/rashid%20lateef.png" alt="Rashid Latif Khan University">
+									</div>
+									<div class="author">Rashid Latif Khan University</div>
+								</a>
+							</li>
+						</ul>
+
+
+
+					</div>
+					<h2>Latest Admissions in Pakistan</h2>
+					<div class="home-jobs-list">
+						<ul>
+							@if (Model.Admissions != null)
+							{
+								foreach (var admission in Model.Admissions)
+								{
+									var month = admission.AdmissionOpenDate?.Month;
+									var year = admission.AdmissionOpenDate?.Year;
+
+									string imagePath = !string.IsNullOrEmpty(admission.Image)
+									? $"https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{year}/{month}/Thumb/{admission.Image}"
+									: "https://www.ilmkidunya.com/images/not-available.png";
+
+									<li>
+										<div class="img-holder">
+											<img class="lazy-load loaded"
+												 data-src="@imagePath"
+												 alt="image"
+												 onerror="this.onerror=null;this.src='https://www.ilmkidunya.com/images/not-available.png';" />
+										</div>
+										<div class="text-holder">
+											<a href="/admissions/@admission.Url">@admission.Title</a>
+											<span class="date">Posted: @admission.AdmissionOpenDate?.ToString("dd MMM yyyy")</span>
+											<span class="apply">Apply by: @admission.AppliedDate?.ToString("dd MMM yyyy")</span>
+										</div>
+									</li>
+								}
+							}
+							else
+							{
+								<li><p>No admissions found.</p></li>
+							}
+						</ul>
+
+
+
+					</div>
+
+		
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<div class="side-bar">
+						<div class="home-banner">
+							<partial name="HomeContentMiddleBanner" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-sec">
+		<div class="accordion-image">
+			<img class="lazy-load" data-src="https://images.ishallwin.com/home/ikd-teachers.webp" alt="teachers Image">
+		</div>
+		<div class="home-accordion-wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="heading-label" style="margin-bottom: 30px;">
+							<h2><strong style="font-weight: 700;">Study Online - For FREE</strong> </h2>
+							<p>Free Video Lectues, Practice MCQs &amp; Test Sessions</p>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<div class="accordion-container">
+							<ul class="accordion-list">
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										9th Class
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/9th-class/study.aspx">Video Lectures</a>
+											<a href="/9th-class/syllabus.aspx">Smart Syllabus 2025</a>
+											<a href="/9th-class/past-papers.aspx">Past Papers</a>
+											<a href="/9th-class/paper-scheme.aspx#">Paper Scheme 2025</a>
+											<a href="/9th-class/books.aspx">Books</a>
+											<a href="/9th-class/online-test.aspx">MCQ Tests</a>
+											<a href="/results/9th-class-result.aspx">Result 2025</a>
+											<a href="/9th-class/notes.aspx">Notes</a>
+											<a href="/date_sheets/9th-class-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/9th-class/numericals.aspx">Numericals</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										10th Class
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/10th-class/study.aspx">Video Lectures</a>
+											<a href="/10th-class/syllabus.aspx">Smart Syllabus 2025</a>
+											<a href="/10th-class/past-papers.aspx">Past Papers</a>
+											<a href="/10th-class/pairing-scheme.aspx">Paper Scheme 2025</a>
+											<a href="/10th-class/books.aspx">Books</a>
+											<a href="/10th-class/online-test.aspx">MCQ Tests</a>
+											<a href="/results/10th-class-result.aspx">Result 2025</a>
+											<a href="/10th-class/notes.aspx">Notes</a>
+											<a href="/date_sheets/10th-class-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/10th-class/numericals.aspx">Numericals</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										11th Class
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/11th-class/study.aspx">Video Lectures</a>
+											<a href="/11th-class/syllabus.aspx">Syllabus 2025</a>
+											<a href="/11th-class/past-papers.aspx">Past Papers</a>
+											<a href="/11th-class/pairing-scheme.aspx">Paper Scheme 2025</a>
+											<a href="/11th-class/books.aspx">Books</a>
+											<a href="/11th-class/online-test.aspx">MCQ Tests</a>
+											<a href="/results/11th-class-result.aspx">Result 2025</a>
+											<a href="/11th-class/notes.aspx">Notes</a>
+											<a href="/date_sheets/11th-class-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/11th-class/numericals.aspx">Numericals</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										12th Class
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/12th-class/study.aspx">Video Lectures</a>
+											<a href="/12th-class/syllabus.aspx">Smart Syllabus 2025</a>
+											<a href="/12th-class/past-papers.aspx">Past Papers</a>
+											<a href="/12th-class/pairing-scheme.aspx">Paper Scheme 2025</a>
+											<a href="/12th-class/books.aspx">Books</a>
+											<a href="/12th-class/online-test.aspx">MCQ Tests</a>
+											<a href="/results/12th-class-result.aspx">Result 2025</a>
+											<a href="/12th-class/notes.aspx">Notes</a>
+											<a href="/date_sheets/12th-class-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/12th-class/numericals.aspx">Numericals</a>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<div class="accordion-container">
+							<ul class="accordion-list">
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										PPSC
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/ppsc/registration">Registration</a>
+											<a href="/ppsc/syllabus">Syllabus 2025</a>
+											<a href="/ppsc/past-papers">Past Papers</a>
+											<a href="/ppsc/fee-structure">Fee Structure</a>
+											<a href="/ppsc/eligibility-criteria">Eligibility Criteria</a>
+											<a href="/ppsc/exam-pattern">Exam Pattern</a>
+											<a href="https://www.ilmkidunya.com/ppsc/results">Result 2024</a>
+											<a href="/ppsc/jobs.aspx">Jobs</a>
+											<a href="/ppsc/date-sheet">Date sheet 2025</a>
+											<a href="/ppsc/interview">Interview Schedule</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a class="toggle" href="javascript:;">
+										FPSC <span>
+											<img src="https://resources.ilmkidunya.com/ikd-new/demo-1/assets/images/icons/arrow-left.png"
+												 alt="icon">
+										</span>
+									</a>
+									<div class="inner">
+										<div class="guide-list">
+											<a href="https://www.ilmkidunya.com/fpsc/registration">Registration</a>
+											<a href="https://www.ilmkidunya.com/fpsc/syllabus">Syllabus 2024</a>
+											<a href="https://www.ilmkidunya.com/fpsc/past-papers">Past Papers</a>
+											<a href="https://www.ilmkidunya.com/fpsc/eligibility-criteria">Eligibility Criteria</a>
+											<a href="https://www.ilmkidunya.com/fpsc/paper-patten">Exam Pattern</a>
+											<a href="https://www.ilmkidunya.com/fpsc/results">Result 2024</a>
+											<a href="https://www.ilmkidunya.com/fpsc/jobs.aspx">Jobs</a>
+											<a href="https://www.ilmkidunya.com/fpsc/date-sheet">Date sheet 2024</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										SPSC
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/spsc/spsc-fee-structure">Fee Structure</a>
+											<a href="/spsc/spsc-syllabus-and-subjects">Syllabus 2025</a>
+											<a href="/spsc/spsc-test-guidelines">Guidelines</a>
+											<a href="https://www.ilmkidunya.com/spsc/apply-online">Registration</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										CSS
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/css-pakistan/exam-fee">Fee Structure</a>
+											<a href="/css-pakistan/syllabus">Syllabus 2025</a>
+											<a href="/css-pakistan/past-papers">Past Papers</a>
+											<a href="/css-pakistan/registration-process">Registration 2025</a>
+											<a href="/css-pakistan/books.aspx">Books</a>
+											<a href="/css-pakistan/how-to-prepare-for-css-exam">Test Preparation</a>
+											<a href="/results/css_exam_results.aspx">Result 2025</a>
+											<a href="/css-pakistan/exam-centers">Exam Centers</a>
+											<a href="/date_sheets/css_examination_datesheets.aspx">Date sheet 2025</a>
+											<a href="/css-pakistan/career-opportunity">Jobs List</a>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<div class="accordion-container">
+							<ul class="accordion-list">
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										MDCAT
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/mcat/mcat-video-lectures.aspx">Video Lectures</a>
+											<a href="/mcat/mcat-test-syllabus.aspx">Syllabus 2025</a>
+											<a href="/mcat/mcat-past-papers.aspx">Past Papers</a>
+											<a href="/mcat/mcat-test-paper-pattern.aspx">Paper Pattern 2025</a>
+											<a href="/mcat/mdcat-merit-lists.aspx">Merit Lists</a>
+											<a href="/online-test/mcat-test-preparation.aspx">MCQ Tests</a>
+											<a href="/mcat/mcat-test-result.aspx">Result 2025</a>
+											<a href="/mcat/mcat-test-application-process-fees.aspx">Registration</a>
+											<a href="/mcat/mcat-test-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/mcat/mdcat-test-roll-no-slip.aspx">Roll No Slip</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										ECAT
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/ecat/ecat-test-video-lectures.aspx">Video Lectures</a>
+											<a href="/ecat/ecat-test-syllabus.aspx">Syllabus 2025</a>
+											<a href="/ecat/ecat-test-sample-papers.aspx">Past Papers</a>
+											<a href="/ecat/ecat-test-scores-merit-lists.aspx">Merit Lists</a>
+											<a href="/ecat/ecat-test-application-process-fees.aspx">Registration</a>
+											<a href="/online-test/ecat-pre-engineering">MCQ Tests</a>
+											<a href="/results/ecat_entrytest_result.aspx">Result 2025</a>
+											<a href="/ecat/ecat-test-format-eligibility-criteria.aspx">Eligibility Criteria</a>
+											<a href="/ecat/ecat-test-date-sheet.aspx">Date sheet 2025</a>
+											<a href="/ecat/ecat-test-roll-no-slip.aspx">Roll No Slip</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										LAT
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/lat/test-preparation">Video Lectures</a>
+											<a href="/lat/academies-centers">Coaching Centers</a>
+											<a href="/lat/past-papers">Past Papers</a>
+											<a href="/lat/paper-pattarn">Paper Pattern 2025</a>
+											<a href="/lat/fee">Fee Structure</a>
+											<a href="/lat/registration-process">Registration</a>
+											<a href="/results/hec-lat-test-result.aspx">Result 2025</a>
+											<a href="/lat/eligibility-criteria">Eligibility Criteria</a>
+											<a href="/lat/date-sheet">Date sheet 2025</a>
+											<a href="/lat/test-schedule">Test Schedule</a>
+										</div>
+									</div>
+								</li>
+								<li class="accordion-li">
+									<a aria-label="link" class="toggle" href="javascript:;">
+										ISSB
+										<span>
+											<img class="lazy-load loaded" data-src="https://images.ishallwin.com/icons/arrow-left.webp"
+												 alt="icon" src="https://images.ishallwin.com/icons/arrow-left.webp">
+										</span>
+									</a>
+									<div class="inner" style="display: none;">
+										<div class="guide-list">
+											<a href="/issb/issb-registration-process">Registration</a>
+											<a href="/issb/issb-subjects">Syllabus 2024</a>
+											<a href="/issb/past-papers">Past Papers</a>
+											<a href="/issb/issb-fee">Fee Structure</a>
+											<a href="/issb/eligibility-criteria">Eligibility Criteria</a>
+											<a href="/issb/universities">Universities</a>
+											<a href="/issb/result">Result 2024</a>
+											<a href="/issb/issb-centers">Exam Centers</a>
+											<a href="/issb/date-sheet">Date sheet 2024</a>
+											<a href="/issb/issb-guideline">Guidelines</a>
+										</div>
+									</div>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding-bottom: 20px; ">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9 col-md-9 col-sm-12">
+					<h2>Study Abroad Guides</h2>
+					<div class="institute-list st-abroad">
+						<ul>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-canada.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/canada.webp">
+									</div>
+									<div class="author">Canada</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-usa.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/usa.webp">
+									</div>
+									<div class="author">USA</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-china.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/China.webp">
+									</div>
+									<div class="author">China</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-uk.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/uk.webp">
+									</div>
+									<div class="author">UK</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="studyabroad/study-abroad-in-turkey.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/turkey.webp">
+									</div>
+									<div class="author">Turkey</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-germany.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/germany.webp">
+									</div>
+									<div class="author">Germany</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-malaysia.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/Malaysia.webp">
+									</div>
+									<div class="author">Malaysia</div>
+								</a>
+							</li>
+							<li>
+								<a aria-label="link" href="/studyabroad/study-abroad-in-australia.aspx">
+									<div class="figure">
+										<img class="lazy-load" alt="image" data-src="https://images.ishallwin.com/home/aus.webp">
+									</div>
+									<div class="author">Australia</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<div class="side-bar">
+						<div class="home-banner">
+
+
+
+							<partial name="HomeContentLowerBanner" />
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	function LoadBackEnd() {
+		const location = document.getElementById('ddlCity').value;
+		const level = document.getElementById('ddlLevel').value;
+		const category = document.getElementById('catUlList').value;
+
+		// Build query string
+		let query = [];
+
+		if (location && location != -1)
+			query.push(`location=${location}`);
+		if (level && level != -1)
+			query.push(`level=${level}`);
+		if (category && category != -1)
+			query.push(`category=${category}`);
+
+		if (query.length === 0) {
+			alert("Please select at least one filter.");
+			return false;
+		}
+
+		// Redirect to courses home page with query params
+		const url = `/courses?${query.join("&")}`;
+		window.location.href = url;
+
+		return false; // Prevent form submission
+	}
+</script>

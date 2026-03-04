@@ -1,0 +1,306 @@
+﻿@model IKDFrontEnd.ViewModels.CombinedSubjectCityLevelViewModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var random = new Random();
+	var colorClasses = new[] { "sh-green", "sh-blue", "sh-purple", "sh-red" };
+}
+@section MetaData {
+	@if (ViewBag.CmsData != null)
+	{
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+		<meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+		<meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+		<meta name="description" content="@ViewBag.CmsData.MetaDesc">
+		<meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>@ViewBag.CmsData.MetaTitle</title>
+	}
+}
+
+@section header {
+	<!-- Header Start -->
+	<div class="col-lg-11">
+		<partial name="_JobsNavBar" />
+	</div>
+}
+
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@ViewBag.CmsData.Heading</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+}
+
+<!-- Main Start -->
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+					{
+						<style>
+							p {
+								margin: 0px !important;
+							}
+
+							span {
+								font-size: 16px !important;
+							}
+						</style>
+						<p>@Html.Raw(ViewBag.CmsData.Desc1)</p>
+					}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									@await Html.PartialAsync("_maincontenttopbanner")
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@if (Model.Subjects != null)
+	{
+		<div class="content-sec level-wise">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+
+						<h2>Tutors Available for Following Subjects</h2>
+
+						<!-- Subjects with Tutor Counts -->
+						<ul class="admission-nav quizze-list">
+							@foreach (var subject in Model.Subjects)
+							{
+@* 								var subjectSlug = subject.SubjectName.ToLower().Replace(" ", "-");
+ *@								var levelSlug = Model.educationLevelName.ToLower().Replace(" ", "-");
+								var subjectSlug = subject.SubjectName?.ToLower().Replace(" ", "-") ?? "general";
+								<li>
+									<a href="/tutors/home-tutors-for-@($"{levelSlug}-class-{subjectSlug}.aspx")">
+										<figure>
+											<img src="@(!string.IsNullOrEmpty(subject.SubjectIcon) ? subject.SubjectIcon : "/images/default-subject.webp")" onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" />
+										</figure>
+
+										<span style="padding-bottom:30px;">@subject.SubjectName</span>
+										<em>(@subject.TutorCount) Tutors</em>
+									</a>
+								</li>
+							}
+						</ul>
+						<style>
+							ul.admission-nav.quizze-list li a span {
+								line-height: normal !important;
+							}
+
+							.content-sec.level-wise ul.admission-nav li a span {
+								font-size: 13px !important;
+							}
+
+							.content-sec.level-wise ul.admission-nav li a em {
+								font-size: 13px;
+								display: block;
+								text-align: center;
+								font-style: normal;
+								line-height: 1.5;
+							}
+						</style>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	}
+	<div class="content-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>Find Your Desired Tutors According to City</h2>
+					<!-- Cities with Tutor Counts -->
+					<ul class="admission-nav" style="border: 0;">
+						@foreach (var city in Model.Cities)
+						{
+							var levelSlug = Model.educationLevelName.ToLower().Replace(" ", "-");
+							var citySlug = city.CityName.ToLower().Replace(" ", "-");
+
+							<li>
+								<a href="/tutors/tutors-for-@($"{levelSlug}-in-{citySlug}.aspx")">
+									<figure>
+										<img src="@(!string.IsNullOrEmpty(city.ImageName) ? city.ImageName : "/images/default-city.webp")" onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" />
+									</figure>
+									<span style="display:none;">@city.CityId</span>
+									<span>@city.CityName</span> <em>@city.TutorCount Tutors</em>
+								</a>
+							</li>
+						}
+					</ul>
+					<button type="button" class="load-more-button" style="margin-bottom: 20px;" id="loadMoreBtn">View all Cities</button>
+					<h2>Featured Tutors</h2>
+					<div class="institute-list">
+						<ul id="tutor-list" class="skills-tutors">
+							@foreach (var tutor in Model.LatestTutors)
+							{
+								var tutorSlug = tutor.TutorName.ToLower().Replace(" ", "-");
+								<li>
+									<a aria-label="link" href="@($"/tutors/{tutorSlug}-home-tutor-{tutor.MemberId}.aspx")">
+										<div class="figure">
+											<img onerror="this.onerror=null; this.src='https://www.ilmkidunya.com/ikd-noimg.png';" src="@tutor.ProfileImage">
+										</div>
+										<div class="author" style="height:200px">
+											<h4>@tutor.TutorName</h4>
+											<span>@tutor.CityName | @tutor.CourseName</span>
+											<p>Teaching</p>
+											<span>@string.Join(", ", tutor.Subjects)...</span>
+										</div>
+									</a>
+								</li>
+							}
+						</ul>
+						<style>
+							.button {
+								display: inline-block;
+								background: #434343;
+								font-size: 16px;
+								border: none;
+								padding: 5px 20px;
+								color: #fff;
+								border-radius: 5px;
+								margin: 0;
+								text-decoration: none;
+								cursor: pointer;
+							}
+
+								.button:hover,
+								.button:focus,
+								.button.load-more {
+									background-color: #15A18D;
+									border-color: #15A18D;
+									color: #fff;
+								}
+
+							.load-more span {
+								animation-name: loading;
+								animation-duration: 1.2s;
+								animation-iteration-count: infinite;
+								animation-fill-mode: both;
+								background-color: #15A18D;
+								border-color: #15A18D;
+								color: #fff;
+							}
+
+							@@keyframes loading {
+								0% {
+									opacity: 0;
+								}
+
+								50% {
+									opacity: 1;
+								}
+
+								100% {
+									opacity: 0;
+								}
+							}
+
+							.load-more span:nth-child(2) {
+								animation-delay: 0.2s;
+							}
+
+							.load-more span:nth-child(3) {
+								animation-delay: 0.4s;
+							}
+						</style>
+
+						<div class="loader" style="text-align: center; margin-bottom: 20px;">
+							<a href="javascript:void(0)" class="button js-load-more" id="load-more-btn" data-skip="10">Load More</a>
+						</div>
+
+						<script>
+							document.getElementById("load-more-btn").addEventListener("click", function () {
+								const btn = this;
+								const skip = parseInt(btn.getAttribute("data-skip"));
+
+								const subjId = '@ViewBag.SubjectId';
+								const cityId = '@ViewBag.CityId';
+								const levelId = '@ViewBag.LevelId';
+
+								// Optional: show loading animation
+								btn.classList.add("load-more");
+								btn.innerHTML = 'Loading <span>.</span><span>.</span><span>.</span>';
+
+								fetch(`/tutors/LoadMore?skip=${skip}&subjId=${subjId}&cityId=${cityId}&levelId=${levelId}`)
+									.then(res => res.text())
+									.then(html => {
+										document.getElementById("tutor-list").insertAdjacentHTML("beforeend", html);
+										const newSkip = skip + 10;
+										btn.setAttribute("data-skip", newSkip);
+										if (html.trim() === '') {
+											btn.parentElement.remove(); // No more tutors
+										} else {
+											btn.classList.remove("load-more");
+											btn.textContent = "Load More";
+										}
+									})
+									.catch(err => {
+										console.error("LoadMore error:", err);
+										btn.classList.remove("load-more");
+										btn.textContent = "Load More";
+									});
+							});
+						</script>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="share-box">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+					{
+						<p>@Html.Raw(ViewBag.CmsData.Desc2)</p>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontentlowerbanner")
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main End -->

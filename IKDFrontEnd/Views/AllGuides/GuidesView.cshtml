@@ -1,0 +1,244 @@
+﻿@using IKDFrontEnd.ViewModels
+@model IKDFrontEnd.ViewModels.GuidePageViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="@Model.GuideDetail?.MetaTitle" />
+	<meta property="og:description" content="@Model.GuideDetail?.MetaDesc" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@Model.GuideDetail?.MetaDesc">
+	<meta name="keywords" content="@Model.GuideDetail?.MetaKeyword">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   
+		<title>@Model.GuideDetail?.MetaTitle</title>
+}
+
+
+
+@section header {
+
+
+	<div class="col-lg-11">
+
+		<ul class="navigation">
+			@if (ViewBag.HomeUrl != null)
+			{
+				<li>
+					<a href="/@ViewBag.HomeUrl" class="menu_main">
+						<div class="child">
+							<img class="lazyload" alt="" src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png" >
+							<span>Home</span>
+						</div>
+					</a>
+				</li>
+			}
+
+
+			@if (Model.MenuItems != null)
+			{
+				foreach (var item in Model.MenuItems)
+				{
+					<li>
+						<a href="@item.Url" class="menu_main">
+							<div class="child">
+								<img class="lazyload" alt="" src="https://cdn.ilmkidunya.com/guidesheadericons/icons/@item.HeaderIcon" >
+								<span>@item.HeaderName</span>
+							</div>
+						</a>
+					</li>
+				}
+			}
+
+
+		</ul>
+
+
+
+
+
+	</div>
+
+
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.GuideDetail?.Heading</h1>
+						<p>
+							@Model.GuideDetail?.HeadingDesc
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ckeditorcontent">
+						@Html.RenderWithAds(Model.GuideDetail?.Detail)
+					</div>
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ckeditorcontent">
+						@Html.RenderWithAds(Model.GuideDetail?.Detail2)
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="bs-admission-sec">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>
+						More on
+						@(Model.Guide != null && Model.Guide.Abrevation != null
+													? Model.Guide.Abrevation
+													: ViewBag.HomeUrl.ToString().Replace("-", " "))
+					</h2>
+					<ul class="admission-nav">
+						@if (ViewBag.HomeUrl != null)
+						{
+							<li>
+								<a href="/@ViewBag.HomeUrl">
+									<figure><img src="https://invent.ilmkidunya.com/nadmin/Guide/Icon/home-2.png" alt=""></figure>
+									<span>Home</span>
+								</a>
+							</li>
+						}
+						@if (Model.MenuItems != null)
+						{
+							foreach (var item in Model.MenuItems)
+							{
+								<li>
+									<a href="@item.Url">
+										<figure><img src="https://cdn.ilmkidunya.com/guidesheadericons/icons/@item.HeaderIcon" alt=""></figure>
+										<span>@item.HeaderName</span>
+									</a>
+								</li>
+							}
+						}
+
+					</ul>
+				</div>
+				@if (ViewBag.ShowInqueryForm)
+							
+				{
+									<div class="inner-holder">
+					
+										<div class="col-lg-12">
+											<div class="box-right" id="Form" style = "border:none; padding:0;">
+							
+													<h2>Free Admission Advice for @ViewBag.HomeUrl.ToString().Replace("-", " ")</h2>
+													@Html.Partial("_SuggestionFormGuides", new SuggestionViewModel())
+							
+							
+											</div>
+										</div>
+									</div>
+				}
+			</div>
+		</div>
+	</div>
+	
+	
+
+</div>
+
+@{
+	// Get WhatsApp group data passed from controller
+	var whatsappGroup = ViewBag.ShowWatsupLink;
+}
+
+@if (whatsappGroup != null && !string.IsNullOrEmpty(whatsappGroup.GroupLink))
+{
+	<a href="@whatsappGroup.GroupLink" target="_blank" title="Join WhatsApp Group">
+		<img src="https://www.ilmkidunya.com/guidewtg.gif" alt="Join WhatsApp Group" class="whatsapp-group-img" />
+	</a>
+}
+
+<style>
+	.whatsapp-group-img {
+		position: fixed;
+		left: auto;
+		right: 5px;
+		top: 60%;
+		transform: translateY(-50%);
+		z-index: 999;
+		border-radius: 10px;
+		transition: all 0.3s ease;
+		object-fit: cover;
+	}
+
+		.whatsapp-group-img:hover {
+			transform: translateY(-50%) scale(1.1);
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+		}
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+		// Set current page URL in hidden field
+		$("#PageUrl").val(window.location.href);
+
+		// Handle form submission
+		$("#suggestion-form").submit(function (event) {
+			event.preventDefault(); // Prevent the form from submitting the usual way
+
+			var formData = $(this).serialize(); // Serialize form data
+
+			$.ajax({
+				url: '/submitform/colleges',
+				type: 'POST',
+				data: formData,
+				success: function (response) {
+					if (response.success) {
+						alert(response.message);
+						$("#suggestion-form")[0].reset();
+					} else {
+						alert(response.message);
+					}
+				},
+				error: function () {
+					alert("There was an error submitting the form.");
+				}
+			});
+		});
+	});
+
+</script>

@@ -1,0 +1,1584 @@
+﻿@model IKDFrontEnd.ViewModels.DictionaryViewModel
+@using IKDFrontEnd.ViewModels
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MetaData {
+    @if (ViewBag.CmsData != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@ViewBag.CmsData.MetaTitle" />
+        <meta property="og:description" content="@ViewBag.CmsData.MetaDesc" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@ViewBag.CmsData.MetaDesc">
+        <meta name="keywords" content="@ViewBag.CmsData.MetaKeys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@ViewBag.CmsData.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder" id="coursesHeading">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Heading != null)
+                        {
+                            <h1>@ViewBag.CmsData.Heading</h1>
+                            <p>@ViewBag.CmsData.ShortHeading</p>
+                        }
+                        else
+                        {
+                            <h1>English to Urdu Translation & Urdu to English Translation – Free Online Dictionary</h1>
+                            <p>Type a word to find its meaning, synonyms, and examples.</p>
+                        }
+
+                    </div>
+                </div>
+                <div class="ss-col-lg-12">
+                    <div class="banner-form" style="margin: 0 20%; position: relative;">
+                        <div class="input-holder" style="width: 90%;">
+                            <div style="width: 60%; position: relative;">
+                                <input type="text" placeholder="Type Your Word Here">
+                            </div>
+
+                            <div class="custom-select-wrapper" style="width: 40%;">
+                                <div class="custom-select" id="customSelectSearch">
+                                    <span class="selected">Select Language</span>
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="custom-options">
+                                    <div class="search-box">
+                                        <input type="text" id="optionSearchHeader" placeholder="Search...">
+                                    </div>
+                                    <span data-value="Afrikaans">Afrikaans</span>
+                                    <span data-value="Albanian">Albanian</span>
+                                    <span data-value="Amharic">Amharic</span>
+                                    <span data-value="Arabic">Arabic</span>
+                                    <span data-value="Armenian">Armenian</span>
+                                    <span data-value="Azerbaijani">Azerbaijani</span>
+                                    <span data-value="Basque">Basque</span>
+                                    <span data-value="Belarusian">Belarusian</span>
+                                    <span data-value="Bengali">Bengali</span>
+                                    <span data-value="Bosnian">Bosnian</span>
+                                    <span data-value="Bulgarian">Bulgarian</span>
+                                    <span data-value="Catalan">Catalan</span>
+                                    <span data-value="Cebuano">Cebuano</span>
+                                    <span data-value="Chinese (Simplified)">Chinese</span>
+                                    <span data-value="Croatian">Croatian</span>
+                                    <span data-value="Czech">Czech</span>
+                                    <span data-value="Danish">Danish</span>
+                                    <span data-value="Dutch">Dutch</span>
+                                    <span data-value="English">English</span>
+                                    <span data-value="Esperanto">Esperanto</span>
+                                    <span data-value="Estonian">Estonian</span>
+                                    <span data-value="Finnish">Finnish</span>
+                                    <span data-value="French">French</span>
+                                    <span data-value="Galician">Galician</span>
+                                    <span data-value="Georgian">Georgian</span>
+                                    <span data-value="German">German</span>
+                                    <span data-value="Greek">Greek</span>
+                                    <span data-value="Gujarati">Gujarati</span>
+                                    <span data-value="Haitian Creole">Haitian Creole</span>
+                                    <span data-value="Hausa">Hausa</span>
+                                    <span data-value="Hebrew">Hebrew</span>
+                                    <span data-value="Hindi">Hindi</span>
+                                    <span data-value="Hungarian">Hungarian</span>
+                                    <span data-value="Icelandic">Icelandic</span>
+                                    <span data-value="Indonesian">Indonesian</span>
+                                    <span data-value="Irish">Irish</span>
+                                    <span data-value="Italian">Italian</span>
+                                    <span data-value="Japanese">Japanese</span>
+                                    <span data-value="Javanese">Javanese</span>
+                                    <span data-value="Kannada">Kannada</span>
+                                    <span data-value="Kazakh">Kazakh</span>
+                                    <span data-value="Khmer">Khmer</span>
+                                    <span data-value="Korean">Korean</span>
+                                    <span data-value="Kurdish">Kurdish</span>
+                                    <span data-value="Kyrgyz">Kyrgyz</span>
+                                    <span data-value="Lao">Lao</span>
+                                    <span data-value="Latin">Latin</span>
+                                    <span data-value="Latvian">Latvian</span>
+                                    <span data-value="Lithuanian">Lithuanian</span>
+                                    <span data-value="Macedonian">Macedonian</span>
+                                    <span data-value="Malagasy">Malagasy</span>
+                                    <span data-value="Malay">Malay</span>
+                                    <span data-value="Malayalam">Malayalam</span>
+                                    <span data-value="Maltese">Maltese</span>
+                                    <span data-value="Maori">Maori</span>
+                                    <span data-value="Marathi">Marathi</span>
+                                    <span data-value="Mongolian">Mongolian</span>
+                                    <span data-value="Burmese">Burmese</span>
+                                    <span data-value="Nepali">Nepali</span>
+                                    <span data-value="Norwegian">Norwegian</span>
+                                    <span data-value="Persian (Farsi)">Persian</span>
+                                    <span data-value="Polish">Polish</span>
+                                    <span data-value="Portuguese">Portuguese</span>
+                                    <span data-value="Punjabi">Punjabi</span>
+                                    <span data-value="Romanian">Romanian</span>
+                                    <span data-value="Russian">Russian</span>
+                                    <span data-value="Serbian">Serbian</span>
+                                    <span data-value="Sinhala">Sinhala</span>
+                                    <span data-value="Slovak">Slovak</span>
+                                    <span data-value="Slovenian">Slovenian</span>
+                                    <span data-value="Somali">Somali</span>
+                                    <span data-value="Spanish">Spanish</span>
+                                    <span data-value="Sundanese">Sundanese</span>
+                                    <span data-value="Swahili">Swahili</span>
+                                    <span data-value="Swedish">Swedish</span>
+                                    <span data-value="Tagalog">Tagalog</span>
+                                    <span data-value="Tajik">Tajik</span>
+                                    <span data-value="Tamil">Tamil</span>
+                                    <span data-value="Telugu">Telugu</span>
+                                    <span data-value="Thai">Thai</span>
+                                    <span data-value="Turkish">Turkish</span>
+                                    <span data-value="Ukrainian">Ukrainian</span>
+                                    <span data-value="Urdu">Urdu</span>
+                                    <span data-value="Uzbek">Uzbek</span>
+                                    <span data-value="Vietnamese">Vietnamese</span>
+                                    <span data-value="Welsh">Welsh</span>
+                                    <span data-value="Xhosa">Xhosa</span>
+                                    <span data-value="Yiddish">Yiddish</span>
+                                    <span data-value="Yoruba">Yoruba</span>
+                                    <span data-value="Zulu">Zulu</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="btn-holder">
+                            <button type="button" id="searchBtnHeader">
+                                <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}
+
+
+<style>
+    .dictionary-word {
+        color: #15a18d;
+    }
+
+    .dictionary-from.banner-form {
+        position: relative;
+    }
+
+    .custom-select-wrapper {
+        user-select: none;
+        padding: 8px 20px;
+        border-left: 1px solid #c8c8c8;
+    }
+
+    .custom-select {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+        .custom-select .arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #15a18d;
+            margin-left: 10px;
+            transition: transform .2s;
+        }
+
+    .custom-options {
+        position: absolute;
+        top: 80%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #15a18d;
+        border-radius: 5px;
+        margin-top: 5px;
+        display: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        z-index: 10;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+        .custom-options .search-box {
+            padding: 5px;
+            border-bottom: 2px solid #ddd;
+            flex: 1 1 100%;
+        }
+
+        .custom-options input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .custom-options span {
+            padding: 10px;
+            cursor: pointer;
+            flex: 1 1 33%;
+            min-width: 150px;
+            transition: 0.2s;
+        }
+
+            .custom-options span:hover {
+                background: #15a18d;
+                color: #fff;
+            }
+
+    .custom-select-wrapper.open .custom-options {
+        display: flex;
+    }
+
+    .custom-select-wrapper.open .custom-select .arrow {
+        transform: rotate(180deg);
+    }
+
+    .dictionary-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 35px;
+    }
+
+        .dictionary-row .dictionary-boxes {
+            min-width: 300px;
+            min-height: 200px;
+            width: 45%;
+            flex: 1;
+            padding: 25px;
+            background: rgba(54, 229, 124, 0.1);
+            border: 1px solid #36e57c;
+            border-radius: 10px;
+            position: relative;
+        }
+
+    .dictionary-boxes .meaning-bx {
+        margin: 15px 0px;
+    }
+
+        .dictionary-boxes .meaning-bx li {
+            color: #383838;
+            line-height: 1.18;
+            margin-bottom: 6px;
+        }
+
+    .dictionary-speaker {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .dictionary-speaker h2 {
+            font-weight: bold !important;
+        }
+
+    .dictionary-boxes .spk-icon svg {
+        cursor: pointer;
+        color: #15a18d;
+        fill: #15a18d;
+        width: 35px;
+    }
+
+    .dictionary-boxes .spk-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+    }
+
+    .dictionary-boxes .banner-form {
+        margin: 0px !important;
+    }
+
+    .translation-result p {
+        font-size: 20px;
+        margin-top: 15px;
+    }
+
+        .translation-result p.urdu {
+            font-size: 25px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+    .responsive-table span.urdu {
+        font-size: 20px;
+        text-align: right;
+        font-weight: 500;
+        display: block;
+    }
+
+    .dictionary-synonyms-list {
+        padding: 25px;
+        background: rgba(54, 229, 124, 0.1);
+        border: 1px solid #36e57c;
+        border-radius: 10px;
+        margin: 15px 0px 25px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .dictionary-synonyms-list a {
+            background-color: #ffffff;
+            padding: 5px 14px;
+            border-radius: 50px;
+        }
+
+    .dictionary-by-words {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
+
+        .dictionary-by-words .by-words-colm {
+            min-width: 300px;
+            min-height: 200px;
+            flex: 1 1 46%;
+            padding: 30px;
+            background: rgba(54, 229, 124, 0.1);
+            border: 1px solid #36e57c;
+            border-radius: 10px;
+        }
+
+    .dictionary-letters {
+        margin: 20px 0px 0px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .dictionary-letters a {
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            color: black;
+            cursor: pointer;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background-color: #36e57c;
+            transition: all 0.3s ease;
+        }
+
+            .dictionary-letters a:hover {
+                background-color: #4EA28D;
+            }
+
+    .by-words-colm.words-by-urdu {
+        flex-basis: 100%;
+    }
+
+        .by-words-colm.words-by-urdu .dictionary-letters {
+            direction: rtl !important;
+        }
+
+            .by-words-colm.words-by-urdu .dictionary-letters a {
+                font-size: 23px;
+            }
+
+    span.dict-urdu-word {
+        font-size: 20px;
+        display: block;
+        text-align: right;
+    }
+
+    .responsive-table td {
+        align-content: center;
+    }
+</style>
+
+<!-- Main Start -->
+<div id="main">
+    <div class="college-news-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc1 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc1)
+                        }
+                        else
+                        {
+                            <h2>
+                                Comprehensive Urdu to English & English to Urdu Dictionary with Synonyms and Antonyms
+                            </h2>
+                            <p>
+                                Welcome to <strong>Explore Online Dictionary</strong>, your all-in-one platform for quick
+                                and reliable word meanings, translations, synonyms, and antonyms. Our goal is to make
+                                learning and understanding languages simple for everyone—whether you are a student
+                                preparing for exams, a teacher looking for references, a professional working in a
+                                bilingual environment, or just someone curious about words.
+                            </p>
+                            <p>
+                                This online dictionary is designed to give you not only the literal meanings of words but
+                                also the context, usage, and related expressions. With features like <strong>
+                                    English to
+                                    Urdu Dictionary, Urdu to English Dictionary, Hindi Dictionary, Slangs Translator,
+                                    Synonyms and Antonyms
+                                </strong>, and <strong>Free Online Translation</strong>, this
+                                is more than just a dictionary—it’s a complete language-learning tool.
+                            </p>
+                            <h3>English to Urdu Dictionary</h3>
+                            <p>
+                                Our <strong>English to Urdu Dictionary</strong> is one of the most widely used features
+                                of the site. It allows you to search for any English word and instantly find its
+                                accurate meaning in Urdu. Along with the translation, you also get:
+                            </p>
+                            <ul>
+                                <li>Correct spelling and pronunciation</li>
+                                <li>Synonyms and antonyms</li>
+                                <li>Sentence examples for better understanding</li>
+                                <li>Related words and phrases</li>
+                            </ul>
+                            <p>
+                                This feature is especially helpful for Urdu speakers who want to improve their
+                                vocabulary, school and college students who are preparing for exams, and professionals
+                                who need strong communication skills in both languages.
+                            </p>
+                            <p>
+                                For example, if you search the word <em>Success</em>, you will not only get the Urdu
+                                meaning but also related words like <em>Achievement, Victory, Accomplishment</em>, and
+                                their antonyms like <em>Failure, Defeat</em>.
+                            </p>
+                            <h3>Urdu to English Dictionary</h3>
+                            <p>
+                                The <strong>Urdu to English Dictionary</strong> is equally powerful and user-friendly. By
+                                entering any Urdu word, you can quickly get its correct meaning in English. This is a
+                                great resource for anyone learning English or working in environments where both Urdu
+                                and English are used.
+                            </p>
+                            <p>It helps with:</p>
+                            <ul>
+                                <li>Expanding English vocabulary</li>
+                                <li>Understanding idioms and expressions</li>
+                                <li>Writing better essays, emails, and reports</li>
+                                <li>Improving fluency in speaking and writing</li>
+                            </ul>
+                            <p>
+                                For example, searching the Urdu word <em>محبت</em> will give you the English meanings
+                                like <em>Love, Affection, Passion</em>, along with usage examples.
+                            </p>
+                            <h3>Hindi Dictionary</h3>
+                            <p>
+                                Our platform also offers a <strong>Hindi Dictionary</strong> for users who want
+                                translations between Hindi and English. This feature is particularly useful for learners
+                                and professionals across South Asia where both Hindi and Urdu are commonly spoken.
+                            </p>
+                            <p>With the Hindi Dictionary, you can:</p>
+                            <ul>
+                                <li>Translate words between Hindi and English</li>
+                                <li>Discover related terms used in daily conversation</li>
+                                <li>Learn vocabulary that overlaps between Hindi and Urdu</li>
+                                <li>Build a stronger foundation in multiple languages</li>
+                            </ul>
+                            <h2>Synonyms and Antonyms</h2>
+                            <p>
+                                Good writing and speaking require more than just knowing the basic meaning of a word. To
+                                help users enrich their vocabulary, our dictionary provides <strong>
+                                    synonyms and
+                                    antonyms
+                                </strong> for almost every word.
+                            </p>
+                            <p>
+                                This is extremely helpful for writers, bloggers, students, and professionals. Instead of
+                                repeating the same word, you can choose a synonym that fits the tone of your content.
+                                Similarly, antonyms make it easier to explain contrasts and comparisons.
+                            </p>
+                            <p><strong>Example:</strong></p>
+                            <ul>
+                                <li><em>Bright</em> → Shining, Radiant, Vivid (Synonyms)</li>
+                                <li><em>Bright</em> → Dull, Dark, Faint (Antonyms)</li>
+                            </ul>
+                            <p>
+                                This simple feature can make your writing clearer, more professional, and more engaging.
+                            </p>
+                            <h2>Slangs </h2>
+                            <p>
+                                In today’s digital age, a lot of communication happens through slang words, especially on
+                                social media, in movies, and in everyday conversations. These informal terms often
+                                confuse learners because they are not included in traditional dictionaries.
+                            </p>
+                            <p>
+                                Our <strong>Slangs </strong>solves this issue by explaining modern and popular slang
+                                words in simple terms.
+                            </p>
+                            <p><strong>Examples:</strong></p>
+                            <ul>
+                                <li>“Ghosting” → Suddenly cutting off all communication with someone</li>
+                                <li>“Vibe” → Feeling, mood, or atmosphere</li>
+                                <li>“Flex” → To show off something proudly</li>
+                            </ul>
+                            <p>
+                                By using this feature, you can stay updated with the latest expressions, understand
+                                online conversations better, and communicate more naturally.
+                            </p>
+
+                        }
+                    </div>
+                    @await Html.PartialAsync("_GoogleAd")
+                    <div class="col-lg-12">
+                        <h2>Explore the Meaning of Words with the Best Complies Dictionary Online</h2>
+                        <div class="subjects-tble2 diclinkclr">
+                            <ul>
+                                <li><a href="/dictionary/english-to-afrikaans-dictionary"><span>English To Afrikaans Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-albanian-dictionary"><span>English To Albanian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-amharic-dictionary"><span>English To Amharic Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-arabic-dictionary"><span>English To Arabic Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-armenian-dictionary"><span>English To Armenian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-azerbaijani-dictionary"><span>English To Azerbaijani Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-basque-dictionary"><span>English To Basque Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-belarusian-dictionary"><span>English To Belarusian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-bengali-dictionary"><span>English To Bengali Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-bosnian-dictionary"><span>English To Bosnian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-bulgarian-dictionary"><span>English To Bulgarian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-catalan-dictionary"><span>English To Catalan Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-cebuano-dictionary"><span>English To Cebuano Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-chinese-dictionary"><span>English To Chinese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-croatian-dictionary"><span>English To Croatian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-czech-dictionary"><span>English To Czech Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-danish-dictionary"><span>English To Danish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-dutch-dictionary"><span>English To Dutch Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-esperanto-dictionary"><span>English To Esperanto Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-estonian-dictionary"><span>English To Estonian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-finnish-dictionary"><span>English To Finnish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-french-dictionary"><span>English To French Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-galician-dictionary"><span>English To Galician Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-georgian-dictionary"><span>English To Georgian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-german-dictionary"><span>English To German Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-greek-dictionary"><span>English To Greek Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-gujarati-dictionary"><span>English To Gujarati Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-haitian-creole-dictionary"><span>English To Haitian Creole Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-hausa-dictionary"><span>English To Hausa Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-hebrew-dictionary"><span>English To Hebrew Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-hindi-dictionary"><span>English To Hindi Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-hungarian-dictionary"><span>English To Hungarian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-icelandic-dictionary"><span>English To Icelandic Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-indonesian-dictionary"><span>English To Indonesian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-irish-dictionary"><span>English To Irish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-italian-dictionary"><span>English To Italian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-japanese-dictionary"><span>English To Japanese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-javanese-dictionary"><span>English To Javanese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-kannada-dictionary"><span>English To Kannada Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-kazakh-dictionary"><span>English To Kazakh Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-khmer-dictionary"><span>English To Khmer Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-korean-dictionary"><span>English To Korean Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-kurdish-dictionary"><span>English To Kurdish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-kyrgyz-dictionary"><span>English To Kyrgyz Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-lao-dictionary"><span>English To Lao Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-latin-dictionary"><span>English To Latin Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-latvian-dictionary"><span>English To Latvian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-lithuanian-dictionary"><span>English To Lithuanian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-macedonian-dictionary"><span>English To Macedonian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-malagasy-dictionary"><span>English To Malagasy Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-malay-dictionary"><span>English To Malay Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-malayalam-dictionary"><span>English To Malayalam Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-maltese-dictionary"><span>English To Maltese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-maori-dictionary"><span>English To Maori Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-marathi-dictionary"><span>English To Marathi Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-mongolian-dictionary"><span>English To Mongolian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-burmese-dictionary"><span>English To Burmese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-nepali-dictionary"><span>English To Nepali Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-norwegian-dictionary"><span>English To Norwegian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-persian-farsi-dictionary"><span>English To Persian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-polish-dictionary"><span>English To Polish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-portuguese-dictionary"><span>English To Portuguese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-punjabi-dictionary"><span>English To Punjabi Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-romanian-dictionary"><span>English To Romanian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-russian-dictionary"><span>English To Russian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-serbian-dictionary"><span>English To Serbian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-sinhala-dictionary"><span>English To Sinhala Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-slovak-dictionary"><span>English To Slovak Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-slovenian-dictionary"><span>English To Slovenian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-somali-dictionary"><span>English To Somali Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-spanish-dictionary"><span>English To Spanish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-sundanese-dictionary"><span>English To Sundanese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-swahili-dictionary"><span>English To Swahili Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-swedish-dictionary"><span>English To Swedish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-tagalog-dictionary"><span>English To Tagalog Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-tajik-dictionary"><span>English To Tajik Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-tamil-dictionary"><span>English To Tamil Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-telugu-dictionary"><span>English To Telugu Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-thai-dictionary"><span>English To Thai Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-turkish-dictionary"><span>English To Turkish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-ukrainian-dictionary"><span>English To Ukrainian Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-urdu-dictionary"><span>English To Urdu Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-uzbek-dictionary"><span>English To Uzbek Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-vietnamese-dictionary"><span>English To Vietnamese Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-welsh-dictionary"><span>English To Welsh Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-xhosa-dictionary"><span>English To Xhosa Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-yiddish-dictionary"><span>English To Yiddish Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-yoruba-dictionary"><span>English To Yoruba Dictionary</span></a></li>
+                                <li><a href="/dictionary/english-to-zulu-dictionary"><span>English To Zulu Dictionary</span></a></li>
+                                <li>
+                                    <a href="/dictionary/english-to-urdu-translator">
+                                        <span>
+                                            Translate English To Urdu
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/dictionary/urdu-to-english-translator">
+                                        <span>
+                                            Translate Urdu To English
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("_GoogleAd")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec level-wise" style="margin-bottom: 30px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Explore Words by Alphabet</h2>
+                    <p>
+                        Explore our complete dictionary and vocabulary collection, arranged alphabetically to
+                        make it easy for you to find words, learn their meanings, and improve your language step
+                        by step.
+                    </p>
+                    <div class="dictionary-by-words">
+                        <div class="by-words-colm">
+                            <h3>Browse English Words by Alphabet</h3>
+                            <div class="dictionary-letters">
+                                <a href="/dictionary/english-words-with-a">A</a>
+                                <a href="/dictionary/english-words-with-b">B</a>
+                                <a href="/dictionary/english-words-with-c">C</a>
+                                <a href="/dictionary/english-words-with-d">D</a>
+                                <a href="/dictionary/english-words-with-e">E</a>
+                                <a href="/dictionary/english-words-with-f">F</a>
+                                <a href="/dictionary/english-words-with-g">G</a>
+                                <a href="/dictionary/english-words-with-h">H</a>
+                                <a href="/dictionary/english-words-with-i">I</a>
+                                <a href="/dictionary/english-words-with-j">J</a>
+                                <a href="/dictionary/english-words-with-k">K</a>
+                                <a href="/dictionary/english-words-with-l">L</a>
+                                <a href="/dictionary/english-words-with-m">M</a>
+                                <a href="/dictionary/english-words-with-n">N</a>
+                                <a href="/dictionary/english-words-with-o">O</a>
+                                <a href="/dictionary/english-words-with-p">P</a>
+                                <a href="/dictionary/english-words-with-q">Q</a>
+                                <a href="/dictionary/english-words-with-r">R</a>
+                                <a href="/dictionary/english-words-with-s">S</a>
+                                <a href="/dictionary/english-words-with-t">T</a>
+                                <a href="/dictionary/english-words-with-u">U</a>
+                                <a href="/dictionary/english-words-with-v">V</a>
+                                <a href="/dictionary/english-words-with-w">W</a>
+                                <a href="/dictionary/english-words-with-x">X</a>
+                                <a href="/dictionary/english-words-with-y">Y</a>
+                                <a href="/dictionary/english-words-with-z">Z</a>
+                            </div>
+
+
+                        </div>
+                        <div class="by-words-colm words-by-urdu">
+                            <h3>Browse Urdu Words by Alphabet</h3>
+                            <div class="dictionary-letters">
+                                <a href="/dictionary/urdu-words-with-آ">آ</a>
+                                <a href="/dictionary/urdu-words-with-ا">ا</a>
+                                <a href="/dictionary/urdu-words-with-ب">ب</a>
+                                <a href="/dictionary/urdu-words-with-پ">پ</a>
+                                <a href="/dictionary/urdu-words-with-ت">ت</a>
+                                <a href="/dictionary/urdu-words-with-ٹ">ٹ</a>
+                                <a href="/dictionary/urdu-words-with-ث">ث</a>
+                                <a href="/dictionary/urdu-words-with-ج">ج</a>
+                                <a href="/dictionary/urdu-words-with-چ">چ</a>
+                                <a href="/dictionary/urdu-words-with-ح">ح</a>
+                                <a href="/dictionary/urdu-words-with-خ">خ</a>
+                                <a href="/dictionary/urdu-words-with-د">د</a>
+                                <a href="/dictionary/urdu-words-with-ڈ">ڈ</a>
+                                <a href="/dictionary/urdu-words-with-ذ">ذ</a>
+                                <a href="/dictionary/urdu-words-with-ر">ر</a>
+                                <a href="/dictionary/urdu-words-with-ڑ">ڑ</a>
+                                <a href="/dictionary/urdu-words-with-ز">ز</a>
+                                <a href="/dictionary/urdu-words-with-ژ">ژ</a>
+                                <a href="/dictionary/urdu-words-with-س">س</a>
+                                <a href="/dictionary/urdu-words-with-ش">ش</a>
+                                <a href="/dictionary/urdu-words-with-ص">ص</a>
+                                <a href="/dictionary/urdu-words-with-ض">ض</a>
+                                <a href="/dictionary/urdu-words-with-ط">ط</a>
+                                <a href="/dictionary/urdu-words-with-ظ">ظ</a>
+                                <a href="/dictionary/urdu-words-with-ع">ع</a>
+                                <a href="/dictionary/urdu-words-with-غ">غ</a>
+                                <a href="/dictionary/urdu-words-with-ف">ف</a>
+                                <a href="/dictionary/urdu-words-with-ق">ق</a>
+                                <a href="/dictionary/urdu-words-with-ک">ک</a>
+                                <a href="/dictionary/urdu-words-with-گ">گ</a>
+                                <a href="/dictionary/urdu-words-with-ل">ل</a>
+                                <a href="/dictionary/urdu-words-with-م">م</a>
+                                <a href="/dictionary/urdu-words-with-ن">ن</a>
+                                <a href="/dictionary/urdu-words-with-و">و</a>
+                                <a href="/dictionary/urdu-words-with-ھ">ھ</a>
+                                <a href="/dictionary/urdu-words-with-ہ">ہ</a>
+                                <a href="/dictionary/urdu-words-with-ی">ی</a>
+                                <a href="/dictionary/urdu-words-with-ے">ے</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-sec level fee-box">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+                <div class="col-lg-12">
+                    <h2>Top Trending English To Urdu Words</h2>
+                    <div class="responsive-table">
+                        <table class="table" id="englishToUrduTable">
+                            <thead>
+                                <tr>
+                                    <th><span>Sr. #</span></th>
+                                    <th><span>English</span></th>
+                                    <th><span>Urdu</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var existingEnToUrMeanings = ViewBag.ExistingEnToUrMeanings as Dictionary<string, string>;
+                                }
+                                @foreach (var item in (List<WordPair>)ViewBag.EnglishToUrdu)
+                                {
+                                    var existingMeaning = existingEnToUrMeanings != null && existingEnToUrMeanings.ContainsKey(item.English.ToLower())
+                                    ? existingEnToUrMeanings[item.English.ToLower()]
+                                    : "";
+
+                                    <tr data-english-word="@item.English">
+                                        <td>@item.SrNo</td>
+                                        <td><a href="/dictionary/@item.English.ToLower().Replace(" ", "-")-meaning-in-urdu">@item.English</a></td>
+                                        <td>
+                                            <span class="dict-urdu-word"
+                                                  data-word="@item.English"
+                                                  data-lang="en-ur"
+                                                  data-existing-meaning="@existingMeaning">
+                                                @if (!string.IsNullOrEmpty(existingMeaning))
+                                                {
+                                                    @existingMeaning
+                                                }
+                                                else
+                                                {
+                                                    <span class="loading">Loading...</span>
+                                                }
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2>Top Trending Urdu To English Words</h2>
+                    <div class="responsive-table">
+                        <table class="table" id="urduToEnglishTable">
+                            <thead>
+                                <tr>
+                                    <th><span>Sr. #</span></th>
+                                    <th><span>Urdu</span></th>
+                                    <th><span>English</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var existingUrToEnMeanings = ViewBag.ExistingUrToEnMeanings as Dictionary<string, string>;
+                                }
+                                @foreach (var item in (List<WordPair>)ViewBag.UrduToEnglish)
+                                {
+                                    var existingMeaning = existingUrToEnMeanings != null && existingUrToEnMeanings.ContainsKey(item.Urdu.ToLower())
+                                    ? existingUrToEnMeanings[item.Urdu.ToLower()]
+                                    : "";
+
+                                    <tr data-urdu-word="@item.Urdu">
+                                        <td>@item.SrNo</td>
+                                        <td>
+                                            <a href="/dictionary/@item.Urdu.Replace(" ", "-")-meaning-in-english" class="urdu-link" data-urdu-word="@item.Urdu">
+                                                <span class="dict-urdu-word">@item.Urdu</span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="dict-english-word"
+                                                  data-word="@item.Urdu"
+                                                  data-lang="ur-en"
+                                                  data-existing-meaning="@existingMeaning">
+                                                @if (!string.IsNullOrEmpty(existingMeaning))
+                                                {
+                                                    @existingMeaning
+                                                }
+                                                else
+                                                {
+                                                    <span class="loading">Loading...</span>
+                                                }
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Function to decode HTML entities
+                                    function decodeHtmlEntities(text) {
+                                        if (!text) return text;
+                                        const textArea = document.createElement('textarea');
+                                        textArea.innerHTML = text;
+                                        return textArea.value;
+                                    }
+
+                                    // Function to fix encoded URLs in anchor tags
+                                    function fixEncodedUrls() {
+                                        console.log('🔗 Fixing encoded URLs...');
+
+                                        const urduLinks = document.querySelectorAll('.urdu-link');
+                                        urduLinks.forEach(link => {
+                                            const currentHref = link.getAttribute('href');
+                                            const urduWord = link.getAttribute('data-urdu-word');
+
+                                            // If URL contains encoded entities, fix it
+                                            if (currentHref && (currentHref.includes('&amp;#x') || currentHref.includes('&#x'))) {
+                                                console.log('Found encoded URL:', currentHref);
+
+                                                // Decode the URL
+                                                const decodedUrl = decodeHtmlEntities(currentHref);
+                                                link.setAttribute('href', decodedUrl);
+                                                console.log('Fixed URL:', decodedUrl);
+                                            }
+
+                                            // Also ensure the data attribute is decoded
+                                            if (urduWord && (urduWord.includes('&amp;#x') || urduWord.includes('&#x'))) {
+                                                const decodedWord = decodeHtmlEntities(urduWord);
+                                                link.setAttribute('data-urdu-word', decodedWord);
+                                            }
+                                        });
+                                    }
+
+                                    // Function to fix displayed text
+                                    function fixDisplayedText() {
+                                        console.log('📝 Fixing displayed text...');
+
+                                        document.querySelectorAll('.dict-urdu-word, .dict-english-word').forEach(el => {
+                                            const currentHtml = el.innerHTML;
+                                            if (currentHtml.includes('&amp;#x') || currentHtml.includes('&#x')) {
+                                                console.log('Found encoded text:', currentHtml);
+
+                                                // Decode the text
+                                                const decodedHtml = decodeHtmlEntities(currentHtml);
+                                                el.innerHTML = decodedHtml;
+                                                console.log('Fixed text:', decodedHtml);
+                                            }
+                                        });
+                                    }
+
+                                    // Function to fix all data attributes
+                                    function fixDataAttributes() {
+                                        console.log('🏷️ Fixing data attributes...');
+
+                                        // Fix data attributes on table rows
+                                        document.querySelectorAll('tr[data-urdu-word]').forEach(row => {
+                                            const urduWord = row.getAttribute('data-urdu-word');
+                                            if (urduWord && (urduWord.includes('&amp;#x') || urduWord.includes('&#x'))) {
+                                                const decodedWord = decodeHtmlEntities(urduWord);
+                                                row.setAttribute('data-urdu-word', decodedWord);
+                                                console.log('Fixed row data:', decodedWord);
+                                            }
+                                        });
+
+                                        // Fix data attributes on english word spans
+                                        document.querySelectorAll('.dict-english-word').forEach(el => {
+                                            const wordAttr = el.getAttribute('data-word');
+                                            const meaningAttr = el.getAttribute('data-existing-meaning');
+
+                                            if (wordAttr && (wordAttr.includes('&amp;#x') || wordAttr.includes('&#x'))) {
+                                                const decodedWord = decodeHtmlEntities(wordAttr);
+                                                el.setAttribute('data-word', decodedWord);
+                                                console.log('Fixed data-word:', decodedWord);
+                                            }
+
+                                            if (meaningAttr && (meaningAttr.includes('&amp;#x') || meaningAttr.includes('&#x'))) {
+                                                const decodedMeaning = decodeHtmlEntities(meaningAttr);
+                                                el.setAttribute('data-existing-meaning', decodedMeaning);
+                                                console.log('Fixed data-existing-meaning:', decodedMeaning);
+                                            }
+                                        });
+                                    }
+
+                                    // Run all fixes
+                                    function runAllFixes() {
+                                        console.log('🔄 Running all text decoding fixes...');
+                                        fixEncodedUrls();
+                                        fixDisplayedText();
+                                        fixDataAttributes();
+                                        console.log('✅ All fixes completed');
+                                    }
+
+                                    // Run immediately
+                                    runAllFixes();
+
+                                    // Run again after delays to catch any dynamic content
+                                    setTimeout(runAllFixes, 100);
+                                    setTimeout(runAllFixes, 500);
+                                });
+                            </script>
+                        </table>
+                    </div>
+
+                    <script>
+                        console.log('=== DICTIONARY HOME PAGE LOADED ===');
+
+                        // Function to fetch translation from API with fallback
+                        async function fetchTranslation(word, sourceLang, targetLang) {
+                            console.log('🌐 Fetching translation for:', word, 'from', sourceLang, 'to', targetLang);
+
+                            try {
+                                // Try Google Translate first
+                                console.log('   Trying Google Translate API...');
+                                const googleUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(word)}`;
+
+                                const googleResponse = await fetch(googleUrl);
+                                console.log('   Google API Response status:', googleResponse.status);
+
+                                if (googleResponse.ok) {
+                                    const googleData = await googleResponse.json();
+                                    console.log('   Google API Response data:', googleData);
+
+                                    if (googleData && googleData[0] && googleData[0][0] && googleData[0][0][0]) {
+                                        const translatedText = googleData[0][0][0];
+                                        console.log('   ✅ Google Translation successful:', translatedText);
+                                        return translatedText;
+                                    }
+                                }
+
+                                // Fallback to MyMemory API
+                                console.log('   🔄 Google failed, trying MyMemory API...');
+                                const myMemoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=${sourceLang}|${targetLang}`;
+                                const myMemoryResponse = await fetch(myMemoryUrl);
+                                console.log('   MyMemory API Response status:', myMemoryResponse.status);
+
+                                if (myMemoryResponse.ok) {
+                                    const myMemoryData = await myMemoryResponse.json();
+                                    console.log('   MyMemory API Response data:', myMemoryData);
+
+                                    if (myMemoryData.responseStatus === 200 && myMemoryData.responseData && myMemoryData.responseData.translatedText) {
+                                        console.log('   ✅ MyMemory Translation successful:', myMemoryData.responseData.translatedText);
+                                        return myMemoryData.responseData.translatedText;
+                                    }
+                                }
+
+                                console.log('   ❌ All translation APIs failed');
+                                return "Translation not available";
+                            } catch (error) {
+                                console.error('   💥 Translation API error:', error);
+                                return "Translation error";
+                            }
+                        }
+
+                        // Function to save word and meaning to database
+                        async function saveWordAndMeaning(sourceWord, sourceLangCode, targetWord, targetLangCode) {
+                            console.log('💾 Saving word and meaning to database:', sourceWord, '->', targetWord);
+                            try {
+                                const requestData = {
+                                    sourceWord: sourceWord,
+                                    sourceLanguageCode: sourceLangCode,
+                                    targetWord: targetWord,
+                                    targetLanguageCode: targetLangCode
+                                };
+
+                                const response = await fetch('/dictionary/save-word-with-meaning', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(requestData)
+                                });
+
+                                console.log('   Save API Response status:', response.status);
+
+                                if (!response.ok) {
+                                    throw new Error('Failed to save word data: ' + response.status);
+                                }
+
+                                const result = await response.json();
+                                console.log('   ✅ Word and meaning saved successfully:', result);
+                                return result;
+
+                            } catch (error) {
+                                console.error('   💥 Error saving word and meaning:', error);
+                                return { success: false, message: error.message };
+                            }
+                        }
+
+                        // Function to process a single translation element
+                        async function processTranslationElement(element, sourceLang, targetLang) {
+                            const word = element.getAttribute('data-word');
+                            const existingMeaning = element.getAttribute('data-existing-meaning');
+
+                            console.log(`🔍 Processing ${sourceLang} word: "${word}"`);
+                            console.log('   Existing meaning from database:', existingMeaning);
+
+                            // Skip if already has existing meaning and it's already displayed
+                            if (existingMeaning && existingMeaning !== "" && existingMeaning !== "Loading...") {
+                                console.log('   ✅ Using existing meaning from database');
+                                // Check if the element still shows "Loading..." and needs to be updated
+                                if (element.textContent.includes('Loading...') || element.querySelector('.loading')) {
+                                    element.innerHTML = existingMeaning;
+                                }
+                                return; // Skip API call
+                            }
+
+                            // If we get here, we need to call the API
+                            console.log('   🌐 Fetching translation from API...');
+                            const translation = await fetchTranslation(word, sourceLang, targetLang);
+                            console.log('   📨 Translation result:', translation);
+
+                            if (translation && translation !== "Translation not available" && translation !== "Translation error") {
+                                console.log('   ✅ Translation successful, updating UI and saving to DB');
+                                element.textContent = translation;
+
+                                // Save to database for future use
+                                await saveWordAndMeaning(word, sourceLang, translation, targetLang);
+                            } else {
+                                console.log('   ❌ Translation failed, showing fallback');
+                                element.textContent = translation || "N/A";
+                            }
+                        }
+
+                        // Function to update all translations
+                        async function updateAllTranslations() {
+                            console.log('🔄 Starting translation updates...');
+
+                            // Urdu to English translations
+                            const urToEnElements = document.querySelectorAll('[data-lang="ur-en"]');
+                            console.log('📊 Found Urdu to English elements:', urToEnElements.length);
+
+                            for (const element of urToEnElements) {
+                                await processTranslationElement(element, 'ur', 'en');
+
+                                // Add delay to avoid rate limiting
+                                console.log('   ⏳ Waiting 500ms before next translation...');
+                                await new Promise(resolve => setTimeout(resolve, 500));
+                            }
+
+                            // English to Urdu translations
+                            const enToUrElements = document.querySelectorAll('[data-lang="en-ur"]');
+                            console.log('📊 Found English to Urdu elements:', enToUrElements.length);
+
+                            for (const element of enToUrElements) {
+                                await processTranslationElement(element, 'en', 'ur');
+
+                                // Add delay to avoid rate limiting
+                                console.log('   ⏳ Waiting 500ms before next translation...');
+                                await new Promise(resolve => setTimeout(resolve, 500));
+                            }
+
+                            console.log('✅ All translations completed');
+                        }
+
+                        // Initialize translations when page loads
+                        document.addEventListener('DOMContentLoaded', function() {
+                            console.log('🚀 Starting translation process...');
+
+                            // First, immediately update any elements that have existing meanings
+                            const allTranslationElements = document.querySelectorAll('[data-lang]');
+                            allTranslationElements.forEach(element => {
+                                const existingMeaning = element.getAttribute('data-existing-meaning');
+                                if (existingMeaning && existingMeaning !== "" && existingMeaning !== "Loading...") {
+                                    if (element.textContent.includes('Loading...') || element.querySelector('.loading')) {
+                                        element.innerHTML = existingMeaning;
+                                        console.log('🔄 Immediately updated existing meaning for:', element.getAttribute('data-word'));
+                                    }
+                                }
+                            });
+
+                            // Then start the API translation process
+                            updateAllTranslations();
+                        });
+                    </script>
+
+                    <style>
+                        .loading {
+                            color: #666;
+                            font-style: italic;
+                        }
+                    </style>
+
+                </div>
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 30px 0px 20px; height: auto !important;">
+
+        <div class="contact-sec fee-box" style="padding-top: 0;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                        {
+                            @Html.Raw(ViewBag.CmsData.Desc2)
+                        }
+                        else
+                        {
+                            <h2>Explore Online Dictionary – Learn New Words &amp; Improve Vocabulary</h2>
+
+                            <p>When it comes to learning, understanding, or improving communication between <strong>English and Urdu language</strong>, one of the most valuable tools is a reliable <strong>English to Urdu dictionary</strong>. With globalization and digital communication at its peak, students, professionals, and learners in Pakistan and worldwide often search for the best ways to <strong>translate English to Urdu</strong> or perform a <strong>translation Urdu to English</strong>.</p>
+                            <p>This comprehensive guide covers everything you need to know about using online and offline dictionaries, translation apps, and resources that make learning easier. From <strong>Urdu to English translation</strong> to <strong>English to Urdu meaning</strong>, we will explore how to improve your language skills with examples, downloadable tools, and step-by-step assistance.</p>
+                            <h2>Importance of English and Urdu Language in Daily Life</h2>
+                            <p>Both languages hold great significance in Pakistan and beyond. English is widely used in official, educational, and professional contexts, while Urdu serves as the national language that connects people across cultural backgrounds.</p>
+                            <p>For this reason, dictionaries such as the <strong>Oxford Dictionary English to Urdu</strong> and modern online translation platforms are crucial. They provide <strong>word meaning in Urdu</strong>, help to <strong>translate into Urdu</strong>, and assist learners in understanding vocabulary in both directions. Whether you want <strong>Urdu meaning in English</strong> or <strong>English to Urdu word meanings</strong>, the right resources can make learning seamless.</p>
+                            <h2>Why You Need an English to Urdu Dictionary</h2>
+                            <p>A reliable <strong>English dictionary</strong> or <strong>Urdu dictionary</strong> is more than just a vocabulary list. It allows users to:</p>
+                            <ul>
+                                <li>
+                                    <p><strong>Translate English to Urdu</strong> instantly.</p>
+                                </li>
+                                <li>
+                                    <p>Find <strong>English to Urdu meanings</strong> for difficult terms.</p>
+                                </li>
+                                <li>
+                                    <p>Learn accurate <strong>Urdu to English sentence translation</strong> for communication.</p>
+                                </li>
+                                <li>
+                                    <p>Practice pronunciation using <strong>Roman Urdu</strong>.</p>
+                                </li>
+                                <li>
+                                    <p>Explore grammar and usage through examples.</p>
+                                </li>
+                            </ul>
+                            <p>In addition, digital tools such as the <strong>English to Urdu dictionary free download for mobile</strong> and <strong>Urdu to English dictionary free download</strong> make it convenient to carry knowledge in your pocket.</p>
+                            <h2>Online Dictionary English to Urdu: A Modern Solution</h2>
+                            <p>With the advancement of technology, many people prefer an <strong>online dictionary English to Urdu</strong> rather than carrying bulky books. These digital platforms offer:</p>
+                            <ul>
+                                <li>
+                                    <p>Quick access to <strong>English to Urdu translation online</strong>.</p>
+                                </li>
+                                <li>
+                                    <p>Ability to <strong>translate into English</strong> from Urdu and vice versa.</p>
+                                </li>
+                                <li>
+                                    <p>Updated vocabulary with contextual examples.</p>
+                                </li>
+                                <li>
+                                    <p>Features like <strong>Urdu to English translation with Urdu keyboard</strong>, making typing easier for native users.</p>
+                                </li>
+                            </ul>
+                            <p>The <strong>English to Urdu converter</strong> is another useful tool that automatically provides <strong>English to Urdu word meanings</strong> in seconds.</p>
+                            <h2>Translate Urdu Sentences into English – Step-by-Step</h2>
+                            <p>One of the most common challenges for learners is how to <strong>translate Urdu sentences into English</strong> correctly. While individual word meanings may be easy, sentences require grammar and context.</p>
+                            <p>For example:</p>
+                            <ul>
+                                <li>
+                                    <p>Urdu sentence: "Mujhe tumse baat karni hai."</p>
+                                </li>
+                                <li>
+                                    <p><strong>Translation Urdu to English</strong>: "I want to talk to you."</p>
+                                </li>
+                            </ul>
+                            <p>Using an <strong>Urdu to English dictionary free download</strong> app, learners can practice multiple examples daily. The same tool also works to <strong>translate into Urdu</strong> when English phrases need to be understood.</p>
+                            <h2>English to Urdu Translation for Beginners</h2>
+                            <p>Beginners often search for <strong>English to Urdu translation online</strong> or <strong>English to Urdu meaning</strong> of simple words. Let’s look at some basic examples:</p>
+
+                            <p>These simple translations show how easy it is to <strong>translate English to Urdu</strong> with the right resources.</p>
+                            <h2>Mobile Solutions – Dictionaries &amp; Translators</h2>
+                            <p>Carrying a dictionary everywhere is no longer necessary. With tools like <strong>English to Urdu dictionary free download for mobile</strong> and <strong>Urdu to English dictionary free download</strong>, learning is portable.</p>
+                            <p>Benefits of mobile apps:</p>
+                            <ul>
+                                <li>
+                                    <p>Offline access anytime, anywhere.</p>
+                                </li>
+                                <li>
+                                    <p>Quick search features.</p>
+                                </li>
+                                <li>
+                                    <p>Dual support for <strong>Urdu to English translation</strong> and <strong>English to Urdu translation</strong>.</p>
+                                </li>
+                                <li>
+                                    <p>Support for <strong>Roman Urdu</strong> typing.</p>
+                                </li>
+                            </ul>
+                            <p>Additionally, the <strong>English to Urdu dictionary free</strong> apps often include synonyms, antonyms, and examples for better learning.</p>
+                            <h2>Oxford Dictionary English to Urdu – A Trusted Choice</h2>
+                            <p>The <strong>Oxford Dictionary English to Urdu</strong> is one of the most reliable references worldwide. It provides authentic <strong>English to Urdu word meanings</strong>, grammar usage, and <strong>Urdu to English translation</strong> examples.</p>
+                            <p>Unlike free apps, Oxford ensures accuracy, making it ideal for academic and professional users. It can be accessed online or via <strong>English to Urdu dictionary free download for mobile</strong> versions.</p>
+                            <h2>Learning with Roman Urdu</h2>
+                            <p>For many beginners, reading Urdu script can be difficult. That’s where <strong>Roman Urdu</strong> comes in handy. By writing Urdu in English alphabets (like "Aap kaise hain?"), learners can gradually build vocabulary while still using <strong>Urdu to English translation</strong> tools.</p>
+                            <p>Roman Urdu bridges the gap for new learners, helping them move from <strong>translate into English</strong> exercises to full fluency.</p>
+                            <h2>English to Urdu Converter – Instant Learning</h2>
+                            <p>If you struggle with <strong>Urdu to English sentence translation</strong>, a quick <strong>English to Urdu converter</strong> can help. These online tools:</p>
+                            <ul>
+                                <li>
+                                    <p>Translate <strong>English to Urdu word meanings</strong> quickly.</p>
+                                </li>
+                                <li>
+                                    <p>Offer <strong>Urdu meaning in English</strong> instantly.</p>
+                                </li>
+                                <li>
+                                    <p>Provide audio pronunciation for both languages.</p>
+                                </li>
+                            </ul>
+                            <p>This saves time compared to flipping through a physical <strong>English dictionary</strong>.</p>
+                            <h2>Common Word Meanings in Urdu &amp; English</h2>
+                            <p>To give you a clearer picture, here are some commonly searched words:</p>
+                            <div>
+                                <div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>English Word</th>
+                                                <th>Urdu Translation</th>
+                                                <th>Roman Urdu</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Hello</td>
+                                                <td>ہیلو (<strong>Hello meaning in Urdu</strong>)</td>
+                                                <td>Hello</td>
+                                                <td>Greeting</td>
+                                            </tr>
+                                            <tr>
+                                                <td>What</td>
+                                                <td>کیا (<strong>What meaning in Urdu</strong>)</td>
+                                                <td>Kya</td>
+                                                <td>Question word</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Teacher</td>
+                                                <td>استاد</td>
+                                                <td>Ustaad</td>
+                                                <td>Common in schools</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Student</td>
+                                                <td>طالب علم</td>
+                                                <td>Talib Ilm</td>
+                                                <td>Everyday use</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Love</td>
+                                                <td>محبت</td>
+                                                <td>Mohabbat</td>
+                                                <td>Emotional word</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Peace</td>
+                                                <td>امن</td>
+                                                <td>Aman</td>
+                                                <td>Positive meaning</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <p>These examples show the usefulness of <strong>online dictionary English to Urdu</strong> and <strong>Urdu to English dictionary free download for mobile</strong>.</p>
+                            <h2>Free Download Options</h2>
+                            <p>Many learners prefer offline tools. Here are some options:</p>
+                            <ul>
+                                <li>
+                                    <p><strong>Urdu to English dictionary free download</strong> for desktop or mobile.</p>
+                                </li>
+                                <li>
+                                    <p><strong>English to Urdu dictionary free download for mobile</strong>, ideal for Android and iOS.</p>
+                                </li>
+                                <li>
+                                    <p>Apps with <strong>English to Urdu word meanings</strong>, sentence examples, and voice assistance.</p>
+                                </li>
+                            </ul>
+                            <p>With these, you don’t need an internet connection to practice <strong>English to Urdu translation</strong> or <strong>Urdu to English sentence translation</strong>.</p>
+                            <h2>Translate Into Urdu or English – Best Practices</h2>
+                            <p>If you want to <strong>translate into Urdu</strong> from English or <strong>translate into English</strong> from Urdu, keep these points in mind:</p>
+                            <ol>
+                                <li>
+                                    <p>Always check the context.</p>
+                                </li>
+                                <li>
+                                    <p>Use a reliable <strong>online dictionary</strong> instead of only guessing.</p>
+                                </li>
+                                <li>
+                                    <p>Practice <strong>translation Urdu to English</strong> daily for fluency.</p>
+                                </li>
+                                <li>
+                                    <p>Compare results with authentic sources like the <strong>Oxford Dictionary English to Urdu</strong>.</p>
+                                </li>
+                            </ol>
+                            <p>By combining digital tools with practice, anyone can master both <strong>English and Urdu language</strong> effectively.</p>
+                            <p>The need for a reliable <strong>English to Urdu dictionary</strong> and <strong>Urdu to English dictionary free download</strong> has never been greater. From <strong>English to Urdu translation online</strong> tools to offline apps, learners now have multiple options to improve vocabulary and fluency.</p>
+                            <p>Whether you are looking for <strong>Hello meaning in Urdu</strong>, <strong>What meaning in Urdu</strong>, or advanced <strong>Urdu to English sentence translation</strong>, digital resources provide instant solutions.</p>
+                            <p>By practicing daily, using <strong>Roman Urdu</strong> as support, and utilizing resources like the <strong>Oxford Dictionary English to Urdu</strong>, you can master both languages easily. The ability to <strong>translate Urdu sentences into English</strong> and vice versa opens doors to better communication, education, and career growth.</p>
+                            <p>So, explore your favorite <strong>online dictionary English to Urdu</strong>, install the <strong>English to Urdu dictionary free download for mobile</strong>, and start your journey toward bilingual excellence today.</p>
+                        }
+                    </div>
+                    @await Html.PartialAsync("_GoogleAd")
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Add Banner  -->
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontentlowerbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    let englishWord = '';
+    let selectedLanguageMain = ''; // For main content search (second search bar)
+    let selectedLanguageHeader = ''; // For header search (first search bar)
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeHeaderCustomSelect(); // Header search (first search bar)
+    });
+
+
+    // Header Custom Select Functionality (first search bar - requires new word input)
+    function initializeHeaderCustomSelect() {
+        const customSelectHeader = document.getElementById('customSelectSearch');
+        const customOptionsHeader = customSelectHeader.nextElementSibling; // The .custom-options div right after customSelectSearch
+        const optionSearchHeader = document.getElementById('optionSearchHeader');
+        const optionsHeader = customOptionsHeader.querySelectorAll('span[data-value]');
+        const selectedSpanHeader = customSelectHeader.querySelector('.selected');
+        const searchBtnHeader = document.getElementById('searchBtnHeader');
+        const wordInputHeader = document.querySelector('.ss-banner-inner .banner-form input[type="text"]');
+        const customSelectWrapperHeader = customSelectHeader.parentElement;
+
+        console.log('Initializing header search bar:', { customSelectHeader, customOptionsHeader, optionSearchHeader, options: optionsHeader.length });
+
+        // Toggle dropdown using CSS classes
+        customSelectHeader.addEventListener('click', function(e) {
+            e.stopPropagation();
+            customSelectWrapperHeader.classList.toggle('active');
+            customOptionsHeader.classList.toggle('active');
+
+            if (customOptionsHeader.classList.contains('active')) {
+                optionSearchHeader.focus();
+            }
+        });
+
+        // Handle option selection
+        optionsHeader.forEach(option => {
+            option.addEventListener('click', function() {
+                selectedLanguageHeader = this.getAttribute('data-value');
+                const languageName = this.textContent;
+                selectedSpanHeader.textContent = languageName;
+
+                // Close dropdown
+                customSelectWrapperHeader.classList.remove('active');
+                customOptionsHeader.classList.remove('active');
+
+                console.log('Header search bar selected:', selectedLanguageHeader);
+            });
+        });
+
+        // Search filter functionality
+        optionSearchHeader.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            let hasVisibleOptions = false;
+
+            optionsHeader.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    option.style.display = 'block';
+                    hasVisibleOptions = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Show a message if no options match
+            const noResults = customOptionsHeader.querySelector('.no-results');
+            if (!hasVisibleOptions && !noResults) {
+                const noResultsMsg = document.createElement('div');
+                noResultsMsg.className = 'no-results';
+                noResultsMsg.textContent = 'No languages found';
+                noResultsMsg.style.padding = '10px 15px';
+                noResultsMsg.style.color = '#666';
+                noResultsMsg.style.fontStyle = 'italic';
+                customOptionsHeader.appendChild(noResultsMsg);
+            } else if (hasVisibleOptions && noResults) {
+                noResults.remove();
+            }
+        });
+
+        // Search button functionality - requires new word
+        searchBtnHeader.addEventListener('click', function() {
+            performHeaderSearch();
+        });
+
+        // Allow Enter key to trigger search in both search box and word input
+        optionSearchHeader.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performHeaderSearch();
+            }
+        });
+
+        wordInputHeader.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performHeaderSearch();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            customSelectWrapperHeader.classList.remove('active');
+            customOptionsHeader.classList.remove('active');
+        });
+    }
+
+
+
+    // Perform search for header (first search bar - requires new word input)
+    function performHeaderSearch() {
+        console.log('Header search triggered. Selected language:', selectedLanguageHeader);
+
+        if (!selectedLanguageHeader) {
+            selectedLanguageHeader = "urdu";
+            // alert('Please select a language first from the header search bar');
+            // return;
+        }
+
+        // Get the word from header input
+        const wordInput = document.querySelector('.ss-banner-inner .banner-form input[type="text"]');
+        const wordToSearch = wordInput.value.trim();
+
+        if (!wordToSearch) {
+            alert('Please enter a word to search');
+            wordInput.focus();
+            return;
+        }
+
+        // Default from language is English for header search
+        const fromLanguage = 'en-gb';
+
+        // Redirect to the new language page
+        window.location.href = `/dictionary/${wordToSearch.toLowerCase().trim().replace(/\s+/g, "-")}-meaning-in-${selectedLanguageHeader.toLowerCase().trim()}`;
+    }
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const wrappers = document.querySelectorAll(".custom-select-wrapper");
+
+        function closeAll(except = null) {
+            wrappers.forEach(w => {
+                if (w !== except) w.classList.remove("open");
+            });
+        }
+
+        wrappers.forEach(wrapper => {
+            const customSelect = wrapper.querySelector(".custom-select");
+            const searchInput = wrapper.querySelector(".search-box input");
+            const optionItems = Array.from(wrapper.querySelectorAll(".custom-options span[data-value]"));
+            const selected = wrapper.querySelector(".custom-select .selected");
+
+            // Toggle on header click
+            customSelect.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const willOpen = !wrapper.classList.contains("open");
+                closeAll(willOpen ? wrapper : null);
+                wrapper.classList.toggle("open");
+                if (willOpen && searchInput) {
+                    // focus search when opened
+                    setTimeout(() => searchInput.focus(), 0);
+                }
+            });
+
+            // Delegate clicks inside wrapper: only option clicks close+select
+            wrapper.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const option = e.target.closest("span[data-value]");
+                if (option && wrapper.contains(option)) {
+                    selected.textContent = option.textContent;
+                    wrapper.dataset.value = option.dataset.value;
+                    wrapper.classList.remove("open");
+                }
+                // other clicks inside wrapper (like search input) do nothing => dropdown stays open
+            });
+
+            // Live search (filter only this wrapper's options)
+            if (searchInput) {
+                searchInput.addEventListener("input", function () {
+                    const filter = this.value.toLowerCase().trim();
+                    optionItems.forEach(option => {
+                        option.style.display = option.textContent.toLowerCase().includes(filter) ? "" : "none";
+                    });
+                    // keep it open while typing
+                    if (!wrapper.classList.contains("open")) wrapper.classList.add("open");
+                });
+            }
+        });
+
+        // Click outside any wrapper closes all
+        document.addEventListener("click", function (e) {
+            if (!e.target.closest(".custom-select-wrapper")) {
+                closeAll();
+            }
+        });
+
+        // Optional: close on Escape
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeAll();
+        });
+    });
+
+</script>
+
+
+
