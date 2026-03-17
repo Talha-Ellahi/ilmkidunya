@@ -1,6 +1,6 @@
 ﻿using IKDFrontEnd.DictionaryModels;
 
-namespace IKDFrontEnd.ViewModels
+namespace IKDFrontEnd.DictionaryViewModels
 {
 
 

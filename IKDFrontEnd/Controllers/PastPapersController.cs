@@ -36,7 +36,7 @@ namespace IKDFrontEnd.Controllers
 
             var sectionContent = await _context.SectionContentImports
                 .Where(c => c.ContentId == sectionType.Id && c.IsActive == true)
-                .Select(c => new TblCm
+                .Select(c => new Models.TblCm
                 {
                     Id = c.Id,
                     Url = sectionType.Url,

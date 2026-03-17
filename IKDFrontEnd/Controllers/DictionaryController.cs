@@ -1,7 +1,7 @@
 ﻿using Humanizer;
 using IKDFrontEnd.DictionaryModels;
+using IKDFrontEnd.DictionaryViewModels;
 using IKDFrontEnd.Services;
-using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

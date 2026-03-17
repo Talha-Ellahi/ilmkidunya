@@ -7,6 +7,7 @@ using IKDFrontEnd.BookModels;
 using IKDFrontEnd.DictionaryModels;
 using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.JobModels;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -123,8 +124,23 @@ builder.Services.AddDbContext<DbikdContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorNumbersToAdd: null);
     }));
+builder.Services.AddDbContext<JobsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("JobsDbConnectionString"),
+    sqlOptions => {
+        sqlOptions.CommandTimeout(60); // 60 seconds timeout
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    }));
 builder.Services.AddDbContext<BookDbikdContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreConnection"),
+    sqlOptions => {
+        sqlOptions.CommandTimeout(60);
+        sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
+    }));
+builder.Services.AddDbContext<Dbikd1Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd1"),
     sqlOptions => {
         sqlOptions.CommandTimeout(60);
         sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
@@ -135,18 +151,18 @@ builder.Services.AddDbContext<Dbikd2Context>(options =>
         sqlOptions.CommandTimeout(60);
         sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
     }));
-builder.Services.AddDbContext<Dbikd3Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd3"),
-    sqlOptions => {
-        sqlOptions.CommandTimeout(60);
-        sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
-    }));
-builder.Services.AddDbContext<Dbikd4Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd4"),
-    sqlOptions => {
-        sqlOptions.CommandTimeout(60);
-        sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
-    }));
+//builder.Services.AddDbContext<Dbikd3Context>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd3"),
+//    sqlOptions => {
+//        sqlOptions.CommandTimeout(60);
+//        sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
+//    }));
+//builder.Services.AddDbContext<Dbikd4Context>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd4"),
+//    sqlOptions => {
+//        sqlOptions.CommandTimeout(60);
+//        sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
+//    }));
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DictionaryDb"),
     sqlOptions => {
@@ -174,7 +190,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
             EndPoints = { { "redis-15065.c265.us-east-1-2.ec2.cloud.redislabs.com", 15065 } },
             Password = "1F4AaDVPCswf86E4js8o0JJT8ZbypgDk",
             User = "default",
-            Ssl = true,
+            Ssl = false,
             AbortOnConnectFail = true, // throw on failure
             ConnectTimeout = 15000,
             SslProtocols = System.Security.Authentication.SslProtocols.Tls12

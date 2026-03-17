@@ -24,7 +24,7 @@ namespace IKDFrontEnd.Controllers
         private readonly BannerService _bannerService;
         private readonly ILogger<HomeController> _logger;
         private readonly CmsRepository _cmsRepo;
-
+        private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
 
         public HomeController(
@@ -32,13 +32,15 @@ namespace IKDFrontEnd.Controllers
             BannerService bannerService,
             ILogger<HomeController> logger,
             CmsRepository cmsRepo,
-            IMemoryCache memoryCache)   // 👈 change here
+            IMemoryCache memoryCache,
+            IConfiguration configuration)   // 👈 change here
         {
             _context = context;
             _bannerService = bannerService;
             _logger = logger;
             _cmsRepo = cmsRepo;
             _memoryCache = memoryCache; // 👈 assign
+            _configuration = configuration;
         }
 
 
@@ -235,46 +237,43 @@ namespace IKDFrontEnd.Controllers
                                 });
                             }
 
-                            // 10. Jobs
-                            await reader.NextResultAsync();
-                            model.Jobs = new List<GroupedJobAdViewModel>();
-                            while (await reader.ReadAsync())
-                            {
-                                model.Jobs.Add(new GroupedJobAdViewModel
-                                {
-                                    Dated = reader["Dated"] != DBNull.Value
-                                            ? Convert.ToDateTime(reader["Dated"])
-                                            : DateTime.MinValue,
+                            var jobs = new List<GroupedJobAdViewModel>();
 
-                                    LastDate = reader["LastDate"] != DBNull.Value
-                                                ? Convert.ToDateTime(reader["LastDate"])
-                                                : (DateTime?)null,
-                                    JobCounts = new List<int> { Convert.ToInt32(reader["JobCount"]) },
-                                    DetailUrl = reader["DetailUrl"].ToString(),
-                                    CompanyName = reader["CompanyName"].ToString(),
-                                    CompanyImage = reader["CompanyImage"].ToString()
-                                });
+                            using (var jobConnection = new SqlConnection(_configuration.GetConnectionString("JobsDbConnectionString")))
+                            {
+                                await jobConnection.OpenAsync();
+
+                                using (var cmd = jobConnection.CreateCommand())
+                                {
+                                    cmd.CommandText = "GetHomePageJobs";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+
+                                    using (var readers = await cmd.ExecuteReaderAsync())
+                                    {
+                                        while (await readers.ReadAsync())
+                                        {
+                                            jobs.Add(new GroupedJobAdViewModel
+                                            {
+                                                Dated = readers["Dated"] != DBNull.Value
+                                                    ? Convert.ToDateTime(readers["Dated"])
+                                                    : DateTime.MinValue,
+
+                                                LastDate = readers["LastDate"] != DBNull.Value
+                                                    ? Convert.ToDateTime(readers["LastDate"])
+                                                    : (DateTime?)null,
+
+                                                JobCounts = new List<int> { Convert.ToInt32(readers["JobCount"]) },
+                                                DetailUrl = readers["DetailUrl"].ToString(),
+                                                CompanyName = readers["CompanyName"].ToString(),
+                                                CompanyImage = readers["CompanyImage"].ToString()
+                                            });
+                                        }
+                                    }
+                                }
                             }
 
-                            // 11. Banners
-                            await reader.NextResultAsync();
-                            var banners = new List<Banner>();
-                            while (await reader.ReadAsync())
-                            {
-                                var url = reader["Url"]?.ToString();
-                                var advertiser = reader["Advertiser"]?.ToString();
+                            model.Jobs = jobs;
 
-                                banners.Add(new Banner
-                                {
-                                    Id = reader["Id"] != DBNull.Value ? Convert.ToInt32(reader["Id"]) : 0,
-                                    Url = !string.IsNullOrEmpty(url) && !string.Equals(advertiser, "no", StringComparison.OrdinalIgnoreCase)
-                                            ? Convert.ToBase64String(Encoding.UTF8.GetBytes(url))
-                                            : url,  // ? agar Advertiser "no" hai to original URL hi rahega
-                                    Image = reader["Image"]?.ToString(),
-                                    Advertiser = advertiser,
-                                    SortOrder = reader["SortOrder"] != DBNull.Value ? Convert.ToInt32(reader["SortOrder"]) : 0
-                                });
-                            }
 
                             // 12 Home Links
                             var homeLinks = _context.SectionTypeImports
@@ -284,7 +283,6 @@ namespace IKDFrontEnd.Controllers
 
                             model.HomeLinks = homeLinks;
 
-                            ViewBag.Banners = banners;
                             stopwatch.Stop();
                             var dbTime = stopwatch.ElapsedMilliseconds;
                             ViewBag.DbTime = dbTime;
