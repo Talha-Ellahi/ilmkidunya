@@ -1,9 +1,13 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Models.PastPaperModel;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,24 +19,76 @@ namespace IKDFrontEnd.Controllers
 
     public class PastPapersController : Controller
     {
-        private readonly DbikdContext _context;
+        private readonly PastPaperDbContext _pastPaperDbContext;
         private readonly BannerService _bannerService;
-
-        public PastPapersController(DbikdContext context, BannerService bannerService)
+        private readonly IDistributedCache _distributedCache;
+        private readonly IMemoryCache _memoryCache;
+        private readonly ILogger<PastPapersController> _logger;
+        public PastPapersController(BannerService bannerService, PastPaperDbContext pastPaperDbContext, IDistributedCache distributedCache, IMemoryCache memoryCache, ILogger<PastPapersController> logger)
         {
-            _context = context;
             _bannerService = bannerService;
+            _pastPaperDbContext = pastPaperDbContext;
+            _distributedCache = distributedCache;
+            _memoryCache = memoryCache;
+            _logger = logger;
         }
 
 
+        [OutputCache(Duration = 60)]
         [Route("past_papers")]
         public async Task<IActionResult> Home()
         {
-            var banners = await _bannerService.GetBannersAsync();
-            ViewBag.Banners = banners;
+            string cacheKey = "past_papers_page_data";
 
-            var sectionType = _context.SectionTypeImports
-                .FirstOrDefault(c => c.Url == "past_papers");
+            // TRY REDIS CACHE FIRST
+            try
+            {
+                var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    // Use Newtonsoft JsonConvert instead of System.Text.Json
+                    var cachedModel = JsonConvert.DeserializeObject<PastPapersPageViewModel>(cachedData);
+                    if (cachedModel != null)
+                    {
+                        _logger.LogInformation("Redis cache hit for past_papers page");
+
+                        ViewBag.Banners = cachedModel.Banners;
+                        ViewBag.CmsData = cachedModel.CmsData;
+                        ViewBag.InitialBoards = cachedModel.InitialBoards;
+                        ViewBag.CacheSource = "Redis";
+
+                        return View();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Redis cache read failed for past_papers page");
+            }
+
+            // TRY MEMORY CACHE NEXT (as fallback)
+            if (_memoryCache.TryGetValue(cacheKey, out PastPapersPageViewModel memoryCachedModel))
+            {
+                ViewBag.Banners = memoryCachedModel.Banners;
+                ViewBag.CmsData = memoryCachedModel.CmsData;
+                ViewBag.InitialBoards = memoryCachedModel.InitialBoards;
+                ViewBag.CacheSource = "Memory";
+
+                return View();
+            }
+
+            try
+            {
+                // If not cached in either → run DB logic
+                var model = new PastPapersPageViewModel();
+
+                // Get banners
+                var banners = await _bannerService.GetBannersAsync();
+                model.Banners = banners;
+
+                // Get section type
+                var sectionType = _pastPaperDbContext.SectionTypeImports
+                    .FirstOrDefault(c => c.Url == "past_papers");
 
             var sectionContent = await _context.SectionContentImports
                 .Where(c => c.ContentId == sectionType.Id && c.IsActive == true)
@@ -48,20 +104,64 @@ namespace IKDFrontEnd.Controllers
                     MetaTitle = c.MetaTitle,
                 }).FirstOrDefaultAsync();
 
-            ViewBag.CmsData = sectionContent;
+                model.CmsData = sectionContent;
 
-            // Get initial boards data
-            var initialBoards = await _context.Boards
-                .Where(b => b.IsActive == true)
-                .Select(b => new { id = b.Id, name = b.Name })
-                .OrderBy(b => b.name)
-                .ToListAsync();
+                // Get initial boards data
+                var initialBoards = await _pastPaperDbContext.Boards
+                    .Where(b => b.IsActive == true)
+                    .Select(b => new { id = b.Id, name = b.Name })
+                    .OrderBy(b => b.name)
+                    .ToListAsync();
 
-            ViewBag.InitialBoards = initialBoards;
+                model.InitialBoards = initialBoards;
 
-            return View();
+                // Save to Redis cache (with 1 hour expiration)
+                try
+                {
+                    var serializedModel = JsonConvert.SerializeObject(model, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Formatting = Formatting.None
+                    });
+
+                    await _distributedCache.SetStringAsync(cacheKey, serializedModel, new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+                    });
+
+                    _logger.LogInformation("Saved past_papers page data to Redis - Serialized size: {Size} bytes",
+                        System.Text.Encoding.UTF8.GetByteCount(serializedModel));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to save past_papers page data to Redis cache");
+                }
+
+                // Save to Memory Cache (also 1 hour)
+                _memoryCache.Set(cacheKey, model, new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)));
+
+                // Set ViewBag data
+                ViewBag.Banners = model.Banners;
+                ViewBag.CmsData = model.CmsData;
+                ViewBag.InitialBoards = model.InitialBoards;
+                ViewBag.CacheSource = "Database";
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in HomeController.past_papers");
+                return Content("ERROR:\n" + ex.Message + "\n\nSTACK:\n" + ex.StackTrace);
+            }
         }
 
+        public class PastPapersPageViewModel
+        {
+            public List<Models.Banner> Banners { get; set; } // Replace 'object' with your actual banner type
+            public Models.TblCm CmsData { get; set; }
+            public object InitialBoards { get; set; } // Replace 'object' with your actual board type
+        }
 
         [HttpGet]
         [Route("/past_papers/search_papers.aspx")]
@@ -73,7 +173,7 @@ namespace IKDFrontEnd.Controllers
             try
             {
                 // Start with the base query
-                var query = _context.TblPastPapers
+                var query = _pastPaperDbContext.TblPastPapers
                     .Include(p => p.Board)
                     .Include(p => p.Ppsubject)
                     .Include(p => p.Ppclass)
@@ -158,8 +258,8 @@ namespace IKDFrontEnd.Controllers
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
 
-            var content = await (from sc in _context.SectionContentImports
-                                 join st in _context.SectionTypeImports
+            var content = await (from sc in _pastPaperDbContext.SectionContentImports
+                                 join st in _pastPaperDbContext.SectionTypeImports
                                  on sc.ContentId equals st.Id
                                  //where st.Url.Contains(urlSlug.Replace("-urdu-medium", "").Replace("-english-medium", ""))
                                  where st.Url == urlSlug
@@ -188,8 +288,8 @@ namespace IKDFrontEnd.Controllers
 
             if (content == null)
             {
-                content = await (from sc in _context.SectionContentImports
-                                 join st in _context.SectionTypeImports
+                content = await (from sc in _pastPaperDbContext.SectionContentImports
+                                 join st in _pastPaperDbContext.SectionTypeImports
                                  on sc.ContentId equals st.Id
                                  //where st.Url.Contains(urlSlug.Replace("-urdu-medium", "").Replace("-english-medium", ""))
                                  where st.Url == urlSlug.Replace("-urdu-medium", "").Replace("-english-medium", "")
@@ -223,8 +323,8 @@ namespace IKDFrontEnd.Controllers
                 var redirectSlug = $"{urlSlug}".ToLower().Replace(" ", "-");
                 return await PaperDetails(redirectSlug);
             }
-            var PanelDescription = await (from pd in _context.PastPaperPageDescriptions
-                                          join sc in _context.SectionContentImports
+            var PanelDescription = await (from pd in _pastPaperDbContext.PastPaperPageDescriptions
+                                          join sc in _pastPaperDbContext.SectionContentImports
                                           on pd.Id equals sc.PanelDescriptionId
                                           where pd.Id == content.PanelDescriptionId
                                           select new
@@ -239,7 +339,7 @@ namespace IKDFrontEnd.Controllers
 
 
 
-            IQueryable<TblPastPaper> papersQuery = _context.TblPastPapers
+            IQueryable<TblPastPaper> papersQuery = _pastPaperDbContext.TblPastPapers
                         .Where(p => p.IsDelete == true || p.IsDelete == null);
 
 
@@ -302,9 +402,9 @@ namespace IKDFrontEnd.Controllers
                         PaperName = p.Pnname,
                         Year = p.Date.HasValue ? p.Date.Value.Year : DateTime.Now.Year,
                         Month = p.Date.HasValue ? p.Date.Value.ToString("MM").TrimStart('0') : DateTime.Now.ToString("MM"),
-                        BoardName = _context.Boards.Where(b => b.Id == p.BoardId).Select(b => b.Name).FirstOrDefault(),
-                        ClassName = _context.TblPpclasses.Where(c => c.Id == p.PpclassId).Select(c => c.PpclassName).FirstOrDefault(),
-                        SubjectName = _context.TblPpsubjects.Where(s => s.Id == p.PpsubjectId).Select(s => s.PpsubjectName).FirstOrDefault(),
+                        BoardName = _pastPaperDbContext.Boards.Where(b => b.Id == p.BoardId).Select(b => b.Name).FirstOrDefault(),
+                        ClassName = _pastPaperDbContext.TblPpclasses.Where(c => c.Id == p.PpclassId).Select(c => c.PpclassName).FirstOrDefault(),
+                        SubjectName = _pastPaperDbContext.TblPpsubjects.Where(s => s.Id == p.PpsubjectId).Select(s => s.PpsubjectName).FirstOrDefault(),
                         QuestionType = p.QuestionType,
                         Language = p.Language,
                         Description = p.Description,
@@ -350,7 +450,7 @@ namespace IKDFrontEnd.Controllers
             var lowerSearchBase = searchBase.ToLower();
 
             // Try database search first
-            var paper = await _context.TblPastPapers
+            var paper = await _pastPaperDbContext.TblPastPapers
                 .AsNoTracking()
                 .Where(p => p.Pnname.ToLower().Replace("(", " ").Replace(")", " ").Contains(lowerSearchBase))
                 .Select(p => new PastPaperViewModel
@@ -375,7 +475,7 @@ namespace IKDFrontEnd.Controllers
             }
 
             // Fallback to recent papers search
-            var recentPapers = await _context.TblPastPapers
+            var recentPapers = await _pastPaperDbContext.TblPastPapers
                 .AsNoTracking()
                 .OrderByDescending(p => p.Date)
                 .Take(300)
@@ -455,7 +555,7 @@ namespace IKDFrontEnd.Controllers
         {
             try
             {
-                var boards = await _context.Boards
+                var boards = await _pastPaperDbContext.Boards
                     .Where(b => b.IsActive == true)
                     .Select(b => new { id = b.Id, name = b.Name })
                     .OrderBy(b => b.name)
@@ -475,7 +575,7 @@ namespace IKDFrontEnd.Controllers
         {
             try
             {
-                var query = _context.TblPpclasses
+                var query = _pastPaperDbContext.TblPpclasses
                     .Where(c => !c.IsDelete.HasValue || !c.IsDelete.Value);
 
                 // If boardId is provided, filter classes by board
@@ -503,7 +603,7 @@ namespace IKDFrontEnd.Controllers
         {
             try
             {
-                var query = _context.TblPpsubjects
+                var query = _pastPaperDbContext.TblPpsubjects
                     .Where(s => !s.IsDelete.HasValue || !s.IsDelete.Value);
 
                 // If boardId and classId are provided, filter subjects

@@ -1,16 +1,18 @@
 ﻿using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
+using IKDFrontEnd.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using static System.Net.WebRequestMethods;
 using System.Net;
 using System.Security.Policy;
-using IKDFrontEnd.ViewModels.Common;
 
 namespace IKDFrontEnd.Controllers
 {
@@ -19,79 +21,125 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
+        private readonly IDistributedCache _distributedCache;
 
-        public AdmissionController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo)
+        public AdmissionController(
+            DbikdContext context,
+            BannerService bannerService,
+            CmsRepository cmsRepo,
+            IDistributedCache distributedCache)  // Added distributed cache parameter
         {
             _context = context;
             _bannerService = bannerService;
             _cmsRepo = cmsRepo;
+            _distributedCache = distributedCache;
         }
 
         [Route("admissions/")]
         public async Task<IActionResult> Home(int page = 1, int pageSize = 30)
         {
             var skip = (page - 1) * pageSize;
+
+            // Get banners (unchanged)
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
 
-            var cities = await _context.TblDefCities.OrderBy(c => c.CityName).ToListAsync();
-            var courseLevels = await _context.TblXcourseLevels.OrderBy(c => c.SortOrder).ToListAsync();
-            ViewBag.AdCount = await _context.TblAdmissions.CountAsync();
+            string cacheKey = $"admissions_home_page_{page}_{pageSize}";
+            HomePageViewModel viewModel = null;
 
-            var admissions = await (
-                from a in _context.TblAdmissions
-                join co in _context.TblColleges on a.CollegeId equals co.Id
-                join ci in _context.TblDefCities on co.CityId equals ci.CityId
-                orderby a.Dated descending
-                select new
+            // Try to get from Redis cache
+            try
+            {
+                var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
                 {
-                    a.Id,
-                    a.AdmissionTitle,
-                    a.NoticeImageThumb,
-                    a.Dated,
-                    a.LastDate,
-                    a.Url,
-                    CollegeName = co.Name,
-                    CollageLogo = co.Logo,
-                    CollageUrl = co.Url,
-                    CityName = ci.CityName
+                    viewModel = JsonSerializer.Deserialize<HomePageViewModel>(cachedData);
+
+                    // Optional: add debug info
+                    // ViewBag.CacheSource = "Redis";
                 }
-            )
-            .Skip(skip)
-            .Take(pageSize)
-            .ToListAsync();
-
-            var result = admissions.Select(a => new CityWiseAdmissionViewModel
+            }
+            catch
             {
-                AdmissionId = a.Id,
-                AdmissionTitle = a.AdmissionTitle,
-                AdmissionLogo = GetAdmissionLogoPath(a.NoticeImageThumb, a.Dated),
-
-                Dated = a.Dated,
-                LastDate = a.LastDate,
-                CollegeName = a.CollegeName,
-                CollageLogo = a.CollageLogo,
-                CityName = a.CityName,
-                CollageUrl = a.CollageUrl,
-                Url = a.Url
-            }).ToList();
-
-            var viewModel = new HomePageViewModel
-            {
-                Admissions = result,
-                SearchResults = null,
-                Cities = cities,
-                CourseLevels = courseLevels
-            };
-
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                return Json(result);
+                // If Redis fails, just continue to database
             }
 
-            //var cmsData = await _context.TblCms
-            //    .Where(c => c.Url == "https://www.ilmkidunya.com/admissions/")
-            //    .FirstOrDefaultAsync();
+            // If not in cache, get from database
+            if (viewModel == null)
+            {
+                var cities = await _context.TblDefCities.OrderBy(c => c.CityName).ToListAsync();
+                var courseLevels = await _context.TblXcourseLevels.OrderBy(c => c.SortOrder).ToListAsync();
+                ViewBag.AdCount = await _context.TblAdmissions.CountAsync();
+
+                var admissions = await (
+                    from a in _context.TblAdmissions
+                    join co in _context.TblColleges on a.CollegeId equals co.Id
+                    join ci in _context.TblDefCities on co.CityId equals ci.CityId
+                    orderby a.Dated descending
+                    select new
+                    {
+                        a.Id,
+                        a.AdmissionTitle,
+                        a.NoticeImageThumb,
+                        a.Dated,
+                        a.LastDate,
+                        a.Url,
+                        CollegeName = co.Name,
+                        CollageLogo = co.Logo,
+                        CollageUrl = co.Url,
+                        CityName = ci.CityName
+                    }
+                )
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
+
+                var result = admissions.Select(a => new CityWiseAdmissionViewModel
+                {
+                    AdmissionId = a.Id,
+                    AdmissionTitle = a.AdmissionTitle,
+                    AdmissionLogo = GetAdmissionLogoPath(a.NoticeImageThumb, a.Dated),
+                    Dated = a.Dated,
+                    LastDate = a.LastDate,
+                    CollegeName = a.CollegeName,
+                    CollageLogo = a.CollageLogo,
+                    CityName = a.CityName,
+                    CollageUrl = a.CollageUrl,
+                    Url = a.Url
+                }).ToList();
+
+                viewModel = new HomePageViewModel
+                {
+                    Admissions = result,
+                    SearchResults = null,
+                    Cities = cities,
+                    CourseLevels = courseLevels
+                };
+
+                // Save to Redis cache
+                try
+                {
+                    await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(viewModel), new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Cache for 1 hour
+                    });
+
+                    // Optional: add debug info
+                    // ViewBag.CacheSource = "Database";
+                }
+                catch
+                {
+                    // If Redis fails, just continue
+                }
+            }
+
+            // Handle AJAX request (not cached)
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(viewModel.Admissions);
+            }
+
+            // Get CMS data (not cached as it might change frequently)
             var cmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/admissions/");
             ViewBag.CmsData = cmsData;
 
@@ -785,7 +833,7 @@ namespace IKDFrontEnd.Controllers
 
             if (category == null)
             {
-                if(catUrl == "engineering" && cityUrl == "wah-cantt")
+                if (catUrl == "engineering" && cityUrl == "wah-cantt")
                 {
                     return Redirect("/admissions/engineering-technology-admissions-in-Wah%20Cantt");
                 }

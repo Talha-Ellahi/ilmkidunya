@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime;
 using System.Security.Policy;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace IKDFrontEnd.Controllers
@@ -24,198 +26,117 @@ namespace IKDFrontEnd.Controllers
         private readonly BannerService _bannerService;
         private readonly ILogger<CollegesController> _logger;
         private readonly CmsRepository _cmsRepo;
-        public CollegesController(DbikdContext context, BannerService bannerService, ILogger<CollegesController> logger, CmsRepository cmsRepo)
+        private readonly IDistributedCache _distributedCache;
+
+        public CollegesController(
+            DbikdContext context,
+            BannerService bannerService,
+            ILogger<CollegesController> logger,
+            CmsRepository cmsRepo,
+            IDistributedCache distributedCache)  // Added distributed cache parameter
         {
             _context = context;
             _bannerService = bannerService;
             _logger = logger;
             _cmsRepo = cmsRepo;
+            _distributedCache = distributedCache;
+        }
+
+        [Route("/colleges/")]
+        [Route("/colleges/index.html")]
+        [ResponseCache(NoStore = true)]
+        public async Task<IActionResult> Home()
+        {
+            string cacheKey = "colleges_home_page_data";
+
+            // Try to get from Redis cache
+            try
+            {
+                var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    var cachedDataObject = JsonSerializer.Deserialize<CollegesHomeCacheData>(cachedData);
+                    if (cachedDataObject != null)
+                    {
+                        ViewBag.Banners = cachedDataObject.Banners;
+                        ViewBag.Cities = cachedDataObject.Cities;
+                        ViewBag.Levels = cachedDataObject.Levels;
+                        ViewBag.Categories = cachedDataObject.Categories;
+                        ViewBag.FeaturedColleges = cachedDataObject.FeaturedColleges;
+
+                        // Optional: add debug info
+                        // ViewBag.CacheSource = "Redis";
+
+                        return View("Home");
+                    }
+                }
+            }
+            catch
+            {
+                // If Redis fails, just continue to database
+            }
+
+            // If not in cache, get from database
+            var banners = await _bannerService.GetBannersAsync();
+            var cities = await _context.TblDefCities.ToListAsync();
+            var categories = await _context.CourseCategories.OrderBy(c => c.SortOrder).AsNoTracking().ToListAsync();
+            var levels = await _context.TblXcourseLevels.OrderBy(c => c.SortOrder).AsNoTracking().ToListAsync();
+            var featuredColleges = await _context.TblColleges
+                                                 .Where(c => c.IsFeatured.HasValue && c.IsFeatured.Value)
+                                                 .OrderBy(c => c.SortOrder == null).ThenBy(c => c.SortOrder)
+                                                 .ToListAsync();
+
+            ViewBag.Banners = banners;
+            ViewBag.Cities = cities;
+            ViewBag.Levels = levels;
+            ViewBag.Categories = categories;
+            ViewBag.FeaturedColleges = featuredColleges;
+
+            // Save to Redis cache
+            try
+            {
+                var cacheData = new CollegesHomeCacheData
+                {
+                    Banners = banners,
+                    Cities = cities,
+                    Levels = levels,
+                    Categories = categories,
+                    FeaturedColleges = featuredColleges
+                };
+
+                await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(cacheData), new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Cache for 1 hour
+                });
+
+                // Optional: add debug info
+                // ViewBag.CacheSource = "Database";
+            }
+            catch
+            {
+                // If Redis fails, just continue
+            }
+
+            return View("Home");
         }
 
 
+        // Helper class for caching
+        public class CollegesHomeCacheData
+        {
+            public List<Banner> Banners { get; set; }
+            public List<TblDefCity> Cities { get; set; }
+            public List<TblXcourseLevel> Levels { get; set; }
+            public List<CourseCategory> Categories { get; set; }
+            public List<TblCollege> FeaturedColleges { get; set; }
+        }
 
-        //[Route("colleges/{collegeUrl:regex(^((?!colleges-in-).)*$)}.aspx")]
-        //public async Task<IActionResult> CollegeHome(string collegeUrl)
-        //{
-        //    if (string.IsNullOrWhiteSpace(collegeUrl))
-        //        return NotFound();
-
-
-        //    if (collegeUrl.Contains("-reviews"))
-        //    {
-        //        var result = await CollegeReviews(collegeUrl) as ViewResult;
-
-        //        if (result != null)
-        //            return View("CollegeReviews", result.Model);
-
-        //        return NotFound();
-        //    }
-
-        //    if (collegeUrl.Contains("fee-structure"))
-        //    {
-        //        var result = await CollegeFee(collegeUrl) as ViewResult;
-
-        //        if (result != null)
-        //            return View("CollegeFee", result.Model);
-
-        //        return NotFound();
-        //    }
-
-        //    if (collegeUrl.Contains("-admission"))
-        //    {
-        //        var result = await CollegeAmissions(collegeUrl) as ViewResult;
-
-        //        if (result != null)
-        //            return View("CollegeAmissions", result.Model);
-
-        //        return NotFound();
-        //    }
-
-        //    if (collegeUrl.Contains("-merit-list"))
-        //    {
-        //        var result = await CollegeMeritLists(collegeUrl) as ViewResult;
-
-        //        if (result != null)
-        //            return View("CollegeMeritLists", result.Model);
-
-        //        return NotFound();
-        //    }
-
-        //    collegeUrl = collegeUrl.Replace("-courses", "");
-        //    var college = await (from c in _context.TblColleges
-        //                         join tc in _context.TblDefCities on c.CityId equals tc.CityId
-        //                         where c.Url == collegeUrl
-        //                         select new
-        //                         {
-        //                             c.Id,
-        //                             c.Name,
-        //                             c.Logo,
-        //                             c.EstablishedYear,
-        //                             c.StudentsCount,
-        //                             c.ShortName,
-        //                             c.AffiliationStatus,
-        //                             c.ContactNumber,
-        //                             c.Address,
-        //                             c.Website,
-        //                             c.IsGovt,
-        //                             c.MetaTitle,
-        //                             c.MetaDesc,
-        //                             c.MetaKeyWords,
-        //                             c.InstituteDetails,
-        //                             c.InstituteOtherDetails,
-        //                             c.Fbranking,
-        //                             c.GoogleRanking,
-        //                             c.Email,
-        //                             c.Latitude,
-        //                             c.Longitude,
-        //                             c.Zoomlevel,
-        //                             c.Url,
-        //                             c.AdministrationDetails,
-        //                             tc.CityName,
-        //                         })
-        //                         .AsNoTracking()
-        //                         .FirstOrDefaultAsync();
-
-        //    if (college == null)
-        //    {
-        //        if (string.IsNullOrWhiteSpace(collegeUrl))
-        //            return NotFound();
-
-        //        return RedirectToAction("LevelWiseCollegesDetails", new { collegeUrl });
-        //    }
-
-
-        //    var reviews = await _context.TblCollegereviews
-        //                                 .Where(r => r.InstId == college.Id)
-        //                                 .ToListAsync();
-
-        //    var (overallRating, reviewScore) = CalculateOverallRanking(reviews, college.GoogleRanking, college.Fbranking);
-
-
-        //    var distinctStudyLevels = await (from c in _context.Courses
-        //                                     join cl in _context.TblXcourseLevels on c.EducationLevelId equals cl.Id
-        //                                     where c.CollegeId == college.Id
-        //                                     select cl.Name)
-        //                                     .Distinct()
-        //                                     .ToListAsync();
-
-        //    var latestAdmission = await _context.TblAdmissions
-        //                            .Where(a => a.CollegeId == college.Id)
-        //                            .OrderByDescending(a => a.Dated)
-        //                            .FirstOrDefaultAsync();
-
-
-        //    var allCourses = await _context.Courses
-        //        .Where(c => c.CollegeId == college.Id)
-        //        .ToListAsync();
-        //    var baseUrl = collegeUrl
-        //         .Replace("-fee-structure", "")
-        //         .Replace("-admission", "")
-        //         .Replace("-merit-lists", "");
-
-        //    ViewBag.CollegeBaseUrl = baseUrl;
-
-
-        //    var cmsData = await _cmsRepo.GetListByUrlAsync($"/colleges/{baseUrl}");
-
-        //    ViewBag.ShowFeeStructure = cmsData.Any(c => c.Url.Contains(baseUrl + "-fee-structure.aspx"));
-        //    ViewBag.ShowMeritList = cmsData.Any(c => c.Url.Contains(baseUrl + "-merit-lists.aspx"));
-        //    ViewBag.ShowAdmissions = cmsData.Any(c => c.Url.Contains(baseUrl + "-admission.aspx"));
-
-        //    var viewModel = new CollegesViewModel
-        //    {
-        //        CollegeId = college.Id ?? 0,
-        //        CollegeName = college.Name ?? "Not Available",
-        //        CollegeShortName = college.ShortName ?? college.Name ?? "Not Available",
-        //        Url = college.Url ?? "Not Available",
-        //        CollegeImage = college.Logo ?? "Not Available",
-        //        EstablishedYear = college.EstablishedYear?.ToString() ?? "Not Available",
-        //        StudentsCount = college.StudentsCount?.ToString() ?? "Not Available",
-        //        Recognition = college.AffiliationStatus ?? "Not Available",
-        //        ContactNumber = college.ContactNumber ?? "Not Available",
-        //        Address = college.Address ?? "Not Available",
-        //        Website = college.Website ?? "Not Available",
-        //        IsGovt = college.IsGovt,
-        //        AffiliationStatus = college.AffiliationStatus ?? "Not Available",
-        //        MetaTitle = college.MetaTitle ?? "Not Available",
-        //        MetaDesc = college.MetaDesc ?? "Not Available",
-        //        MetaKeyWords = college.MetaKeyWords ?? "Not Available",
-        //        InstituteDetails = college.InstituteDetails ?? "Not Available",
-        //        AdministrationDetails = college.AdministrationDetails ?? "Not Available",
-        //        InstituteOtherDetails = college.InstituteOtherDetails ?? "Not Available",
-        //        FacebokkRanking = college.Fbranking,
-        //        GoogleRanking = college.GoogleRanking,
-        //        City = college.CityName ?? "Not Available",
-        //        Email = college.Email ?? "Not Available",
-        //        IlmkiDuniyaRanking = overallRating.ToString("0.0"),
-        //        OveraAlRanking = reviewScore.ToString("0.0"),
-        //        Latitude = college.Latitude,
-        //        Longitude = college.Longitude,
-        //        Zoomlevel = college.Zoomlevel,
-        //        Reviews = reviews ?? new List<TblCollegereview>(),
-        //        TotalCourseCount = allCourses?.Count() ?? 0,
-        //        DistinctStudyLevels = distinctStudyLevels ?? new List<string>(),
-        //        AllCourses = allCourses ?? new List<Course>(),
-        //        Addmission = latestAdmission,
-        //        AddmissionLogo = latestAdmission != null ?
-        //    GetAdmissionLogoPath(latestAdmission.NoticeImageThumb, latestAdmission.Dated) :
-        //    null
-        //    };
-
-        //    ViewBag.Levels = await _context.TblXcourseLevels.AsNoTracking().ToListAsync();
-        //    ViewBag.Cities = await _context.TblDefCities.AsNoTracking().ToListAsync();
-        //    ViewBag.Fields = await _context.CourseCategories.AsNoTracking().ToListAsync();
-        //    var banners = await _bannerService.GetBannersAsync();
-        //    ViewBag.Banners = banners;
-        //    return View("CollegeHome", viewModel);
-
-        //}
 
 
         [Route("colleges/{collegeUrl:regex(^((?!universities-in-)(?!colleges-in-)).*$)}.aspx")]
         [ResponseCache(NoStore = true)]
         public async Task<IActionResult> CollegeHome(string collegeUrl)
-        
+
         {
             if (string.IsNullOrWhiteSpace(collegeUrl))
                 return NotFound();
@@ -270,7 +191,7 @@ namespace IKDFrontEnd.Controllers
             {
                 if (string.IsNullOrWhiteSpace(collegeUrl))
                     return NotFound();
-                return RedirectToAction("LevelWiseCollegesDetails", new { levelUrl = collegeUrl } );
+                return RedirectToAction("LevelWiseCollegesDetails", new { levelUrl = collegeUrl });
             }
 
             var reviews = (await multi.ReadAsync<TblCollegereview>()).ToList();
@@ -415,27 +336,6 @@ namespace IKDFrontEnd.Controllers
             return await GetFilteredInstitutionsByCity(cityUrl, filterCategory, filterValue, page, pageSize);
         }
 
-
-        [Route("/colleges/")]
-        [Route("/colleges/index.html")]
-        [ResponseCache(NoStore = true)]
-        public async Task<IActionResult> Home()
-        {
-            var banners = await _bannerService.GetBannersAsync();
-            var cities = await _context.TblDefCities.ToListAsync();
-            var categories = await _context.CourseCategories.OrderBy(c => c.SortOrder).AsNoTracking().ToListAsync();
-            var levels = await _context.TblXcourseLevels.OrderBy(c => c.SortOrder).AsNoTracking().ToListAsync();
-            var count = await _context.TblColleges.CountAsync();
-            var featuredColleges = await _context.TblColleges
-                                                 .Where(c => c.IsFeatured.HasValue && c.IsFeatured.Value).OrderBy(c => c.SortOrder == null).ThenBy(c => c.SortOrder)
-                                                 .ToListAsync();
-            ViewBag.Banners = banners;
-            ViewBag.Cities = cities;
-            ViewBag.Levels = levels;
-            ViewBag.Categories = categories;
-            ViewBag.FeaturedColleges = featuredColleges;
-            return View("Home");
-        }
 
         [HttpGet]
         [Route("colleges/col/search")]
@@ -1061,8 +961,8 @@ namespace IKDFrontEnd.Controllers
 
             return View(("CategoryWiseCollegesDetail"), viewModel);
         }
-       
-        
+
+
         private async Task<CityInstitutionsViewModel> GetCollegesByCityAsyncc(int catId, string cityName, int page, int pageSize = 10)
         {
             var cities = await _context.TblDefCities.ToListAsync();
@@ -1314,8 +1214,8 @@ namespace IKDFrontEnd.Controllers
 
             return View(("CategoryAndLevelWiseColleges"), viewModel);
         }
-        
-        
+
+
         private async Task<CityInstitutionsViewModel> GetCCollegesByCityAsync(int catId, int levelId, int page, int pageSize = 10, string cityName = "All Cities")
         {
             var cities = await _context.TblDefCities.ToListAsync();
@@ -1392,9 +1292,9 @@ namespace IKDFrontEnd.Controllers
                 CityName = cityName ?? "All Cities"
             };
         }
-        
-        
-        
+
+
+
         [Route("colleges/reviews/{colUrl}")]
         public async Task<IActionResult> CollegeReviews(string colUrl, int page = 1, int pageSize = 10)
         {
@@ -1442,9 +1342,9 @@ namespace IKDFrontEnd.Controllers
 
             return View("CollegeReviews", viewModel);
         }
-        
-        
-        
+
+
+
         [HttpPost]
         public async Task<IActionResult> SubmitReview([FromForm] TblCollegereview model)
         {
@@ -1474,8 +1374,8 @@ namespace IKDFrontEnd.Controllers
 
             return Json(new { success = false, message = "There was an error submitting the review." });
         }
-        
-        
+
+
         private async Task<List<CollegeRating>> GetCollegeRatingsAsync(List<int> collegeIds)
         {
             var reviews = await _context.TblCollegereviews
@@ -2444,8 +2344,8 @@ namespace IKDFrontEnd.Controllers
 
             return $"{year}/{month}/thumb/{fileName}";
         }
-      
-        
+
+
         [Route("colleges/{levelUrl:regex(^[[a-zA-Z0-9\\-]]+$)}")]
         public async Task<IActionResult> LevelWiseCollegesDetails(string levelUrl, string cityName = "All Cities", int page = 1, string viewType = "desktop")
         {

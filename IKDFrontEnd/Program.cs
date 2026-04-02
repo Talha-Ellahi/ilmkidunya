@@ -9,6 +9,7 @@ using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.JobModels;
 using IKDFrontEnd.Models;
+using IKDFrontEnd.Models.PastPaperModel;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -61,6 +62,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+    });
 
 // ---------------- Compression ----------------
 // SINGLE ResponseCompression configuration - REMOVED DUPLICATE
@@ -181,9 +188,10 @@ builder.Services.AddSingleton<IFtpService>(sp =>
         logger
     );
 });
+// Replace your current Redis configuration with this:
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    try
+    options.ConfigurationOptions = new ConfigurationOptions
     {
         var config = new ConfigurationOptions
         {
@@ -196,15 +204,17 @@ builder.Services.AddStackExchangeRedisCache(options =>
             SslProtocols = System.Security.Authentication.SslProtocols.Tls12
         };
 
-        using var conn = ConnectionMultiplexer.Connect(config);
-        Console.WriteLine("✅ Connected successfully!");
-        var db = conn.GetDatabase();
-        db.Ping();
-        Console.WriteLine("✅ Ping successful!");
+    // Test connection (optional - you can remove this in production)
+    try
+    {
+        var connection = ConnectionMultiplexer.Connect(options.ConfigurationOptions);
+        Console.WriteLine("✅ Redis connected successfully!");
+        connection.Close();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Connection failed: {ex}");
+        Console.WriteLine($"⚠️ Redis connection warning: {ex.Message}");
+        // Don't throw - let the app continue even if Redis fails
     }
 });
 
