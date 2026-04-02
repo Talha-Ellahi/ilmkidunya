@@ -90,7 +90,7 @@ namespace IKDFrontEnd.Controllers
                 var sectionType = _pastPaperDbContext.SectionTypeImports
                     .FirstOrDefault(c => c.Url == "past_papers");
 
-            var sectionContent = await _context.SectionContentImports
+            var sectionContent = await _pastPaperDbContext.SectionContentImports
                 .Where(c => c.ContentId == sectionType.Id && c.IsActive == true)
                 .Select(c => new Models.TblCm
                 {

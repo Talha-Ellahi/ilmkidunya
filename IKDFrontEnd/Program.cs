@@ -188,26 +188,27 @@ builder.Services.AddSingleton<IFtpService>(sp =>
         logger
     );
 });
-// Replace your current Redis configuration with this:
+
+
+// With this corrected block:
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.ConfigurationOptions = new ConfigurationOptions
+    var config = new ConfigurationOptions
     {
-        var config = new ConfigurationOptions
-        {
-            EndPoints = { { "redis-15065.c265.us-east-1-2.ec2.cloud.redislabs.com", 15065 } },
-            Password = "1F4AaDVPCswf86E4js8o0JJT8ZbypgDk",
-            User = "default",
-            Ssl = false,
-            AbortOnConnectFail = true, // throw on failure
-            ConnectTimeout = 15000,
-            SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-        };
+        AbortOnConnectFail = true,
+        ConnectTimeout = 15000,
+        Password = "1F4AaDVPCswf86E4js8o0JJT8ZbypgDk",
+        User = "default",
+        Ssl = false,
+        SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+    };
+    config.EndPoints.Add("redis-15065.c265.us-east-1-2.ec2.cloud.redislabs.com", 15065);
+    options.ConfigurationOptions = config;
 
     // Test connection (optional - you can remove this in production)
     try
     {
-        var connection = ConnectionMultiplexer.Connect(options.ConfigurationOptions);
+        var connection = ConnectionMultiplexer.Connect(config);
         Console.WriteLine("✅ Redis connected successfully!");
         connection.Close();
     }
@@ -217,9 +218,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
         // Don't throw - let the app continue even if Redis fails
     }
 });
-
-
-
 
 // ---------------- Authentication ----------------
 builder.Services.AddAuthentication(options =>
