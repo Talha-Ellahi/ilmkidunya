@@ -1781,7 +1781,7 @@ namespace IKDFrontEnd.Controllers
 
                 if (cmsData == null)
                 {
-                    var CmsData = new TblCm
+                    var CmsData = new Models.TblCm
                     {
                         PageName = "Colleges Information",
                         Url = $"/colleges/filter/{cityUrl}",

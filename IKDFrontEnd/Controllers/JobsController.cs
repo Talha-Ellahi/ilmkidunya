@@ -1,6 +1,5 @@
 ﻿using HtmlAgilityPack;
 using IKDFrontEnd.Interfaces;
-using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.Common;
@@ -12,6 +11,7 @@ using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Net.WebRequestMethods;
 using System.Globalization;
+using IKDFrontEnd.JobModels;
 
 namespace IKDFrontEnd.Controllers
 {
@@ -19,14 +19,14 @@ namespace IKDFrontEnd.Controllers
 
     public class JobsController : Controller
     {
-        private readonly DbikdContext _context;
+        private readonly JobsDbContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
         private readonly ITezMateService _tezMateService;
         private readonly IConfiguration _config;
         private readonly IServiceProvider _serviceProvider;
 
-        public JobsController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, ITezMateService tezMateService, IConfiguration config, IServiceProvider serviceProvider)
+        public JobsController(JobsDbContext context, BannerService bannerService, CmsRepository cmsRepo, ITezMateService tezMateService, IConfiguration config, IServiceProvider serviceProvider)
         {
             _context = context;
             _bannerService = bannerService;
@@ -1236,7 +1236,7 @@ namespace IKDFrontEnd.Controllers
                 backgroundQueue.QueueBackgroundWorkItem(async (ct) =>
                 {
                     using var scope = _serviceProvider.CreateScope();
-                    var db = scope.ServiceProvider.GetRequiredService<DbikdContext>();
+                    var db = scope.ServiceProvider.GetRequiredService<JobsDbContext>();
 
                     try
                     {

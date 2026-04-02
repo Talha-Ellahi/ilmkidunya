@@ -43,9 +43,10 @@ namespace IKDFrontEnd.Services
                 {
                     dynamic? data = context switch
                     {
+                        Dbikd1Context db1 => await db1.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
                         Dbikd2Context db2 => await db2.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
-                        Dbikd3Context db3 => await db3.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
-                        Dbikd4Context db4 => await db4.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
+                        //Dbikd3Context db3 => await db3.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
+                        //Dbikd4Context db4 => await db4.TblCms.FirstOrDefaultAsync(x => x.Url.Trim() == url),
                         _ => null
                     };
 
@@ -83,15 +84,19 @@ namespace IKDFrontEnd.Services
                 {
                     dynamic? dataList = context switch
                     {
+                        Dbikd1Context db1 => await db1.TblCms
+                            .Where(x => x.Url.Contains(url))
+                            .ToListAsync(),
+
                         Dbikd2Context db2 => await db2.TblCms
                             .Where(x => x.Url.Contains(url))
                             .ToListAsync(),
-                        Dbikd3Context db3 => await db3.TblCms
-                            .Where(x => x.Url.Contains(url))
-                            .ToListAsync(),
-                        Dbikd4Context db4 => await db4.TblCms
-                            .Where(x => x.Url.Contains(url))
-                            .ToListAsync(),
+                        //Dbikd3Context db3 => await db3.TblCms
+                        //    .Where(x => x.Url.Contains(url))
+                        //    .ToListAsync(),
+                        //Dbikd4Context db4 => await db4.TblCms
+                        //    .Where(x => x.Url.Contains(url))
+                        //    .ToListAsync(),
                         _ => null
                     };
 
@@ -122,23 +127,29 @@ namespace IKDFrontEnd.Services
         {
             var context = _randomCms.GetRandomContext();
 
+            if (context is Dbikd1Context db1)
+                return await db1.TblCms
+                    .Where(x => x.Heading.Contains(keyword))
+                    .Select(x => MapToDto(x))
+                    .ToListAsync();
+
             if (context is Dbikd2Context db2)
                 return await db2.TblCms
                     .Where(x => x.Heading.Contains(keyword))
                     .Select(x => MapToDto(x))
                     .ToListAsync();
 
-            if (context is Dbikd3Context db3)
-                return await db3.TblCms
-                    .Where(x => x.Heading.Contains(keyword))
-                    .Select(x => MapToDto(x))
-                    .ToListAsync();
+            //if (context is Dbikd3Context db3)
+            //    return await db3.TblCms
+            //        .Where(x => x.Heading.Contains(keyword))
+            //        .Select(x => MapToDto(x))
+            //        .ToListAsync();
 
-            if (context is Dbikd4Context db4)
-                return await db4.TblCms
-                    .Where(x => x.Heading.Contains(keyword))
-                    .Select(x => MapToDto(x))
-                    .ToListAsync();
+            //if (context is Dbikd4Context db4)
+            //    return await db4.TblCms
+            //        .Where(x => x.Heading.Contains(keyword))
+            //        .Select(x => MapToDto(x))
+            //        .ToListAsync();
 
             return new List<TblCmsDto>();
         }

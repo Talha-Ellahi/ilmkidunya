@@ -15,10 +15,10 @@ namespace IKDFrontEnd.Services
         
         private static readonly Dictionary<string, DateTime> _failedDbs = new();
 
-        public RandomCmsService(Dbikd2Context db2, Dbikd4Context db4,Dbikd3Context db3, ILogger<RandomCmsService> logger)
+        public RandomCmsService(Dbikd1Context db1, Dbikd2Context db2, /*Dbikd4Context db4,Dbikd3Context db3,*/ ILogger<RandomCmsService> logger)
         {
             _logger = logger;
-            _contexts = new List<DbContext> { db2,db3, db4 };
+            _contexts = new List<DbContext> { db1, db2 };
             _random = new Random();
         }
 

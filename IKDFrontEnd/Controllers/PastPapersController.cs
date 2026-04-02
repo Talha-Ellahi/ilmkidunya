@@ -90,20 +90,19 @@ namespace IKDFrontEnd.Controllers
                 var sectionType = _pastPaperDbContext.SectionTypeImports
                     .FirstOrDefault(c => c.Url == "past_papers");
 
-                // Get section content
-                var sectionContent = await _pastPaperDbContext.SectionContentImports
-                    .Where(c => c.ContentId == sectionType.Id && c.IsActive == true)
-                    .Select(c => new Models.TblCm
-                    {
-                        Id = c.Id,
-                        Url = sectionType.Url,
-                        Heading = c.Heading,
-                        Desc1 = c.Detail,
-                        Desc2 = c.DetailShort,
-                        MetaDesc = c.MetaDesc,
-                        MetaKeys = c.MetaKeyword,
-                        MetaTitle = c.MetaTitle,
-                    }).FirstOrDefaultAsync();
+            var sectionContent = await _context.SectionContentImports
+                .Where(c => c.ContentId == sectionType.Id && c.IsActive == true)
+                .Select(c => new Models.TblCm
+                {
+                    Id = c.Id,
+                    Url = sectionType.Url,
+                    Heading = c.Heading,
+                    Desc1 = c.Detail,
+                    Desc2 = c.DetailShort,
+                    MetaDesc = c.MetaDesc,
+                    MetaKeys = c.MetaKeyword,
+                    MetaTitle = c.MetaTitle,
+                }).FirstOrDefaultAsync();
 
                 model.CmsData = sectionContent;
 

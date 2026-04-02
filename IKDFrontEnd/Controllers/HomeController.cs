@@ -12,33 +12,33 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Text;
 
-public class HomeController : Controller
-{
-    private readonly DbikdContext _context;
-    private readonly BannerService _bannerService;
-    private readonly ILogger<HomeController> _logger;
-    private readonly CmsRepository _cmsRepo;
-    private readonly IConfiguration _configuration;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IDistributedCache _distributedCache;
 
-    public HomeController(
-        DbikdContext context,
-        BannerService bannerService,
-        ILogger<HomeController> logger,
-        CmsRepository cmsRepo,
-        IMemoryCache memoryCache,
-        IDistributedCache distributedCache,
-        IConfiguration configuration)
+namespace IKDFrontEnd.Controllers
+{
+    public class HomeController : Controller
     {
-        _context = context;
-        _bannerService = bannerService;
-        _logger = logger;
-        _cmsRepo = cmsRepo;
-        _memoryCache = memoryCache;
-        _distributedCache = distributedCache;
-        _configuration = configuration;
-    }
+        private readonly DbikdContext _context;
+        private readonly BannerService _bannerService;
+        private readonly ILogger<HomeController> _logger;
+        private readonly CmsRepository _cmsRepo;
+        private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
+
+        public HomeController(
+            DbikdContext context,
+            BannerService bannerService,
+            ILogger<HomeController> logger,
+            CmsRepository cmsRepo,
+            IMemoryCache memoryCache,
+            IConfiguration configuration)   // 👈 change here
+        {
+            _context = context;
+            _bannerService = bannerService;
+            _logger = logger;
+            _cmsRepo = cmsRepo;
+            _memoryCache = memoryCache; // 👈 assign
+            _configuration = configuration;
+        }
 
     [OutputCache(Duration = 60)]
     public async Task<IActionResult> Index()
@@ -269,44 +269,43 @@ public class HomeController : Controller
                             });
                         }
 
-                        stopwatch.Stop();
-                        var dbTime = stopwatch.ElapsedMilliseconds;
-                        ViewBag.DbTime = dbTime;
-                    }
-                }
-            }
+                            var jobs = new List<GroupedJobAdViewModel>();
 
-            // Jobs data
-            var jobs = new List<GroupedJobAdViewModel>();
-            using (var jobConnection = new SqlConnection(_configuration.GetConnectionString("JobsDbConnectionString")))
-            {
-                await jobConnection.OpenAsync();
-                using (var cmd = jobConnection.CreateCommand())
-                {
-                    cmd.CommandText = "GetHomePageJobs";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (var readers = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await readers.ReadAsync())
-                        {
-                            jobs.Add(new GroupedJobAdViewModel
+                            using (var jobConnection = new SqlConnection(_configuration.GetConnectionString("JobsDbConnectionString")))
                             {
-                                Dated = readers["Dated"] != DBNull.Value
-                                    ? Convert.ToDateTime(readers["Dated"])
-                                    : DateTime.MinValue,
-                                LastDate = readers["LastDate"] != DBNull.Value
-                                    ? Convert.ToDateTime(readers["LastDate"])
-                                    : (DateTime?)null,
-                                JobCounts = new List<int> { Convert.ToInt32(readers["JobCount"]) },
-                                DetailUrl = readers["DetailUrl"].ToString(),
-                                CompanyName = readers["CompanyName"].ToString(),
-                                CompanyImage = readers["CompanyImage"].ToString()
-                            });
-                        }
-                    }
-                }
-            }
-            model.Jobs = jobs;
+                                await jobConnection.OpenAsync();
+
+                                using (var cmd = jobConnection.CreateCommand())
+                                {
+                                    cmd.CommandText = "GetHomePageJobs";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+
+                                    using (var readers = await cmd.ExecuteReaderAsync())
+                                    {
+                                        while (await readers.ReadAsync())
+                                        {
+                                            jobs.Add(new GroupedJobAdViewModel
+                                            {
+                                                Dated = readers["Dated"] != DBNull.Value
+                                                    ? Convert.ToDateTime(readers["Dated"])
+                                                    : DateTime.MinValue,
+
+                                                LastDate = readers["LastDate"] != DBNull.Value
+                                                    ? Convert.ToDateTime(readers["LastDate"])
+                                                    : (DateTime?)null,
+
+                                                JobCounts = new List<int> { Convert.ToInt32(readers["JobCount"]) },
+                                                DetailUrl = readers["DetailUrl"].ToString(),
+                                                CompanyName = readers["CompanyName"].ToString(),
+                                                CompanyImage = readers["CompanyImage"].ToString()
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+
+                            model.Jobs = jobs;
+
 
             // Home Links
             var homeLinks = _context.SectionTypeImports
@@ -324,10 +323,9 @@ public class HomeController : Controller
                     Formatting = Formatting.None
                 });
 
-                await _distributedCache.SetStringAsync(cacheKey, serializedModel, new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
-                });
+                            stopwatch.Stop();
+                            var dbTime = stopwatch.ElapsedMilliseconds;
+                            ViewBag.DbTime = dbTime;
 
                 _logger.LogInformation("Saved to Redis - Serialized size: {Size} bytes",
                     System.Text.Encoding.UTF8.GetByteCount(serializedModel));

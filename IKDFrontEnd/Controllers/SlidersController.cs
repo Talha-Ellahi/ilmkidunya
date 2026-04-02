@@ -115,7 +115,7 @@ namespace IKDFrontEnd.Controllers
 
 
 
-            ViewBag.CmsData = new TblCm
+            ViewBag.CmsData = new Models.TblCm
             {
                 MetaTitle = slides.FirstOrDefault()?.SliderName,
                 MetaDesc = "Explore a wide range of educational stories on Ilm Ki Dunya. Stay updated with the latest trends and insights in education.",
@@ -163,7 +163,7 @@ namespace IKDFrontEnd.Controllers
                 return NotFound();
             }
 
-            ViewBag.CmsData = new TblCm
+            ViewBag.CmsData = new Models.TblCm
             {
                 MetaTitle = category.Replace("_"," ").ToUpperInvariant(),
                 MetaDesc = "Explore a wide range of educational stories on Ilm Ki Dunya. Stay updated with the latest trends and insights in education.",
