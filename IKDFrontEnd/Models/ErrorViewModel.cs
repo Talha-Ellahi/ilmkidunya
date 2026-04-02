@@ -7,5 +7,6 @@ namespace IKDFrontEnd.Models
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
         public string? Reason { get;  set; }
+        public string Message { get; internal set; }
     }
 }

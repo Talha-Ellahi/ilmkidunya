@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace IKDFrontEnd.Controllers
@@ -15,23 +17,55 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
+        private readonly IDistributedCache _distributedCache;
 
-        public CoursesController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo)
+        public CoursesController(
+            DbikdContext context,
+            BannerService bannerService,
+            CmsRepository cmsRepo,
+            IDistributedCache distributedCache)  // Added distributed cache parameter
         {
             _context = context;
             _bannerService = bannerService;
             _cmsRepo = cmsRepo;
+            _distributedCache = distributedCache;
         }
+
         [HttpGet]
         [Route("/courses/")]
         public async Task<IActionResult> Home(int? level, int? category, int? location, int page = 1, int pageSize = 10)
         {
+            // Get banners (unchanged)
             ViewBag.Banners = await _bannerService.GetBannersAsync();
+
             if (level.HasValue || category.HasValue || location.HasValue)
             {
                 return await GetFilteredCollege(level, category, location, page, pageSize);
             }
-           
+
+            string cacheKey = "courses_home_page_data";
+            CoursesViewModels viewModel = null;
+
+            // Try to get from Redis cache
+            try
+            {
+                var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    viewModel = JsonSerializer.Deserialize<CoursesViewModels>(cachedData);
+
+                    // Optional: add debug info
+                    // ViewBag.CacheSource = "Redis";
+                }
+            }
+            catch
+            {
+                // If Redis fails, just continue to database
+            }
+
+            // If not in cache, get from database
+            if (viewModel == null)
+            {
                 var citiesWithCourses = await (
                                                  from ci in _context.TblDefCities
                                                  join co in _context.TblColleges on ci.CityId equals co.CityId
@@ -42,8 +76,7 @@ namespace IKDFrontEnd.Controllers
                                              .Distinct()
                                              .ToListAsync();
 
-
-                var viewModel = new CoursesViewModels
+                viewModel = new CoursesViewModels
                 {
                     Cities = citiesWithCourses,
                     Categories = await _context.CourseCategories.OrderBy(c => c.Name).ToListAsync(),
@@ -52,10 +85,29 @@ namespace IKDFrontEnd.Controllers
                     SearchResults = null,
                 };
 
-                  ViewBag.CmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/courses/");
-           
-            return View(viewModel);
+                // Save to Redis cache
+                try
+                {
+                    await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(viewModel), new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Cache for 1 hour
+                    });
+
+                    // Optional: add debug info
+                    // ViewBag.CacheSource = "Database";
+                }
+                catch
+                {
+                    // If Redis fails, just continue
+                }
             }
+
+            // Get CMS data (not cached as it might change frequently)
+            ViewBag.CmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/courses/");
+
+            return View(viewModel);
+        }
+
 
         [HttpGet]
         [Route("/courses/index")]
@@ -129,7 +181,7 @@ namespace IKDFrontEnd.Controllers
                 {
                     College = college,
                     CourseCount = collegeCourses.Count,
-                    
+
                     AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0,
                     Courses = collegeCourses
                                     .Where(c => !string.IsNullOrEmpty(c.Name))
@@ -276,7 +328,7 @@ namespace IKDFrontEnd.Controllers
 
         private async Task<CityInstitutionsViewModel> GetCollegesByCityAsync(int levelId, int page, int pageSize = 10)
         {
-            
+
             var collegeIdsWithLevel = await _context.Courses
                 .Where(c => c.EducationLevelId == levelId && c.IsActive == true)
                 .Select(c => c.CollegeId)
@@ -482,14 +534,14 @@ namespace IKDFrontEnd.Controllers
                 databases = dbList
             });
         }
-        
-        
+
+
         [HttpGet]
         [Route("/courses/popular-courses.aspx")]
         public async Task<IActionResult> PopularCourses()
         {
             ViewBag.Banners = await _bannerService.GetBannersAsync();
-         
+
             ViewBag.CmsData = await _cmsRepo.GetByUrlAsync($"/courses/popular-courses.aspx");
             return View();
         }
@@ -570,7 +622,7 @@ namespace IKDFrontEnd.Controllers
                     Attempts = 0,
                     DateofBirth = null,
                     CallMe = true,
-                  
+
                     GuideId = null,
                     Status = 1,
                     CourseName = "empty",

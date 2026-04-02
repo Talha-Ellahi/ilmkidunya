@@ -48,14 +48,7 @@ namespace IKDFrontEnd.ViewModels
         public DateTime? AdmissionOpenDate { get; set; }
         public DateTime? AppliedDate { get; set; }
     }
-    public class SlidersHome
-    {
-        public int ID { get; set; }
-        public string Slidertitle { get; set; }
-        public string Categoryname { get; set; }
-        public string Image { get; set; }
-        public DateTime? Date { get; set; }
-    }
+
     public class FeaturedCollegeViewModel
     {
         public string? Name { get; set; }

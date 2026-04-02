@@ -8,6 +8,7 @@ using IKDFrontEnd.DictionaryModels;
 using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
+using IKDFrontEnd.Models.PastPaperModel;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -60,6 +61,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+    });
 
 // ---------------- Compression ----------------
 // SINGLE ResponseCompression configuration - REMOVED DUPLICATE
@@ -123,6 +130,24 @@ builder.Services.AddDbContext<DbikdContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorNumbersToAdd: null);
     }));
+builder.Services.AddDbContext<JobsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("JobsDbConnectionString"),
+    sqlOptions => {
+        sqlOptions.CommandTimeout(60); // 60 seconds timeout
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    }));
+builder.Services.AddDbContext<PastPaperDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PastPaperDbConnectionString"),
+    sqlOptions => {
+        sqlOptions.CommandTimeout(60); // 60 seconds timeout
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    }));
 builder.Services.AddDbContext<BookDbikdContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookStoreConnection"),
     sqlOptions => {
@@ -165,30 +190,31 @@ builder.Services.AddSingleton<IFtpService>(sp =>
         logger
     );
 });
+// Replace your current Redis configuration with this:
 builder.Services.AddStackExchangeRedisCache(options =>
 {
+    options.ConfigurationOptions = new ConfigurationOptions
+    {
+        EndPoints = { { "redis-15065.c265.us-east-1-2.ec2.cloud.redislabs.com", 15065 } },
+        Password = "1F4AaDVPCswf86E4js8o0JJT8ZbypgDk",
+        User = "default",
+        Ssl = false,
+        AbortOnConnectFail = false, // Set to false to avoid crashes on startup
+        ConnectTimeout = 15000,
+        SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+    };
+
+    // Test connection (optional - you can remove this in production)
     try
     {
-        var config = new ConfigurationOptions
-        {
-            EndPoints = { { "redis-15065.c265.us-east-1-2.ec2.cloud.redislabs.com", 15065 } },
-            Password = "1F4AaDVPCswf86E4js8o0JJT8ZbypgDk",
-            User = "default",
-            Ssl = true,
-            AbortOnConnectFail = true, // throw on failure
-            ConnectTimeout = 15000,
-            SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-        };
-
-        using var conn = ConnectionMultiplexer.Connect(config);
-        Console.WriteLine("✅ Connected successfully!");
-        var db = conn.GetDatabase();
-        db.Ping();
-        Console.WriteLine("✅ Ping successful!");
+        var connection = ConnectionMultiplexer.Connect(options.ConfigurationOptions);
+        Console.WriteLine("✅ Redis connected successfully!");
+        connection.Close();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Connection failed: {ex}");
+        Console.WriteLine($"⚠️ Redis connection warning: {ex.Message}");
+        // Don't throw - let the app continue even if Redis fails
     }
 });
 

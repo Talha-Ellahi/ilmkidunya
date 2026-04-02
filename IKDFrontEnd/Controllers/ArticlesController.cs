@@ -3,60 +3,101 @@ using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IKDFrontEnd.Controllers
 {
-	public class ArticlesController : Controller
-	{
-		private readonly DbikdContext _context;
-		private readonly IWebHostEnvironment _env;
+    public class ArticlesController : Controller
+    {
+        private readonly DbikdContext _context;
+        private readonly IWebHostEnvironment _env;
         private readonly BannerService _bannerService;
+        private readonly IDistributedCache _distributedCache;
 
-        public ArticlesController(DbikdContext context, IWebHostEnvironment env, BannerService bannerService)
-		{
-			_context = context;
-			_env = env;
+        public ArticlesController(
+            DbikdContext context,
+            IWebHostEnvironment env,
+            BannerService bannerService,
+            IDistributedCache distributedCache)  // Added distributed cache parameter
+        {
+            _context = context;
+            _env = env;
             _bannerService = bannerService;
+            _distributedCache = distributedCache;
         }
 
-		[Route("/articles/")]
-		public async Task<IActionResult> Home(int page = 1)
-		
-		
-		
-		{
-			const int pageSize = 48;
+        [Route("/articles/")]
+        public async Task<IActionResult> Home(int page = 1)
+        {
+            const int pageSize = 48;
 
-
-            var articles = await _context.TblArticles
-                          .AsNoTracking()
-                          .Where(n => n.Approve == true)
-                          .OrderByDescending(n => n.Dated)
-                          .Skip((page - 1) * pageSize)
-                          .Take(pageSize)
-                  .Select(n => new TblArticle
-                  {
-                      ArticleId = n.ArticleId,
-                      Title = n.Title,
-                      RewriteUrl = n.RewriteUrl,
-                      Dated = n.Dated,
-                      SenderName = n.SenderName,
-                      PictureThumbnail = n.PictureThumbnail
-                  })
-                  .ToListAsync();
-
-            var ArticleModel = new ArticlesPageViewModel
-			{
-				Articles = articles,
-                CurrentPage = page
-			};
+            // Get banners (unchanged)
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
-            return View("Home", ArticleModel); 
-		}
+
+            // Try to get from Redis cache
+            string cacheKey = $"articles_home_page_{page}";
+            ArticlesPageViewModel ArticleModel = null;
+
+            try
+            {
+                var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    ArticleModel = JsonSerializer.Deserialize<ArticlesPageViewModel>(cachedData);
+                }
+            }
+            catch
+            {
+                // If Redis fails, just continue to database
+            }
+
+            // If not in cache, get from database
+            if (ArticleModel == null)
+            {
+                var articles = await _context.TblArticles
+                              .AsNoTracking()
+                              .Where(n => n.Approve == true)
+                              .OrderByDescending(n => n.Dated)
+                              .Skip((page - 1) * pageSize)
+                              .Take(pageSize)
+                              .Select(n => new TblArticle
+                              {
+                                  ArticleId = n.ArticleId,
+                                  Title = n.Title,
+                                  RewriteUrl = n.RewriteUrl,
+                                  Dated = n.Dated,
+                                  SenderName = n.SenderName,
+                                  PictureThumbnail = n.PictureThumbnail
+                              })
+                              .ToListAsync();
+
+                ArticleModel = new ArticlesPageViewModel
+                {
+                    Articles = articles,
+                    CurrentPage = page
+                };
+
+                // Save to Redis cache
+                try
+                {
+                    await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(ArticleModel), new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Cache for 1 hour
+                    });
+                }
+                catch
+                {
+                    // If Redis fails, just continue
+                }
+            }
+
+            return View("Home", ArticleModel);
+        }
 
 
 
@@ -169,7 +210,7 @@ namespace IKDFrontEnd.Controllers
                 ArticleDetail = articles.ArticleDetails,
                 PostDate = articles.Dated?.ToString("dd-MMM-yyyy"),
                 ArticleSenderName = articles.SenderName,
-				RelatedArticles = relatedArticles,
+                RelatedArticles = relatedArticles,
                 ArticleImage = articles.Picture1,
             };
 
