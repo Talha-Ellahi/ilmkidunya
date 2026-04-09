@@ -4,6 +4,7 @@ using IKDFrontEnd.BackupModel1;
 using IKDFrontEnd.BackupModel2;
 using IKDFrontEnd.BackupModel3;
 using IKDFrontEnd.BookModels;
+using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.DictionaryModels;
 using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
@@ -158,6 +159,8 @@ builder.Services.AddDbContext<Dbikd2Context>(options =>
         sqlOptions.CommandTimeout(60);
         sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
     }));
+builder.Services.AddDbContext<DbCollegeContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DbCollege")));
 //builder.Services.AddDbContext<Dbikd3Context>(options =>
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd3"),
 //    sqlOptions => {

@@ -227,7 +227,7 @@
 					</ul>
 					<h2>Colleges and Universities in Pakistan</h2>
 					<ul class="citywise-list">
-						@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+						@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.DBCollege.TblDefCity>)
 						{
 							<li><a href="/colleges/colleges-in-@(city.Url).aspx" aria-label="link">@city.CityName</a></li>
 

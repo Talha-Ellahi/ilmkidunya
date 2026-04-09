@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System.Data;
 using System.Diagnostics;
-using Newtonsoft.Json;
 using System.Text;
 
 
@@ -24,26 +25,29 @@ namespace IKDFrontEnd.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
         private readonly IDistributedCache _distributedCache;
+		private readonly DbCollegeContext _contextCollege;
 
-        public HomeController(
-            DbikdContext context,
-            BannerService bannerService,
-            ILogger<HomeController> logger,
-            CmsRepository cmsRepo,
-            IMemoryCache memoryCache,
-            IConfiguration configuration,
-            IDistributedCache distributedCache)   // 👈 change here
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _logger = logger;
-            _cmsRepo = cmsRepo;
-            _memoryCache = memoryCache; // 👈 assign
-            _configuration = configuration;
-            _distributedCache = distributedCache;
-        }
+		public HomeController(
+			DbikdContext context,
+			BannerService bannerService,
+			ILogger<HomeController> logger,
+			CmsRepository cmsRepo,
+			IMemoryCache memoryCache,
+			IConfiguration configuration,
+			IDistributedCache distributedCache,
+			DbCollegeContext contextCollege)   // 👈 change here
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_logger = logger;
+			_cmsRepo = cmsRepo;
+			_memoryCache = memoryCache; // 👈 assign
+			_configuration = configuration;
+			_distributedCache = distributedCache;
+			_contextCollege = contextCollege;
+		}
 
-        [OutputCache(Duration = 60)]
+		[OutputCache(Duration = 60)]
         public async Task<IActionResult> Index()
         {
             string cacheKey = "home_page_data";
@@ -199,11 +203,11 @@ namespace IKDFrontEnd.Controllers
 
                             // 5. Cities
                             await reader.NextResultAsync();
-                            var cities = new List<TblDefCity>();
+                            var cities = new List<DBCollege.TblDefCity>();
                             while (await reader.ReadAsync())
                             {
-                                cities.Add(new TblDefCity
-                                {
+                                cities.Add(new DBCollege.TblDefCity
+								{
                                     CityId = (int)reader["City_Id"],
                                     CityName = reader["City_Name"].ToString()
                                 });
@@ -211,10 +215,10 @@ namespace IKDFrontEnd.Controllers
 
                             // 6. Categories
                             await reader.NextResultAsync();
-                            var categories = new List<CourseCategory>();
+                            var categories = new List<DBCollege.CourseCategory>();
                             while (await reader.ReadAsync())
                             {
-                                categories.Add(new CourseCategory
+                                categories.Add(new DBCollege.CourseCategory
                                 {
                                     Id = (int)reader["Id"],
                                     Name = reader["Name"].ToString()
@@ -223,10 +227,10 @@ namespace IKDFrontEnd.Controllers
 
                             // 7. Levels
                             await reader.NextResultAsync();
-                            var levels = new List<TblXcourseLevel>();
+                            var levels = new List<DBCollege.TblXcourseLevel>();
                             while (await reader.ReadAsync())
                             {
-                                levels.Add(new TblXcourseLevel
+                                levels.Add(new DBCollege.TblXcourseLevel
                                 {
                                     Id = (int)reader["Id"],
                                     Name = reader["Name"].ToString(),
@@ -531,18 +535,18 @@ namespace IKDFrontEnd.Controllers
         public async Task<IActionResult> Homesearchcourses()
         {
             var citiesWithCourses = await (
-                  from ci in _context.TblDefCities
-                  join co in _context.TblColleges on ci.CityId equals co.CityId
-                  join c in _context.Courses on co.Id equals c.CollegeId
+                  from ci in _contextCollege.TblDefCities
+                  join co in _contextCollege.TblColleges on ci.CityId equals co.CityId
+                  join c in _contextCollege.Courses on co.Id equals c.CollegeId
                   where c.IsActive == true
                   select ci
               ).Distinct().ToListAsync();
 
-            var categories = await _context.CourseCategories
+            var categories = await _contextCollege.CourseCategories
                 .OrderBy(c => c.Name)
                 .ToListAsync();
 
-            var levels = await _context.TblXcourseLevels
+            var levels = await _contextCollege.TblXcourseLevels
                 .OrderBy(l => l.SortOrder)
                 .ToListAsync();
 

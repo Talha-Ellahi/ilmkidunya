@@ -1,13 +1,14 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.DBCollege;
+//using IKDFrontEnd.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IKDFrontEnd.ViewModels
 {
     public class CoursesViewModels
     {
-        public List<TblDefCity> Cities { get; set; }
-        public List<CourseCategory> Categories { get; set; }
-        public List<TblXcourseLevel> Levels { get; set; }
+        public List<DBCollege.TblDefCity> Cities { get; set; }
+        public List<DBCollege.CourseCategory> Categories { get; set; }
+        public List<DBCollege.TblXcourseLevel> Levels { get; set; }
         public List<CollegeWithCourseCountViewModel> SearchResults { get; set; } // ✅ sahi type
         public int? TotalFilteredCollegeCount { get; set; }
         public int? TotalFilteredCourseCount { get; set; }

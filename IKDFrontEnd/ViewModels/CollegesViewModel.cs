@@ -1,5 +1,6 @@
 ﻿
 using IKDFrontEnd.Models;
+//using IKDFrontEnd.DBCollege;
 using System;
 using System.Collections.Generic;
 
@@ -45,16 +46,16 @@ namespace IKDFrontEnd.ViewModels
 		public DateTime? LastDate { get; set; }
 		public string? MeritListName { get; set; }
 		public string MeritTypeName { get; set; }
-		public TblAdmission? Addmission { get; set; }
-		public TblCollege College { get; set; }
-		public List<TblAdmission> Addmissions { get; set; }
-		public List<TblCollegereview>? Reviews { get; set; }
+		public DBCollege.TblAdmission? Addmission { get; set; }
+		public DBCollege.TblCollege College { get; set; }
+		public List<DBCollege.TblAdmission> Addmissions { get; set; }
+		public List<DBCollege.TblCollegereview>? Reviews { get; set; }
 		public int TotalCourseCount { get; set; }
 		public List<string>? DistinctStudyLevels { get; set; }  // For distinct study levels
-		public List<Course>? AllCourses { get; set; }
+		public List<DBCollege.Course>? AllCourses { get; set; }
 		public List<CourseGroupedData> GroupedCourses { get; set; }
 		public List<MeritListResult> MeritList { get; set; }
-		public List<TblMeritList>? MeritListType { get; set; }
+		public List<DBCollege.TblMeritList>? MeritListType { get; set; }
         public int CourseCount { get; set; }
 
         // Additional properties for dynamically getting courses grouped by course levels
@@ -123,7 +124,7 @@ namespace IKDFrontEnd.ViewModels
 		public DateTime? LastDate { get; set; }
 		public string AdmissionImage { get; set; }
 		public string AdmissionTitle { get; set; }
-		public List<Course> Courses { get; set; }
+		public List<DBCollege.Course> Courses { get; set; }
         public List<string> NoticeImageThumb { get; internal set; }
         public List<DateTime?> Dated { get; internal set; }
         public List<string> AddmissionLogoList { get; internal set; }
@@ -139,12 +140,12 @@ namespace IKDFrontEnd.ViewModels
 		public string CityName { get; set; }
         public string Url { get; set; }
         public List<CollegeWithCourseNamesViewModel> CollegesWithCourseNames { get; set; }
-        public List<Course> TopCourses { get; set; }
+        public List<DBCollege.Course> TopCourses { get; set; }
 
     }
 	public class CollegeWithCourseCountViewModel
 	{
-		public TblCollege College { get; set; }
+		public IKDFrontEnd.DBCollege.TblCollege College { get; set; }
 		public int CourseCount { get; set; }
         public List<string> CourseNames { get; set; }
         public double AvgRating { get; set; }
@@ -221,7 +222,7 @@ namespace IKDFrontEnd.ViewModels
     }
     public class CollegeWithCourseNamesViewModel
     {
-        public TblCollege College { get; set; }
+        public DBCollege.TblCollege College { get; set; }
         public List<string> CourseNames { get; set; }
         public double AvgRating { get; set; }
     }
@@ -235,8 +236,15 @@ namespace IKDFrontEnd.ViewModels
         public string CmsContent { get; set; }
         public List<Banner> Banners { get; set; }
     }
-
-    public class ReviewViewModel
+ //   public class Banner
+ //   {
+ //       public int Id { get; set; }
+ //       public BannerType BannerType { get; set; }
+	//	public string ImageUrl { get; set; }
+ //       public string LinkUrl { get; set; }
+ //       public string AltText { get; set; }
+	//}
+	public class ReviewViewModel
     {
         public string CollegeName { get; set; }
         public int? CollegeId { get; set; }
@@ -284,7 +292,7 @@ namespace IKDFrontEnd.ViewModels
     {
         public CollegeBasicInfo College { get; set; }
         public CourseDetailInfo Course { get; set; }
-        public TblAdmission AdmissionInfo { get; set; }
+        public DBCollege.TblAdmission AdmissionInfo { get; set; }
         public FeeStructureViewModel FeeStructure { get; set; }
         public List<MeritListViewModel> MeritLists { get; set; }
         public List<RelatedColleges> RelatedColleges { get; set; }
@@ -292,7 +300,7 @@ namespace IKDFrontEnd.ViewModels
     }
     public class RelatedColleges
     {
-        public TblCollege College { get; set; }
+        public DBCollege.TblCollege College { get; set; }
         public List<CourseInfo> Courses { get; set; }
 
     }

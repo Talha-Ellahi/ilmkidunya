@@ -6,8 +6,8 @@ namespace IKDFrontEnd.ViewModels.Common
     {
         public List<CityWiseAdmissionViewModel> Admissions { get; set; }
         public List<CityWiseAdmissionViewModel>? SearchResults { get; set; }
-        public List<TblDefCity> Cities { get; set; }
-        public List<TblXcourseLevel> CourseLevels { get; set; }
+        public List<IKDFrontEnd.DBCollege.TblDefCity> Cities { get; set; }
+        public List<IKDFrontEnd.DBCollege.TblXcourseLevel> CourseLevels { get; set; }
     }
 
     public class CityWiseAdmissionViewModel

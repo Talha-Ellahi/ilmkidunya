@@ -77,7 +77,7 @@
 									<option value="">-- Select City --</option>
 									@if (ViewBag.Cities != null)
 									{
-										@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+										@foreach (var city in ViewBag.Cities as List<IKDFrontEnd.DBCollege.TblDefCity>)
 										{
 											<option value="@city.CityId">
 												@city.CityName
@@ -89,7 +89,7 @@
 									<option value="">-- Select Category --</option>
 									@if (ViewBag.Categories != null)
 									{
-										@foreach (var city in ViewBag.Categories as List<IKDFrontEnd.Models.CourseCategory>)
+										@foreach (var city in ViewBag.Categories as List<IKDFrontEnd.DBCollege.CourseCategory>)
 										{
 											<option value="@city.Id">
 												@city.Name
@@ -101,7 +101,7 @@
 									<option value="">-- Select Level --</option>
 									@if (ViewBag.Levels != null)
 									{
-										@foreach (var city in ViewBag.Levels as List<IKDFrontEnd.Models.TblXcourseLevel>)
+										@foreach (var city in ViewBag.Levels as List<IKDFrontEnd.DBCollege.TblXcourseLevel>)
 										{
 											<option value="@city.Id">
 												@city.Name
@@ -359,7 +359,7 @@
 					<ul class="study-institue-list">
 						@if (ViewBag.Categories != null)
 						{
-							@foreach (var category in ViewBag.Categories as List<IKDFrontEnd.Models.CourseCategory>)
+							@foreach (var category in ViewBag.Categories as List<IKDFrontEnd.DBCollege.CourseCategory>)
 							{
 								<li>
 									<a href="/colleges/category/@category.Url">
