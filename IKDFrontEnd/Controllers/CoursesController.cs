@@ -1,4 +1,6 @@
-﻿using IKDFrontEnd.Models;
+﻿//using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.Common;
@@ -14,24 +16,27 @@ namespace IKDFrontEnd.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly DbikdContext _context;
+        //private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
         private readonly IDistributedCache _distributedCache;
+        private readonly DbCollegeContext _context;
+		public CoursesController(
+			//DbCollegeContext context,
+			BannerService bannerService,
+			CmsRepository cmsRepo,
+			IDistributedCache distributedCache,
+			DbCollegeContext context)  // Added distributed cache parameter
+		{
+			//_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_distributedCache = distributedCache;
+			_context = context;
+			//_contextCollege = contextCollege;
+		}
 
-        public CoursesController(
-            DbikdContext context,
-            BannerService bannerService,
-            CmsRepository cmsRepo,
-            IDistributedCache distributedCache)  // Added distributed cache parameter
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-            _distributedCache = distributedCache;
-        }
-
-        [HttpGet]
+		[HttpGet]
         [Route("/courses/")]
         public async Task<IActionResult> Home(int? level, int? category, int? location, int page = 1, int pageSize = 10)
         {
@@ -118,14 +123,14 @@ namespace IKDFrontEnd.Controllers
             ViewBag.Level = level;
             ViewBag.Category = category;
 
-            IQueryable<Course> courseQuery = _context.Courses;
+            IQueryable<DBCollege.Course> courseQuery = _context.Courses;
 
             if (category.HasValue)
             {
                 int catId = category.Value;
 
                 courseQuery = courseQuery.Where(c =>
-                    _context.CourseCategoryJoins
+					_context.CourseCategoryJoins
                         .Any(j => j.CourseId == c.Id && j.CategoryId == catId));
             }
 
@@ -149,8 +154,8 @@ namespace IKDFrontEnd.Controllers
                 .ToList();
 
             // STEP 3: Build base college query and apply filters
-            IQueryable<TblCollege> collegeQuery = _context.TblColleges
-                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id ?? 0));
+            IQueryable<DBCollege.TblCollege> collegeQuery = _context.TblColleges
+                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id));
 
             if (location.HasValue)
                 collegeQuery = collegeQuery.Where(c => c.CityId == location.Value);
@@ -165,7 +170,7 @@ namespace IKDFrontEnd.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
 
             var pagedCourses = filteredCourses
                 .Where(c => pagedCollegeIds.Contains(c.CollegeId ?? 0))
@@ -182,7 +187,7 @@ namespace IKDFrontEnd.Controllers
                     College = college,
                     CourseCount = collegeCourses.Count,
 
-                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0,
+                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0,
                     Courses = collegeCourses
                                     .Where(c => !string.IsNullOrEmpty(c.Name))
                                     .Select(c => new CourseInfoVm
@@ -289,10 +294,10 @@ namespace IKDFrontEnd.Controllers
             ViewBag.Banners = await _bannerService.GetBannersAsync();
 
             var slugMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "phd", "ph-d" },
-        { "mphil", "m-phil" }
-    };
+            {
+                { "phd", "ph-d" },
+                { "mphil", "m-phil" }
+            };
 
             if (slugMap.ContainsKey(levelUrl))
                 levelUrl = slugMap[levelUrl];
@@ -338,7 +343,7 @@ namespace IKDFrontEnd.Controllers
                 .ToListAsync();
 
             var collegesQuery = _context.TblColleges
-                .Where(c => c.Id.HasValue && collegeIdsWithLevel.Contains(c.Id.Value) && c.IsActive == true)
+                .Where(c => c.IsActive == true && collegeIdsWithLevel.Contains(c.Id))
                 .OrderByDescending(c => c.Views);
 
             ViewBag.CollegeSerialStart = (page - 1) * pageSize + 1;
@@ -349,8 +354,8 @@ namespace IKDFrontEnd.Controllers
                 .ToListAsync();
 
             var pagedCollegeIds = pagedColleges
-                .Where(c => c.Id.HasValue)
-                .Select(c => c.Id.Value)
+                //.Where(c => c.Id)
+                .Select(c => c.Id)
                 .ToList();
 
             var courses = await _context.Courses
@@ -452,7 +457,7 @@ namespace IKDFrontEnd.Controllers
 
             // Step 3: Get colleges
             var colleges = await _context.TblColleges
-                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id ?? 0))
+                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id))
                 .ToListAsync();
 
             // Set some viewbag stats (optional, if needed in view)
@@ -471,7 +476,7 @@ namespace IKDFrontEnd.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
 
             var courses = await _context.Courses
                 .Where(c => pagedCollegeIds.Contains(c.CollegeId ?? 0) && courseIdsInCategory.Contains(c.Id))
@@ -494,7 +499,7 @@ namespace IKDFrontEnd.Controllers
                 CourseNameSummary = "Total Courses (" + courses.Count(c => c.CollegeId == college.Id) + ")",
 
                 AvgRating = collegeRatings
-                    .FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                    .FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
             }).ToList();
 
 
@@ -599,7 +604,7 @@ namespace IKDFrontEnd.Controllers
 
 
 
-                var entity = new TblCourseinquiry
+                var entity = new DBCollege.TblCourseinquiry
                 {
                     EducationLevel = model.LevelId,
                     Name = model.AboutYourself,

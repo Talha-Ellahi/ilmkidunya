@@ -182,7 +182,7 @@
 				<div class="col-lg-12">
 					<h2>Admissions In Featured Institutions</h2>
 					<ul class="feature-institue-list">
-						@foreach (var college in (List<IKDFrontEnd.Models.TblCollege>)ViewBag.Featured)
+						@foreach (var college in (List<IKDFrontEnd.DBCollege.TblCollege>)ViewBag.Featured)
 						{
 							<li>
 								<a href="/colleges/@college.Url-admission.aspx">

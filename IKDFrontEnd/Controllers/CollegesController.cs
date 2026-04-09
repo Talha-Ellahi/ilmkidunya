@@ -1,4 +1,7 @@
 ﻿using Dapper;
+using IKDFrontEnd.DBCollege;
+
+//using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -22,27 +25,29 @@ namespace IKDFrontEnd.Controllers
 {
     public class CollegesController : Controller
     {
-        private readonly DbikdContext _context;
-        private readonly BannerService _bannerService;
+		//private readonly DbikdContext _context;
+		private readonly DbCollegeContext _context;
+		private readonly BannerService _bannerService;
         private readonly ILogger<CollegesController> _logger;
         private readonly CmsRepository _cmsRepo;
         private readonly IDistributedCache _distributedCache;
 
-        public CollegesController(
-            DbikdContext context,
+		public CollegesController(
+			DbCollegeContext context,
             BannerService bannerService,
-            ILogger<CollegesController> logger,
-            CmsRepository cmsRepo,
-            IDistributedCache distributedCache)  // Added distributed cache parameter
-        {
+			ILogger<CollegesController> logger,
+			CmsRepository cmsRepo,
+			IDistributedCache distributedCache)  // Added distributed cache parameter
+		{
             _context = context;
             _bannerService = bannerService;
-            _logger = logger;
-            _cmsRepo = cmsRepo;
-            _distributedCache = distributedCache;
-        }
+			_logger = logger;
+			_cmsRepo = cmsRepo;
+			_distributedCache = distributedCache;
+			//_contextCollege = contextCollege;
+		}
 
-        [Route("/colleges/")]
+		[Route("/colleges/")]
         [Route("/colleges/index.html")]
         [ResponseCache(NoStore = true)]
         public async Task<IActionResult> Home()
@@ -125,10 +130,10 @@ namespace IKDFrontEnd.Controllers
         public class CollegesHomeCacheData
         {
             public List<Banner> Banners { get; set; }
-            public List<TblDefCity> Cities { get; set; }
-            public List<TblXcourseLevel> Levels { get; set; }
-            public List<CourseCategory> Categories { get; set; }
-            public List<TblCollege> FeaturedColleges { get; set; }
+            public List<DBCollege.TblDefCity> Cities { get; set; }
+            public List<DBCollege.TblXcourseLevel> Levels { get; set; }
+            public List<DBCollege.CourseCategory> Categories { get; set; }
+            public List<DBCollege.TblCollege> FeaturedColleges { get; set; }
         }
 
 
@@ -136,7 +141,6 @@ namespace IKDFrontEnd.Controllers
         [Route("colleges/{collegeUrl:regex(^((?!universities-in-)(?!colleges-in-)).*$)}.aspx")]
         [ResponseCache(NoStore = true)]
         public async Task<IActionResult> CollegeHome(string collegeUrl)
-
         {
             if (string.IsNullOrWhiteSpace(collegeUrl))
                 return NotFound();
@@ -194,10 +198,10 @@ namespace IKDFrontEnd.Controllers
                 return RedirectToAction("LevelWiseCollegesDetails", new { levelUrl = collegeUrl });
             }
 
-            var reviews = (await multi.ReadAsync<TblCollegereview>()).ToList();
+            var reviews = (await multi.ReadAsync<DBCollege.TblCollegereview>()).ToList();
             var distinctStudyLevels = (await multi.ReadAsync<string>()).ToList();
-            var latestAdmission = await multi.ReadFirstOrDefaultAsync<TblAdmission>();
-            var allCourses = (await multi.ReadAsync<Course>()).ToList();
+            var latestAdmission = await multi.ReadFirstOrDefaultAsync<DBCollege.TblAdmission>();
+            var allCourses = (await multi.ReadAsync<DBCollege.Course>()).ToList();
 
             // Calculate ratings
             var (overallRating, reviewScore) = CalculateOverallRanking(reviews, college.GoogleRanking, college.Fbranking);
@@ -246,10 +250,10 @@ namespace IKDFrontEnd.Controllers
                 Latitude = college.Latitude,
                 Longitude = college.Longitude,
                 Zoomlevel = college.Zoomlevel,
-                Reviews = reviews ?? new List<TblCollegereview>(),
+                Reviews = reviews ?? new List<DBCollege.TblCollegereview>(),
                 TotalCourseCount = allCourses?.Count() ?? 0,
                 DistinctStudyLevels = distinctStudyLevels ?? new List<string>(),
-                AllCourses = allCourses ?? new List<Course>(),
+                AllCourses = allCourses ?? new List<DBCollege.Course>(),
                 Addmission = latestAdmission,
                 AddmissionLogo = latestAdmission != null
                     ? GetAdmissionLogoPath(latestAdmission.NoticeImageThumb, latestAdmission.Dated)
@@ -366,7 +370,7 @@ namespace IKDFrontEnd.Controllers
                     .Distinct()
                     .ToListAsync();
 
-                query = query.Where(c => collegeIdsFromCategory.Contains(c.Id ?? 0));
+                query = query.Where(c => collegeIdsFromCategory.Contains(c.Id));
             }
 
 
@@ -378,7 +382,7 @@ namespace IKDFrontEnd.Controllers
                     .Distinct()
                     .ToListAsync();
 
-                query = query.Where(c => collegeIdsWithLevel.Contains(c.Id ?? 0));
+                query = query.Where(c => collegeIdsWithLevel.Contains(c.Id));
             }
 
 
@@ -390,7 +394,7 @@ namespace IKDFrontEnd.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var collegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var collegeIds = pagedColleges.Select(c => c.Id).ToList();
 
             var courseCounts = await _context.Courses
                 .Where(c => c.IsActive == true && c.CollegeId.HasValue && collegeIds.Contains(c.CollegeId.Value))
@@ -434,7 +438,7 @@ namespace IKDFrontEnd.Controllers
 
 
 
-        private (decimal overallRating, decimal reviewScore) CalculateOverallRanking(List<TblCollegereview> reviews, decimal? googleRanking, decimal? facebookRanking)
+        private (decimal overallRating, decimal reviewScore) CalculateOverallRanking(List<DBCollege.TblCollegereview> reviews, decimal? googleRanking, decimal? facebookRanking)
         {
             // Initialize variables
             decimal reviewScore = 0;
@@ -540,7 +544,7 @@ namespace IKDFrontEnd.Controllers
                 .Select(g => new CourseGroupedData
                 {
                     CourseLevel = g.Key,
-                    Courses = g.Select(c => new Course
+                    Courses = g.Select(c => new DBCollege.Course
                     {
                         Id = c.Id,
                         Name = c.Name,
@@ -574,7 +578,7 @@ namespace IKDFrontEnd.Controllers
 
             var viewModel = new CollegesViewModel
             {
-                CollegeId = college.Id ?? 0,
+                CollegeId = college.Id,
                 CollegeName = college.Name,
                 CollegeImage = college.Logo,
                 CollegeShortName = college.ShortName,
@@ -597,7 +601,7 @@ namespace IKDFrontEnd.Controllers
 
             var college = await _context.TblColleges
                 .Where(c => c.Url.Contains(collegeName))
-                .Select(c => new TblCollege
+                .Select(c => new DBCollege.TblCollege
                 {
                     Id = c.Id,
                     Name = c.Name ?? "",
@@ -641,7 +645,7 @@ namespace IKDFrontEnd.Controllers
                                 ? (DateTime?)null
                                 : g.Select(x => x.LastDate).FirstOrDefault(),
                     AdmissionImage = g.Select(x => x.NoticeImageLarge).FirstOrDefault() ?? "",
-                    Courses = g.Select(x => new Course
+                    Courses = g.Select(x => new DBCollege.Course
                     {
                         Name = string.IsNullOrWhiteSpace(x.Name) ? "" : x.Name,
                         CreatedDate = DateTime.Now
@@ -665,12 +669,12 @@ namespace IKDFrontEnd.Controllers
 
             var viewModel = new CollegesViewModel
             {
-                CollegeId = college.Id ?? 0,
+                CollegeId = college.Id,
                 CollegeName = college.Name,
                 CollegeImage = college.Logo,
                 Address = college.Address,
                 ContactNumber = college.ContactNumber,
-                Addmissions = groupedAdmissions.Select(ad => new TblAdmission
+                Addmissions = groupedAdmissions.Select(ad => new DBCollege.TblAdmission
                 {
                     Dated = ad.AdmissionDate ?? DateTime.Now,
                     LastDate = ad.LastDate,
@@ -784,7 +788,7 @@ namespace IKDFrontEnd.Controllers
 
             var viewModel = new CollegesViewModel
             {
-                CollegeId = college.Id ?? 0,
+                CollegeId = college.Id,
                 College = college,
                 CourseLevels = courseLevelData,
                 MeritList = latestMeritLists,
@@ -881,7 +885,7 @@ namespace IKDFrontEnd.Controllers
                 .ToListAsync();
 
             var colleges = _context.TblColleges
-                .Where(c => collegeIdsWithLevel.Contains(c.Id ?? 0) && c.IsActive == true);
+                .Where(c => collegeIdsWithLevel.Contains(c.Id) && c.IsActive == true);
             colleges = colleges.OrderByDescending(c => c.Views);
             if (city != null && cityName != "All Cities")
             {
@@ -893,7 +897,7 @@ namespace IKDFrontEnd.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
 
 
             var courses = await _context.Courses
@@ -904,7 +908,7 @@ namespace IKDFrontEnd.Controllers
             {
                 College = college,
                 CourseCount = courses.Count(c => c.CollegeId == college.Id),
-                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
             }).ToList();
 
             return new CityInstitutionsViewModel
@@ -994,7 +998,7 @@ namespace IKDFrontEnd.Controllers
                 .Distinct()
                 .ToListAsync();
             var colleges = await _context.TblColleges
-                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id ?? 0))
+                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id))
                 .ToListAsync();
 
             ViewBag.TotalUniversities = colleges.Count(c => c.TypeOfInstituteId == 1);
@@ -1020,7 +1024,7 @@ namespace IKDFrontEnd.Controllers
                                   .ToList();
 
 
-            var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
 
             var courses = await _context.Courses
                 .Where(c => pagedCollegeIds.Contains(c.CollegeId ?? 0) && courseIdsInCategory.Contains(c.Id))
@@ -1030,7 +1034,7 @@ namespace IKDFrontEnd.Controllers
             {
                 College = college,
                 CourseCount = courses.Count(c => c.CollegeId == college.Id),
-                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
             }).ToList();
             ViewBag.CollegeSerialStart = (page - 1) * pageSize + 1;
             return new CityInstitutionsViewModel
@@ -1114,7 +1118,7 @@ namespace IKDFrontEnd.Controllers
 
             if (ModelState.IsValid)
             {
-                var suggestion = new TblCourseinquiry
+                var suggestion = new DBCollege.TblCourseinquiry
                 {
                     CollegeId = model.CollegeId,
                     Name = model.Name,
@@ -1185,7 +1189,7 @@ namespace IKDFrontEnd.Controllers
                                     })
                          .Take(12)
                          .ToListAsync();
-            var topCourseList = topCourses.Select(c => new Course
+            var topCourseList = topCourses.Select(c => new DBCollege.Course
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -1251,7 +1255,7 @@ namespace IKDFrontEnd.Controllers
                 .ToListAsync();
 
             var colleges = await _context.TblColleges
-                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id ?? 0))
+                .Where(c => c.IsActive == true && collegeIds.Contains(c.Id))
                 .OrderByDescending(c => c.Views)
                 .ToListAsync();
 
@@ -1270,7 +1274,7 @@ namespace IKDFrontEnd.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
 
             var courses = await _context.Courses
                 .Where(c => pagedCollegeIds.Contains(c.CollegeId ?? 0) && courseIdsInCategoryAndLevel.Contains(c.Id))
@@ -1283,7 +1287,7 @@ namespace IKDFrontEnd.Controllers
                     .Where(c => c.CollegeId == college.Id)
                     .Select(c => c.Name)
                     .ToList(),
-                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
             }).ToList();
             ViewBag.CollegeSerialStart = (page - 1) * pageSize + 1;
             return new CityInstitutionsViewModel
@@ -1346,12 +1350,12 @@ namespace IKDFrontEnd.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> SubmitReview([FromForm] TblCollegereview model)
+        public async Task<IActionResult> SubmitReview([FromForm] DBCollege.TblCollegereview model)
         {
             if (ModelState.IsValid)
             {
 
-                var review = new TblCollegereview
+                var review = new DBCollege.TblCollegereview
                 {
                     Name = model.Name,
                     Comment = model.Comment,
@@ -1432,7 +1436,7 @@ namespace IKDFrontEnd.Controllers
                 return NotFound();
             }
 
-            IQueryable<TblCollege> collegesQuery = _context.TblColleges.OrderByDescending(c => c.Views);
+            IQueryable<DBCollege.TblCollege> collegesQuery = _context.TblColleges.OrderByDescending(c => c.Views);
 
             bool hasCategory = sectionContent.CollegeCategoryId.HasValue && sectionContent.CollegeCategoryId.Value > 0;
             bool hasCity = sectionContent.CityId.HasValue && sectionContent.CityId.Value > 0;
@@ -1476,7 +1480,7 @@ namespace IKDFrontEnd.Controllers
             var totalCount = await collegesQuery.CountAsync();
             var collegesList = await collegesQuery.Select(c => new CustomPagesCollegeViewModel
             {
-                Id = c.Id ?? 0,
+                Id = c.Id,
                 Name = c.Name,
                 Address = c.Address,
                 ContactNumber = c.ContactNumber,
@@ -1540,7 +1544,7 @@ namespace IKDFrontEnd.Controllers
                 }
 
                 // Start with base query for active institutions in the specified city
-                IQueryable<TblCollege> institutionsQuery = _context.TblColleges
+                IQueryable<DBCollege.TblCollege> institutionsQuery = _context.TblColleges
                     .Where(c => c.IsActive == true && c.CityId == city.CityId)
                     .OrderByDescending(c => c.Views);
 
@@ -1582,7 +1586,7 @@ namespace IKDFrontEnd.Controllers
                                     .Distinct()
                                     .ToListAsync();
 
-                                institutionsQuery = institutionsQuery.Where(c => collegeIdsFromCategory.Contains(c.Id ?? 0));
+                                institutionsQuery = institutionsQuery.Where(c => collegeIdsFromCategory.Contains(c.Id));
                                 filterDescription = category.Name;
                             }
                         }
@@ -1609,7 +1613,7 @@ namespace IKDFrontEnd.Controllers
                                     .Distinct()
                                     .ToListAsync();
 
-                                institutionsQuery = institutionsQuery.Where(c => collegeIdsWithLevel.Contains(c.Id ?? 0));
+                                institutionsQuery = institutionsQuery.Where(c => collegeIdsWithLevel.Contains(c.Id));
                                 filterDescription = level.Name;
                             }
                         }
@@ -1656,7 +1660,7 @@ namespace IKDFrontEnd.Controllers
                                         .Distinct()
                                         .ToListAsync();
 
-                                    institutionsQuery = institutionsQuery.Where(c => collegeIds.Contains(c.Id ?? 0));
+                                    institutionsQuery = institutionsQuery.Where(c => collegeIds.Contains(c.Id));
                                     filterDescription = $"{category.Name} - {level.Name}";
                                 }
                             }
@@ -1692,8 +1696,8 @@ namespace IKDFrontEnd.Controllers
                     .ToList();
 
                 // Get IDs for course counting and ratings
-                var pagedCollegeIds = pagedColleges.Select(c => c.Id ?? 0).ToList();
-                var pagedUniversityIds = pagedUniversities.Select(u => u.Id ?? 0).ToList();
+                var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
+                var pagedUniversityIds = pagedUniversities.Select(u => u.Id).ToList();
                 var allPagedIds = pagedCollegeIds.Concat(pagedUniversityIds).ToList();
 
                 // Get course counts
@@ -1711,7 +1715,7 @@ namespace IKDFrontEnd.Controllers
                 {
                     College = college,
                     CourseCount = courseCounts.FirstOrDefault(x => x.CollegeId == college.Id)?.Count ?? 0,
-                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
                 }).ToList();
 
                 // Map universities with details
@@ -1719,7 +1723,7 @@ namespace IKDFrontEnd.Controllers
                 {
                     College = university,
                     CourseCount = courseCounts.FirstOrDefault(x => x.CollegeId == university.Id)?.Count ?? 0,
-                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (university.Id ?? 0))?.AvgRating ?? 0
+                    AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (university.Id))?.AvgRating ?? 0
                 }).ToList();
 
                 // Create city info
@@ -1933,7 +1937,7 @@ namespace IKDFrontEnd.Controllers
                 {
                     College = new CollegeBasicInfo
                     {
-                        Id = college.Id ?? 0,
+                        Id = college.Id,
                         Name = college.Name,
                         Url = college.Url,
                         Logo = college.Logo,
@@ -2246,7 +2250,7 @@ namespace IKDFrontEnd.Controllers
             int totalUniversities = allInstitutes.Count(c => c.TypeOfInstituteId == 1);
 
 
-            var allInstituteIds = allInstitutes.Select(i => i.Id ?? 0).ToList();
+            var allInstituteIds = allInstitutes.Select(i => i.Id).ToList();
             var allCourses = await _context.Courses
                 .Where(c => c.CollegeId != null)
                 .Join(_context.TblColleges
@@ -2281,16 +2285,16 @@ namespace IKDFrontEnd.Controllers
             var collegeWithCourseCount = pagedColleges.Select(college => new CollegeWithCourseCountViewModel
             {
                 College = college,
-                CourseCount = college.Id.HasValue && courseCountsByInstitute.ContainsKey(college.Id.Value) ? courseCountsByInstitute[college.Id.Value] : 0,
-                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id ?? 0))?.AvgRating ?? 0
+                CourseCount = courseCountsByInstitute.ContainsKey(college.Id) ? courseCountsByInstitute[college.Id] : 0,
+                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (college.Id))?.AvgRating ?? 0
             }).ToList();
 
             // Map paginated universities with course count and rating
             var universityWithCourseCount = pagedUniversities.Select(university => new CollegeWithCourseCountViewModel
             {
                 College = university,
-                CourseCount = university.Id.HasValue && courseCountsByInstitute.ContainsKey(university.Id.Value) ? courseCountsByInstitute[university.Id.Value] : 0,
-                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (university.Id ?? 0))?.AvgRating ?? 0
+                CourseCount = courseCountsByInstitute.ContainsKey(university.Id) ? courseCountsByInstitute[university.Id] : 0,
+                AvgRating = collegeRatings.FirstOrDefault(r => r.CollegeId == (university.Id))?.AvgRating ?? 0
             }).ToList();
 
             var cityInfo = new
