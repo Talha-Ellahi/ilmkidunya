@@ -289,7 +289,7 @@
 					<ul class="study-institue-list">
 						@if (ViewBag.Categories != null)
 						{
-							@foreach (var category in ViewBag.Categories as List<IKDFrontEnd.Models.CourseCategory>)
+							@foreach (var category in ViewBag.Categories as List<IKDFrontEnd.DBCollege.CourseCategory>)
 							{
 								<li>
 									<a href="/colleges/category/@category.Url">
