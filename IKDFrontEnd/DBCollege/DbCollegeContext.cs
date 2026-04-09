@@ -61,9 +61,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("Boards", "dbo");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.LevelIds)
                 .HasMaxLength(1000)
@@ -81,7 +79,6 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("Courses", "dbo");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Coursetags).HasMaxLength(255);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.Duration).HasMaxLength(255);
@@ -105,24 +102,19 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("CourseCategory", "dbo");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Url).HasMaxLength(255);
         });
 
         modelBuilder.Entity<CourseCategoryJoin>(entity =>
         {
             entity.ToTable("CourseCategoryJoin", "dbo");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<InstituteType>(entity =>
         {
             entity.ToTable("InstituteType", "dbo");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.MetaDesc).HasMaxLength(600);
             entity.Property(e => e.MetaKeyword).HasMaxLength(600);
@@ -140,9 +132,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("SectionContentImport", "dbikduser");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AppHeading).IsUnicode(false);
             entity.Property(e => e.CollegeTypeId).HasMaxLength(250);
             entity.Property(e => e.ContentId).HasColumnName("ContentID");
@@ -179,9 +169,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("SectionTypeImport", "dbikduser");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ClassId).HasColumnName("ClassID");
             entity.Property(e => e.InstituteId).HasColumnName("InstituteID");
             entity.Property(e => e.InstituteTypeId).HasColumnName("InstituteTypeID");
@@ -199,7 +187,6 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("tblAdmissions", "dbikduser");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.LastDate).HasColumnType("datetime");
             entity.Property(e => e.Updated)
@@ -210,16 +197,13 @@ public partial class DbCollegeContext : DbContext
 
         modelBuilder.Entity<TblAdmissionCourse>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblAdmissionCourses", "dbikduser");
+            entity.ToTable("tblAdmissionCourses", "dbikduser");
         });
 
         modelBuilder.Entity<TblCollege>(entity =>
         {
             entity.ToTable("TblCollege", "dbo");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.ContactNumber).HasMaxLength(255);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.DateSheetUrl).HasColumnName("DateSheetURL");
@@ -258,9 +242,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("tbl_Collegereviews", "dbo");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Cid).HasColumnName("CID");
             entity.Property(e => e.Date).HasColumnType("smalldatetime");
             entity.Property(e => e.InstId).HasColumnName("inst_id");
@@ -270,9 +252,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("tblCourseinquiry", "dbikduser");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CollegeId).HasColumnName("CollegeID");
             entity.Property(e => e.CurrentDegree).HasMaxLength(200);
             entity.Property(e => e.DivisionId).HasColumnName("DivisionID");
@@ -289,9 +269,7 @@ public partial class DbCollegeContext : DbContext
 
             entity.ToTable("tblDefCity", "dbo");
 
-            entity.Property(e => e.CityId)
-                .ValueGeneratedNever()
-                .HasColumnName("city_id");
+            entity.Property(e => e.CityId).HasColumnName("city_id");
             entity.Property(e => e.CityName)
                 .HasMaxLength(80)
                 .HasColumnName("city_name");
@@ -316,7 +294,6 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("TblGuidesDefination", "dbikduser");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Abrevation).HasMaxLength(100);
             entity.Property(e => e.CategoryIds).HasMaxLength(500);
             entity.Property(e => e.CourseUrl)
@@ -339,9 +316,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("tblMeritList", "dbikduser");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AddedDate).HasColumnType("datetime");
             entity.Property(e => e.CollegeId).HasColumnName("CollegeID");
             entity.Property(e => e.FileName)
@@ -366,9 +341,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("TblMeritListType", "dbo");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MeritListTypeName).IsUnicode(false);
         });
 
@@ -376,9 +349,7 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("tblXCourseLevels", "dbo");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.Heading)
                 .HasMaxLength(500)

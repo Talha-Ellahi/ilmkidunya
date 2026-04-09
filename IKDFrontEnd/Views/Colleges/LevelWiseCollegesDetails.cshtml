@@ -123,7 +123,7 @@
                         List of Institutions for @ViewBag.LevelName Level Programs in Pakistan
                         <select class="form-control" name="cityId" id="cityId">
                             <option value="">-- Select City --</option>
-                            @foreach (var city in ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>)
+                            @foreach (var city in ViewBag.Cities as List<IKDFrontEnd.DBCollege.TblDefCity>)
                             {
                                 <option value="@city.CityName"
                                         selected="@(Model.CityName != null && Model.CityName == city.CityName ? "selected" : null)">
