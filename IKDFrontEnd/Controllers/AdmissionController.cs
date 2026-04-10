@@ -101,7 +101,7 @@ namespace IKDFrontEnd.Controllers
                 {
                     AdmissionId = a.Id,
                     AdmissionTitle = a.AdmissionTitle,
-                    AdmissionLogo = GetAdmissionLogoPath(a.NoticeImageThumb, a.Dated),
+                    AdmissionLogo = GetAdmissionLogoPathThumb(a.NoticeImageThumb, a.Dated),
                     Dated = a.Dated,
                     LastDate = a.LastDate,
                     CollegeName = a.CollegeName,
@@ -496,11 +496,8 @@ namespace IKDFrontEnd.Controllers
         }
 
         [Route("/admissions/{levelUrl}-admissions-in-{cityUrl:regex(^[[a-zA-Z-]]+$)}.aspx")]
-
         public async Task<IActionResult> LevelWiseAdmissionsDetailWithCity(string levelUrl, string cityUrl, int page = 1, int pageSize = 10, int id = 0)
         {
-
-
             var skip = (page - 1) * pageSize;
             if (levelUrl.ToLower() == "phd")
                 levelUrl = "ph-d";
@@ -750,7 +747,7 @@ namespace IKDFrontEnd.Controllers
             // Step 1: Get distinct admission IDs (fast and light)
             var distinctAdmissionIds = await (
                 from a in _contextCollege.TblAdmissions
-                join ac in _context.TblAdmissionCourses on a.Id equals ac.NoticeId
+                join ac in _contextCollege.TblAdmissionCourses on a.Id equals ac.NoticeId
                 join c in _contextCollege.Courses on ac.CourseId equals c.Id
                 join ccj in _contextCollege.CourseCategoryJoins on c.Id equals ccj.CourseId
                 where ccj.CategoryId == category.Id
@@ -780,7 +777,7 @@ namespace IKDFrontEnd.Controllers
                     Url = a.Url,
                     AdmissionLogo = string.IsNullOrEmpty(a.NoticeImageThumb) || a.Dated == null
                     ? "/images/no-image.png"
-                    : $"{a.Dated.Value.Year}/{a.Dated.Value.Month.ToString()}/thumb/{a.NoticeImageThumb}",
+                    : $"{a.Dated.Value.Year}/{a.Dated.Value.Month.ToString()}/large/{a.NoticeImageThumb}",
 
                     Dated = a.Dated,
                     LastDate = a.LastDate,
@@ -1050,7 +1047,7 @@ namespace IKDFrontEnd.Controllers
                 AdmissionId = a.Id,
                 AdmissionTitle = a.AdmissionTitle,
                 Url = a.Url,
-                AdmissionLogo = GetAdmissionLogoPath(a.NoticeImageThumb, a.Dated),
+                AdmissionLogo = GetAdmissionLogoPathThumb(a.NoticeImageThumb, a.Dated),
                 Dated = a.Dated,
                 LastDate = a.LastDate,
                 CollegeName = a.CollegeName,
@@ -1317,6 +1314,15 @@ namespace IKDFrontEnd.Controllers
 
             return $"{year}/{month}/thumb/{fileName}";
         }
+		private string GetAdmissionLogoPathThumb(string fileName, DateTime? dated)
+		{
+			if (string.IsNullOrEmpty(fileName) || dated == null)
+				return "/images/no-image.png"; // fallback image
 
-    }
+			var year = dated.Value.Year;
+			var month = dated.Value.Month.ToString(); // e.g. 03 for March
+
+			return $"{year}/{month}/large/{fileName}";
+		}
+	}
 }

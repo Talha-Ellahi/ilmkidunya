@@ -256,7 +256,7 @@ namespace IKDFrontEnd.Controllers
                 AllCourses = allCourses ?? new List<DBCollege.Course>(),
                 Addmission = latestAdmission,
                 AddmissionLogo = latestAdmission != null
-                    ? GetAdmissionLogoPath(latestAdmission.NoticeImageThumb, latestAdmission.Dated)
+                    ? GetAdmissionLogoPathThumb(latestAdmission.NoticeImageThumb, latestAdmission.Dated)
                     : null
             };
 
@@ -1958,7 +1958,7 @@ namespace IKDFrontEnd.Controllers
                         TotalFees = course.TotalFee
                     },
                     AdmissionInfo = admission,
-                    AdmissionLogo = GetAdmissionLogoPath(admission?.NoticeImageLarge, admission?.Dated),
+                    AdmissionLogo = GetAdmissionLogoPathThumb(admission?.NoticeImageLarge, admission?.Dated),
                     MeritLists = meritLists,
                     RelatedColleges = relatedColleges
                 };
@@ -2348,9 +2348,18 @@ namespace IKDFrontEnd.Controllers
 
             return $"{year}/{month}/thumb/{fileName}";
         }
+		private string GetAdmissionLogoPathThumb(string fileName, DateTime? dated)
+		{
+			if (string.IsNullOrEmpty(fileName) || dated == null)
+				return "/images/no-image.png"; // fallback image
 
+			var year = dated.Value.Year;
+			var month = dated.Value.Month.ToString(); // e.g. 03 for March
 
-        [Route("colleges/{levelUrl:regex(^[[a-zA-Z0-9\\-]]+$)}")]
+			return $"{year}/{month}/large/{fileName}";
+		}
+
+		[Route("colleges/{levelUrl:regex(^[[a-zA-Z0-9\\-]]+$)}")]
         public async Task<IActionResult> LevelWiseCollegesDetails(string levelUrl, string cityName = "All Cities", int page = 1, string viewType = "desktop")
         {
 
