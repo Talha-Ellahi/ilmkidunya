@@ -177,7 +177,8 @@
                         <ul class="citywise-list">
                             @foreach (var city in @ViewBag.Citylist)
                             {
-                                <li><a href="/admissions/@(ViewBag.levelUrl)-admissions-in-@(city.CityName).aspx" aria-label="link">@city.CityName</a></li>
+                                var slug = city.CityName.ToLower().Replace(" ", "-");
+                                <li><a href="/admissions/@(ViewBag.levelUrl)-admissions-in-@(slug).aspx" aria-label="link">@city.CityName</a></li>
                             }
                         </ul>
                     }

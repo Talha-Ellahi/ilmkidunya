@@ -33,10 +33,11 @@ namespace IKDFrontEnd.Controllers
             _logger = logger;
         }
 
+	
 
-        [OutputCache(Duration = 60)]
-        [Route("past_papers")]
-        public async Task<IActionResult> Home()
+		[OutputCache(Duration = 60)]
+		[Route("past_papers")]
+		public async Task<IActionResult> Home()
         {
             string cacheKey = "past_papers_page_data";
 

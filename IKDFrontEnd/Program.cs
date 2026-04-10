@@ -161,6 +161,8 @@ builder.Services.AddDbContext<Dbikd2Context>(options =>
     }));
 builder.Services.AddDbContext<DbCollegeContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DbCollege")));
+builder.Services.AddDbContext<PastPaperDbContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("PastPaperDbConnectionString")));
 //builder.Services.AddDbContext<Dbikd3Context>(options =>
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("Dbikd3"),
 //    sqlOptions => {
