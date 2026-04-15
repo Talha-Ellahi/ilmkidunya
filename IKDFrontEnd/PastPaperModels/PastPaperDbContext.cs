@@ -17,8 +17,6 @@ public partial class PastPaperDbContext : DbContext
 
     public virtual DbSet<Board> Boards { get; set; }
 
-    public virtual DbSet<Board1> Boards1 { get; set; }
-
     public virtual DbSet<Boooard> Boooards { get; set; }
 
     public virtual DbSet<PastPaperPageDescription> PastPaperPageDescriptions { get; set; }
@@ -49,32 +47,16 @@ public partial class PastPaperDbContext : DbContext
 
     public virtual DbSet<TblPptype> TblPptypes { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=67.217.56.210;Database=dbpapers;User Id=dbuserpapers;Password=^Ei4uaJd1H6$buwx;TrustServerCertificate=True;MultipleActiveResultSets=true;Connection Timeout=30;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("dbuserpapers");
 
         modelBuilder.Entity<Board>(entity =>
         {
-            entity.ToTable("Boards", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Dated).HasColumnType("datetime");
-            entity.Property(e => e.LevelIds)
-                .HasMaxLength(1000)
-                .IsUnicode(false)
-                .HasColumnName("LevelIDs");
-            entity.Property(e => e.LiveUrl)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.Name)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Board1>(entity =>
-        {
-            entity.ToTable("Boards");
-
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.LevelIds)
@@ -238,7 +220,7 @@ public partial class PastPaperDbContext : DbContext
             entity.HasOne(d => d.Board).WithMany(p => p.TblPastPapers)
                 .HasForeignKey(d => d.BoardId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__tblPastPa__Board__66603565");
+                .HasConstraintName("FK_tblPastPapers_Boards");
 
             entity.HasOne(d => d.Ppclass).WithMany(p => p.TblPastPapers)
                 .HasForeignKey(d => d.PpclassId)
@@ -262,6 +244,11 @@ public partial class PastPaperDbContext : DbContext
                 .HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
             entity.Property(e => e.PpclassId).HasColumnName("PPClassID");
+
+            entity.HasOne(d => d.Ppclass).WithMany(p => p.TblPpboardClasses)
+                .HasForeignKey(d => d.PpclassId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPPBoardClasses_tblPPClass");
         });
 
         modelBuilder.Entity<TblPpboardClassSubject>(entity =>
@@ -274,11 +261,6 @@ public partial class PastPaperDbContext : DbContext
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
             entity.Property(e => e.PpclassId).HasColumnName("PPClassID");
             entity.Property(e => e.PpsubjectId).HasColumnName("PPSubjectID");
-
-            entity.HasOne(d => d.Board).WithMany(p => p.TblPpboardClassSubjects)
-                .HasForeignKey(d => d.BoardId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__tblPPBoar__Board__74AE54BC");
 
             entity.HasOne(d => d.Ppclass).WithMany(p => p.TblPpboardClassSubjects)
                 .HasForeignKey(d => d.PpclassId)

@@ -28,4 +28,6 @@ public partial class TblPpclass
     public virtual ICollection<TblPastPaper> TblPastPapers { get; set; } = new List<TblPastPaper>();
 
     public virtual ICollection<TblPpboardClassSubject> TblPpboardClassSubjects { get; set; } = new List<TblPpboardClassSubject>();
+
+    public virtual ICollection<TblPpboardClass> TblPpboardClasses { get; set; } = new List<TblPpboardClass>();
 }

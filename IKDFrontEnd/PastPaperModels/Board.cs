@@ -28,6 +28,4 @@ public partial class Board
     public string? Url { get; set; }
 
     public virtual ICollection<TblPastPaper> TblPastPapers { get; set; } = new List<TblPastPaper>();
-
-    public virtual ICollection<TblPpboardClassSubject> TblPpboardClassSubjects { get; set; } = new List<TblPpboardClassSubject>();
 }

@@ -321,8 +321,9 @@ namespace IKDFrontEnd.Controllers
 
             if (content == null)
             {
-                var redirectSlug = $"{urlSlug}".ToLower().Replace(" ", "-");
-                return await PaperDetails(redirectSlug);
+                //var redirectSlug = $"{urlSlug}".ToLower().Replace(" ", "-");
+                //return await PaperDetails(redirectSlug);
+                return NotFound();
             }
             var PanelDescription = await (from pd in _pastPaperDbContext.PastPaperPageDescriptions
                                           join sc in _pastPaperDbContext.SectionContentImports
@@ -436,24 +437,20 @@ namespace IKDFrontEnd.Controllers
         }
 
 
-
-        public async Task<IActionResult> PaperDetails(string redirectSlug)
+        [Route("past_papers/{slug}-{id:int}.aspx")]
+        public async Task<IActionResult> PaperDetails(string slug, int id)
         {
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
 
-            if (string.IsNullOrEmpty(redirectSlug) || !redirectSlug.Contains('-'))
+            // Validate ID
+            if (id <= 0)
                 return NotFound();
 
-            int lastHyphenIndex = redirectSlug.LastIndexOf('-');
-            var searchBase = redirectSlug.Substring(0, lastHyphenIndex).Replace("-", " ");
-            var normalizedSlug = NormalizeStringDetail(searchBase);
-            var lowerSearchBase = searchBase.ToLower();
-
-            // Try database search first
+            // Try to get the paper by ID first (most efficient)
             var paper = await _pastPaperDbContext.TblPastPapers
                 .AsNoTracking()
-                .Where(p => p.Pnname.ToLower().Replace("(", " ").Replace(")", " ").Contains(lowerSearchBase))
+                .Where(p => p.Id == id)
                 .Select(p => new PastPaperViewModel
                 {
                     Id = p.Id,
@@ -473,44 +470,6 @@ namespace IKDFrontEnd.Controllers
                     PastPapers = new List<PastPaperViewModel> { paper }
                 };
                 return View("PaperDetails", viewModel);
-            }
-
-            // Fallback to recent papers search
-            var recentPapers = await _pastPaperDbContext.TblPastPapers
-                .AsNoTracking()
-                .OrderByDescending(p => p.Date)
-                .Take(300)
-                .Select(p => new
-                {
-                    p.Id,
-                    p.Pnname,
-                    p.Image,
-                    p.Date,
-                    p.Description
-                })
-                .ToListAsync();
-
-            foreach (var p in recentPapers)
-            {
-                if (NormalizeStringDetail(p.Pnname).Contains(normalizedSlug))
-                {
-                    var resultPaper = new PastPaperViewModel
-                    {
-                        Id = p.Id,
-                        PaperName = p.Pnname,
-                        ImageName = p.Image,
-                        Dated = p.Date ?? DateTime.MinValue,
-                        Heading = p.Pnname,
-                        Description = p.Description
-                    };
-
-                    var resultViewModel = new PastPaperPageViewModel
-                    {
-                        PageTitle2 = resultPaper.PaperName,
-                        PastPapers = new List<PastPaperViewModel> { resultPaper }
-                    };
-                    return View("PaperDetails", resultViewModel);
-                }
             }
 
             return NotFound();
