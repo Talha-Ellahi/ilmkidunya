@@ -10,7 +10,7 @@ using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.JobModels;
 using IKDFrontEnd.Models;
-using IKDFrontEnd.Models.PastPaperModel;
+using IKDFrontEnd.PastPaperModels;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
