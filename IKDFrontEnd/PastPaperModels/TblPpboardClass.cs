@@ -12,4 +12,6 @@ public partial class TblPpboardClass
     public int PpclassId { get; set; }
 
     public bool? IsDelete { get; set; }
+
+    public virtual TblPpclass Ppclass { get; set; } = null!;
 }

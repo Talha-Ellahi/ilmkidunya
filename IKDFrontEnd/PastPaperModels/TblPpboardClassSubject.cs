@@ -15,8 +15,6 @@ public partial class TblPpboardClassSubject
 
     public bool? IsDelete { get; set; }
 
-    public virtual Board Board { get; set; } = null!;
-
     public virtual TblPpclass Ppclass { get; set; } = null!;
 
     public virtual TblPpsubject Ppsubject { get; set; } = null!;
