@@ -9,12 +9,12 @@ namespace IKDFrontEnd.ViewModels
         public List<ArticleViewModel> Articles { get; set; }
         public List<AdmissionViewModel> Admissions { get; set; }
         public CoursesViewModels Courses { get; set; }
-        public List<SliderHome> WebStorySliders { get; set; }
-        public List<GroupedJobAdViewModel> Jobs { get; set; }
+        public List<SliderHome> WebStorySliders { get; set; } = new();
+		public List<GroupedJobAdViewModel> Jobs { get; set; }
         public List<FeaturedCollegeViewModel> FeaturedColleges { get; set; }
         public List<NewsViewModel> SliderNews { get; set; }
         public List<CategoryCoursesViewModel> CategoryCourses { get; set; } = new();
-        public List<SectionTypeImport> HomeLinks { get; set; }
+        public List<DBCollege.SectionTypeImport> HomeLinks { get; set; }
     }
 
     public class SliderViewModel
