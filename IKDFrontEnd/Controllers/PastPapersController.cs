@@ -1,4 +1,4 @@
-﻿using IKDFrontEnd.Models.PastPaperModel;
+﻿using IKDFrontEnd.PastPaperModels;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
