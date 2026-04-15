@@ -1,7 +1,10 @@
 ﻿using DinkToPdf;
 using DinkToPdf.Contracts;
 using HtmlAgilityPack;
+using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.Models;
+
+//using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.AllGuidesViewModel;
@@ -28,8 +31,9 @@ namespace IKDFrontEnd.Controllers
 
     public class AllGuidesController : Controller
     {
-        private readonly DbikdContext _context;
-        private readonly BannerService _bannerService;
+		//private readonly DbikdContext _context;
+		private readonly DbCollegeContext _context;
+		private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
 
         private readonly IFtpService _ftpService;
@@ -37,8 +41,9 @@ namespace IKDFrontEnd.Controllers
         private readonly ICompositeViewEngine _viewEngine;
 
         public AllGuidesController(
-            DbikdContext context,
-            BannerService bannerService,
+			//DbikdContext context,
+			DbCollegeContext context,
+			BannerService bannerService,
             CmsRepository cmsRepo,
             ICompositeViewEngine viewEngine, // new
             IFtpService ftpService)
@@ -1295,7 +1300,7 @@ namespace IKDFrontEnd.Controllers
 
             course = course.ToLower().Replace("-", " ");
 
-            TblDefCity City = new TblDefCity();
+           DBCollege.TblDefCity City = new DBCollege.TblDefCity();
             if (!string.IsNullOrEmpty(city))
             {
                 City = _context.TblDefCities
@@ -1313,7 +1318,7 @@ namespace IKDFrontEnd.Controllers
                          group new { c, cs } by c.Id into g
                          select new CollegeWithCourseViewModel
                          {
-                             CollegeId = g.Key ?? 0,
+                             CollegeId = g.Key,
                              CollegeName = g.First().c.Name,
                              CollegeUrl = g.First().c.Url,
                              CollegeAddress = g.First().c.Address,
@@ -1337,7 +1342,7 @@ namespace IKDFrontEnd.Controllers
                          group new { c, cs } by c.Id into g
                          select new CollegeWithCourseViewModel
                          {
-                             CollegeId = g.Key ?? 0,
+                             CollegeId = g.Key,
                              CollegeName = g.First().c.Name,
                              CollegeUrl = g.First().c.Url,
                              CollegeAddress = g.First().c.Address,
@@ -1456,7 +1461,7 @@ namespace IKDFrontEnd.Controllers
             if (!courses.Any())
                 return new List<AdmissionWithCollegeViewModel>();
 
-            TblDefCity City = new TblDefCity();
+            DBCollege.TblDefCity City = new DBCollege.TblDefCity();
             if (!string.IsNullOrEmpty(city))
             {
                 City = _context.TblDefCities
@@ -1637,7 +1642,7 @@ namespace IKDFrontEnd.Controllers
         // ViewModel for city with college count
 
 
-        public string ReplacePlaceholders(string inputHtml, string[] pathSegment, TblGuidesDefination guide)
+        public string ReplacePlaceholders(string inputHtml, string[] pathSegment, DBCollege.TblGuidesDefination guide)
         {
             if (string.IsNullOrEmpty(inputHtml))
                 return inputHtml;

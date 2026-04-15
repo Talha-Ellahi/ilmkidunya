@@ -58,7 +58,8 @@
         public string? CompanyName { get; set; }
         public List<string> JobTitles { get; set; } = new();
         public List<int> JobCounts { get; set; } = new();
-        public DateTime? LastDate { get; set; }
+		public int JobCount { get; set; } = new();
+		public DateTime? LastDate { get; set; }
         public string? DetailUrl { get; set; }
         public string? CompanyUrl { get; internal set; }
         public string? Location { get; set; }

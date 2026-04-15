@@ -33,6 +33,8 @@ public partial class DbCollegeContext : DbContext
 
     public virtual DbSet<TblAdmissionCourse> TblAdmissionCourses { get; set; }
 
+    public virtual DbSet<TblAllGuidesCm> TblAllGuidesCms { get; set; }
+
     public virtual DbSet<TblCollege> TblColleges { get; set; }
 
     public virtual DbSet<TblCollegereview> TblCollegereviews { get; set; }
@@ -46,6 +48,8 @@ public partial class DbCollegeContext : DbContext
     public virtual DbSet<TblMeritList> TblMeritLists { get; set; }
 
     public virtual DbSet<TblMeritListType> TblMeritListTypes { get; set; }
+
+    public virtual DbSet<TblWhatsAppGroup> TblWhatsAppGroups { get; set; }
 
     public virtual DbSet<TblXcourseLevel> TblXcourseLevels { get; set; }
 
@@ -200,6 +204,19 @@ public partial class DbCollegeContext : DbContext
             entity.ToTable("tblAdmissionCourses", "dbikduser");
         });
 
+        modelBuilder.Entity<TblAllGuidesCm>(entity =>
+        {
+            entity.ToTable("TblAllGuidesCms", "dbikduser");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.HeaderIcon).HasMaxLength(255);
+            entity.Property(e => e.HeaderName).HasMaxLength(255);
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
+        });
+
         modelBuilder.Entity<TblCollege>(entity =>
         {
             entity.ToTable("TblCollege", "dbo");
@@ -343,6 +360,16 @@ public partial class DbCollegeContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MeritListTypeName).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TblWhatsAppGroup>(entity =>
+        {
+            entity.ToTable("TblWhatsAppGroups", "dbikduser");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.GroupLink).HasMaxLength(500);
+            entity.Property(e => e.GuideName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblXcourseLevel>(entity =>

@@ -28,7 +28,7 @@ namespace IKDFrontEnd.ViewModels
         public List<MenuItemViewModel>? MenuItems { get; set; }
         public List<ConsultantBasicViewModel>? Consultants { get; set; }
         public List<AllGuidesController.CitywithAdmissionAndCollegeCountViewModel> CityList { get; internal set; }
-        public TblGuidesDefination? Guide { get; internal set; }
+        public DBCollege.TblGuidesDefination? Guide { get; internal set; }
     }
 
 
