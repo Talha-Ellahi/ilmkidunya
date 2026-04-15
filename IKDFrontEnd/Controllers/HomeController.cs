@@ -1,7 +1,6 @@
 ﻿using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.JobModels;
 using IKDFrontEnd.Models;
-using IKDFrontEnd.Models.PastPaperModel;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
