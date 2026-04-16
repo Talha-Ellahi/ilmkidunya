@@ -1005,7 +1005,9 @@
     const holder = document.getElementById("quest-holder");
 
     // Function for Set-wise tests (openAnsMode)
-    function openAnsMode(apiUrl) {
+    function openAnsMode(apiUrl) 
+            debugger;
+            
         fetch(apiUrl)
             .then(res => res.json())
             .then(data => {

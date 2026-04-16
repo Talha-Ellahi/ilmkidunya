@@ -59,49 +59,49 @@ namespace IKDFrontEnd.Controllers
             var banneres = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banneres;
 
-			// TRY REDIS CACHE FIRST
-			try
-			{
-				var cachedData = await _distributedCache.GetStringAsync(cacheKey);
-				if (!string.IsNullOrEmpty(cachedData))
-				{
-					// Use Newtonsoft JsonConvert instead of System.Text.Json
-					var cachedModel = JsonConvert.DeserializeObject<HomePageViewModel3>(cachedData);
-					if (cachedModel != null)
-					{
-						// Verify WebStorySliders are properly deserialized
-						if (cachedModel.WebStorySliders != null)
-						{
-							_logger.LogInformation("Redis cache: WebStorySliders count: {Count}",
-								cachedModel.WebStorySliders.Count);
+			//// TRY REDIS CACHE FIRST
+			//try
+			//{
+			//	var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+			//	if (!string.IsNullOrEmpty(cachedData))
+			//	{
+			//		// Use Newtonsoft JsonConvert instead of System.Text.Json
+			//		var cachedModel = JsonConvert.DeserializeObject<HomePageViewModel3>(cachedData);
+			//		if (cachedModel != null)
+			//		{
+			//			// Verify WebStorySliders are properly deserialized
+			//			if (cachedModel.WebStorySliders != null)
+			//			{
+			//				_logger.LogInformation("Redis cache: WebStorySliders count: {Count}",
+			//					cachedModel.WebStorySliders.Count);
 
-							// Log first item to verify data
-							var firstSlider = cachedModel.WebStorySliders.FirstOrDefault();
-							if (firstSlider != null)
-							{
-								_logger.LogInformation("First slider - Title: {Title}, Image: {Image}",
-									firstSlider.Slidertitle, firstSlider.Image);
-							}
-						}
+			//				// Log first item to verify data
+			//				var firstSlider = cachedModel.WebStorySliders.FirstOrDefault();
+			//				if (firstSlider != null)
+			//				{
+			//					_logger.LogInformation("First slider - Title: {Title}, Image: {Image}",
+			//						firstSlider.Slidertitle, firstSlider.Image);
+			//				}
+			//			}
 
-						ViewBag.HideHeaderLowerBanner = true;
-						ViewBag.CacheSource = "Redis";
-						return View("Index", cachedModel);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.LogWarning(ex, "Redis cache read failed");
-			}
+			//			ViewBag.HideHeaderLowerBanner = true;
+			//			ViewBag.CacheSource = "Redis";
+			//			return View("Index", cachedModel);
+			//		}
+			//	}
+			//}
+			//catch (Exception ex)
+			//{
+			//	_logger.LogWarning(ex, "Redis cache read failed");
+			//}
 
-			// TRY MEMORY CACHE NEXT (as fallback)
-			if (_memoryCache.TryGetValue(cacheKey, out HomePageViewModel3 memoryCachedModel))
-			{
-				ViewBag.HideHeaderLowerBanner = true;
-				ViewBag.CacheSource = "Memory";
-				return View("Index", memoryCachedModel);
-			}
+			//// TRY MEMORY CACHE NEXT (as fallback)
+			//if (_memoryCache.TryGetValue(cacheKey, out HomePageViewModel3 memoryCachedModel))
+			//{
+			//	ViewBag.HideHeaderLowerBanner = true;
+			//	ViewBag.CacheSource = "Memory";
+			//	return View("Index", memoryCachedModel);
+			//}
 
 			try
             {
@@ -192,9 +192,39 @@ namespace IKDFrontEnd.Controllers
 				// =====================
 				// COURSES
 				// =====================
-				var cities = await _contextCollege.TblDefCities.AsNoTracking().ToListAsync();
-				var categories = await _contextCollege.CourseCategories.AsNoTracking().ToListAsync();
-				var levels = await _contextCollege.TblXcourseLevels.AsNoTracking().ToListAsync();
+				//var cities = await _contextCollege.TblDefCities.AsNoTracking().ToListAsync();
+				//var categories = await _contextCollege.CourseCategories.AsNoTracking().ToListAsync();
+				//var levels = await _contextCollege.TblXcourseLevels.AsNoTracking().ToListAsync();
+				var cities = await _contextJobes.TblDefCities
+					.OrderBy(c => c.CityName)
+					.Select(c => new DBCollege.TblDefCity
+					{
+						CityId = c.CityId,
+						CityName = c.CityName
+					})
+					.AsNoTracking()
+					.ToListAsync();
+
+				var categories = await _context.CourseCategories
+					.OrderBy(c => c.Name)
+					.Select(c => new DBCollege.CourseCategory
+					{
+						Id = c.Id,
+						Name = c.Name
+					})
+					.AsNoTracking()
+					.ToListAsync();
+
+				var levels = await _context.TblXcourseLevels
+					.OrderBy(x => x.SortOrder)
+					.Select(x => new DBCollege.TblXcourseLevel
+					{
+						Id = x.Id,
+						Name = x.Name,
+						SortOrder = x.SortOrder
+					})
+					.AsNoTracking()
+					.ToListAsync();
 
 				model.Courses = new CoursesViewModels
 				{
@@ -202,7 +232,6 @@ namespace IKDFrontEnd.Controllers
 					Categories = categories,
 					Levels = levels
 				};
-
 
 				// =====================
 				// WEB STORIES
@@ -267,6 +296,12 @@ namespace IKDFrontEnd.Controllers
 					.Take(8)
 					.ToListAsync();
 
+				model.HomeLinks = await _contextCollege.SectionTypeImports
+						.Where(s => s.SectionId == 195)
+						.OrderBy(s => s.Id) // or whatever column defines order
+						.Take(4)
+						.AsNoTracking()
+						.ToListAsync();
 				//model.HomeLinks = await _contextCollege.SectionTypeImports
 				//.AsNoTracking()
 				//.Where(s => s.SectionId == 195)
@@ -639,7 +674,7 @@ namespace IKDFrontEnd.Controllers
         private async Task<List<CategoryCoursesViewModel>> GetCategoryCoursesAsync()
         {
             // Step 1: Get latest 10 categories based on guide activity
-            var categoryIdsRaw = await _context.TblGuidesDefinations
+            var categoryIdsRaw = await _contextCollege.TblGuidesDefinations
                 .OrderByDescending(g => g.Id)
                 .Select(g => g.CategoryIds)
                 .ToListAsync();
@@ -656,12 +691,12 @@ namespace IKDFrontEnd.Controllers
                 .ToList();
 
             // Step 3: Fetch categories
-            var latestCategories = await _context.CourseCategories
+            var latestCategories = await _contextCollege.CourseCategories
                 .Where(c => latestCategoryIds.Contains(c.Id))
                 .ToListAsync();
 
             // Step 4: Get active levels ordered by SortOrder
-            var levels = await _context.TblXcourseLevels
+            var levels = await _contextCollege.TblXcourseLevels
                 .Where(l => l.IsActive == true)
                 .OrderBy(l => l.SortOrder)
                 .ToListAsync();
@@ -685,7 +720,7 @@ namespace IKDFrontEnd.Controllers
             foreach (var category in latestCategories)
             {
                 // get all guides for this category
-                var guidesData = await _context.TblGuidesDefinations
+                var guidesData = await _contextCollege.TblGuidesDefinations
                     .Where(g =>
                         activeLevelIds.Contains(g.EducationLevelId) &&
                         ("," + g.CategoryIds + ",").Contains("," + category.Id + ","))

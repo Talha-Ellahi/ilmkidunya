@@ -167,7 +167,7 @@ namespace IKDFrontEnd.Controllers
             {
                 return NotFound();
             };
-                ViewBag.CountryName = country.Name;
+            ViewBag.CountryName = country.Name;
             var cmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/scholarships/scholarships-in-{urlSlug}.aspx");
 
 
@@ -179,7 +179,7 @@ namespace IKDFrontEnd.Controllers
                                          {
                                              SchName = string.IsNullOrWhiteSpace(s.SchName) ? "Not Available" : s.SchName,
                                              Url = string.IsNullOrWhiteSpace(s.Url) ? "Not Available" : s.Url,
-                                             Deadline = s.Deadline ?? DateTime.MinValue, // Agar date null ho to handle karein
+                                             Deadline = s.Deadline, // Agar date null ho to handle karein
                                              Image = string.IsNullOrWhiteSpace(s.SchImage) ? "/images/default-image.png" : s.SchImage,
 
                                              StudyLevels = s.TblSchStudyLevelChildren
