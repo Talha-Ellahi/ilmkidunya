@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,17 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
+		private readonly DbCollegeContext _contextCollege;
+		public StudyabroadController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, DbCollegeContext contextCollege)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_contextCollege = contextCollege;
+		}
 
-        public StudyabroadController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-        }
-
-        [HttpGet("studyabroad")]
-        public async Task<IActionResult> Home(string guideSlug)
-        
+		[HttpGet("studyabroad")]
+        public async Task<IActionResult> Home(string guideSlug) 
         {
             var sectionData = await _context.Tblpagewisecontents
                 .Where(s => s.SectionId == 55)
@@ -53,9 +54,7 @@ namespace IKDFrontEnd.Controllers
         [HttpGet("studyabroad/{detailSlug}")]
         public async Task<IActionResult> Detail(string detailSlug)
      {
-
-
-            var sectionContent = await _context.TblAllGuidesCms
+            var sectionContent = await _contextCollege.TblAllGuidesCms
                       .Where(c => c.Url == "/studyabroad/" + detailSlug)
                       .FirstOrDefaultAsync();
 
@@ -64,7 +63,7 @@ namespace IKDFrontEnd.Controllers
                 var slug = detailSlug.Split("-")[0];
                 var guideUrl = $"https://www.ilmkidunya.com/{slug}";
                 
-                var guide = await _context.TblGuidesDefinations.FirstOrDefaultAsync(g => g.GuideMainUrl == guideUrl || g.GuideMainUrl == guideUrl + '/');
+                var guide = await _contextCollege.TblGuidesDefinations.FirstOrDefaultAsync(g => g.GuideMainUrl == guideUrl || g.GuideMainUrl == guideUrl + '/');
                 if(guide != null)
                 {
                     string redirectUrl = $"/{slug}/{detailSlug}";
