@@ -37,6 +37,8 @@ builder.Services.AddScoped<RandomCmsService>();
 builder.Services.AddScoped<CmsRepository>();
 builder.Services.AddSingleton<ICompositeViewEngine, CompositeViewEngine>();
 builder.Services.AddHttpClient();
+builder.Services.AddControllers()
+	.AddNewtonsoftJson();
 
 // ---------------- Logging ----------------
 builder.Services.AddLogging(logging =>
@@ -337,33 +339,33 @@ else
 
 app.UseRouting();
 
-// ---------------- Global Exception Handler ----------------
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (Exception ex)
-    {
-        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex,
-            "Unhandled exception occurred. Path: {Path}, Method: {Method}, User: {User}",
-            context.Request.Path,
-            context.Request.Method,
-            context.User?.Identity?.Name ?? "Anonymous");
+//// ---------------- Global Exception Handler ----------------
+//app.Use(async (context, next) =>
+//{
+//    try
+//    {
+//        await next();
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex,
+//            "Unhandled exception occurred. Path: {Path}, Method: {Method}, User: {User}",
+//            context.Request.Path,
+//            context.Request.Method,
+//            context.User?.Identity?.Name ?? "Anonymous");
 
 
-        context.Response.StatusCode = 500;
-        context.Response.ContentType = "text/html";
-        await context.Response.WriteAsync(@"
-            <html><body>
-            <h2>Service Temporarily Unavailable</h2>
-            <p>Please try again in a few moments.</p>
-            <script>setTimeout(function(){ window.location.reload(); }, 3000);</script>
-            </body></html>");
-    }
-});
+//        context.Response.StatusCode = 500;
+//        context.Response.ContentType = "text/html";
+//        await context.Response.WriteAsync(@"
+//            <html><body>
+//            <h2>Service Temporarily Unavailable</h2>
+//            <p>Please try again in a few moments.</p>
+//            <script>setTimeout(function(){ window.location.reload(); }, 3000);</script>
+//            </body></html>");
+//    }
+//});
 
 // ---------------- Dart client block ----------------
 app.Use(async (context, next) =>

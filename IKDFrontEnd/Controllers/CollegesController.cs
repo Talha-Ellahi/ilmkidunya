@@ -186,7 +186,7 @@ namespace IKDFrontEnd.Controllers
                 _context.Database.GetConnectionString());
 
             using var multi = await connection.QueryMultipleAsync(
-                "sp_GetCollegeHomeData",
+				"dbo.sp_GetCollegeHomeData",
                 new { CollegeUrl = collegeUrl },
                 commandType: CommandType.StoredProcedure);
 

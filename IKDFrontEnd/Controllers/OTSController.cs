@@ -170,8 +170,8 @@ namespace IKDFrontEnd.Controllers
         }
 
 
-        [HttpGet("online-test/{url}")]
-        [ResponseCache(NoStore = true)]
+		[HttpGet("online-test/{*url}")]
+		[ResponseCache(NoStore = true)]
         public async Task<IActionResult> RouteOnlineTestRequest(string url)
         {
             var test = await _context.TblOtsTestCriteria.FirstOrDefaultAsync(x => x.Url == url);
@@ -1829,12 +1829,9 @@ namespace IKDFrontEnd.Controllers
 
 
 
-            return Json(questions, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+			return Ok(questions);
 
-        }
+		}
 
 
 
