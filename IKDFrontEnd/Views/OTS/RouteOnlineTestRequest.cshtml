@@ -1005,20 +1005,39 @@
     const holder = document.getElementById("quest-holder");
 
     // Function for Set-wise tests (openAnsMode)
+<<<<<<< Updated upstream
     function openAnsMode(apiUrl) {
+=======
+       @*  function openAnsMode(apiUrl) {
+        fetch(apiUrl)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Server error: " + res.status);
+            }
+            return res.json();
+        })
+        .then(data => {
+            // your logic
+        })
+        .catch(err => {
+            console.error("Error fetching data:", err);
+        });
+        } *@
+            function openAnsMode(apiUrl) {
+>>>>>>> Stashed changes
         fetch(apiUrl)
             .then(res => res.json())
             .then(data => {
                 console.log("Fetched Questions:", data);
-                holder.innerHTML = "";
 
                 const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
+                let html = "";
 
                 data.forEach((q, index) => {
-                    let correctIndex = q.correctAnswer - 1;
+                    let correctIndex = (q.correctAnswer || 1) - 1;
 
                     let questionImgHtml = q.questionImage
-                        ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+                        ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" /></div>`
                         : "";
 
                     let choicesHtml = q.choices
@@ -1027,17 +1046,17 @@
                             <li class="${i === correctIndex ? "correct" : ""}">
                                 <label class="radio-container">
                                     <span class="q-detiel">
-                                        ${c.text ? c.text : ""}
-                                        ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+                                        ${c.text || ""}
+                                        ${c.img ? `<img src="${baseImgPath + c.img}" class="opt-img" />` : ""}
                                     </span>
-                                    <input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
+                                    <input type="radio" disabled value="${c.value}">
                                     <span class="label">${c.value}</span>
                                     <span class="checkmark"></span>
                                 </label>
                             </li>
                         `).join("");
 
-                    holder.innerHTML += `
+                    html += `
                         <div class="mid-box1 ans-bx-visible">
                             <strong>Question # ${index + 1}</strong>
                             <h3>${q.question}</h3>
@@ -1047,11 +1066,16 @@
                     `;
                 });
 
+                holder.innerHTML = html;
+
                 setupNavigation();
                 targetBox.classList.add("visible");
+            })
+            .catch(err => {
+                console.error("Error fetching data:", err);
             });
     }
-
+     
     // Setup navigation for answer mode
     function setupNavigation() {
         let questions = document.querySelectorAll(".ans-bx-visible");

@@ -58,8 +58,7 @@ namespace IKDFrontEnd.Controllers
             var sectionContent = await _context.TblAllGuidesCms
                       .Where(c => c.Url == "/studyabroad/" + detailSlug)
                       .FirstOrDefaultAsync();
-
-            if (sectionContent == null)
+			if (sectionContent == null)
             {
                 var slug = detailSlug.Split("-")[0];
                 var guideUrl = $"https://www.ilmkidunya.com/{slug}";
