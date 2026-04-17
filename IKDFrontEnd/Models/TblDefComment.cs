@@ -49,7 +49,6 @@ public partial class TblDefComment
     // Navigation to replies (FIXED - this is the inverse property)
     [InverseProperty("ParentComment")]
     public virtual ICollection<TblDefComment> Replies { get; set; } = new List<TblDefComment>();
-
     [NotMapped]
     public int LikeCount { get; set; }
 

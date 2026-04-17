@@ -20,4 +20,10 @@ public partial class TblLongQuestion
     public int? MemberId { get; set; }
 
     public int? TopicId { get; set; }
+
+    public int? UserId { get; set; }
+
+    public DateTime? Updated { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

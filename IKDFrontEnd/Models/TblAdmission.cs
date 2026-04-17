@@ -32,4 +32,10 @@ public partial class TblAdmission
     public string? MetaKeywords { get; set; }
 
     public string? Url { get; set; }
+
+    public int? UserId { get; set; }
+
+    public DateTime? Updated { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

@@ -32,4 +32,6 @@ public partial class TblCm
     public int? UserId { get; set; }
 
     public DateTime? Date { get; set; }
+
+    public DateTime? Updated { get; set; }
 }

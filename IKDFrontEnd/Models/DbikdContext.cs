@@ -59,8 +59,6 @@ public partial class DbikdContext : DbContext
 
     public virtual DbSet<ComapnyAddress> ComapnyAddresses { get; set; }
 
-    public virtual DbSet<Company> Companies { get; set; }
-
     public virtual DbSet<CompanyFollow> CompanyFollows { get; set; }
 
     public virtual DbSet<Country> Countries { get; set; }
@@ -79,13 +77,9 @@ public partial class DbikdContext : DbContext
 
     public virtual DbSet<InstituteType> InstituteTypes { get; set; }
 
-    public virtual DbSet<JobAd> JobAds { get; set; }
-
     public virtual DbSet<JobAdsCity> JobAdsCities { get; set; }
 
     public virtual DbSet<JobAdsClone> JobAdsClones { get; set; }
-
-    public virtual DbSet<JobAdsNewTest> JobAdsNewTests { get; set; }
 
     public virtual DbSet<JobAdsPapular> JobAdsPapulars { get; set; }
 
@@ -100,8 +94,6 @@ public partial class DbikdContext : DbContext
     public virtual DbSet<JobSubscriber> JobSubscribers { get; set; }
 
     public virtual DbSet<JobSubscriberChild> JobSubscriberChildren { get; set; }
-
-    public virtual DbSet<JobType> JobTypes { get; set; }
 
     public virtual DbSet<JobUserAlert> JobUserAlerts { get; set; }
 
@@ -118,6 +110,20 @@ public partial class DbikdContext : DbContext
     public virtual DbSet<LongQuestionCriteriaDetail> LongQuestionCriteriaDetails { get; set; }
 
     public virtual DbSet<LongQuestionCriterion> LongQuestionCriteria { get; set; }
+
+    public virtual DbSet<Menu> Menus { get; set; }
+
+    public virtual DbSet<MovedCompany> MovedCompanies { get; set; }
+
+    public virtual DbSet<MovedJobAd> MovedJobAds { get; set; }
+
+    public virtual DbSet<MovedJobAdsNewTest> MovedJobAdsNewTests { get; set; }
+
+    public virtual DbSet<MovedJobType> MovedJobTypes { get; set; }
+
+    public virtual DbSet<MovedTblJobScale> MovedTblJobScales { get; set; }
+
+    public virtual DbSet<MovedTbljobadslatest> MovedTbljobadslatests { get; set; }
 
     public virtual DbSet<NewsPaper> NewsPapers { get; set; }
 
@@ -154,6 +160,8 @@ public partial class DbikdContext : DbContext
     public virtual DbSet<ShortQuestionsAnswerSuggestion> ShortQuestionsAnswerSuggestions { get; set; }
 
     public virtual DbSet<SubJobCategory> SubJobCategories { get; set; }
+
+    public virtual DbSet<SubMenu> SubMenus { get; set; }
 
     public virtual DbSet<TblAdmission> TblAdmissions { get; set; }
 
@@ -209,6 +217,8 @@ public partial class DbikdContext : DbContext
 
     public virtual DbSet<TblDefCommentLike> TblDefCommentLikes { get; set; }
 
+    public virtual DbSet<TblDefCommentNew> TblDefCommentNews { get; set; }
+
     public virtual DbSet<TblDefConsultant> TblDefConsultants { get; set; }
 
     public virtual DbSet<TblDefCountry> TblDefCountries { get; set; }
@@ -242,8 +252,6 @@ public partial class DbikdContext : DbContext
     public virtual DbSet<TblHostelRoomType> TblHostelRoomTypes { get; set; }
 
     public virtual DbSet<TblInstitute> TblInstitutes { get; set; }
-
-    public virtual DbSet<TblJobScale> TblJobScales { get; set; }
 
     public virtual DbSet<TblLecture> TblLectures { get; set; }
 
@@ -385,6 +393,10 @@ public partial class DbikdContext : DbContext
 
     public virtual DbSet<TblTutorSubject> TblTutorSubjects { get; set; }
 
+    public virtual DbSet<TblUrl> TblUrls { get; set; }
+
+    public virtual DbSet<TblUrlcontent> TblUrlcontents { get; set; }
+
     public virtual DbSet<TblUrlcontentMigrate> TblUrlcontentMigrates { get; set; }
 
     public virtual DbSet<TblWhatsAppGroup> TblWhatsAppGroups { get; set; }
@@ -394,8 +406,6 @@ public partial class DbikdContext : DbContext
     public virtual DbSet<Tblarticlestypemetadatum> Tblarticlestypemetadata { get; set; }
 
     public virtual DbSet<Tbldefmembertype2> Tbldefmembertype2s { get; set; }
-
-    public virtual DbSet<Tbljobadslatest> Tbljobadslatests { get; set; }
 
     public virtual DbSet<Tblpagewisecontent> Tblpagewisecontents { get; set; }
 
@@ -415,12 +425,17 @@ public partial class DbikdContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserRight> UserRights { get; set; }
+
     public virtual DbSet<WebStorySlider> WebStorySliders { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=66.23.236.70;Database=dbed;User Id=userdbed;Password=sHEzRtoc3!jv@37j;TrustServerCertificate=True;MultipleActiveResultSets=true;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("dbikduser");
+        modelBuilder.HasDefaultSchema("userdbed");
 
         modelBuilder.Entity<AbroadCity>(entity =>
         {
@@ -478,6 +493,8 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<AspNetRole>(entity =>
         {
+            entity.ToTable("AspNetRoles", "dbikduser");
+
             entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
                 .IsUnique()
                 .HasFilter("([NormalizedName] IS NOT NULL)");
@@ -488,6 +505,8 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<AspNetRoleClaim>(entity =>
         {
+            entity.ToTable("AspNetRoleClaims", "dbikduser");
+
             entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
             entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims).HasForeignKey(d => d.RoleId);
@@ -495,6 +514,8 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<AspNetUser>(entity =>
         {
+            entity.ToTable("AspNetUsers", "dbikduser");
+
             entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
             entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
@@ -514,13 +535,15 @@ public partial class DbikdContext : DbContext
                     j =>
                     {
                         j.HasKey("UserId", "RoleId");
-                        j.ToTable("AspNetUserRoles");
+                        j.ToTable("AspNetUserRoles", "dbikduser");
                         j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                     });
         });
 
         modelBuilder.Entity<AspNetUserClaim>(entity =>
         {
+            entity.ToTable("AspNetUserClaims", "dbikduser");
+
             entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
@@ -530,6 +553,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
 
+            entity.ToTable("AspNetUserLogins", "dbikduser");
+
             entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
@@ -538,6 +563,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<AspNetUserToken>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+            entity.ToTable("AspNetUserTokens", "dbikduser");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
@@ -610,6 +637,8 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<CategoryTest>(entity =>
         {
+            entity.ToTable("CategoryTests", "dbikduser");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.TestId).HasColumnName("TestID");
@@ -618,6 +647,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<ChatMessage>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__ChatMess__3214EC07800C1917");
+
+            entity.ToTable("ChatMessages", "dbikduser");
 
             entity.Property(e => e.SentAt)
                 .HasDefaultValueSql("(getdate())")
@@ -629,7 +660,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.CityId).HasName("PK__tblCity__F2D21B767960A40D");
 
-            entity.ToTable("City");
+            entity.ToTable("City", "dbikduser");
 
             entity.Property(e => e.CityName)
                 .HasMaxLength(100)
@@ -648,6 +679,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<City1>(entity =>
         {
             entity.HasKey(e => e.CityId).HasName("PK__City__F2D21B76C220EC5A");
+
+            entity.ToTable("Citys", "dbikduser");
 
             entity.Property(e => e.CityName)
                 .HasMaxLength(150)
@@ -693,7 +726,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.ClassId).HasName("PK_tblClasses");
 
-            entity.ToTable("classmigration");
+            entity.ToTable("classmigration", "dbikduser");
 
             entity.Property(e => e.ClassId).HasColumnName("class_id");
             entity.Property(e => e.ClassName)
@@ -709,6 +742,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<Collegeformdatum>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_collegeformdata");
+
+            entity.ToTable("Collegeformdata", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CityId).HasColumnName("CityID");
@@ -727,29 +762,6 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.ContactNumber).IsUnicode(false);
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.EstablishedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<Company>(entity =>
-        {
-            entity.ToTable("Company", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CityId).HasColumnName("CityID");
-            entity.Property(e => e.Dated).HasColumnType("smalldatetime");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.Heading).HasMaxLength(200);
-            entity.Property(e => e.LiveUrl).IsUnicode(false);
-            entity.Property(e => e.MetaDesc).HasMaxLength(200);
-            entity.Property(e => e.MetaKeyword).HasMaxLength(300);
-            entity.Property(e => e.MetaTitle).HasMaxLength(100);
-            entity.Property(e => e.Name).HasMaxLength(300);
-            entity.Property(e => e.ShortForm).HasMaxLength(300);
-            entity.Property(e => e.Url).HasMaxLength(600);
-            entity.Property(e => e.Website)
-                .HasMaxLength(100)
-                .IsUnicode(false);
         });
 
         modelBuilder.Entity<CompanyFollow>(entity =>
@@ -831,6 +843,8 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<DateSheetResultType>(entity =>
         {
+            entity.ToTable("DateSheetResultTypes", "dbikduser");
+
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
@@ -863,6 +877,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<FriendRequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__FriendRe__3214EC074D00BBB7");
+
+            entity.ToTable("FriendRequests", "dbikduser");
 
             entity.Property(e => e.SentAt)
                 .HasDefaultValueSql("(getutcdate())")
@@ -897,91 +913,6 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Url)
                 .HasMaxLength(200)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<JobAd>(entity =>
-        {
-            entity.ToTable("JobAds", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.AbroadCityName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Address).HasMaxLength(500);
-            entity.Property(e => e.AgeLimit).HasMaxLength(200);
-            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CompanyName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.ContactPerson)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Dated).HasColumnType("datetime");
-            entity.Property(e => e.Detail).IsUnicode(false);
-            entity.Property(e => e.Email)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Experience).HasMaxLength(100);
-            entity.Property(e => e.ImageName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCities)
-                .HasMaxLength(600)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCitiesIds)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsCitiesIDs");
-            entity.Property(e => e.JobAdsNewsPapers)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsNewsPapersIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsNewsPapersIDs");
-            entity.Property(e => e.JobAdsTypes)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsTypesIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsTypesIDs");
-            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
-            entity.Property(e => e.JobSkills)
-                .HasMaxLength(2000)
-                .IsUnicode(false);
-            entity.Property(e => e.JobViews).HasDefaultValue(1);
-            entity.Property(e => e.JobsFromMustakbil).HasDefaultValue(false);
-            entity.Property(e => e.LastDate).HasColumnType("datetime");
-            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.MemberId)
-                .HasDefaultValue(0)
-                .HasColumnName("MemberID");
-            entity.Property(e => e.MetaDesc).HasMaxLength(500);
-            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
-            entity.Property(e => e.MetaTitle)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Name)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.Otstest)
-                .IsUnicode(false)
-                .HasColumnName("OTSTest");
-            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
-            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
-            entity.Property(e => e.TestDate).HasColumnType("datetime");
-            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
-            entity.Property(e => e.Url)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<JobAdsCity>(entity =>
@@ -1066,90 +997,6 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Url)
                 .HasMaxLength(1000)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<JobAdsNewTest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__JobAds_N__3214EC278677DA10");
-
-            entity.ToTable("JobAds_New_Test", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.AbroadCityName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Address).HasMaxLength(500);
-            entity.Property(e => e.AgeLimit).HasMaxLength(200);
-            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CompanyName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.ContactPerson)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Dated).HasColumnType("datetime");
-            entity.Property(e => e.Detail).IsUnicode(false);
-            entity.Property(e => e.Email)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Experience).HasMaxLength(100);
-            entity.Property(e => e.ImageName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCities)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCitiesIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsCitiesIDs");
-            entity.Property(e => e.JobAdsNewsPapers)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsNewsPapersIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsNewsPapersIDs");
-            entity.Property(e => e.JobAdsTypes)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsTypesIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsTypesIDs");
-            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
-            entity.Property(e => e.JobSkills)
-                .HasMaxLength(2000)
-                .IsUnicode(false);
-            entity.Property(e => e.LastDate).HasColumnType("datetime");
-            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
-            entity.Property(e => e.MetaDesc).HasMaxLength(500);
-            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
-            entity.Property(e => e.MetaTitle)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Name)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.Otstest)
-                .IsUnicode(false)
-                .HasColumnName("OTSTest");
-            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
-            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.Profession).HasMaxLength(200);
-            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
-            entity.Property(e => e.TestDate).HasColumnType("datetime");
-            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
-            entity.Property(e => e.Url)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<JobAdsPapular>(entity =>
@@ -1247,30 +1094,6 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.JobTypeId).HasColumnName("JobTypeID");
         });
 
-        modelBuilder.Entity<JobType>(entity =>
-        {
-            entity.ToTable("JobType", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Dated).HasColumnType("datetime");
-            entity.Property(e => e.Heading)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.ImageName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.MetaDesc).HasMaxLength(200);
-            entity.Property(e => e.MetaKeyword).HasMaxLength(300);
-            entity.Property(e => e.MetaTags).HasMaxLength(600);
-            entity.Property(e => e.MetaTitle).HasMaxLength(80);
-            entity.Property(e => e.Name)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Url)
-                .HasMaxLength(200)
-                .IsUnicode(false);
-        });
-
         modelBuilder.Entity<JobUserAlert>(entity =>
         {
             entity.ToTable("JobUserAlerts", "dbo");
@@ -1365,12 +1188,348 @@ public partial class DbikdContext : DbContext
             entity.ToTable("LongQuestionCriteria", "dbo");
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.ImageName).IsUnicode(false);
             entity.Property(e => e.IsActive).HasColumnName("isActive");
             entity.Property(e => e.LastUpdated).HasColumnType("datetime");
             entity.Property(e => e.Tabs).HasColumnName("TABS");
             entity.Property(e => e.TestName).IsUnicode(false);
             entity.Property(e => e.Url).IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.LongQuestionCriteria)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_LongQuestionCriteria_Admin");
+        });
+
+        modelBuilder.Entity<Menu>(entity =>
+        {
+            entity.ToTable("Menu", "dbo");
+
+            entity.Property(e => e.MenuId)
+                .ValueGeneratedNever()
+                .HasColumnName("MenuID");
+            entity.Property(e => e.Icon).HasMaxLength(50);
+            entity.Property(e => e.MenuController).HasMaxLength(50);
+            entity.Property(e => e.MenuName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<MovedCompany>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Company");
+
+            entity.ToTable("moved_Company", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.CityId).HasColumnName("CityID");
+            entity.Property(e => e.Dated).HasColumnType("smalldatetime");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Heading).HasMaxLength(200);
+            entity.Property(e => e.LiveUrl).IsUnicode(false);
+            entity.Property(e => e.MetaDesc).HasMaxLength(200);
+            entity.Property(e => e.MetaKeyword).HasMaxLength(300);
+            entity.Property(e => e.MetaTitle).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(300);
+            entity.Property(e => e.ShortForm).HasMaxLength(300);
+            entity.Property(e => e.Url).HasMaxLength(600);
+            entity.Property(e => e.Website)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<MovedJobAd>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_JobAds");
+
+            entity.ToTable("moved_JobAds", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AbroadCityName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.AgeLimit).HasMaxLength(200);
+            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CompanyName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.ContactPerson)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.Detail).IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Experience).HasMaxLength(100);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCities)
+                .HasMaxLength(600)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCitiesIds)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsCitiesIDs");
+            entity.Property(e => e.JobAdsNewsPapers)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsNewsPapersIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsNewsPapersIDs");
+            entity.Property(e => e.JobAdsTypes)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsTypesIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsTypesIDs");
+            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
+            entity.Property(e => e.JobSkills)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.JobViews).HasDefaultValue(1);
+            entity.Property(e => e.JobsFromMustakbil).HasDefaultValue(false);
+            entity.Property(e => e.LastDate).HasColumnType("datetime");
+            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.MemberId)
+                .HasDefaultValue(0)
+                .HasColumnName("MemberID");
+            entity.Property(e => e.MetaDesc).HasMaxLength(500);
+            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
+            entity.Property(e => e.MetaTitle)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Name)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.Otstest)
+                .IsUnicode(false)
+                .HasColumnName("OTSTest");
+            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
+            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
+            entity.Property(e => e.TestDate).HasColumnType("datetime");
+            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
+            entity.Property(e => e.Url)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<MovedJobAdsNewTest>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__JobAds_N__3214EC278677DA10");
+
+            entity.ToTable("moved_JobAds_New_Test", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AbroadCityName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.AgeLimit).HasMaxLength(200);
+            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CompanyName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.ContactPerson)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.Detail).IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Experience).HasMaxLength(100);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCities)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCitiesIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsCitiesIDs");
+            entity.Property(e => e.JobAdsNewsPapers)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsNewsPapersIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsNewsPapersIDs");
+            entity.Property(e => e.JobAdsTypes)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsTypesIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsTypesIDs");
+            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
+            entity.Property(e => e.JobSkills)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.LastDate).HasColumnType("datetime");
+            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.MetaDesc).HasMaxLength(500);
+            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
+            entity.Property(e => e.MetaTitle)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Name)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.Otstest)
+                .IsUnicode(false)
+                .HasColumnName("OTSTest");
+            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
+            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Profession).HasMaxLength(200);
+            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
+            entity.Property(e => e.TestDate).HasColumnType("datetime");
+            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
+            entity.Property(e => e.Url)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<MovedJobType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_JobType");
+
+            entity.ToTable("moved_JobType", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.Heading)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.MetaDesc).HasMaxLength(200);
+            entity.Property(e => e.MetaKeyword).HasMaxLength(300);
+            entity.Property(e => e.MetaTags).HasMaxLength(600);
+            entity.Property(e => e.MetaTitle).HasMaxLength(80);
+            entity.Property(e => e.Name)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Url)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<MovedTblJobScale>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tblJobSc__3214EC27A780E4C8");
+
+            entity.ToTable("moved_tblJobScale", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Name).HasMaxLength(150);
+        });
+
+        modelBuilder.Entity<MovedTbljobadslatest>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_JobAdsLatest");
+
+            entity.ToTable("moved_Tbljobadslatest", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AbroadCityName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.AgeLimit).HasMaxLength(200);
+            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CompanyName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.ContactPerson)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.Detail).IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Experience).HasMaxLength(100);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCities)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsCitiesIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsCitiesIDs");
+            entity.Property(e => e.JobAdsNewsPapers)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsNewsPapersIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsNewsPapersIDs");
+            entity.Property(e => e.JobAdsTypes)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.JobAdsTypesIds)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("JobAdsTypesIDs");
+            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
+            entity.Property(e => e.JobSkills)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.LastDate).HasColumnType("datetime");
+            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.MetaDesc).HasMaxLength(500);
+            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
+            entity.Property(e => e.MetaTitle)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Name)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.Otstest)
+                .IsUnicode(false)
+                .HasColumnName("OTSTest");
+            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
+            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
+            entity.Property(e => e.TestDate).HasColumnType("datetime");
+            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
+            entity.Property(e => e.Url)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
+            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<NewsPaper>(entity =>
@@ -1393,9 +1552,16 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
             entity.Property(e => e.Url)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.User).WithMany(p => p.NewsPapers)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_NewsPaper_Admin");
         });
 
         modelBuilder.Entity<NtsCompanyCustomPage>(entity =>
@@ -1416,6 +1582,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__OtsLearn__3214EC074BE9CCD2");
 
+            entity.ToTable("OtsLearnMoreData", "dbikduser");
+
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
         });
 
@@ -1423,7 +1591,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__PastPape__3214EC07DCF42E19");
 
-            entity.ToTable("PastPaperPageDescription");
+            entity.ToTable("PastPaperPageDescription", "dbikduser");
 
             entity.Property(e => e.Name).HasMaxLength(255);
         });
@@ -1449,7 +1617,7 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<PastPaperTypeRelation>(entity =>
         {
-            entity.ToTable("PastPaperTypeRelation");
+            entity.ToTable("PastPaperTypeRelation", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PastPaperId).HasColumnName("PastPaperID");
@@ -1459,6 +1627,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<PrivateMessage>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__PrivateM__3214EC07C9133762");
+
+            entity.ToTable("PrivateMessages", "dbikduser");
 
             entity.Property(e => e.SentAt)
                 .HasDefaultValueSql("(getutcdate())")
@@ -1496,7 +1666,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_SectionContents");
 
-            entity.ToTable("SectionContentImport");
+            entity.ToTable("SectionContentImport", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AppHeading).IsUnicode(false);
@@ -1535,7 +1705,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_SectionType");
 
-            entity.ToTable("SectionTypeImport");
+            entity.ToTable("SectionTypeImport", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ClassId).HasColumnName("ClassID");
@@ -1673,31 +1843,61 @@ public partial class DbikdContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<SubMenu>(entity =>
+        {
+            entity.ToTable("SubMenu", "dbo");
+
+            entity.Property(e => e.SubMenuId)
+                .ValueGeneratedNever()
+                .HasColumnName("SubMenuID");
+            entity.Property(e => e.Action).HasMaxLength(50);
+            entity.Property(e => e.Controller).HasMaxLength(50);
+            entity.Property(e => e.MenuId).HasColumnName("MenuID");
+            entity.Property(e => e.SubMenuName).HasMaxLength(50);
+
+            entity.HasOne(d => d.Menu).WithMany(p => p.SubMenus)
+                .HasForeignKey(d => d.MenuId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubMenu_Menu");
+        });
+
         modelBuilder.Entity<TblAdmission>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__tblAdmis__3214EC0701BC1617");
 
-            entity.ToTable("tblAdmissions");
+            entity.ToTable("tblAdmissions", "dbikduser");
 
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.LastDate).HasColumnType("datetime");
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
             entity.Property(e => e.Url).HasMaxLength(255);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblAdmissions)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblAdmissions_Admin");
         });
 
         modelBuilder.Entity<TblAdmissionCourse>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__tblAdmis__3214EC070DFC2BB8");
 
-            entity.ToTable("tblAdmissionCourses");
+            entity.ToTable("tblAdmissionCourses", "dbikduser");
         });
 
         modelBuilder.Entity<TblAllGuidesCm>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TblAllGu__3214EC07EC36FF27");
+            entity
+                .HasNoKey()
+                .ToTable("TblAllGuidesCms", "dbikduser");
 
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.HeaderIcon).HasMaxLength(255);
             entity.Property(e => e.HeaderName).HasMaxLength(255);
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
         });
 
         modelBuilder.Entity<TblAnswerChoice>(entity =>
@@ -1804,10 +2004,17 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Title)
                 .HasMaxLength(500)
                 .HasColumnName("title");
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
             entity.Property(e => e.Viewed)
                 .HasDefaultValue(0m)
                 .HasColumnType("numeric(18, 0)")
                 .HasColumnName("viewed");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblArticles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblArticles_Admin");
         });
 
         modelBuilder.Entity<TblArticleType>(entity =>
@@ -1838,6 +2045,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<TblBoard>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__TblBoard__3214EC07D3858E4E");
+
+            entity.ToTable("TblBoards", "dbikduser");
 
             entity.HasIndex(e => e.Slug, "UQ__TblBoard__BC7B5FB6C239A5B2").IsUnique();
 
@@ -1926,7 +2135,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblClass__3214EC07A76CFD43");
 
-            entity.ToTable("tblClassesChild");
+            entity.ToTable("tblClassesChild", "dbikduser");
 
             entity.Property(e => e.MainClassName).HasMaxLength(100);
         });
@@ -1935,7 +2144,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblCMS__3214EC27FAA1EFA8");
 
-            entity.ToTable("tblCMS");
+            entity.ToTable("tblCMS", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date)
@@ -1948,6 +2157,9 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.PageName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
             entity.Property(e => e.Url)
                 .HasMaxLength(500)
                 .HasColumnName("URL");
@@ -2012,7 +2224,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.CommentId).HasName("PK_tblComments");
 
-            entity.ToTable("tblComments2");
+            entity.ToTable("tblComments2", "dbikduser");
 
             entity.Property(e => e.CommentId)
                 .ValueGeneratedOnAdd()
@@ -2054,7 +2266,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.ChildCmtId).HasName("PK_tblComments_Like_Dislike_against_CmtId");
 
-            entity.ToTable("tblComments_Child");
+            entity.ToTable("tblComments_Child", "dbikduser");
 
             entity.Property(e => e.ChildCmtId).HasColumnName("ChildCmt_Id");
             entity.Property(e => e.Abused).HasDefaultValue(0);
@@ -2084,7 +2296,9 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<TblConsultantCountry>(entity =>
         {
-            entity.HasNoKey();
+            entity
+                .HasNoKey()
+                .ToTable("TblConsultantCountries", "dbikduser");
 
             entity.Property(e => e.CompanyId)
                 .HasColumnType("numeric(18, 0)")
@@ -2101,7 +2315,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblConta__3214EC07592A5665");
 
-            entity.ToTable("TblContactMessage");
+            entity.ToTable("TblContactMessage", "dbikduser");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -2116,7 +2330,7 @@ public partial class DbikdContext : DbContext
 
         modelBuilder.Entity<TblCourseinquiry>(entity =>
         {
-            entity.ToTable("tblCourseinquiry");
+            entity.ToTable("tblCourseinquiry", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CollegeId).HasColumnName("CollegeID");
@@ -2141,7 +2355,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__DateShee__3214EC076B7AF1A6");
 
-            entity.ToTable("TblDateSheetCriteriaChild");
+            entity.ToTable("TblDateSheetCriteriaChild", "dbikduser");
 
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.ExamDate).HasMaxLength(100);
@@ -2151,6 +2365,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<TblDateSheetcriterion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__DateShee__3214EC0729EED797");
+
+            entity.ToTable("TblDateSheetcriteria", "dbikduser");
 
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.DatesheetCode).HasMaxLength(50);
@@ -2187,6 +2403,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.CommentId).HasName("PK__TblDefCo__C3B4DFCA156863CA");
 
+            entity.ToTable("TblDefComments", "dbikduser");
+
             entity.HasIndex(e => e.CreatedDate, "IX_CreatedDate").IsDescending();
 
             entity.HasIndex(e => e.PageUrl, "IX_PageUrl");
@@ -2221,6 +2439,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.LikeId).HasName("PK__TblDefCo__A2922C14DFE3F571");
 
+            entity.ToTable("TblDefCommentLikes", "dbikduser");
+
             entity.HasIndex(e => e.CommentId, "IX_CommentId");
 
             entity.HasIndex(e => e.CommentId, "IX_TblDefCommentLikes_CommentId");
@@ -2241,11 +2461,30 @@ public partial class DbikdContext : DbContext
                 .HasConstraintName("FK_CommentLikes_Comments");
         });
 
+        modelBuilder.Entity<TblDefCommentNew>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__TblDefCo__C3B4DFCA159178D6");
+
+            entity.ToTable("TblDefComment_New", "dbikduser");
+
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.PageTitle).HasMaxLength(500);
+            entity.Property(e => e.PageUrl).HasMaxLength(500);
+            entity.Property(e => e.PageUrlNoSlash).HasMaxLength(500);
+            entity.Property(e => e.UserEmail).HasMaxLength(200);
+            entity.Property(e => e.UserId).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UserName).HasMaxLength(200);
+            entity.Property(e => e.UserProfilePicture).HasMaxLength(500);
+        });
+
         modelBuilder.Entity<TblDefConsultant>(entity =>
         {
             entity.HasKey(e => e.CompanyId).HasName("PK_tblDefConsultants");
 
-            entity.ToTable("TblDefConsultant");
+            entity.ToTable("TblDefConsultant", "dbikduser");
 
             entity.Property(e => e.CompanyId)
                 .ValueGeneratedOnAdd()
@@ -2335,7 +2574,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.CountryId).HasName("PK_tblDefCountry");
 
-            entity.ToTable("TblDefCountry");
+            entity.ToTable("TblDefCountry", "dbikduser");
 
             entity.Property(e => e.CountryId)
                 .ValueGeneratedOnAdd()
@@ -2353,7 +2592,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.MemberId).HasName("PK__TblDefMe__0CF04B1886261B21");
 
-            entity.ToTable("TblDefMemberInfo2");
+            entity.ToTable("TblDefMemberInfo2", "dbikduser");
 
             entity.Property(e => e.MemberId).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CityId).HasColumnType("decimal(18, 0)");
@@ -2370,7 +2609,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.MemberId).HasName("PK__TblDefMe__0CF04B18130288B0");
 
-            entity.ToTable("TblDefMemberInfoikd");
+            entity.ToTable("TblDefMemberInfoikd", "dbikduser");
 
             entity.Property(e => e.MemberId)
                 .ValueGeneratedOnAdd()
@@ -2447,6 +2686,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Files__3214EC07ECAF3A77");
 
+            entity.ToTable("TblFiles", "dbikduser");
+
             entity.Property(e => e.Date).HasColumnType("datetime");
 
             entity.HasOne(d => d.Section).WithMany(p => p.TblFiles)
@@ -2459,6 +2700,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Flagss");
 
+            entity.ToTable("TblFlags", "dbikduser");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
@@ -2469,7 +2712,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Guide");
 
-            entity.ToTable("TblGuide");
+            entity.ToTable("TblGuide", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -2483,7 +2726,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_GuideDetail");
 
-            entity.ToTable("TblGuideDetail");
+            entity.ToTable("TblGuideDetail", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.GuideId).HasColumnName("GuideID");
@@ -2496,7 +2739,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblGuide__3214EC0770A0651D");
 
-            entity.ToTable("TblGuidesDefination");
+            entity.ToTable("TblGuidesDefination", "dbikduser");
 
             entity.Property(e => e.Abrevation).HasMaxLength(100);
             entity.Property(e => e.CategoryIds).HasMaxLength(500);
@@ -2610,6 +2853,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.InstId).HasName("PK__TblInsti__E2A29686FDDB3FD6");
 
+            entity.ToTable("TblInstitutes", "dbikduser");
+
             entity.Property(e => e.Abbrevation).HasMaxLength(50);
             entity.Property(e => e.Address).HasMaxLength(500);
             entity.Property(e => e.Backgroundimage).HasMaxLength(500);
@@ -2645,21 +2890,11 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Zoomlevel).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<TblJobScale>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__tblJobSc__3214EC27A780E4C8");
-
-            entity.ToTable("tblJobScale", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(150);
-        });
-
         modelBuilder.Entity<TblLecture>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC274EE52181");
 
-            entity.ToTable("tblLectures");
+            entity.ToTable("tblLectures", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Duration).HasMaxLength(50);
@@ -2707,7 +2942,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC271A38001F");
 
-            entity.ToTable("tblLectureChapters");
+            entity.ToTable("tblLectureChapters", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ChImage).HasMaxLength(255);
@@ -2733,7 +2968,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC2723BBA22C");
 
-            entity.ToTable("tblLectureClasses");
+            entity.ToTable("tblLectureClasses", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ClassName).HasMaxLength(255);
@@ -2749,7 +2984,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC278792C8DA");
 
-            entity.ToTable("tblLectureSubject");
+            entity.ToTable("tblLectureSubject", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Image).HasMaxLength(255);
@@ -2766,7 +3001,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC2771970395");
 
-            entity.ToTable("tblLectureTeacher");
+            entity.ToTable("tblLectureTeacher", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Description).HasColumnType("text");
@@ -2780,7 +3015,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblLectu__3214EC271F22ABDB");
 
-            entity.ToTable("tblLectureTopics");
+            entity.ToTable("tblLectureTopics", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
@@ -2826,6 +3061,13 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.QuestionMarks)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("question_marks");
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblLongQuestions)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblLongQuestions_Admin");
         });
 
         modelBuilder.Entity<TblLongQuestionAnswerChoice>(entity =>
@@ -2958,13 +3200,17 @@ public partial class DbikdContext : DbContext
                 .HasDefaultValue(10m)
                 .HasColumnType("numeric(18, 0)")
                 .HasColumnName("views");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblMainNews)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblMainNews_Admin");
         });
 
         modelBuilder.Entity<TblMemberTestHistory2>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToTable("TblMemberTestHistory2");
+                .ToTable("TblMemberTestHistory2", "dbikduser");
 
             entity.Property(e => e.MemberId).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.ObtainedMarks).HasColumnType("decimal(18, 2)");
@@ -2976,7 +3222,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblMerit__3214EC278A9805D8");
 
-            entity.ToTable("tblMeritList");
+            entity.ToTable("tblMeritList", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AddedDate).HasColumnType("datetime");
@@ -2991,7 +3237,9 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Notes)
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
             entity.Property(e => e.Year)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -3150,7 +3398,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblOtsCh__3214EC07F89D1CFD");
 
-            entity.ToTable("TblOtsChapter");
+            entity.ToTable("TblOtsChapter", "dbikduser");
 
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
@@ -3165,12 +3413,14 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblOtsTe__3214EC071441C9EA");
 
-            entity.ToTable("TblOtsTestCriteriaDetail");
+            entity.ToTable("TblOtsTestCriteriaDetail", "dbikduser");
         });
 
         modelBuilder.Entity<TblOtsTestCriterion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__TblOtsmc__3214EC074D4E90DE");
+
+            entity.ToTable("TblOtsTestCriteria", "dbikduser");
 
             entity.Property(e => e.LastUpdated).HasColumnType("datetime");
         });
@@ -3179,7 +3429,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblOtsQu__3214EC07D2D9A642");
 
-            entity.ToTable("TblOtsTestMcq");
+            entity.ToTable("TblOtsTestMcq", "dbikduser");
 
             entity.Property(e => e.Choice1img).HasMaxLength(255);
             entity.Property(e => e.Choice2img).HasMaxLength(255);
@@ -3188,11 +3438,20 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.Choice5img).HasMaxLength(255);
             entity.Property(e => e.Dated).HasColumnType("datetime");
             entity.Property(e => e.QuestionImage).HasMaxLength(255);
+            entity.Property(e => e.Updated)
+                .HasColumnType("datetime")
+                .HasColumnName("updated");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblOtsTestMcqs)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_TblOtsTestMcq_Admin");
         });
 
         modelBuilder.Entity<TblOtsTopic>(entity =>
         {
             entity.HasKey(e => e.TopicId).HasName("PK__TblOtsTo__022E0F5D0718EE62");
+
+            entity.ToTable("TblOtsTopics", "dbikduser");
 
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.TopicName)
@@ -3205,7 +3464,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSCl__3214EC275047C6AE");
 
-            entity.ToTable("tblOTSClass");
+            entity.ToTable("tblOTSClass", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Image).HasMaxLength(255);
@@ -3219,7 +3478,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSMC__3214EC277CF9EB35");
 
-            entity.ToTable("tblOTSMCQChild");
+            entity.ToTable("tblOTSMCQChild", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Choice1).HasColumnName("CHOICE1");
@@ -3241,7 +3500,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSQu__3213E83FC07966BC");
 
-            entity.ToTable("tblOTSQuiz");
+            entity.ToTable("tblOTSQuiz", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Date).HasColumnType("datetime");
@@ -3262,7 +3521,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSQu__3214EC27362C25F2");
 
-            entity.ToTable("tblOTSQuizCategory");
+            entity.ToTable("tblOTSQuizCategory", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
@@ -3279,7 +3538,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSQu__3214EC2720900990");
 
-            entity.ToTable("tblOTSQuizChild");
+            entity.ToTable("tblOTSQuizChild", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
@@ -3289,7 +3548,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblOTSSu__3214EC07B541EC21");
 
-            entity.ToTable("tblOTSSubject");
+            entity.ToTable("tblOTSSubject", "dbikduser");
 
             entity.Property(e => e.Date)
                 .HasDefaultValueSql("(getdate())")
@@ -3300,7 +3559,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblPageF__3214EC07BE7615AF");
 
-            entity.ToTable("TblPageFeedback");
+            entity.ToTable("TblPageFeedback", "dbikduser");
 
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.PageSection).HasMaxLength(250);
@@ -3311,7 +3570,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPastP__3214EC27A573DD75");
 
-            entity.ToTable("tblPastPapers");
+            entity.ToTable("tblPastPapers", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
@@ -3355,7 +3614,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_PlaceOfStudy");
 
-            entity.ToTable("TblPlaceOfStudy");
+            entity.ToTable("TblPlaceOfStudy", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Ikdurl).HasColumnName("IKDUrl");
@@ -3365,7 +3624,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPBoa__3214EC278DE8202A");
 
-            entity.ToTable("tblPPBoardClasses");
+            entity.ToTable("tblPPBoardClasses", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
@@ -3386,7 +3645,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPBoa__3214EC27D2B4069D");
 
-            entity.ToTable("tblPPBoardClassSubjects");
+            entity.ToTable("tblPPBoardClassSubjects", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
@@ -3413,7 +3672,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPCla__3214EC27FA596413");
 
-            entity.ToTable("tblPPClass");
+            entity.ToTable("tblPPClass", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PpclassName)
@@ -3433,7 +3692,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPQua__3214EC273AC14555");
 
-            entity.ToTable("tblPPQualification");
+            entity.ToTable("tblPPQualification", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PpqualificationName).HasColumnName("PPQualificationName");
@@ -3444,7 +3703,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPSub__3214EC272C6C6B48");
 
-            entity.ToTable("tblPPSubject");
+            entity.ToTable("tblPPSubject", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PpsubjectName).HasColumnName("PPSubjectName");
@@ -3455,7 +3714,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblPPTyp__3214EC2702C4A2AB");
 
-            entity.ToTable("tblPPTypes");
+            entity.ToTable("tblPPTypes", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PptypeName)
@@ -3467,6 +3726,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<TblResult>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__TblResul__3214EC07C3E94284");
+
+            entity.ToTable("TblResults", "dbikduser");
 
             entity.HasIndex(e => e.ResultUrl, "UQ__TblResul__5F8EF04FA125C9AD").IsUnique();
 
@@ -3490,7 +3751,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblResul__3214EC074AA3A605");
 
-            entity.ToTable("TblResultCategory");
+            entity.ToTable("TblResultCategory", "dbikduser");
 
             entity.HasIndex(e => e.Slug, "UQ__TblResul__BC7B5FB6E8AB3C89").IsUnique();
 
@@ -3503,6 +3764,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblResul__3214EC078367C3E9");
 
+            entity.ToTable("TblResultClasses", "dbikduser");
+
             entity.HasIndex(e => e.Slug, "UQ__TblResul__BC7B5FB6DE5DE2DC").IsUnique();
 
             entity.Property(e => e.ClassName).HasMaxLength(100);
@@ -3514,7 +3777,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_ResultArchive");
 
-            entity.ToTable("TblResultCriteriaChild");
+            entity.ToTable("TblResultCriteriaChild", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.DateText).HasMaxLength(50);
@@ -3528,6 +3791,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<TblResultCriterion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_ResultCriteria");
+
+            entity.ToTable("TblResultCriteria", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
@@ -3543,7 +3808,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblResul__3214EC0748F3B8B8");
 
-            entity.ToTable("TblResultUpdate");
+            entity.ToTable("TblResultUpdate", "dbikduser");
 
             entity.Property(e => e.ClassName).HasMaxLength(255);
             entity.Property(e => e.Dated).HasColumnType("datetime");
@@ -3556,7 +3821,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSch__3214EC2711BB8D09");
 
-            entity.ToTable("tblSch");
+            entity.ToTable("tblSch", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
@@ -3573,7 +3838,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchFi__3214EC27BD986974");
 
-            entity.ToTable("tblSchFieldofStudy");
+            entity.ToTable("tblSchFieldofStudy", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Url).HasColumnName("URL");
@@ -3584,7 +3849,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchFi__3214EC27F0024B5F");
 
-            entity.ToTable("TblSchFieldsofStudyChild");
+            entity.ToTable("TblSchFieldsofStudyChild", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.SchFieldofStudyId).HasColumnName("SchFieldofStudyID");
@@ -3600,7 +3865,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchSt__3214EC275BAC9E82");
 
-            entity.ToTable("tblSchStudyLevel");
+            entity.ToTable("tblSchStudyLevel", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Url).HasColumnName("URL");
@@ -3611,7 +3876,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchSt__3214EC27B724A72D");
 
-            entity.ToTable("tblSchStudyLevelChild");
+            entity.ToTable("tblSchStudyLevelChild", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.SchId).HasColumnName("SchID");
@@ -3632,7 +3897,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchTo__3214EC27E86EEF15");
 
-            entity.ToTable("tblSchTop");
+            entity.ToTable("tblSchTop", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
@@ -3649,7 +3914,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSchTo__3214EC27994F1A4A");
 
-            entity.ToTable("tblSchTopLinking");
+            entity.ToTable("tblSchTopLinking", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.SchId).HasColumnName("SchID");
@@ -3670,7 +3935,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_ScholarShipCategories");
 
-            entity.ToTable("TblSchWithCategory");
+            entity.ToTable("TblSchWithCategory", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -3681,7 +3946,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblSecti__3214EC27E899985B");
 
-            entity.ToTable("tblSections");
+            entity.ToTable("tblSections", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Cmsurlpattern).HasColumnName("CMSURLPattern");
@@ -3786,6 +4051,8 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblStudy__3214EC07CC9AE797");
 
+            entity.ToTable("TblStudyAbroadGuides", "dbikduser");
+
             entity.HasOne(d => d.Country).WithMany(p => p.TblStudyAbroadGuides)
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.Cascade)
@@ -3796,7 +4063,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblStudy__3214EC2738DD8E58");
 
-            entity.ToTable("tblStudyGuides");
+            entity.ToTable("tblStudyGuides", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.BoardId).HasColumnName("BoardID");
@@ -3848,7 +4115,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tblTeach__3214EC27CBC6C80B");
 
-            entity.ToTable("tblTeachers");
+            entity.ToTable("tblTeachers", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date).HasColumnType("datetime");
@@ -3859,7 +4126,7 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__TblTest__3214EC273F5C9F73");
 
-            entity.ToTable("TblTest");
+            entity.ToTable("TblTest", "dbikduser");
 
             entity.HasIndex(e => e.TestId, "IX_TblTest_TestId");
 
@@ -3958,11 +4225,42 @@ public partial class DbikdContext : DbContext
             entity.Property(e => e.TlTutorId).HasColumnName("tl_tutor_id");
         });
 
+        modelBuilder.Entity<TblUrl>(entity =>
+        {
+            entity.ToTable("tblURL");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.PageName).HasMaxLength(1000);
+            entity.Property(e => e.SectionName).HasMaxLength(1000);
+            entity.Property(e => e.Url)
+                .HasMaxLength(1000)
+                .HasColumnName("URL");
+        });
+
+        modelBuilder.Entity<TblUrlcontent>(entity =>
+        {
+            entity.ToTable("tblURLContent");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Content3).HasColumnName("content3");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.LastEdited).HasMaxLength(1000);
+            entity.Property(e => e.MainImage).HasMaxLength(1000);
+            entity.Property(e => e.MetaDescription).HasMaxLength(1000);
+            entity.Property(e => e.MetaKeywords).HasMaxLength(1000);
+            entity.Property(e => e.MetaTitle).HasMaxLength(1000);
+            entity.Property(e => e.PageName).HasMaxLength(1000);
+            entity.Property(e => e.Url)
+                .HasMaxLength(1000)
+                .HasColumnName("URL");
+        });
+
         modelBuilder.Entity<TblUrlcontentMigrate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tblURLContent");
 
-            entity.ToTable("TblURLContentMigrate");
+            entity.ToTable("TblURLContentMigrate", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Content3).HasColumnName("content3");
@@ -3981,6 +4279,8 @@ public partial class DbikdContext : DbContext
         modelBuilder.Entity<TblWhatsAppGroup>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__TblWhats__3214EC07281FB5F9");
+
+            entity.ToTable("TblWhatsAppGroups", "dbikduser");
 
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
@@ -4014,7 +4314,7 @@ public partial class DbikdContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("tblarticlestypemetadata");
+                .ToTable("tblarticlestypemetadata", "dbikduser");
 
             entity.Property(e => e.CaiId)
                 .ValueGeneratedOnAdd()
@@ -4039,99 +4339,16 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.MemberTypeId).HasName("PK__Tbldefme__5D8AFD1FFB6BD909");
 
-            entity.ToTable("Tbldefmembertype2");
+            entity.ToTable("Tbldefmembertype2", "dbikduser");
 
             entity.Property(e => e.MemberTypeId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Tbljobadslatest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_JobAdsLatest");
-
-            entity.ToTable("Tbljobadslatest", "dbo");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.AbroadCityName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Address).HasMaxLength(500);
-            entity.Property(e => e.AgeLimit).HasMaxLength(200);
-            entity.Property(e => e.ApplyOnlineUrl).HasMaxLength(1000);
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CompanyName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.ContactPerson)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Dated).HasColumnType("datetime");
-            entity.Property(e => e.Detail).IsUnicode(false);
-            entity.Property(e => e.Email)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Experience).HasMaxLength(100);
-            entity.Property(e => e.ImageName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCities)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsCitiesIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsCitiesIDs");
-            entity.Property(e => e.JobAdsNewsPapers)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsNewsPapersIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsNewsPapersIDs");
-            entity.Property(e => e.JobAdsTypes)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.JobAdsTypesIds)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("JobAdsTypesIDs");
-            entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
-            entity.Property(e => e.JobSkills)
-                .HasMaxLength(2000)
-                .IsUnicode(false);
-            entity.Property(e => e.LastDate).HasColumnType("datetime");
-            entity.Property(e => e.MaxSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
-            entity.Property(e => e.MetaDesc).HasMaxLength(500);
-            entity.Property(e => e.MetaKeyword).HasMaxLength(400);
-            entity.Property(e => e.MetaTitle)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.MinSalary).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Name)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.Otstest)
-                .IsUnicode(false)
-                .HasColumnName("OTSTest");
-            entity.Property(e => e.ParentCompanyId).HasColumnName("ParentCompanyID");
-            entity.Property(e => e.ParentJobIdNew).HasColumnName("ParentJobID_New");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.QualificationId).HasColumnName("QualificationID");
-            entity.Property(e => e.TestDate).HasColumnType("datetime");
-            entity.Property(e => e.TestSpid).HasColumnName("TestSPID");
-            entity.Property(e => e.Url)
-                .HasMaxLength(1000)
-                .IsUnicode(false);
-            entity.Property(e => e.VideoEmbedUrl).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<Tblpagewisecontent>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_PagewiseContent");
 
-            entity.ToTable("tblpagewisecontent");
+            entity.ToTable("tblpagewisecontent", "dbikduser");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
@@ -4253,8 +4470,37 @@ public partial class DbikdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Users__3214EC0702919191");
 
+            entity.ToTable("Users", "dbikduser");
+
             entity.Property(e => e.Email).HasMaxLength(200);
             entity.Property(e => e.UserName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<UserRight>(entity =>
+        {
+            entity.ToTable("UserRights", "dbo");
+
+            entity.Property(e => e.UserRightId)
+                .ValueGeneratedNever()
+                .HasColumnName("UserRightID");
+            entity.Property(e => e.AdminId).HasColumnName("AdminID");
+            entity.Property(e => e.MenuId).HasColumnName("MenuID");
+            entity.Property(e => e.SubMenuId).HasColumnName("SubMenuID");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.UserRights)
+                .HasForeignKey(d => d.AdminId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserRights_Admin");
+
+            entity.HasOne(d => d.Menu).WithMany(p => p.UserRights)
+                .HasForeignKey(d => d.MenuId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserRights_Menu");
+
+            entity.HasOne(d => d.SubMenu).WithMany(p => p.UserRights)
+                .HasForeignKey(d => d.SubMenuId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserRights_SubMenu");
         });
 
         modelBuilder.Entity<WebStorySlider>(entity =>
@@ -4274,7 +4520,7 @@ public partial class DbikdContext : DbContext
                 .HasForeignKey(d => d.SlierCategoryId)
                 .HasConstraintName("FK_tblSlider_tblSliderCategory");
         });
-        modelBuilder.HasSequence("MemberId_Seq").StartsAt(2866404L);
+        modelBuilder.HasSequence("MemberId_Seq", "dbikduser").StartsAt(2866404L);
 
         OnModelCreatingPartial(modelBuilder);
     }

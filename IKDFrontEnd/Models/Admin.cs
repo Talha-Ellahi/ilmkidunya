@@ -28,4 +28,20 @@ public partial class Admin
     public int? UpdatedBy { get; set; }
 
     public string? Pictures { get; set; }
+
+    public virtual ICollection<LongQuestionCriterion> LongQuestionCriteria { get; set; } = new List<LongQuestionCriterion>();
+
+    public virtual ICollection<NewsPaper> NewsPapers { get; set; } = new List<NewsPaper>();
+
+    public virtual ICollection<TblAdmission> TblAdmissions { get; set; } = new List<TblAdmission>();
+
+    public virtual ICollection<TblArticle> TblArticles { get; set; } = new List<TblArticle>();
+
+    public virtual ICollection<TblLongQuestion> TblLongQuestions { get; set; } = new List<TblLongQuestion>();
+
+    public virtual ICollection<TblMainNews> TblMainNews { get; set; } = new List<TblMainNews>();
+
+    public virtual ICollection<TblOtsTestMcq> TblOtsTestMcqs { get; set; } = new List<TblOtsTestMcq>();
+
+    public virtual ICollection<UserRight> UserRights { get; set; } = new List<UserRight>();
 }

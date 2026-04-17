@@ -24,4 +24,10 @@ public partial class LongQuestionCriterion
     public string? ImageName { get; set; }
 
     public string? AppName { get; set; }
+
+    public DateTime? Dated { get; set; }
+
+    public int? UserId { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

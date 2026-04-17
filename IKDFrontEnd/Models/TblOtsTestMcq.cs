@@ -46,4 +46,10 @@ public partial class TblOtsTestMcq
     public int? UserName { get; set; }
 
     public int? TopicId { get; set; }
+
+    public int? UserId { get; set; }
+
+    public DateTime? Updated { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

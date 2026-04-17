@@ -539,17 +539,6 @@ namespace IKDFrontEnd.Controllers
             input = input.Replace("-", " ");
             return input;
 
-            //var normalized = input.Normalize(NormalizationForm.FormD);
-            //var sb = new StringBuilder();
-
-            //foreach (var c in normalized)
-            //{
-            //    var category = CharUnicodeInfo.GetUnicodeCategory(c);
-            //    if (category != UnicodeCategory.NonSpacingMark)
-            //        sb.Append(c);
-            //}
-
-            //return sb.ToString().Normalize(NormalizationForm.FormC);
         }
 
 
@@ -561,21 +550,7 @@ namespace IKDFrontEnd.Controllers
             //input = Uri.UnescapeDataString(input);
             input = input.ToLower().Replace("-", " ");
             return input;
-            //var normalized = input.Normalize(NormalizationForm.FormD);
-            //var sb = new StringBuilder();
 
-            //foreach (var c in normalized)
-            //{
-            //    var category = CharUnicodeInfo.GetUnicodeCategory(c);
-            //    if (category != UnicodeCategory.NonSpacingMark)
-            //        sb.Append(c);
-            //}
-
-            //return sb.ToString()
-            //    .Normalize(NormalizationForm.FormC)
-            //    .ToLower()
-            //    .Replace("-", " ")
-            //    .Trim();
         }
 
         private async Task<List<PrayerTimingDto>> GetMonthlyPrayerTimings(double lat, double lon, int school)
@@ -846,11 +821,6 @@ namespace IKDFrontEnd.Controllers
         }
 
         #endregion Namaz Timings
-
-
-
-
-
 
 
         #region Enhanced Ramadan Methods
@@ -1792,6 +1762,35 @@ namespace IKDFrontEnd.Controllers
         }
 
         #endregion
+
+
+        #region Quran
+
+        [HttpGet]
+        [Route("quran-{slug}")]
+        public async Task<IActionResult> QuranDetail(string slug)
+        {
+            ViewBag.Banners = await _bannerService.GetBannersAsync();
+            try
+            {
+                var cmsData = await _context.TblUrlcontents.Where(u => u.Url == $"https://www.ilmkidunya.com/islam/quran-{slug}").AsNoTracking().FirstOrDefaultAsync();
+                if (cmsData == null)
+                    return NotFound();
+             
+                return View(cmsData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error loading Quran page for slug: {slug}");
+                return RedirectToAction("ServerError", "Error", new { reason = $"Error loading Quran page: {ex.Message}" });
+            }
+        }
+
+
+
+
+
+        #endregion Quran
 
 
     }

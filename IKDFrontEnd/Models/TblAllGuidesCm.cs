@@ -40,4 +40,6 @@ public partial class TblAllGuidesCm
     public string? HeaderName { get; set; }
 
     public int? SortOrder { get; set; }
+
+    public DateTime? Updated { get; set; }
 }

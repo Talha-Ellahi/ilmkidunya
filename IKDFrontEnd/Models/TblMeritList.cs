@@ -30,4 +30,6 @@ public partial class TblMeritList
     public int? UserId { get; set; }
 
     public int? CourseLevelId { get; set; }
+
+    public DateTime? Updated { get; set; }
 }

@@ -44,4 +44,10 @@ public partial class TblArticle
     public string? Picture1 { get; set; }
 
     public string? Filename { get; set; }
+
+    public int? UserId { get; set; }
+
+    public DateTime? Updated { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

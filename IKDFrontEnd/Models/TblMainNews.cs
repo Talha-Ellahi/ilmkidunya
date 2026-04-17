@@ -62,4 +62,8 @@ public partial class TblMainNews
     public string? ResultKeywords { get; set; }
 
     public bool ShowinSlider { get; set; }
+
+    public int? UserId { get; set; }
+
+    public virtual Admin? User { get; set; }
 }

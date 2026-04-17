@@ -1,0 +1,108 @@
+﻿
+@model TblUrlcontent
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://css.ishallwin.com/style/main-page.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/study-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/program-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/college-section.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/style/online-test-sec.css" rel="stylesheet" async="">
+<link href="https://css.ishallwin.com/common/style.css" rel="stylesheet" async="">
+<link href="https://www.ilmkidunya.com/css-files/style/dictionary.css" rel="stylesheet" async="">
+@section MetaData {
+    @if (Model != null)
+    {
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta property="og:title" content="@Model.MetaTitle" />
+        <meta property="og:description" content="@Model.MetaDescription" />
+        <meta property="og:image" content="https://www.ilmkidunya.com/images/logo.png" />
+        <meta name="description" content="@Model.MetaDescription">
+        <meta name="keywords" content="@Model.MetaKeywords">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="~/images-files/images/favicon.ico">
+        <title>@Model.MetaTitle</title>
+    }
+}
+
+
+@section header {
+    <!-- Header Start -->
+
+    <div class="col-lg-11">
+        <partial name="_NavBarPartial" />
+    </div>
+
+
+}
+
+@section innerbanner {
+    <div class="ss-banner-inner">
+        <div class="ss-container">
+            <div class="ss-row">
+                <div class="ss-col-lg-12">
+                    <div class="ss-text-holder">
+                        @if (Model != null && Model.PageName != null)
+                        {
+                            <h1>@Model.PageName</h1>
+
+                        }
+                        else
+                        {
+                            <h1>Quran Para and Surah Page</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Main Start -->
+
+<div id="main">
+    <div class="content-sec" style="padding: 30px 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (Model != null && Model.Content1 != null)
+                        {
+                            @Html.Raw(Model.Content1)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding: 15px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ckeditorcontent">
+                        @if (Model != null && Model.Content2 != null)
+                        {
+                            @Html.Raw(Model.Content2)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="new-ads-sec">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @await Html.PartialAsync("_maincontenttopbanner")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Main End -->

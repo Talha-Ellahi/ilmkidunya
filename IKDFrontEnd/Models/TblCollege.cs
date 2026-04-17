@@ -5,7 +5,7 @@ namespace IKDFrontEnd.Models;
 
 public partial class TblCollege
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     public string? Name { get; set; }
 

@@ -7732,12 +7732,7 @@
             width: 100%
         }
 
-        @@media screen and (max-width:980px) {
-            .ss-container, .ss-row > div {
-                width: 100%
-            }
-        }
-
+   
         .banner-form {
             display: flex;
             flex-wrap: wrap;
@@ -9134,7 +9129,6 @@
             }
         }</style>
 
-
     <style>
         @@charset "utf-8";
 
@@ -9934,6 +9928,8 @@
                                     margin: 0 15px 0 0
                                 }
 
+
+
         #main .home-scholar-list ul li a .text-holder h3, #main .home-scholar-list ul li a .text-holder h4 {
             font-size: 15px;
             line-height: 22px;
@@ -9999,6 +9995,7 @@
                 line-height: 24px;
                 color: #000
             }
+
 
         .college-news-sec h3, .contact-sec h3, .contact-sec h3 a, .content-sec h3, .flex-container.job-pro h3 {
             font-weight: 400;
@@ -10201,9 +10198,9 @@
             margin: 0 0 0 15px
         }
 
-        button.load-more-button img {
+        #main button.load-more-button img {
             display: inline-block;
-            width: 20px;
+            width: 20px !important;
             vertical-align: top;
             margin: 3px 8px 0 0
         }
@@ -11579,6 +11576,7 @@
             flex-flow: wrap;
             gap: 8px;
             width: 100%;
+            margin-bottom: 15px;
             margin-top: 5px
         }
 
@@ -18968,7 +18966,7 @@
 
             .ats-overlay-bottom-wrapper-rendered {
                 position: fixed;
-                bottom: 45px !important;
+                bottom: 0px !important;
                 padding: 0 !important
             }
 
@@ -19519,7 +19517,7 @@
                 width: 100%
             }
 
-            
+
 
             .table-responsive > .table > tbody > tr > td {
                 white-space: normal
@@ -20122,8 +20120,9 @@
             height: auto;
             width: auto;
             aspect-ratio: auto !important
-        }</style>
-    <!-- ✅ Removed non-critical preloads to improve TBT -->
+        }
+        </style>
+ <!-- ✅ Removed non-critical preloads to improve TBT -->
 </head>
 <body class="ikd-grid">
 
@@ -20612,6 +20611,37 @@
             .ad-container ins, .content-ad-container ins {
                 display: block !important;
                 margin: 0 auto;
+            }
+
+        @@media screen and (max-width:980px) {
+            .ss-container, .ss-row > div {
+                width: 100%
+            }
+
+            .question-side.visible-pol {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+
+                .question-side.Visible-pol .question-box a.text-btn {
+                    margin-left: 15px !important;
+                }
+
+            .question-box .mid-box img {
+                max-width: 100%;
+            }
+
+            .ckeditorcontent > ul {
+                margin: 10px 0 24px 10px;
+            }
+
+            ul.ss-class-list li figure:has(a) figcaption, ul.ss-class-list li figure:has(a) a:after {
+                pointer-events: none;
+            }
+
+            ul.ss-class-list li figure:has(a) figcaption, ul.ss-class-list li figure:has(a) a:after {
+                pointer-events: none;       
             }
     </style>
 
