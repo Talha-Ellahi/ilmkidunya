@@ -27,7 +27,6 @@ namespace IKDFrontEnd.Controllers
 
         [Route("results")]
         public async Task<IActionResult> Home()
-
         {
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;

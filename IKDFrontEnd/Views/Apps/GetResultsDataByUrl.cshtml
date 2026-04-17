@@ -1,0 +1,411 @@
+﻿@model IKDFrontEnd.ViewModels.DateSheetCriteria
+@using System.Text.RegularExpressions
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	.result-update-alert {
+		background: #f3f3f3;
+		border-radius: 10px;
+		padding: 25px 30px;
+		max-width: 1200px;
+		margin: 0 auto;
+		box-shadow: 0 0 5px rgba(0,0,0,0.05);
+	}
+
+	.alert-wrapper {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+
+	.alert-figue img {
+		width: 60px;
+		height: 60px;
+		margin-right: 15px;
+	}
+
+	.alert-content h4 {
+		font-size: 18px;
+		margin: 0;
+		color: #333;
+	}
+
+	.alert-content p {
+		margin: 5px 0 0;
+		font-size: 14px;
+		color: #777;
+	}
+
+	.alert-form {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 15px;
+	}
+
+	.half-box {
+		width: calc(50% - 7.5px); /* two inputs per row with 15px gap */
+	}
+
+	.alert-input {
+		width: 100%;
+		padding: 12px 15px;
+		border: none;
+		border-radius: 6px;
+		font-size: 14px;
+		background: #fff;
+		box-shadow: inset 0 0 0 1px #ccc;
+		transition: box-shadow 0.3s ease;
+	}
+
+		.alert-input:focus {
+			outline: none;
+			box-shadow: inset 0 0 0 2px #36a3f2;
+		}
+
+	.btn-subscribe {
+		width: 100%;
+		padding: 12px;
+		background-color: #3498db;
+		color: #fff;
+		border: none;
+		border-radius: 6px;
+		font-size: 14px;
+		font-weight: bold;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
+
+		.btn-subscribe:hover {
+			background-color: #2c80b4;
+		}
+
+</style>
+
+@section MetaData {
+	@{
+		var metaTitle = Model?.MetaTitle ?? "";
+		var metaDescription = Model?.MetaDescription ?? "";
+		var metaKeywords = Model?.MetaKeywords ?? "";
+	}
+
+	<meta charset="utf-8">
+	<meta property="og:title" content="@metaTitle" />
+	<meta property="og:description" content="@metaDescription" />
+	<meta property="og:image" content="" />
+	<meta name="description" content="@metaDescription">
+	<meta name="keywords" content="@metaKeywords">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@metaTitle</title>
+}
+
+@section header {
+	<div class="col-lg-11">
+		<ul class="navigation">
+			<li>
+				<a aria-label="link" href="/results/">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-1.webp" alt="image" />
+					Home
+				</a>
+			</li>
+
+			<li>
+				<a aria-label="link" href="#">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-2.webp" alt="image" />
+					Matric Result
+				</a>
+				<div class="mega-menu full-width">
+					<div class="mega-menu-wrapper">
+						<div class="mega-menu-top">
+							<div class="menu-left-box">
+								<div class="mega-menu-list">
+									<h2 class="ds-heading"><a class="dynamic-link" href="#">Matric Result</a></h2>
+									<ol>
+										<li><a class="dynamic-link" href="/results/9th-class-result.aspx">9th Class</a></li>
+										<li><a class="dynamic-link" href="/results/10th-class-result.aspx">10th Class</a></li>
+										<li><a class="dynamic-link" href="/results/ssc-part-1-2-result.aspx">SSC Class</a></li>
+										<li><a class="dynamic-link" href="/results/matric-result.aspx">Matric Class</a></li>
+									</ol>
+								</div>
+							</div>
+							<div class="menu-right-box"></div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+			<li>
+				<a aria-label="link" href="#">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-3.webp" alt="image" />
+					Inter Result
+				</a>
+				<div class="mega-menu full-width">
+					<div class="mega-menu-wrapper">
+						<div class="mega-menu-top">
+							<div class="menu-left-box">
+								<div class="mega-menu-list">
+									<h2 class="ds-heading"><a class="dynamic-link" href="#">Inter Result</a></h2>
+									<ol>
+										<li><a class="dynamic-link" href="/results/11th-class-result.aspx">11th Class</a></li>
+										<li><a class="dynamic-link" href="/results/12th-class-result.aspx">12th Class</a></li>
+										<li><a class="dynamic-link" href="/results/fa-part-1-2-result.aspx">FA Class</a></li>
+										<li><a class="dynamic-link" href="/results/fsc-result.aspx">FSc Class</a></li>
+										<li><a class="dynamic-link" href="/results/icom-part-1-2-result.aspx">ICOM Class</a></li>
+										<li><a class="dynamic-link" href="/results/ics-part-1-2-result.aspx">ICS Class</a></li>
+										<li><a class="dynamic-link" href="/results/inter-result.aspx">Inter Class</a></li>
+										<li><a class="dynamic-link" href="/results/hssc-part-1-2-result.aspx">HSSC Class</a></li>
+									</ol>
+								</div>
+							</div>
+							<div class="menu-right-box"></div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+			<li>
+				<a aria-label="link" href="/results/all-boards-result.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-4.webp" alt="image" />
+					All Board Result
+				</a>
+			</li>
+
+			<li>
+				<a aria-label="link" href="/results/all-universities-result.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-5.webp" alt="image" />
+					All Universities Result
+				</a>
+			</li>
+
+			<li>
+				<a aria-label="link" href="/results/all-entry-test-result.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-6.webp" alt="image" />
+					All Entry Test Result
+				</a>
+			</li>
+
+			<li>
+				<a aria-label="link" href="https://www.ilmkidunya.com/edunews/news-categories/results.aspx">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-7.webp" alt="image" />
+					Result News
+				</a>
+			</li>
+
+			<li>
+				<a aria-label="link" href="https://www.ilmkidunya.com/apps/results">
+					<img src="https://images.ishallwin.com/nav-icons/chem-nav-8.webp" alt="image" />
+					Result App
+				</a>
+			</li>
+
+		</ul>
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>@Model.Heading</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ckeditorcontent">
+						@{
+							string renderedDesc1 = "";
+
+							if (!string.IsNullOrWhiteSpace(Model.Desc1))
+							{
+								var cleanedDesc = Model.Desc1.Replace("https://www.ilmkidunya.com", "");
+								var parts = cleanedDesc.Split(new string[] { "[[CRITERIA_PLACEHOLDER]]" }, StringSplitOptions.None);
+
+								if (parts.Length > 0)
+								{
+									@Html.RenderWithAds(parts[0])
+								}
+
+								<div class="page-font">
+									@await Html.PartialAsync("_ResultsCriteriaPartial", Model)
+								</div>
+
+								if (parts.Length > 1)
+								{
+									var afterCriteriaPart = parts[1];
+
+									var updateParts = afterCriteriaPart.Split(new string[] { "[[UPDATE_FORM_PLACEHOLDER]]" }, StringSplitOptions.None);
+
+									@Html.RenderWithAds(updateParts[0])
+
+									if (Model.ShowUpdateForm && updateParts.Length > 1)
+									{
+										<div class="update-form-block">
+											@await Html.PartialAsync("_ResultForm2Partial", Model)
+										</div>
+
+										@Html.RenderWithAds(updateParts[1])
+									}
+									else if (updateParts.Length == 1)
+									{
+										@Html.RenderWithAds(updateParts[0])
+									}
+								}
+							}
+						}
+
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="new-ads-sec">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-12 col-md-12 col-sm-12">
+
+					<ul class="ss-ads" style="border: 0; padding-top: 0; margin: 0;">
+						@await Html.PartialAsync("_maincontenttopbanner")
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="contact-sec fee-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (Model.Desc2 != null)
+					{
+						@Html.Raw(
+						Regex.Replace(
+						Model.Desc2
+						.Replace("#{standard}#", "")
+						.Replace("https://www.ilmkidunya.com", ""),
+						@"##.*?##", ""
+						)
+										)
+
+										}
+
+				</div>
+			</div>
+			@if (!string.IsNullOrEmpty(Model.BoardName))
+			{
+				<div class="result-update-alert">
+					<div class="alert-wrapper">
+						<div class="alert-figue">
+							<img src="https://resources.ilmkidunya.com/css/ikd-results/envelope-green-icon.png">
+						</div>
+						<div class="alert-content">
+							<h4>Get Latest Updates on Results</h4>
+							<p>Result is announced by BISE @Model.BoardName but we can alert you whenever a new result is announced</p>
+						</div>
+					</div>
+					<form id="resultUpdateForm" method="post" class="alert-form">
+						<div class="half-box">
+							<input type="text" class="alert-input" name="name" placeholder="Your Name" required="">
+						</div>
+						<div class="half-box">
+							<input type="text" class="alert-input" name="email" placeholder="Your Email ID" required="">
+						</div>
+						<div class="half-box">
+							<input type="text" class="alert-input" name="className" placeholder="Your Class" required="">
+						</div>
+						<div class="half-box">
+							<input type="text" class="alert-input" name="board" placeholder="Your Board/University" required="">
+						</div>
+
+						<div class="half-box">
+							<button class="btn-subscribe" type="submit">Get results update</button>
+						</div>
+						<div id="resultSuccessMessage" style="display:none; color:green; padding-top:10px;">
+							✅ Thank you! You’ll receive result updates soon.
+						</div>
+					</form>
+				</div>
+			}
+
+			@* 	<div class="container my-4 p-4 border rounded bg-light">
+				<div class="row align-items-center mb-4">
+					<div class="col-md-2 text-center">
+						<img src="https://resources.ilmkidunya.com/css/ikd-results/envelope-green-icon.png" class="img-fluid" alt="Result Alert Icon">
+					</div>
+					<div class="col-md-10">
+						<h4 class="mb-1">Get Latest Updates on Results</h4>
+						<p class="mb-0">Result is announced by BISE Lahore but we can alert you whenever a new result is announced</p>
+					</div>
+				</div>
+
+				<form id="resultUpdateForm" method="post" class="row g-3">
+					<div class="col-md-6">
+						<input type="text" name="Name" maxlength="100" class="form-control" placeholder="Your Name" required />
+					</div>
+					<div class="col-md-6">
+						<input type="email" name="Email" maxlength="100" class="form-control" placeholder="Your Email" required />
+					</div>
+					<div class="col-md-6">
+						<input type="text" name="ClassName" maxlength="100" class="form-control" placeholder="Class Name" required />
+					</div>
+					<div class="col-md-6">
+						<input type="text" name="BoardName" maxlength="100" class="form-control" placeholder="Board Name" required />
+					</div>
+					<div class="col-12">
+						<button type="submit" class="btn btn-success w-100">Get Results Update</button>
+					</div>
+					<div id="resultSuccessMessage" style="display:none; color:green; padding-top:10px;">
+						✅ Thank you! You’ll receive result updates soon.
+					</div>
+				</form>
+
+				
+			</div> *@
+
+		</div>
+	</div>
+
+
+</div>
+
+<script>
+		$(document).ready(function () {
+		$("#resultUpdateForm").submit(function (e) {
+			e.preventDefault();
+
+			// Hide success message before sending request
+			$("#resultSuccessMessage").addClass("d-none").hide();
+
+			$.ajax({
+				type: "POST",
+				url: "/Results/resultupdates",
+				data: $(this).serialize(),
+				success: function (response) {
+					if (response.success) {
+						$("#resultUpdateForm")[0].reset();
+						$("#resultSuccessMessage").removeClass("d-none").show();
+					} else {
+						alert("Error: " + response.message);
+					}
+				},
+				error: function () {
+					alert("An error occurred while submitting the form.");
+				}
+			});
+		});
+	});
+
+</script>
