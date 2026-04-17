@@ -955,472 +955,42 @@
 </div>
 
 <script>
-    // ==================== GLOBAL VARIABLES AND SETUP ====================
-
-    // Global variables accessible to all functions
-    const testTitle = @Html.Raw(Json.Serialize(Model.Test.TestName));
-    const testUrl = @Html.Raw(Json.Serialize(Model.Test.Url));
-    const testId = @Html.Raw(Json.Serialize(Model.Test.Id));
-    let isUserLoggedIn = @Model.IsLoggedIn.ToString().ToLower();
-    let Marks = @Html.Raw(Json.Serialize(Model.TotalMarks));
-    let startTime;
-    let autoStartAfterLogin = false;
-
-    // Global result IDs
-    window.savedTestResultId = null;
-    window.topicTestResultId = null;
-    window.isUserLoggedIn = isUserLoggedIn; // Make it global
-
-    // Timer variables for main test
-    let timer;
-    let isRunning = false;
-    let elapsedTime = 0;
-    let finalDuration = null;
-
-    // Topic test variables
-    let topicTestAlreadyStarted = false;
-    let topicTimer;
-    let topicIsRunning = false;
-    let topicElapsedTime = 0;
-    let topicFinalDuration = null;
-    let topicTestId = null;
-    let topicTestTitle = "";
-    let currentTopicQuestions = [];
-    let currentTopicAnswers = [];
-    const topicQuestionsCache = new Map();
-
-    // NEW: Topic test progress tracking
-    let topicTestProgress = {
-        answers: [],
-        currentQuestionIndex: 0,
-        topicId: null,
-        elapsedTime: 0,
-        testStarted: false
-    };
-
-    // ==================== ANSWER MODE FUNCTIONS ====================
-
-    const closeBtn = document.getElementById("close-ans");
-    const targetBox = document.getElementById("pol-answer-mode");
-    const holder = document.getElementById("quest-holder");
-
-    // Function for Set-wise tests (openAnsMode)
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    function openAnsMode(apiUrl) {
-=======
-       @*  function openAnsMode(apiUrl) {
-        fetch(apiUrl)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error("Server error: " + res.status);
-            }
-            return res.json();
-        })
-        .then(data => {
-            // your logic
-        })
-        .catch(err => {
-            console.error("Error fetching data:", err);
-        });
-        } *@
-            function openAnsMode(apiUrl) {
->>>>>>> Stashed changes
-=======
-    function openAnsMode(apiUrl) 
-            debugger;
-            
->>>>>>> d314e20cc8cdc5e5dee4f628068d5bf5d760d651
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(data => {
-                console.log("Fetched Questions:", data);
-
-                const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
-                let html = "";
-
-                data.forEach((q, index) => {
-                    let correctIndex = (q.correctAnswer || 1) - 1;
-
-                    let questionImgHtml = q.questionImage
-                        ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" /></div>`
-                        : "";
-
-                    let choicesHtml = q.choices
-                        .filter(c => c.text || c.img)
-                        .map((c, i) => `
-                            <li class="${i === correctIndex ? "correct" : ""}">
-                                <label class="radio-container">
-                                    <span class="q-detiel">
-                                        ${c.text || ""}
-                                        ${c.img ? `<img src="${baseImgPath + c.img}" class="opt-img" />` : ""}
-                                    </span>
-                                    <input type="radio" disabled value="${c.value}">
-                                    <span class="label">${c.value}</span>
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                        `).join("");
-
-                    html += `
-                        <div class="mid-box1 ans-bx-visible">
-                            <strong>Question # ${index + 1}</strong>
-                            <h3>${q.question}</h3>
-                            ${questionImgHtml}
-                            <ul>${choicesHtml}</ul>
-                        </div>
-                    `;
-                });
-
-                holder.innerHTML = html;
-
-                setupNavigation();
-                targetBox.classList.add("visible");
-            })
-            .catch(err => {
-                console.error("Error fetching data:", err);
-            });
-    }
-     
-    // Setup navigation for answer mode
-    function setupNavigation() {
-        let questions = document.querySelectorAll(".ans-bx-visible");
-        let currentIndex = 0;
-
-        const prevBtn = document.querySelector(".prev-ans");
-        const nextBtn = document.querySelector(".next-ans");
-
-        function showQuestion(index) {
-            questions.forEach((q, i) => {
-                q.style.display = (i === index) ? "block" : "none";
-            });
-
-            prevBtn.classList.toggle("active", index > 0);
-            nextBtn.classList.toggle("active", index < questions.length - 1);
-        }
-
-        showQuestion(currentIndex);
-
-        nextBtn.onclick = function (e) {
-            e.preventDefault();
-            if (currentIndex < questions.length - 1) {
-                currentIndex++;
-                showQuestion(currentIndex);
-            }
-        };
-
-        prevBtn.onclick = function (e) {
-            e.preventDefault();
-            if (currentIndex > 0) {
-                currentIndex--;
-                showQuestion(currentIndex);
-            }
-        };
-    }
-
-    // Close answer mode popup
-    if (closeBtn) {
-        closeBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            targetBox.classList.remove("visible");
-        });
-    }
-
-    // Close answer mode when clicking outside
-    document.addEventListener("click", function (event) {
-        if (
-            targetBox.classList.contains("visible") &&
-            !targetBox.contains(event.target) &&
-            event.target !== closeBtn &&
-            !event.target.closest("[onclick*='openAnsMode']")
-        ) {
-            targetBox.classList.remove("visible");
-        }
-    });
-
-    // ==================== UTILITY FUNCTIONS ====================
-
-    // Helper function to get correct answer label
-    function getCorrectAnswerLabel(correctIndex) {
-        const labels = ['', 'A', 'B', 'C', 'D', 'E'];
-        return labels[correctIndex] || '';
-    }
-
-    // Function to save answer selection for topic tests
-    function saveTopicAnswer(questionIndex, answer) {
-        currentTopicAnswers[questionIndex] = answer;
-    }
-
-    // Close all popups function
-    function closePoll() {
-        // Close main test popup
-        const pol = document.getElementById('pol');
-        if (pol) {
-            pol.classList.remove('visible');
-        }
-
-        // Close topic popup
-        const topicPol = document.getElementById('topic-pol');
-        if (topicPol && topicPol.classList.contains('visible')) {
-            topicPol.classList.remove('visible');
-        }
-
-        document.body.classList.remove('open-poll');
-    }
-
-    // ==================== MAIN TEST FUNCTIONS ====================
-
-    function launchTest() {
-        // Close topic popup if open
-        const topicPol = document.getElementById('topic-pol');
-        if (topicPol && topicPol.classList.contains('visible')) {
-            topicPol.classList.remove('visible');
-        }
-
-        // Open main test popup
-        const pol = document.getElementById('pol');
-        if (pol) {
-            pol.classList.add('visible');
-        }
-        document.body.classList.add('open-poll');
-
-        if (!testAlreadyStarted && !isRunning) {
-            startTime = Date.now(); // only first time
-            startStop(); // start stopwatch
-            testAlreadyStarted = true; // mark as started
-        }
-    }
-
-    let testAlreadyStarted = false;
-
-    function startStop() {
-        if (isRunning) {
-            clearInterval(timer);
-            document.getElementById('startStopBtn').textContent = 'Start';
-        } else {
-            const startTime = Date.now() - elapsedTime;
-            timer = setInterval(() => {
-                elapsedTime = Date.now() - startTime;
-                const totalSeconds = Math.floor(elapsedTime / 1000);
-                const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-                const seconds = String(totalSeconds % 60).padStart(2, '0');
-                document.getElementById('display').textContent = `${minutes}:${seconds}`;
-            }, 1000);
-            document.getElementById('startStopBtn').textContent = 'Stop';
-        }
-        isRunning = !isRunning;
-    }
-
-    function getDurationInSeconds() {
-        return Math.floor(elapsedTime / 1000);
-    }
-
-    // Main test submit function
-    async function submitTest() {
-        const durationInSeconds = finalDuration ?? getDurationInSeconds();
-        const questionBoxes = document.querySelectorAll("#pol .mid-box");
-        let resultHTML = "";
-        let correctCount = 0;
-
-        questionBoxes.forEach((box) => {
-            const questionNumber = box.dataset.questionNumber;
-            const questionText = box.querySelector("h3").innerHTML;
-            const questionImageElem = box.querySelector(".question-image");
-            const questionImageHtml = questionImageElem ? questionImageElem.outerHTML : "";
-
-            const inputs = box.querySelectorAll("input[type='radio']");
-            const selected = box.querySelector("input[type='radio']:checked");
-            const selectedVal = selected ? selected.value : null;
-
-            let correct = null;
-            inputs.forEach(input => {
-                if (input.dataset.correct === "true") correct = input.value;
-            });
-
-            if (selectedVal === correct) correctCount++;
-
-            let optionsHTML = "";
-            inputs.forEach(input => {
-                const label = input.value;
-                const optionLabelElem = input.closest("label");
-                const optionText = optionLabelElem.querySelector(".q-detiel").innerHTML;
-
-                let liClass = "";
-                if (label === correct) liClass = "correct";
-                if (label === selectedVal && selectedVal !== correct) liClass = "wrong";
-
-                optionsHTML += `
-                    <li class="${liClass}">
-                        <label class="radio-container">
-                            <span class="q-detiel">${optionText}</span>
-                            <input type="radio" disabled value="${label}" data-correct="${label === correct ? 'true' : 'false'}">
-                            <span class="label">${label}</span>
-                            <span class="checkmark"></span>
-                        </label>
-                    </li>`;
-            });
-
-            resultHTML += `
-                <div class="mid-box1">
-                    <strong>Question # ${questionNumber}</strong>
-                    <h3>${questionText}</h3>
-                    ${questionImageHtml}
-                    <ul>${optionsHTML}</ul>
-                </div>`;
-        });
-
-        if (typeof timer !== "undefined") {
-            clearInterval(timer);
-            isRunning = false;
-        }
-
-        document.querySelector(".ans-box").innerHTML = resultHTML;
-        document.querySelector(".holder-question").style.display = "none";
-        document.querySelector(".last-box").style.display = "none";
-        document.querySelector(".real-submit").style.display = "none";
-        document.querySelector(".fake-submit").style.display = "none";
-        document.querySelector(".ans-question").style.display = "block";
-
-        try {
-            const response = await fetch('/online-test/save-result', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    TestId: testId,
-                    TestTitle: testTitle,
-                    TotalQuestions: questionBoxes.length,
-                    CorrectAnswers: correctCount,
-                    Duration: durationInSeconds,
-                    TestUrl: testUrl,
-                    TotalMarks: Marks
-                })
-            });
-
-            if (!response.ok) {
-                console.error("Error saving result:", response.statusText);
-                return;
-            }
-
-            const data = await response.json();
-            if (data.success) {
-                window.savedTestResultId = data.testResultId;
-                console.log("Main test result saved with ID:", window.savedTestResultId);
-            }
-        } catch (err) {
-            console.error("Fetch error:", err);
-        }
-    }
-
-    // ==================== TOPIC TEST FUNCTIONS ====================
-
-    // NEW: Function to save topic test progress
-    function saveTopicTestProgress() {
-        const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
-        if (topicQuestions.length === 0) return;
-
-        // Save current answers
-        const savedAnswers = [];
-
-        topicQuestions.forEach((q, index) => {
-            const questionNumber = index + 1;
-            const radioName = `topic_question_${questionNumber}`;
-            const selected = q.querySelector(`input[name="${radioName}"]:checked`);
-            savedAnswers.push(selected ? selected.value : null);
-        });
-
-        // Find current question index
-        let currentIndex = 0;
-        topicQuestions.forEach((q, index) => {
-            if (q.style.display === 'block' || q.style.display === '') {
-                currentIndex = index;
-            }
-        });
-
-        // Save to global progress object
-        topicTestProgress = {
-            answers: savedAnswers,
-            currentQuestionIndex: currentIndex,
-            topicId: topicTestId,
-            elapsedTime: topicElapsedTime,
-            testStarted: topicTestAlreadyStarted
-        };
-
-        // Also save to localStorage for persistence
-        try {
-            localStorage.setItem('topicTestProgress', JSON.stringify(topicTestProgress));
-        } catch (e) {
-            console.warn('Could not save progress to localStorage:', e);
-        }
-    }
-
-    // NEW: Function to restore topic test progress
-    function restoreTopicTestProgress() {
-        try {
-            const savedProgress = localStorage.getItem('topicTestProgress');
-            if (savedProgress) {
-                const progress = JSON.parse(savedProgress);
-
-                // Check if it's the same topic
-                if (progress.topicId === topicTestId) {
-                    topicTestProgress = progress;
-                    currentTopicAnswers = progress.answers;
-                    topicElapsedTime = progress.elapsedTime;
-
-                    // Clear localStorage after restoring
-                    localStorage.removeItem('topicTestProgress');
-
-                    return true;
-                }
-            }
-        } catch (e) {
-            console.warn('Could not restore progress from localStorage:', e);
-        }
-
-        return false;
-    }
-
-    // NEW: Function to restore selected answers
-    function restoreSelectedAnswers() {
-        const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
-
-        topicQuestions.forEach((q, index) => {
-            if (currentTopicAnswers[index]) {
-                const questionNumber = index + 1;
-                const radioName = `topic_question_${questionNumber}`;
-                const radioValue = currentTopicAnswers[index];
-                const radioInput = q.querySelector(`input[name="${radioName}"][value="${radioValue}"]`);
-
-                if (radioInput) {
-                    radioInput.checked = true;
-                }
-            }
-        });
-    }
-
-    // NEW: Function to navigate to specific question
-    function navigateToTopicQuestion(index) {
-        const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
-        if (index >= 0 && index < topicQuestions.length) {
-            // Hide all questions
-            topicQuestions.forEach((q, i) => {
-                q.style.display = 'none';
-            });
-
-            // Show the target question
-            topicQuestions[index].style.display = 'block';
-
-            // Update navigation button states
-            const prevBtn = document.querySelector('.topic-prev');
-            const nextBtn = document.querySelector('.topic-next');
-
-            if (prevBtn) prevBtn.classList.toggle("active", index > 0);
-            if (nextBtn) nextBtn.classList.toggle("active", index < topicQuestions.length - 1);
-        }
-    }
-
-    // NEW: Function to clear topic test progress
-    function clearTopicTestProgress() {
-        topicTestProgress = {
+        // ==================== GLOBAL VARIABLES AND SETUP ====================
+
+        // Global variables accessible to all functions
+        const testTitle = @Html.Raw(Json.Serialize(Model.Test.TestName));
+        const testUrl = @Html.Raw(Json.Serialize(Model.Test.Url));
+        const testId = @Html.Raw(Json.Serialize(Model.Test.Id));
+        let isUserLoggedIn = @Model.IsLoggedIn.ToString().ToLower();
+        let Marks = @Html.Raw(Json.Serialize(Model.TotalMarks));
+        let startTime;
+        let autoStartAfterLogin = false;
+
+        // Global result IDs
+        window.savedTestResultId = null;
+        window.topicTestResultId = null;
+        window.isUserLoggedIn = isUserLoggedIn; // Make it global
+
+        // Timer variables for main test
+        let timer;
+        let isRunning = false;
+        let elapsedTime = 0;
+        let finalDuration = null;
+
+        // Topic test variables
+        let topicTestAlreadyStarted = false;
+        let topicTimer;
+        let topicIsRunning = false;
+        let topicElapsedTime = 0;
+        let topicFinalDuration = null;
+        let topicTestId = null;
+        let topicTestTitle = "";
+        let currentTopicQuestions = [];
+        let currentTopicAnswers = [];
+        const topicQuestionsCache = new Map();
+
+        // NEW: Topic test progress tracking
+        let topicTestProgress = {
             answers: [],
             currentQuestionIndex: 0,
             topicId: null,
@@ -1428,1509 +998,1909 @@
             testStarted: false
         };
 
-        try {
-            localStorage.removeItem('topicTestProgress');
-        } catch (e) {
-            console.warn('Could not clear progress from localStorage:', e);
+        // ==================== ANSWER MODE FUNCTIONS ====================
+
+        const closeBtn = document.getElementById("close-ans");
+        const targetBox = document.getElementById("pol-answer-mode");
+        const holder = document.getElementById("quest-holder");
+
+        // Function for Set-wise tests (openAnsMode)
+        function openAnsMode(apiUrl){
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Fetched Questions:", data);
+                    holder.innerHTML = "";
+
+                    const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
+
+                    data.forEach((q, index) => {
+                        let correctIndex = q.correctAnswer - 1;
+
+                        let questionImgHtml = q.questionImage
+                            ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+                            : "";
+
+                        let choicesHtml = q.choices
+                            .filter(c => c.text || c.img)
+                            .map((c, i) => `
+                                <li class="${i === correctIndex ? "correct" : ""}">
+                                    <label class="radio-container">
+                                        <span class="q-detiel">
+                                            ${c.text ? c.text : ""}
+                                            ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+                                        </span>
+                                        <input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
+                                        <span class="label">${c.value}</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                            `).join("");
+
+                        holder.innerHTML += `
+                            <div class="mid-box1 ans-bx-visible">
+                                <strong>Question # ${index + 1}</strong>
+                                <h3>${q.question}</h3>
+                                ${questionImgHtml}
+                                <ul>${choicesHtml}</ul>
+                            </div>
+                        `;
+                    });
+
+                    setupNavigation();
+                    targetBox.classList.add("visible");
+                });
         }
-    }
 
-    // Topic timer functions
-    function startTopicTimer() {
-        if (!topicTestAlreadyStarted && !topicIsRunning) {
-            const startTime = Date.now();
-            topicTimer = setInterval(() => {
-                topicElapsedTime = Date.now() - startTime;
-                const totalSeconds = Math.floor(topicElapsedTime / 1000);
-                const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-                const seconds = String(totalSeconds % 60).padStart(2, '0');
-                const topicDisplay = document.getElementById('topic-display');
-                if (topicDisplay) {
-                    topicDisplay.textContent = `${minutes}:${seconds}`;
-                }
-            }, 1000);
-            topicIsRunning = true;
-            topicTestAlreadyStarted = true;
-        }
-    }
+        // Setup navigation for answer mode
+        function setupNavigation() {
+            let questions = document.querySelectorAll(".ans-bx-visible");
+            let currentIndex = 0;
 
-    function getTopicDurationInSeconds() {
-        return Math.floor(topicElapsedTime / 1000);
-    }
+            const prevBtn = document.querySelector(".prev-ans");
+            const nextBtn = document.querySelector(".next-ans");
 
-    // MODIFIED: Setup navigation for topic questions
-    function setupTopicNavigation() {
-        let topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
-        if (topicQuestions.length === 0) return;
+            function showQuestion(index) {
+                questions.forEach((q, i) => {
+                    q.style.display = (i === index) ? "block" : "none";
+                });
 
-        let currentIndex = topicTestProgress.currentQuestionIndex || 0;
+                prevBtn.classList.toggle("active", index > 0);
+                nextBtn.classList.toggle("active", index < questions.length - 1);
+            }
 
-        function showTopicQuestion(index) {
-            // Save progress before navigating
-            saveTopicTestProgress();
+            showQuestion(currentIndex);
 
-            topicQuestions.forEach((q, i) => {
-                q.style.display = (i === index) ? "block" : "none";
-            });
-
-            const prevBtn = document.querySelector('.topic-prev');
-            const nextBtn = document.querySelector('.topic-next');
-
-            if (prevBtn) prevBtn.classList.toggle("active", index > 0);
-            if (nextBtn) nextBtn.classList.toggle("active", index < topicQuestions.length - 1);
-        }
-
-        showTopicQuestion(currentIndex);
-
-        // Next button handler
-        const nextBtn = document.querySelector('.topic-next');
-        if (nextBtn) {
             nextBtn.onclick = function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                if (currentIndex < topicQuestions.length - 1) {
+                if (currentIndex < questions.length - 1) {
                     currentIndex++;
-                    showTopicQuestion(currentIndex);
+                    showQuestion(currentIndex);
                 }
             };
-        }
 
-        // Previous button handler
-        const prevBtn = document.querySelector('.topic-prev');
-        if (prevBtn) {
             prevBtn.onclick = function (e) {
                 e.preventDefault();
-                e.stopPropagation();
                 if (currentIndex > 0) {
                     currentIndex--;
-                    showTopicQuestion(currentIndex);
+                    showQuestion(currentIndex);
                 }
             };
         }
-    }
 
-    // MODIFIED: Function to load questions into popup
-    function loadTopicQuestionsIntoPopup() {
-        const holder = document.getElementById('topic-holder');
-        if (!holder) return;
-
-        holder.innerHTML = '';
-
-        const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
-
-        currentTopicQuestions.forEach((q, index) => {
-            let questionImgHtml = q.questionImage
-                ? `<div class="question-image mb-2">
-                        <img src="${baseImgPath + q.questionImage}" alt="Question Image" class="img-fluid" style="max-width: 100%; height: auto;" />
-                   </div>`
-                : "";
-
-            // Check if this answer was previously selected
-            const savedAnswer = currentTopicAnswers[index];
-
-            let optionsHtml = q.choices.map((c, i) => {
-                let optionImgHtml = c.img
-                    ? `<div class="option-image mt-2">
-                            <img src="${baseImgPath + c.img}" alt="Option Image" class="img-fluid" style="max-width: 100%; height: auto;" />
-                       </div>`
-                    : "";
-
-                const isChecked = savedAnswer === c.value;
-
-                return `
-                    <li>
-                        <label class="radio-container d-flex align-items-start">
-                            <span class="q-detiel">
-                                ${c.text || ''}
-                                ${optionImgHtml}
-                            </span>
-                            <input type="radio"
-                                   name="topic_question_${index + 1}"
-                                   value="${c.value}"
-                                   data-correct="${c.value === getCorrectAnswerLabel(q.correctAnswer)}"
-                                   ${isChecked ? 'checked' : ''}>
-                            <span class="label">${c.value}</span>
-                            <span class="checkmark"></span>
-                        </label>
-                    </li>
-                `;
-            }).join('');
-
-            holder.innerHTML += `
-                <div class="mid-box" data-question-number="${index + 1}" style="display: none;">
-                    <strong>Question # ${index + 1}</strong>
-                    <h3>${q.questionText}</h3>
-                    ${questionImgHtml}
-                    <ul>${optionsHtml}</ul>
-                </div>
-            `;
-        });
-
-        // Add event listeners to radio buttons with auto-save
-        holder.querySelectorAll('input[type="radio"]').forEach((radio, index) => {
-            radio.addEventListener('change', function() {
-                const questionIndex = Math.floor(index / 4);
-                saveTopicAnswer(questionIndex, this.value);
-
-                // Auto-save progress when answer changes
-                saveTopicTestProgress();
+        // Close answer mode popup
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                targetBox.classList.remove("visible");
             });
+        }
+
+        // Close answer mode when clicking outside
+        document.addEventListener("click", function (event) {
+            if (
+                targetBox.classList.contains("visible") &&
+                !targetBox.contains(event.target) &&
+                event.target !== closeBtn &&
+                !event.target.closest("[onclick*='openAnsMode']")
+            ) {
+                targetBox.classList.remove("visible");
+            }
         });
 
-        // Setup navigation
-        setTimeout(() => {
-            setupTopicNavigation();
+        // ==================== UTILITY FUNCTIONS ====================
 
-            // Navigate to saved question index if exists
-            if (topicTestProgress.currentQuestionIndex > 0) {
-                navigateToTopicQuestion(topicTestProgress.currentQuestionIndex);
+        // Helper function to get correct answer label
+        function getCorrectAnswerLabel(correctIndex) {
+            const labels = ['', 'A', 'B', 'C', 'D', 'E'];
+            return labels[correctIndex] || '';
+        }
+
+        // Function to save answer selection for topic tests
+        function saveTopicAnswer(questionIndex, answer) {
+            currentTopicAnswers[questionIndex] = answer;
+        }
+
+        // Close all popups function
+        function closePoll() {
+            // Close main test popup
+            const pol = document.getElementById('pol');
+            if (pol) {
+                pol.classList.remove('visible');
+            }
+
+            // Close topic popup
+            const topicPol = document.getElementById('topic-pol');
+            if (topicPol && topicPol.classList.contains('visible')) {
+                topicPol.classList.remove('visible');
+            }
+
+            document.body.classList.remove('open-poll');
+        }
+
+        // ==================== MAIN TEST FUNCTIONS ====================
+
+        function launchTest() {
+            // Close topic popup if open
+            const topicPol = document.getElementById('topic-pol');
+            if (topicPol && topicPol.classList.contains('visible')) {
+                topicPol.classList.remove('visible');
+            }
+
+            // Open main test popup
+            const pol = document.getElementById('pol');
+            if (pol) {
+                pol.classList.add('visible');
+            }
+            document.body.classList.add('open-poll');
+
+            if (!testAlreadyStarted && !isRunning) {
+                startTime = Date.now(); // only first time
+                startStop(); // start stopwatch
+                testAlreadyStarted = true; // mark as started
+            }
+        }
+
+        let testAlreadyStarted = false;
+
+        function startStop() {
+            if (isRunning) {
+                clearInterval(timer);
+                document.getElementById('startStopBtn').textContent = 'Start';
             } else {
-                navigateToTopicQuestion(0);
+                const startTime = Date.now() - elapsedTime;
+                timer = setInterval(() => {
+                    elapsedTime = Date.now() - startTime;
+                    const totalSeconds = Math.floor(elapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    document.getElementById('display').textContent = `${minutes}:${seconds}`;
+                }, 1000);
+                document.getElementById('startStopBtn').textContent = 'Stop';
             }
-        }, 100);
-    }
+            isRunning = !isRunning;
+        }
 
-    // MODIFIED: Submit topic test with progress clearing
-    async function submitTopicTest() {
-        const durationInSeconds = topicFinalDuration ?? getTopicDurationInSeconds();
-        let correctCount = 0;
+        function getDurationInSeconds() {
+            return Math.floor(elapsedTime / 1000);
+        }
 
-        // Calculate score
-        currentTopicQuestions.forEach((q, index) => {
-            const correctLabel = getCorrectAnswerLabel(q.correctAnswer);
-            if (currentTopicAnswers[index] === correctLabel) {
-                correctCount++;
+        // Main test submit function
+        async function submitTest() {
+            const durationInSeconds = finalDuration ?? getDurationInSeconds();
+            const questionBoxes = document.querySelectorAll("#pol .mid-box");
+            let resultHTML = "";
+            let correctCount = 0;
+
+            questionBoxes.forEach((box) => {
+                const questionNumber = box.dataset.questionNumber;
+                const questionText = box.querySelector("h3").innerHTML;
+                const questionImageElem = box.querySelector(".question-image");
+                const questionImageHtml = questionImageElem ? questionImageElem.outerHTML : "";
+
+                const inputs = box.querySelectorAll("input[type='radio']");
+                const selected = box.querySelector("input[type='radio']:checked");
+                const selectedVal = selected ? selected.value : null;
+
+                let correct = null;
+                inputs.forEach(input => {
+                    if (input.dataset.correct === "true") correct = input.value;
+                });
+
+                if (selectedVal === correct) correctCount++;
+
+                let optionsHTML = "";
+                inputs.forEach(input => {
+                    const label = input.value;
+                    const optionLabelElem = input.closest("label");
+                    const optionText = optionLabelElem.querySelector(".q-detiel").innerHTML;
+
+                    let liClass = "";
+                    if (label === correct) liClass = "correct";
+                    if (label === selectedVal && selectedVal !== correct) liClass = "wrong";
+
+                    optionsHTML += `
+                        <li class="${liClass}">
+                            <label class="radio-container">
+                                <span class="q-detiel">${optionText}</span>
+                                <input type="radio" disabled value="${label}" data-correct="${label === correct ? 'true' : 'false'}">
+                                <span class="label">${label}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>`;
+                });
+
+                resultHTML += `
+                    <div class="mid-box1">
+                        <strong>Question # ${questionNumber}</strong>
+                        <h3>${questionText}</h3>
+                        ${questionImageHtml}
+                        <ul>${optionsHTML}</ul>
+                    </div>`;
+            });
+
+            if (typeof timer !== "undefined") {
+                clearInterval(timer);
+                isRunning = false;
             }
-        });
 
-        // Generate result HTML
-        let resultHTML = "";
-        currentTopicQuestions.forEach((q, index) => {
-            const correctLabel = getCorrectAnswerLabel(q.correctAnswer);
-            const selectedAnswer = currentTopicAnswers[index];
-            const isCorrect = selectedAnswer === correctLabel;
-
-            const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
-
-            let questionImgHtml = q.questionImage
-                ? `<div class="question-image mb-2">
-                        <img src="${baseImgPath + q.questionImage}" alt="Question Image" class="img-fluid" />
-                   </div>`
-                : "";
-
-            let optionsHtml = q.choices.map(c => {
-                let optionImgHtml = c.img
-                    ? `<div class="option-image mt-2">
-                            <img src="${baseImgPath + c.img}" alt="Option Image" class="img-fluid" />
-                       </div>`
-                    : "";
-
-                let liClass = "";
-                if (c.value === correctLabel) liClass = "correct";
-                if (c.value === selectedAnswer && !isCorrect) liClass = "wrong";
-
-                return `
-                    <li class="${liClass}">
-                        <label class="radio-container">
-                            <span class="q-detiel">
-                                ${c.text || ''}
-                                ${optionImgHtml}
-                            </span>
-                            <input type="radio" disabled>
-                            <span class="label">${c.value}</span>
-                            <span class="checkmark"></span>
-                        </label>
-                    </li>
-                `;
-            }).join('');
-
-            resultHTML += `
-                <div class="mid-box1">
-                    <strong>Question # ${index + 1}</strong>
-                    <h3>${q.questionText}</h3>
-                    ${questionImgHtml}
-                    <ul>${optionsHtml}</ul>
-                </div>
-            `;
-        });
-
-        // Show results
-        const topicAnsBox = document.getElementById('topic-ans-box');
-        const topicHolder = document.getElementById('topic-holder');
-        const topicAnswers = document.getElementById('topic-answers');
-
-        if (topicAnsBox) topicAnsBox.innerHTML = resultHTML;
-        if (topicHolder) topicHolder.style.display = 'none';
-
-        const topicRealSubmit = document.querySelector('.topic-real-submit');
-        const topicFakeSubmit = document.querySelector('.topic-fake-submit');
-        if (topicRealSubmit) {
-            topicRealSubmit.style.display = 'none';
+            document.querySelector(".ans-box").innerHTML = resultHTML;
+            document.querySelector(".holder-question").style.display = "none";
             document.querySelector(".last-box").style.display = "none";
-        }
-        if (topicFakeSubmit) {
-            topicFakeSubmit.style.display = 'none';
-            document.querySelector(".last-box").style.display = "none";
-        }
-        if (topicAnswers) topicAnswers.style.display = 'block';
+            document.querySelector(".real-submit").style.display = "none";
+            document.querySelector(".fake-submit").style.display = "none";
+            document.querySelector(".ans-question").style.display = "block";
 
-        // Clear saved progress after test completion
-        clearTopicTestProgress();
-
-        // Save result if user is logged in
-        if (window.isUserLoggedIn) {
             try {
                 const response = await fetch('/online-test/save-result', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        TestId: 0,
-                        TestTitle: `Topic: ${topicTestTitle}`,
-                        TotalQuestions: currentTopicQuestions.length,
+                        TestId: testId,
+                        TestTitle: testTitle,
+                        TotalQuestions: questionBoxes.length,
                         CorrectAnswers: correctCount,
                         Duration: durationInSeconds,
-                        TestUrl: window.location.pathname,
-                        TotalMarks: currentTopicQuestions.length,
-                        IsTopicTest: true,
-                        TopicId: topicTestId
+                        TestUrl: testUrl,
+                        TotalMarks: Marks
                     })
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.testResultId) {
-                        window.topicTestResultId = data.testResultId;
-                        console.log("Topic test result saved with ID:", window.topicTestResultId);
-                    }
+                if (!response.ok) {
+                    console.error("Error saving result:", response.statusText);
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    window.savedTestResultId = data.testResultId;
+                    console.log("Main test result saved with ID:", window.savedTestResultId);
                 }
             } catch (err) {
-                console.error("Error saving topic result:", err);
-            }
-        } else {
-            console.log("User not logged in, topic result not saved");
-        }
-    }
-
-    // Main function to launch topic test
-    window.launchTopicTest = async function(topicId, event) {
-        try {
-            const clickEvent = event || window.event;
-            const topicLink = clickEvent.target.closest('.start-topic-test') || clickEvent.target;
-
-            // Show loading state
-            const originalText = topicLink.innerHTML;
-            topicLink.innerHTML = 'Loading...';
-            topicLink.style.pointerEvents = 'none';
-
-            // Check if we already have this topic cached
-            if (topicQuestionsCache.has(topicId)) {
-                const cachedData = topicQuestionsCache.get(topicId);
-                loadCachedTopicData(cachedData, topicId);
-                topicLink.innerHTML = originalText;
-                topicLink.style.pointerEvents = 'auto';
-                return;
-            }
-
-            // Close any open popup
-            closePoll();
-
-            // Fetch topic questions
-            const response = await fetch(`/online-test/api/topic-questions/${topicId}`);
-            const data = await response.json();
-
-            if (!data.success) {
-                alert('Failed to load topic test: ' + data.error);
-                topicLink.innerHTML = originalText;
-                topicLink.style.pointerEvents = 'auto';
-                return;
-            }
-
-            // Cache the data
-            topicQuestionsCache.set(topicId, data);
-
-            // Load the data
-            loadCachedTopicData(data, topicId);
-
-            // Reset link state
-            topicLink.innerHTML = originalText;
-            topicLink.style.pointerEvents = 'auto';
-
-        } catch (error) {
-            console.error('Error loading topic test:', error);
-            alert('Failed to load topic test. Please try again.');
-            const clickEvent = event || window.event;
-            const topicLink = clickEvent.target.closest('.start-topic-test') || clickEvent.target;
-            topicLink.innerHTML = 'Launch Test';
-            topicLink.style.pointerEvents = 'auto';
-        }
-    };
-
-    // MODIFIED: Function to load cached topic data with progress restoration
-    function loadCachedTopicData(data, topicId) {
-        // Store topic info
-        topicTestId = data.topic.id;
-        topicTestTitle = `Chapter ${data.topic.chapterNo} - Topic ${data.topic.number}: ${data.topic.name}`;
-        currentTopicQuestions = data.questions;
-
-        // Try to restore progress
-        const progressRestored = restoreTopicTestProgress();
-
-        if (!progressRestored) {
-            // Initialize fresh answers array
-            currentTopicAnswers = new Array(data.questions.length).fill(null);
-        }
-
-        // Update popup title
-        const topicTestTitleElement = document.getElementById('topic-test-title');
-        if (topicTestTitleElement) {
-            topicTestTitleElement.textContent = topicTestTitle;
-        }
-
-        // Load questions into popup
-        loadTopicQuestionsIntoPopup();
-
-        // Restore timer state if progress was restored
-        if (progressRestored) {
-            topicTestAlreadyStarted = topicTestProgress.testStarted;
-
-            // Update timer display
-            const topicDisplay = document.getElementById('topic-display');
-            if (topicDisplay) {
-                const totalSeconds = Math.floor(topicTestProgress.elapsedTime / 1000);
-                const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-                const seconds = String(totalSeconds % 60).padStart(2, '0');
-                topicDisplay.textContent = `${minutes}:${seconds}`;
-            }
-
-            // Restore selected answers
-            setTimeout(() => {
-                restoreSelectedAnswers();
-            }, 200);
-        } else {
-            // Reset timer and state
-            topicTestAlreadyStarted = false;
-            topicFinalDuration = null;
-            topicElapsedTime = 0;
-
-            const topicDisplay = document.getElementById('topic-display');
-            if (topicDisplay) {
-                topicDisplay.textContent = '00:00';
+                console.error("Fetch error:", err);
             }
         }
 
-        // Show login/submit buttons based on user status
-        const topicFakeSubmit = document.querySelector('.topic-fake-submit');
-        const topicRealSubmit = document.querySelector('.topic-real-submit');
+        // ==================== TOPIC TEST FUNCTIONS ====================
 
-        if (window.isUserLoggedIn) {
-            if (topicFakeSubmit) topicFakeSubmit.style.display = 'none';
-            if (topicRealSubmit) topicRealSubmit.style.display = 'inline-block';
-        } else {
-            if (topicFakeSubmit) topicFakeSubmit.style.display = 'inline-block';
-            if (topicRealSubmit) topicRealSubmit.style.display = 'none';
-        }
+        // NEW: Function to save topic test progress
+        function saveTopicTestProgress() {
+            const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
+            if (topicQuestions.length === 0) return;
 
-        // Hide answers section and show questions
-        const topicAnswers = document.getElementById('topic-answers');
-        const topicHolder = document.getElementById('topic-holder');
+            // Save current answers
+            const savedAnswers = [];
 
-        if (topicAnswers) topicAnswers.style.display = 'none';
-        if (topicHolder) topicHolder.style.display = 'block';
-
-        // Show the popup with slide animation
-        const topicPol = document.getElementById('topic-pol');
-        if (topicPol) {
-            topicPol.classList.add('visible');
-        }
-        document.body.classList.add('open-poll');
-
-        // Start the timer if test was in progress or start fresh
-        if (progressRestored && topicTestAlreadyStarted) {
-            // Resume timer from saved time
-            const startTime = Date.now() - topicTestProgress.elapsedTime;
-            if (topicTimer) clearInterval(topicTimer);
-            topicTimer = setInterval(() => {
-                topicElapsedTime = Date.now() - startTime;
-                const totalSeconds = Math.floor(topicElapsedTime / 1000);
-                const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-                const seconds = String(totalSeconds % 60).padStart(2, '0');
-                const topicDisplay = document.getElementById('topic-display');
-                if (topicDisplay) {
-                    topicDisplay.textContent = `${minutes}:${seconds}`;
-                }
-            }, 1000);
-            topicIsRunning = true;
-        } else if (!progressRestored) {
-            // Start fresh timer
-            startTopicTimer();
-        }
-    }
-
-    // ==================== EVENT LISTENERS SETUP ====================
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // ===== MAIN TEST EVENT LISTENERS =====
-
-        // Show appropriate submit button based on login status
-        if (!isUserLoggedIn) {
-            document.querySelector(".real-submit").style.display = "none";
-            document.querySelector(".fake-submit").style.display = "inline-block";
-        } else {
-            document.querySelector(".fake-submit").style.display = "none";
-            document.querySelector(".real-submit").style.display = "inline-block";
-        }
-
-        // Main test fake submit button
-        const mainFakeSubmit = document.querySelector(".fake-submit");
-        if (mainFakeSubmit) {
-            mainFakeSubmit.addEventListener("click", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (finalDuration === null) {
-                    finalDuration = getDurationInSeconds();
-                    console.log("Captured duration at fake submit:", finalDuration, "seconds");
-                }
-
-                autoStartAfterLogin = true;
-                if (typeof timer !== "undefined") {
-                    clearInterval(timer);
-                    isRunning = false;
-                }
-
-                // Show login popup
-                if (typeof showLoginPopup === 'function') {
-                    showLoginPopup();
-                } else {
-                    alert("Please login to save your test results.");
-                }
-            });
-        }
-
-        // Main test real submit button
-        const mainRealSubmit = document.querySelector(".real-submit");
-        if (mainRealSubmit) {
-            mainRealSubmit.addEventListener("click", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                submitTest();
-            });
-        }
-
-        // Main test download result button
-        const mainDownloadBtn = document.getElementById('download-result');
-        if (mainDownloadBtn) {
-            mainDownloadBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("Main download clicked, ID:", window.savedTestResultId);
-                if (window.savedTestResultId) {
-                    loadResultInPopup(window.savedTestResultId);
-                } else {
-                    alert("Please submit the test first.");
-                }
-            });
-        }
-
-        // Main test close button
-        const mainCloseBtn = document.getElementById('close');
-        if (mainCloseBtn) {
-            mainCloseBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closePoll();
-                testAlreadyStarted = false;
-            });
-        }
-
-        // ===== TOPIC TEST EVENT LISTENERS =====
-
-        // Topic popup close button with progress clearing
-        const topicCloseBtn = document.getElementById('topic-close');
-        if (topicCloseBtn) {
-            topicCloseBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                // Only clear if test wasn't completed
-                const topicAnswers = document.getElementById('topic-answers');
-                if (topicAnswers && topicAnswers.style.display !== 'block') {
-                    clearTopicTestProgress();
-                }
-
-                const topicPol = document.getElementById('topic-pol');
-                if (topicPol) {
-                    topicPol.classList.remove('visible');
-                }
-                document.body.classList.remove('open-poll');
-            });
-        }
-
-        // MODIFIED: Topic fake submit button with progress saving
-        const topicFakeSubmit = document.querySelector('.topic-fake-submit');
-        if (topicFakeSubmit) {
-            topicFakeSubmit.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                document.querySelectorAll(".last-box").forEach(el => {
-                   el.style.display = "none";
-                });
-                // Save current progress before login
-                saveTopicTestProgress();
-
-                topicFinalDuration = getTopicDurationInSeconds();
-                if (topicTimer) {
-                    clearInterval(topicTimer);
-                    topicIsRunning = false;
-                }
-
-                // Show login popup
-                if (typeof showLoginPopup === 'function') {
-                    showLoginPopup();
-                } else {
-                    alert("Please login to save your test results.");
-                }
-            });
-        }
-
-        // Topic real submit button
-        const topicRealSubmit = document.querySelector('.topic-real-submit');
-        if (topicRealSubmit) {
-            topicRealSubmit.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                document.querySelectorAll(".last-box").forEach(el => {
-                   el.style.display = "none";
-                });
-                submitTopicTest();
-            });
-        }
-
-        // Topic download result button
-        const topicDownloadBtn = document.getElementById('topic-download-result');
-        if (topicDownloadBtn) {
-            topicDownloadBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("Topic download clicked, ID:", window.topicTestResultId);
-                if (window.topicTestResultId) {
-                    loadResultInPopup(window.topicTestResultId);
-                } else {
-                    alert("Please submit the topic test first.");
-                }
-            });
-        }
-
-        // Add click handlers to topic test links
-        document.querySelectorAll('.start-topic-test').forEach(link => {
-            // Remove any existing onclick handlers
-            link.onclick = null;
-
-            // Add new event listener
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const topicId = this.getAttribute('data-topic-id');
-                window.launchTopicTest(topicId, e);
-            });
-        });
-
-        // ===== CLICK OUTSIDE TO CLOSE POPUPS =====
-
-        document.addEventListener('click', function (event) {
-            const pol = document.getElementById('pol');
-            const topicPol = document.getElementById('topic-pol');
-
-            // Check for main test popup
-            if (pol && pol.classList.contains('visible') &&
-                !pol.contains(event.target) &&
-                event.target !== document.getElementById('launch-test-btn') &&
-                !event.target.closest('#launch-test-btn')) {
-                pol.classList.remove('visible');
-                document.body.classList.remove('open-poll');
-            }
-
-            // Check for topic popup
-            if (topicPol && topicPol.classList.contains('visible') &&
-                !topicPol.contains(event.target) &&
-                !event.target.classList.contains('start-topic-test') &&
-                !event.target.closest('.start-topic-test')) {
-                topicPol.classList.remove('visible');
-                document.body.classList.remove('open-poll');
-            }
-        });
-
-        // Setup main test navigation
-        setupMainTestNavigation();
-    });
-
-    // Function to setup main test navigation (from your original code)
-    function setupMainTestNavigation() {
-        let midBoxes = document.querySelectorAll("#pol .mid-box");
-        if (midBoxes.length === 0) return;
-
-        let currentIndex = 0;
-
-        function showBox(index) {
-            midBoxes.forEach((box, i) => {
-                box.style.display = i === index ? "block" : "none";
+            topicQuestions.forEach((q, index) => {
+                const questionNumber = index + 1;
+                const radioName = `topic_question_${questionNumber}`;
+                const selected = q.querySelector(`input[name="${radioName}"]:checked`);
+                savedAnswers.push(selected ? selected.value : null);
             });
 
-            // Update navigation button states
-            const prevBtn = document.querySelector("#pol .prev");
-            const nextBtn = document.querySelector("#pol .next");
-
-            if (prevBtn) prevBtn.classList.toggle("active", index > 0);
-            if (nextBtn) nextBtn.classList.toggle("active", index < midBoxes.length - 1);
-        }
-
-        showBox(currentIndex);
-
-        // Next button
-        const nextBtn = document.querySelector("#pol .next");
-        if (nextBtn) {
-            nextBtn.onclick = function(e) {
-                e.preventDefault();
-                if (currentIndex < midBoxes.length - 1) {
-                    currentIndex++;
-                    showBox(currentIndex);
+            // Find current question index
+            let currentIndex = 0;
+            topicQuestions.forEach((q, index) => {
+                if (q.style.display === 'block' || q.style.display === '') {
+                    currentIndex = index;
                 }
+            });
+
+            // Save to global progress object
+            topicTestProgress = {
+                answers: savedAnswers,
+                currentQuestionIndex: currentIndex,
+                topicId: topicTestId,
+                elapsedTime: topicElapsedTime,
+                testStarted: topicTestAlreadyStarted
             };
+
+            // Also save to localStorage for persistence
+            try {
+                localStorage.setItem('topicTestProgress', JSON.stringify(topicTestProgress));
+            } catch (e) {
+                console.warn('Could not save progress to localStorage:', e);
+            }
         }
 
-        // Previous button
-        const prevBtn = document.querySelector("#pol .prev");
-        if (prevBtn) {
-            prevBtn.onclick = function(e) {
-                e.preventDefault();
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    showBox(currentIndex);
-                }
-            };
-        }
-    }
-
-    // ==================== MODIFIED LOGIN SUCCESS HANDLER ====================
-
-    window.addEventListener("message", function (event) {
-        if (event.data && event.data.success) {
-            console.log("Login success:", event.data.user);
-            window.isUserLoggedIn = true;
-            isUserLoggedIn = true;
-
-            // Update main test buttons
-            const mainRealSubmit = document.querySelector(".real-submit");
-            const mainFakeSubmit = document.querySelector(".fake-submit");
-            if (mainRealSubmit) mainRealSubmit.style.display = "inline-block";
-            if (mainFakeSubmit) mainFakeSubmit.style.display = "none";
-
-            // Update topic test buttons
-            const topicRealSubmit = document.querySelector(".topic-real-submit");
-            const topicFakeSubmit = document.querySelector(".topic-fake-submit");
-            if (topicRealSubmit) topicRealSubmit.style.display = "inline-block";
-            if (topicFakeSubmit) topicFakeSubmit.style.display = "none";
-
-            // Check if topic test was in progress and reopen it
+        // NEW: Function to restore topic test progress
+        function restoreTopicTestProgress() {
             try {
                 const savedProgress = localStorage.getItem('topicTestProgress');
                 if (savedProgress) {
                     const progress = JSON.parse(savedProgress);
-                    if (progress.topicId && progress.testStarted) {
-                        // Find and click the corresponding topic test link
-                        setTimeout(() => {
-                            const topicLink = document.querySelector(`.start-topic-test[data-topic-id="${progress.topicId}"]`);
-                            if (topicLink) {
-                                topicLink.click();
-                            }
-                        }, 500);
+
+                    // Check if it's the same topic
+                    if (progress.topicId === topicTestId) {
+                        topicTestProgress = progress;
+                        currentTopicAnswers = progress.answers;
+                        topicElapsedTime = progress.elapsedTime;
+
+                        // Clear localStorage after restoring
+                        localStorage.removeItem('topicTestProgress');
+
+                        return true;
                     }
                 }
             } catch (e) {
-                console.warn('Error checking for saved topic test:', e);
+                console.warn('Could not restore progress from localStorage:', e);
             }
 
-            if (autoStartAfterLogin) {
-                const startBtn = document.getElementById("launch-test-btn");
-                if (startBtn) {
-                    startBtn.click();
-                    setTimeout(() => {
-                        const submitBtn = document.querySelector(".real-submit");
-                        if (submitBtn) submitBtn.click();
-                    }, 2000);
-                }
-                autoStartAfterLogin = false;
-            }
+            return false;
         }
-    });
 
-    // ==================== HTML2CANVAS LOADING ====================
+        // NEW: Function to restore selected answers
+        function restoreSelectedAnswers() {
+            const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
 
-    // Global html2canvas promise to ensure it loads only once
-    let html2canvasPromise = null;
+            topicQuestions.forEach((q, index) => {
+                if (currentTopicAnswers[index]) {
+                    const questionNumber = index + 1;
+                    const radioName = `topic_question_${questionNumber}`;
+                    const radioValue = currentTopicAnswers[index];
+                    const radioInput = q.querySelector(`input[name="${radioName}"][value="${radioValue}"]`);
 
-    // Function to load html2canvas with better error handling
-    function loadHtml2Canvas() {
-        if (html2canvasPromise) return html2canvasPromise;
-
-        html2canvasPromise = new Promise((resolve, reject) => {
-            // Check if already loaded
-            if (typeof html2canvas !== 'undefined') {
-                resolve(html2canvas);
-                return;
-            }
-
-            // Load html2canvas
-            const script = document.createElement('script');
-            script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-            script.onload = () => {
-                if (typeof html2canvas === 'undefined') {
-                    reject(new Error('html2canvas failed to load'));
-                } else {
-                    resolve(html2canvas);
+                    if (radioInput) {
+                        radioInput.checked = true;
+                    }
                 }
-            };
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
-
-        return html2canvasPromise;
-    }
-
-    // Pre-load html2canvas when page loads to avoid delay later
-    document.addEventListener('DOMContentLoaded', () => {
-        // Load html2canvas in background
-        loadHtml2Canvas().catch(err => {
-            console.warn('html2canvas pre-load failed:', err);
-        });
-    });
-
-    // ==================== OPTIMIZED RESULT MODAL FUNCTIONS ====================
-
-    // Function to load test result in popup
-    async function loadResultInPopup(testResultId) {
-        const overlay = document.getElementById('resultModalOverlay');
-        const modalContent = document.getElementById('resultModal');
-
-        // Show loading
-        modalContent.innerHTML = `
-            <button class="modal-close-btn" onclick="closeResultModal()">×</button>
-            <div style="padding: 40px; text-align: center;">
-                <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                <p class="mt-3">Loading your result...<br><small>This may take a few seconds</small></p>
-                <button onclick="closeResultModal()" style="margin-top: 20px; padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Cancel
-                </button>
-            </div>
-            <style>
-                @@keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            </style>
-        `;
-        overlay.style.display = 'flex';
-
-        try {
-            // Fetch JSON data
-            const response = await fetch(`/online-test/api/get-test-result/${testResultId}`);
-            if (!response.ok) throw new Error('Failed to fetch result');
-
-            const result = await response.json();
-
-            // Try to generate image, fallback to HTML if fails or takes too long
-            const imageGeneration = generateCertificateImage(result);
-
-            // Set timeout for image generation (max 10 seconds)
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Image generation timeout')), 10000);
             });
+        }
 
-            // Race between image generation and timeout
-            await Promise.race([imageGeneration, timeoutPromise])
-                .then(certificateImage => {
-                    displayCertificateImage(modalContent, result, certificateImage);
-                })
-                .catch(async (error) => {
-                    console.warn('Image generation failed, falling back to HTML:', error);
-                    displayCertificateHTML(modalContent, result);
+        // NEW: Function to navigate to specific question
+        function navigateToTopicQuestion(index) {
+            const topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
+            if (index >= 0 && index < topicQuestions.length) {
+                // Hide all questions
+                topicQuestions.forEach((q, i) => {
+                    q.style.display = 'none';
                 });
 
-        } catch (error) {
-            console.error('Error loading result:', error);
+                // Show the target question
+                topicQuestions[index].style.display = 'block';
+
+                // Update navigation button states
+                const prevBtn = document.querySelector('.topic-prev');
+                const nextBtn = document.querySelector('.topic-next');
+
+                if (prevBtn) prevBtn.classList.toggle("active", index > 0);
+                if (nextBtn) nextBtn.classList.toggle("active", index < topicQuestions.length - 1);
+            }
+        }
+
+        // NEW: Function to clear topic test progress
+        function clearTopicTestProgress() {
+            topicTestProgress = {
+                answers: [],
+                currentQuestionIndex: 0,
+                topicId: null,
+                elapsedTime: 0,
+                testStarted: false
+            };
+
+            try {
+                localStorage.removeItem('topicTestProgress');
+            } catch (e) {
+                console.warn('Could not clear progress from localStorage:', e);
+            }
+        }
+
+        // Topic timer functions
+        function startTopicTimer() {
+            if (!topicTestAlreadyStarted && !topicIsRunning) {
+                const startTime = Date.now();
+                topicTimer = setInterval(() => {
+                    topicElapsedTime = Date.now() - startTime;
+                    const totalSeconds = Math.floor(topicElapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    const topicDisplay = document.getElementById('topic-display');
+                    if (topicDisplay) {
+                        topicDisplay.textContent = `${minutes}:${seconds}`;
+                    }
+                }, 1000);
+                topicIsRunning = true;
+                topicTestAlreadyStarted = true;
+            }
+        }
+
+        function getTopicDurationInSeconds() {
+            return Math.floor(topicElapsedTime / 1000);
+        }
+
+        // MODIFIED: Setup navigation for topic questions
+        function setupTopicNavigation() {
+            let topicQuestions = document.querySelectorAll('#topic-holder .mid-box');
+            if (topicQuestions.length === 0) return;
+
+            let currentIndex = topicTestProgress.currentQuestionIndex || 0;
+
+            function showTopicQuestion(index) {
+                // Save progress before navigating
+                saveTopicTestProgress();
+
+                topicQuestions.forEach((q, i) => {
+                    q.style.display = (i === index) ? "block" : "none";
+                });
+
+                const prevBtn = document.querySelector('.topic-prev');
+                const nextBtn = document.querySelector('.topic-next');
+
+                if (prevBtn) prevBtn.classList.toggle("active", index > 0);
+                if (nextBtn) nextBtn.classList.toggle("active", index < topicQuestions.length - 1);
+            }
+
+            showTopicQuestion(currentIndex);
+
+            // Next button handler
+            const nextBtn = document.querySelector('.topic-next');
+            if (nextBtn) {
+                nextBtn.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (currentIndex < topicQuestions.length - 1) {
+                        currentIndex++;
+                        showTopicQuestion(currentIndex);
+                    }
+                };
+            }
+
+            // Previous button handler
+            const prevBtn = document.querySelector('.topic-prev');
+            if (prevBtn) {
+                prevBtn.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        showTopicQuestion(currentIndex);
+                    }
+                };
+            }
+        }
+
+        // MODIFIED: Function to load questions into popup
+        function loadTopicQuestionsIntoPopup() {
+            const holder = document.getElementById('topic-holder');
+            if (!holder) return;
+
+            holder.innerHTML = '';
+
+            const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
+
+            currentTopicQuestions.forEach((q, index) => {
+                let questionImgHtml = q.questionImage
+                    ? `<div class="question-image mb-2">
+                            <img src="${baseImgPath + q.questionImage}" alt="Question Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+                       </div>`
+                    : "";
+
+                // Check if this answer was previously selected
+                const savedAnswer = currentTopicAnswers[index];
+
+                let optionsHtml = q.choices.map((c, i) => {
+                    let optionImgHtml = c.img
+                        ? `<div class="option-image mt-2">
+                                <img src="${baseImgPath + c.img}" alt="Option Image" class="img-fluid" style="max-width: 100%; height: auto;" />
+                           </div>`
+                        : "";
+
+                    const isChecked = savedAnswer === c.value;
+
+                    return `
+                        <li>
+                            <label class="radio-container d-flex align-items-start">
+                                <span class="q-detiel">
+                                    ${c.text || ''}
+                                    ${optionImgHtml}
+                                </span>
+                                <input type="radio"
+                                       name="topic_question_${index + 1}"
+                                       value="${c.value}"
+                                       data-correct="${c.value === getCorrectAnswerLabel(q.correctAnswer)}"
+                                       ${isChecked ? 'checked' : ''}>
+                                <span class="label">${c.value}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>
+                    `;
+                }).join('');
+
+                holder.innerHTML += `
+                    <div class="mid-box" data-question-number="${index + 1}" style="display: none;">
+                        <strong>Question # ${index + 1}</strong>
+                        <h3>${q.questionText}</h3>
+                        ${questionImgHtml}
+                        <ul>${optionsHtml}</ul>
+                    </div>
+                `;
+            });
+
+            // Add event listeners to radio buttons with auto-save
+            holder.querySelectorAll('input[type="radio"]').forEach((radio, index) => {
+                radio.addEventListener('change', function() {
+                    const questionIndex = Math.floor(index / 4);
+                    saveTopicAnswer(questionIndex, this.value);
+
+                    // Auto-save progress when answer changes
+                    saveTopicTestProgress();
+                });
+            });
+
+            // Setup navigation
+            setTimeout(() => {
+                setupTopicNavigation();
+
+                // Navigate to saved question index if exists
+                if (topicTestProgress.currentQuestionIndex > 0) {
+                    navigateToTopicQuestion(topicTestProgress.currentQuestionIndex);
+                } else {
+                    navigateToTopicQuestion(0);
+                }
+            }, 100);
+        }
+
+        // MODIFIED: Submit topic test with progress clearing
+        async function submitTopicTest() {
+            const durationInSeconds = topicFinalDuration ?? getTopicDurationInSeconds();
+            let correctCount = 0;
+
+            // Calculate score
+            currentTopicQuestions.forEach((q, index) => {
+                const correctLabel = getCorrectAnswerLabel(q.correctAnswer);
+                if (currentTopicAnswers[index] === correctLabel) {
+                    correctCount++;
+                }
+            });
+
+            // Generate result HTML
+            let resultHTML = "";
+            currentTopicQuestions.forEach((q, index) => {
+                const correctLabel = getCorrectAnswerLabel(q.correctAnswer);
+                const selectedAnswer = currentTopicAnswers[index];
+                const isCorrect = selectedAnswer === correctLabel;
+
+                const baseImgPath = "https://cdn.ilmkidunya.com/ots/mcqs/";
+
+                let questionImgHtml = q.questionImage
+                    ? `<div class="question-image mb-2">
+                            <img src="${baseImgPath + q.questionImage}" alt="Question Image" class="img-fluid" />
+                       </div>`
+                    : "";
+
+                let optionsHtml = q.choices.map(c => {
+                    let optionImgHtml = c.img
+                        ? `<div class="option-image mt-2">
+                                <img src="${baseImgPath + c.img}" alt="Option Image" class="img-fluid" />
+                           </div>`
+                        : "";
+
+                    let liClass = "";
+                    if (c.value === correctLabel) liClass = "correct";
+                    if (c.value === selectedAnswer && !isCorrect) liClass = "wrong";
+
+                    return `
+                        <li class="${liClass}">
+                            <label class="radio-container">
+                                <span class="q-detiel">
+                                    ${c.text || ''}
+                                    ${optionImgHtml}
+                                </span>
+                                <input type="radio" disabled>
+                                <span class="label">${c.value}</span>
+                                <span class="checkmark"></span>
+                            </label>
+                        </li>
+                    `;
+                }).join('');
+
+                resultHTML += `
+                    <div class="mid-box1">
+                        <strong>Question # ${index + 1}</strong>
+                        <h3>${q.questionText}</h3>
+                        ${questionImgHtml}
+                        <ul>${optionsHtml}</ul>
+                    </div>
+                `;
+            });
+
+            // Show results
+            const topicAnsBox = document.getElementById('topic-ans-box');
+            const topicHolder = document.getElementById('topic-holder');
+            const topicAnswers = document.getElementById('topic-answers');
+
+            if (topicAnsBox) topicAnsBox.innerHTML = resultHTML;
+            if (topicHolder) topicHolder.style.display = 'none';
+
+            const topicRealSubmit = document.querySelector('.topic-real-submit');
+            const topicFakeSubmit = document.querySelector('.topic-fake-submit');
+            if (topicRealSubmit) {
+                topicRealSubmit.style.display = 'none';
+                document.querySelector(".last-box").style.display = "none";
+            }
+            if (topicFakeSubmit) {
+                topicFakeSubmit.style.display = 'none';
+                document.querySelector(".last-box").style.display = "none";
+            }
+            if (topicAnswers) topicAnswers.style.display = 'block';
+
+            // Clear saved progress after test completion
+            clearTopicTestProgress();
+
+            // Save result if user is logged in
+            if (window.isUserLoggedIn) {
+                try {
+                    const response = await fetch('/online-test/save-result', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            TestId: 0,
+                            TestTitle: `Topic: ${topicTestTitle}`,
+                            TotalQuestions: currentTopicQuestions.length,
+                            CorrectAnswers: correctCount,
+                            Duration: durationInSeconds,
+                            TestUrl: window.location.pathname,
+                            TotalMarks: currentTopicQuestions.length,
+                            IsTopicTest: true,
+                            TopicId: topicTestId
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success && data.testResultId) {
+                            window.topicTestResultId = data.testResultId;
+                            console.log("Topic test result saved with ID:", window.topicTestResultId);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error saving topic result:", err);
+                }
+            } else {
+                console.log("User not logged in, topic result not saved");
+            }
+        }
+
+        // Main function to launch topic test
+        window.launchTopicTest = async function(topicId, event) {
+            try {
+                const clickEvent = event || window.event;
+                const topicLink = clickEvent.target.closest('.start-topic-test') || clickEvent.target;
+
+                // Show loading state
+                const originalText = topicLink.innerHTML;
+                topicLink.innerHTML = 'Loading...';
+                topicLink.style.pointerEvents = 'none';
+
+                // Check if we already have this topic cached
+                if (topicQuestionsCache.has(topicId)) {
+                    const cachedData = topicQuestionsCache.get(topicId);
+                    loadCachedTopicData(cachedData, topicId);
+                    topicLink.innerHTML = originalText;
+                    topicLink.style.pointerEvents = 'auto';
+                    return;
+                }
+
+                // Close any open popup
+                closePoll();
+
+                // Fetch topic questions
+                const response = await fetch(`/online-test/api/topic-questions/${topicId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    alert('Failed to load topic test: ' + data.error);
+                    topicLink.innerHTML = originalText;
+                    topicLink.style.pointerEvents = 'auto';
+                    return;
+                }
+
+                // Cache the data
+                topicQuestionsCache.set(topicId, data);
+
+                // Load the data
+                loadCachedTopicData(data, topicId);
+
+                // Reset link state
+                topicLink.innerHTML = originalText;
+                topicLink.style.pointerEvents = 'auto';
+
+            } catch (error) {
+                console.error('Error loading topic test:', error);
+                alert('Failed to load topic test. Please try again.');
+                const clickEvent = event || window.event;
+                const topicLink = clickEvent.target.closest('.start-topic-test') || clickEvent.target;
+                topicLink.innerHTML = 'Launch Test';
+                topicLink.style.pointerEvents = 'auto';
+            }
+        };
+
+        // MODIFIED: Function to load cached topic data with progress restoration
+        function loadCachedTopicData(data, topicId) {
+            // Store topic info
+            topicTestId = data.topic.id;
+            topicTestTitle = `Chapter ${data.topic.chapterNo} - Topic ${data.topic.number}: ${data.topic.name}`;
+            currentTopicQuestions = data.questions;
+
+            // Try to restore progress
+            const progressRestored = restoreTopicTestProgress();
+
+            if (!progressRestored) {
+                // Initialize fresh answers array
+                currentTopicAnswers = new Array(data.questions.length).fill(null);
+            }
+
+            // Update popup title
+            const topicTestTitleElement = document.getElementById('topic-test-title');
+            if (topicTestTitleElement) {
+                topicTestTitleElement.textContent = topicTestTitle;
+            }
+
+            // Load questions into popup
+            loadTopicQuestionsIntoPopup();
+
+            // Restore timer state if progress was restored
+            if (progressRestored) {
+                topicTestAlreadyStarted = topicTestProgress.testStarted;
+
+                // Update timer display
+                const topicDisplay = document.getElementById('topic-display');
+                if (topicDisplay) {
+                    const totalSeconds = Math.floor(topicTestProgress.elapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    topicDisplay.textContent = `${minutes}:${seconds}`;
+                }
+
+                // Restore selected answers
+                setTimeout(() => {
+                    restoreSelectedAnswers();
+                }, 200);
+            } else {
+                // Reset timer and state
+                topicTestAlreadyStarted = false;
+                topicFinalDuration = null;
+                topicElapsedTime = 0;
+
+                const topicDisplay = document.getElementById('topic-display');
+                if (topicDisplay) {
+                    topicDisplay.textContent = '00:00';
+                }
+            }
+
+            // Show login/submit buttons based on user status
+            const topicFakeSubmit = document.querySelector('.topic-fake-submit');
+            const topicRealSubmit = document.querySelector('.topic-real-submit');
+
+            if (window.isUserLoggedIn) {
+                if (topicFakeSubmit) topicFakeSubmit.style.display = 'none';
+                if (topicRealSubmit) topicRealSubmit.style.display = 'inline-block';
+            } else {
+                if (topicFakeSubmit) topicFakeSubmit.style.display = 'inline-block';
+                if (topicRealSubmit) topicRealSubmit.style.display = 'none';
+            }
+
+            // Hide answers section and show questions
+            const topicAnswers = document.getElementById('topic-answers');
+            const topicHolder = document.getElementById('topic-holder');
+
+            if (topicAnswers) topicAnswers.style.display = 'none';
+            if (topicHolder) topicHolder.style.display = 'block';
+
+            // Show the popup with slide animation
+            const topicPol = document.getElementById('topic-pol');
+            if (topicPol) {
+                topicPol.classList.add('visible');
+            }
+            document.body.classList.add('open-poll');
+
+            // Start the timer if test was in progress or start fresh
+            if (progressRestored && topicTestAlreadyStarted) {
+                // Resume timer from saved time
+                const startTime = Date.now() - topicTestProgress.elapsedTime;
+                if (topicTimer) clearInterval(topicTimer);
+                topicTimer = setInterval(() => {
+                    topicElapsedTime = Date.now() - startTime;
+                    const totalSeconds = Math.floor(topicElapsedTime / 1000);
+                    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                    const seconds = String(totalSeconds % 60).padStart(2, '0');
+                    const topicDisplay = document.getElementById('topic-display');
+                    if (topicDisplay) {
+                        topicDisplay.textContent = `${minutes}:${seconds}`;
+                    }
+                }, 1000);
+                topicIsRunning = true;
+            } else if (!progressRestored) {
+                // Start fresh timer
+                startTopicTimer();
+            }
+        }
+
+        // ==================== EVENT LISTENERS SETUP ====================
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ===== MAIN TEST EVENT LISTENERS =====
+
+            // Show appropriate submit button based on login status
+            if (!isUserLoggedIn) {
+                document.querySelector(".real-submit").style.display = "none";
+                document.querySelector(".fake-submit").style.display = "inline-block";
+            } else {
+                document.querySelector(".fake-submit").style.display = "none";
+                document.querySelector(".real-submit").style.display = "inline-block";
+            }
+
+            // Main test fake submit button
+            const mainFakeSubmit = document.querySelector(".fake-submit");
+            if (mainFakeSubmit) {
+                mainFakeSubmit.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (finalDuration === null) {
+                        finalDuration = getDurationInSeconds();
+                        console.log("Captured duration at fake submit:", finalDuration, "seconds");
+                    }
+
+                    autoStartAfterLogin = true;
+                    if (typeof timer !== "undefined") {
+                        clearInterval(timer);
+                        isRunning = false;
+                    }
+
+                    // Show login popup
+                    if (typeof showLoginPopup === 'function') {
+                        showLoginPopup();
+                    } else {
+                        alert("Please login to save your test results.");
+                    }
+                });
+            }
+
+            // Main test real submit button
+            const mainRealSubmit = document.querySelector(".real-submit");
+            if (mainRealSubmit) {
+                mainRealSubmit.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    submitTest();
+                });
+            }
+
+            // Main test download result button
+            const mainDownloadBtn = document.getElementById('download-result');
+            if (mainDownloadBtn) {
+                mainDownloadBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Main download clicked, ID:", window.savedTestResultId);
+                    if (window.savedTestResultId) {
+                        loadResultInPopup(window.savedTestResultId);
+                    } else {
+                        alert("Please submit the test first.");
+                    }
+                });
+            }
+
+            // Main test close button
+            const mainCloseBtn = document.getElementById('close');
+            if (mainCloseBtn) {
+                mainCloseBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closePoll();
+                    testAlreadyStarted = false;
+                });
+            }
+
+            // ===== TOPIC TEST EVENT LISTENERS =====
+
+            // Topic popup close button with progress clearing
+            const topicCloseBtn = document.getElementById('topic-close');
+            if (topicCloseBtn) {
+                topicCloseBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Only clear if test wasn't completed
+                    const topicAnswers = document.getElementById('topic-answers');
+                    if (topicAnswers && topicAnswers.style.display !== 'block') {
+                        clearTopicTestProgress();
+                    }
+
+                    const topicPol = document.getElementById('topic-pol');
+                    if (topicPol) {
+                        topicPol.classList.remove('visible');
+                    }
+                    document.body.classList.remove('open-poll');
+                });
+            }
+
+            // MODIFIED: Topic fake submit button with progress saving
+            const topicFakeSubmit = document.querySelector('.topic-fake-submit');
+            if (topicFakeSubmit) {
+                topicFakeSubmit.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.querySelectorAll(".last-box").forEach(el => {
+                       el.style.display = "none";
+                    });
+                    // Save current progress before login
+                    saveTopicTestProgress();
+
+                    topicFinalDuration = getTopicDurationInSeconds();
+                    if (topicTimer) {
+                        clearInterval(topicTimer);
+                        topicIsRunning = false;
+                    }
+
+                    // Show login popup
+                    if (typeof showLoginPopup === 'function') {
+                        showLoginPopup();
+                    } else {
+                        alert("Please login to save your test results.");
+                    }
+                });
+            }
+
+            // Topic real submit button
+            const topicRealSubmit = document.querySelector('.topic-real-submit');
+            if (topicRealSubmit) {
+                topicRealSubmit.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.querySelectorAll(".last-box").forEach(el => {
+                       el.style.display = "none";
+                    });
+                    submitTopicTest();
+                });
+            }
+
+            // Topic download result button
+            const topicDownloadBtn = document.getElementById('topic-download-result');
+            if (topicDownloadBtn) {
+                topicDownloadBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Topic download clicked, ID:", window.topicTestResultId);
+                    if (window.topicTestResultId) {
+                        loadResultInPopup(window.topicTestResultId);
+                    } else {
+                        alert("Please submit the topic test first.");
+                    }
+                });
+            }
+
+            // Add click handlers to topic test links
+            document.querySelectorAll('.start-topic-test').forEach(link => {
+                // Remove any existing onclick handlers
+                link.onclick = null;
+
+                // Add new event listener
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const topicId = this.getAttribute('data-topic-id');
+                    window.launchTopicTest(topicId, e);
+                });
+            });
+
+            // ===== CLICK OUTSIDE TO CLOSE POPUPS =====
+
+            document.addEventListener('click', function (event) {
+                const pol = document.getElementById('pol');
+                const topicPol = document.getElementById('topic-pol');
+
+                // Check for main test popup
+                if (pol && pol.classList.contains('visible') &&
+                    !pol.contains(event.target) &&
+                    event.target !== document.getElementById('launch-test-btn') &&
+                    !event.target.closest('#launch-test-btn')) {
+                    pol.classList.remove('visible');
+                    document.body.classList.remove('open-poll');
+                }
+
+                // Check for topic popup
+                if (topicPol && topicPol.classList.contains('visible') &&
+                    !topicPol.contains(event.target) &&
+                    !event.target.classList.contains('start-topic-test') &&
+                    !event.target.closest('.start-topic-test')) {
+                    topicPol.classList.remove('visible');
+                    document.body.classList.remove('open-poll');
+                }
+            });
+
+            // Setup main test navigation
+            setupMainTestNavigation();
+        });
+
+        // Function to setup main test navigation (from your original code)
+        function setupMainTestNavigation() {
+            let midBoxes = document.querySelectorAll("#pol .mid-box");
+            if (midBoxes.length === 0) return;
+
+            let currentIndex = 0;
+
+            function showBox(index) {
+                midBoxes.forEach((box, i) => {
+                    box.style.display = i === index ? "block" : "none";
+                });
+
+                // Update navigation button states
+                const prevBtn = document.querySelector("#pol .prev");
+                const nextBtn = document.querySelector("#pol .next");
+
+                if (prevBtn) prevBtn.classList.toggle("active", index > 0);
+                if (nextBtn) nextBtn.classList.toggle("active", index < midBoxes.length - 1);
+            }
+
+            showBox(currentIndex);
+
+            // Next button
+            const nextBtn = document.querySelector("#pol .next");
+            if (nextBtn) {
+                nextBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if (currentIndex < midBoxes.length - 1) {
+                        currentIndex++;
+                        showBox(currentIndex);
+                    }
+                };
+            }
+
+            // Previous button
+            const prevBtn = document.querySelector("#pol .prev");
+            if (prevBtn) {
+                prevBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        showBox(currentIndex);
+                    }
+                };
+            }
+        }
+
+        // ==================== MODIFIED LOGIN SUCCESS HANDLER ====================
+
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.success) {
+                console.log("Login success:", event.data.user);
+                window.isUserLoggedIn = true;
+                isUserLoggedIn = true;
+
+                // Update main test buttons
+                const mainRealSubmit = document.querySelector(".real-submit");
+                const mainFakeSubmit = document.querySelector(".fake-submit");
+                if (mainRealSubmit) mainRealSubmit.style.display = "inline-block";
+                if (mainFakeSubmit) mainFakeSubmit.style.display = "none";
+
+                // Update topic test buttons
+                const topicRealSubmit = document.querySelector(".topic-real-submit");
+                const topicFakeSubmit = document.querySelector(".topic-fake-submit");
+                if (topicRealSubmit) topicRealSubmit.style.display = "inline-block";
+                if (topicFakeSubmit) topicFakeSubmit.style.display = "none";
+
+                // Check if topic test was in progress and reopen it
+                try {
+                    const savedProgress = localStorage.getItem('topicTestProgress');
+                    if (savedProgress) {
+                        const progress = JSON.parse(savedProgress);
+                        if (progress.topicId && progress.testStarted) {
+                            // Find and click the corresponding topic test link
+                            setTimeout(() => {
+                                const topicLink = document.querySelector(`.start-topic-test[data-topic-id="${progress.topicId}"]`);
+                                if (topicLink) {
+                                    topicLink.click();
+                                }
+                            }, 500);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Error checking for saved topic test:', e);
+                }
+
+                if (autoStartAfterLogin) {
+                    const startBtn = document.getElementById("launch-test-btn");
+                    if (startBtn) {
+                        startBtn.click();
+                        setTimeout(() => {
+                            const submitBtn = document.querySelector(".real-submit");
+                            if (submitBtn) submitBtn.click();
+                        }, 2000);
+                    }
+                    autoStartAfterLogin = false;
+                }
+            }
+        });
+
+        // ==================== HTML2CANVAS LOADING ====================
+
+        // Global html2canvas promise to ensure it loads only once
+        let html2canvasPromise = null;
+
+        // Function to load html2canvas with better error handling
+        function loadHtml2Canvas() {
+            if (html2canvasPromise) return html2canvasPromise;
+
+            html2canvasPromise = new Promise((resolve, reject) => {
+                // Check if already loaded
+                if (typeof html2canvas !== 'undefined') {
+                    resolve(html2canvas);
+                    return;
+                }
+
+                // Load html2canvas
+                const script = document.createElement('script');
+                script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                script.onload = () => {
+                    if (typeof html2canvas === 'undefined') {
+                        reject(new Error('html2canvas failed to load'));
+                    } else {
+                        resolve(html2canvas);
+                    }
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+
+            return html2canvasPromise;
+        }
+
+        // Pre-load html2canvas when page loads to avoid delay later
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load html2canvas in background
+            loadHtml2Canvas().catch(err => {
+                console.warn('html2canvas pre-load failed:', err);
+            });
+        });
+
+        // ==================== OPTIMIZED RESULT MODAL FUNCTIONS ====================
+
+        // Function to load test result in popup
+        async function loadResultInPopup(testResultId) {
+            const overlay = document.getElementById('resultModalOverlay');
+            const modalContent = document.getElementById('resultModal');
+
+            // Show loading
             modalContent.innerHTML = `
                 <button class="modal-close-btn" onclick="closeResultModal()">×</button>
                 <div style="padding: 40px; text-align: center;">
-                    <h3 style="color: #dc3545;">Error</h3>
-                    <p>${error.message}</p>
-                    <button onclick="closeResultModal()" class="text-btn" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px;">
-                        Close
+                    <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                    <p class="mt-3">Loading your result...<br><small>This may take a few seconds</small></p>
+                    <button onclick="closeResultModal()" style="margin-top: 20px; padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Cancel
                     </button>
+                </div>
+                <style>
+                    @@keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+            overlay.style.display = 'flex';
+
+            try {
+                // Fetch JSON data
+                const response = await fetch(`/online-test/api/get-test-result/${testResultId}`);
+                if (!response.ok) throw new Error('Failed to fetch result');
+
+                const result = await response.json();
+
+                // Try to generate image, fallback to HTML if fails or takes too long
+                const imageGeneration = generateCertificateImage(result);
+
+                // Set timeout for image generation (max 10 seconds)
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Image generation timeout')), 10000);
+                });
+
+                // Race between image generation and timeout
+                await Promise.race([imageGeneration, timeoutPromise])
+                    .then(certificateImage => {
+                        displayCertificateImage(modalContent, result, certificateImage);
+                    })
+                    .catch(async (error) => {
+                        console.warn('Image generation failed, falling back to HTML:', error);
+                        displayCertificateHTML(modalContent, result);
+                    });
+
+            } catch (error) {
+                console.error('Error loading result:', error);
+                modalContent.innerHTML = `
+                    <button class="modal-close-btn" onclick="closeResultModal()">×</button>
+                    <div style="padding: 40px; text-align: center;">
+                        <h3 style="color: #dc3545;">Error</h3>
+                        <p>${error.message}</p>
+                        <button onclick="closeResultModal()" class="text-btn" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px;">
+                            Close
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Update the html2canvas options for better rendering
+        async function generateCertificateImage(result) {
+            // Ensure html2canvas is loaded
+            const html2canvas = await loadHtml2Canvas();
+
+            // Create a hidden div with the exact structure from your HTML
+            const tempContainer = document.createElement('div');
+            tempContainer.className = 'certificate-generator';
+            tempContainer.style.cssText = `
+                position: absolute;
+                left: -9999px;
+                top: -9999px;
+                width: 960px;
+                min-height: 630px;
+                background: white;
+            `;
+
+            const isPassed = result.isPassed || false;
+            const bgImage = isPassed
+                ? 'https://www.ilmkidunya.com/images/certi/bg-certificates.jpg'
+                : 'https://www.ilmkidunya.com/images/certi/bg-certificates-fail.jpg';
+
+            const badgeImage = isPassed
+                ? 'https://www.ilmkidunya.com/images/certi/high-scorrers.png'
+                : 'https://www.ilmkidunya.com/images/certi/img-fail.png';
+
+            tempContainer.innerHTML = `
+                <div class="certifcate-box" id="certificate-template">
+                    <div class="inner-box">
+                        <h2>${result.testTitle || 'Test Certificate'}</h2>
+                        <h3>${isPassed ? 'Congratulations!' : 'Better Luck Next Time'}</h3>
+                        <div class="name-certi">
+                            <h1>${result.userName || 'Student'}</h1>
+                        </div>
+                        <div class="marks-box">
+                            <span>${result.correctAnswers || 0}</span>
+                            <span>Marks <br> Out of ${result.totalQuestions || 0}</span>
+                        </div>
+                        <div class="last-certi">
+                            <div class="box">
+                                <img src="https://www.ilmkidunya.com/images/certi/logo.svg" alt="Logo" style="height: 70px;" />
+                            </div>
+                            <div class="box">
+                                <img src="${badgeImage}" alt="${isPassed ? 'High Scorer' : 'Fail'}" />
+                            </div>
+                            <div class="box">
+                                <span>${result.dated || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                <em>Issue date</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .certifcate-box {
+                        width: 960px;
+                        min-height: 630px;
+                        background: url('${bgImage}') 0 0/100% no-repeat #f7e8eb;
+                        position: relative;
+                        font-family: 'Open Sans', sans-serif;
+                    }
+                    .certifcate-box .inner-box {
+                        padding: 210px 100px 0;
+                        text-align: center;
+                    }
+                    .certifcate-box h2 {
+                        text-transform: uppercase;
+                        font-size: 34px;
+                        line-height: 42px;
+                        font-weight: 600;
+                        letter-spacing: 1px;
+                        margin: 0 0 10px;
+                        color: #000;
+                    }
+                    .certifcate-box h3 {
+                        font-size: 24px;
+                        font-weight: 500;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                        line-height: 30px;
+                        margin: 0 0 20px 0;
+                        color: #000;
+                    }
+                    .name-certi {
+                        display: block;
+                        margin: 0 50px 20px;
+                        border-bottom: 2px solid #000;
+                    }
+                    .name-certi h1 {
+                        font-size: 70px;
+                        letter-spacing: 2px;
+                        text-transform: capitalize;
+                        font-family: 'Luxurious Script', cursive;
+                        margin: 0 0 5px 0;
+                        color: #000;
+                    }
+                    .marks-box {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 0 10px 0;
+                    }
+                    .marks-box span {
+                        font-size: 20px;
+                        color: #000;
+                        text-align: left;
+                        line-height: 26px;
+                        font-weight: 500;
+                    }
+                    .marks-box span:first-child {
+                        font-size: 50px;
+                        padding: 0 20px;
+                        color: ${isPassed ? 'green' : 'red'};
+                    }
+                    .last-certi {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 5px 0 10px;
+                    }
+                    .last-certi .box {
+                        width: 32%;
+                    }
+                    .last-certi .box span {
+                        display: block;
+                        color: #000;
+                        font-size: 20px;
+                        line-height: 26px;
+                    }
+                    .last-certi .box em {
+                        color: #000;
+                        font-size: 16px;
+                        line-height: 26px;
+                        font-style: normal;
+                        display: inline-block;
+                        padding: 3px 25px 0;
+                        border-top: 1px solid #000;
+                        margin: 10px;
+                    }
+                    .last-certi .box img {
+                        height: 70px;
+                    }
+                </style>
+            `;
+
+            document.body.appendChild(tempContainer);
+
+            // Wait for fonts to load
+            await document.fonts.load('16px "Luxurious Script"');
+            await document.fonts.load('16px "Open Sans"');
+
+            try {
+                const canvas = await html2canvas(tempContainer.querySelector('#certificate-template'), {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    width: 960,
+                    height: 630,
+                    logging: true,
+                    imageTimeout: 30000
+                });
+
+                document.body.removeChild(tempContainer);
+                return canvas.toDataURL('image/png', 1.0);
+
+            } catch (error) {
+                if (document.body.contains(tempContainer)) {
+                    document.body.removeChild(tempContainer);
+                }
+                throw error;
+            }
+        }
+
+        // Function to create certificate HTML
+        function createCertificateHTML(result, includeImages = true) {
+            const isPassed = result.isPassed || false;
+
+            // Use your background images
+            const bgImage = isPassed
+                ? 'https://www.ilmkidunya.com/images/certi/bg-certificates.jpg'
+                : 'https://www.ilmkidunya.com/images/certi/bg-certificates-fail.jpg';
+
+            const badgeImage = isPassed
+                ? 'https://www.ilmkidunya.com/images/certi/high-scorrers.png'
+                : 'https://www.ilmkidunya.com/images/certi/img-fail.png';
+
+            return `
+                <div id="certificate-template" style="
+                    width: 960px;
+                    min-height: 630px;
+                    position: relative;
+                    font-family: 'Open Sans', sans-serif;
+
+    ow: hidden;
+                ">
+                    <!-- Background image as img element -->
+                    ${includeImages ? `
+                        <img src="${bgImage}"
+                             alt="Certificate Background"
+                             style="
+                                 position: absolute;
+                                 top: 0;
+                                 left: 0;
+                                 width: 100%;
+                                 height: 100%;
+                                 object-fit: cover;
+                                 z-index: 1;
+                             " />
+                    ` : ''}
+
+                    <!-- Content overlay -->
+                    <div style="
+                        position: relative;
+                        z-index: 2;
+                        background: transparent;
+                    ">
+                        <div class="inner-box" style="
+                            padding: 210px 100px 0;
+                            text-align: center;
+                        ">
+                            <h2 style="
+                                text-transform: uppercase;
+                                font-size: 34px;
+                                line-height: 42px;
+                                font-weight: 600;
+                                letter-spacing: 1px;
+                                margin: 0 0 10px;
+                                color: #000;
+                            ">${result.testTitle || 'Test Certificate'}</h2>
+
+                            <h3 style="
+                                font-size: 24px;
+                                font-weight: 500;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
+                                line-height: 30px;
+                                margin: 0 0 20px 0;
+                                color: #000;
+                            ">${isPassed ? 'Congratulations!' : 'Better Luck Next Time'}</h3>
+
+                            <div class="name-certi" style="
+                                display: block;
+                                margin: 0 50px 20px;
+                                border-bottom: 2px solid #000;
+                            ">
+                                <h1 style="
+                                    font-size: 70px;
+                                    letter-spacing: 2px;
+                                    text-transform: capitalize;
+                                    font-family: 'Luxurious Script', cursive;
+                                    margin: 0 0 5px 0;
+                                    color: #000;
+                                ">${result.userName || 'Student'}</h1>
+                            </div>
+
+                            <div class="marks-box" style="
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin: 0 0 10px 0;
+                            ">
+                                <span style="
+                                    font-size: 50px;
+                                    padding: 0 20px;
+                                    color: ${isPassed ? 'green' : 'red'};
+                                ">${result.correctAnswers || 0}</span>
+                                <span style="
+                                    font-size: 20px;
+                                    color: #000;
+                                    text-align: left;
+                                    line-height: 26px;
+                                    font-weight: 500;
+                                ">Marks <br> Out of ${result.totalQuestions || 0}</span>
+                            </div>
+
+                            <div class="last-certi" style="
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 5px 0 10px;
+                            ">
+                                <div class="box" style="width: 32%;">
+                                    ${includeImages ? `
+                                        <img src="https://www.ilmkidunya.com/images/certi/logo.svg"
+                                             alt="Logo"
+                                             style="height: 70px; max-width: 100%;" />
+                                    ` : '<div style="height: 70px;"></div>'}
+                                </div>
+
+                                <div class="box" style="width: 32%; text-align: center;">
+                                    ${includeImages ? `
+                                        <img src="${badgeImage}"
+                                             alt="${isPassed ? 'High Scorer' : 'Fail'}"
+                                             style="height: 70px; max-width: 100%;" />
+                                    ` : '<div style="height: 70px;"></div>'}
+                                </div>
+
+                                <div class="box" style="width: 32%; text-align: right;">
+                                    <span style="
+                                        display: block;
+                                        color: #000;
+                                        font-size: 20px;
+                                        line-height: 26px;
+                                    ">${result.dated || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                    <em style="
+                                        color: #000;
+                                        font-size: 16px;
+                                        line-height: 26px;
+                                        font-style: normal;
+                                        display: inline-block;
+                                        padding: 3px 25px 0;
+                                        border-top: 1px solid #000;
+                                        margin: 10px 0 0 0;
+                                    ">Issue date</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
-    }
 
-    // Update the html2canvas options for better rendering
-    async function generateCertificateImage(result) {
-        // Ensure html2canvas is loaded
-        const html2canvas = await loadHtml2Canvas();
+        // Also update the modal display to match your style
+        function displayCertificateImage(modalContent, result, certificateImage) {
+            // Prepare share text
+            const shareText = `Check out my certificate for ${result.testTitle || 'the test'}!`;
+            const shareUrl = window.location.href;
 
-        // Create a hidden div with the exact structure from your HTML
-        const tempContainer = document.createElement('div');
-        tempContainer.className = 'certificate-generator';
-        tempContainer.style.cssText = `
-            position: absolute;
-            left: -9999px;
-            top: -9999px;
-            width: 960px;
-            min-height: 630px;
-            background: white;
-        `;
-
-        const isPassed = result.isPassed || false;
-        const bgImage = isPassed
-            ? 'https://www.ilmkidunya.com/images/certi/bg-certificates.jpg'
-            : 'https://www.ilmkidunya.com/images/certi/bg-certificates-fail.jpg';
-
-        const badgeImage = isPassed
-            ? 'https://www.ilmkidunya.com/images/certi/high-scorrers.png'
-            : 'https://www.ilmkidunya.com/images/certi/img-fail.png';
-
-        tempContainer.innerHTML = `
-            <div class="certifcate-box" id="certificate-template">
-                <div class="inner-box">
-                    <h2>${result.testTitle || 'Test Certificate'}</h2>
-                    <h3>${isPassed ? 'Congratulations!' : 'Better Luck Next Time'}</h3>
-                    <div class="name-certi">
-                        <h1>${result.userName || 'Student'}</h1>
+            modalContent.innerHTML = `
+                <button class="modal-close-btn" onclick="closeResultModal()">×</button>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="border-radius: 12px; overflow: hidden; background: white; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <img src="${certificateImage}"
+                             alt="Certificate"
+                             style="width: 100%; height: auto; display: block; border: 1px solid #eee; opacity: 1;"
+                             id="certificateImageToShare" />
                     </div>
-                    <div class="marks-box">
-                        <span>${result.correctAnswers || 0}</span>
-                        <span>Marks <br> Out of ${result.totalQuestions || 0}</span>
-                    </div>
-                    <div class="last-certi">
-                        <div class="box">
-                            <img src="https://www.ilmkidunya.com/images/certi/logo.svg" alt="Logo" style="height: 70px;" />
-                        </div>
-                        <div class="box">
-                            <img src="${badgeImage}" alt="${isPassed ? 'High Scorer' : 'Fail'}" />
-                        </div>
-                        <div class="box">
-                            <span>${result.dated || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                            <em>Issue date</em>
+                </div>
+
+                <div class="modal-footer"
+                     style="padding: 20px; text-align: center; border-top: 1px solid #eceff5; background: #f9f9f9;">
+                    <h3>Share Your Achievement</h3>
+                    <div class="share-box">
+                        <!-- Custom Share Buttons -->
+                        <div class="share-buttons-container"
+                             style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+
+                            <!-- WhatsApp -->
+                            <button class="share-btn whatsapp-btn"
+                                    onclick="shareToWhatsApp('${certificateImage}', '${shareText}')"
+                                    style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #25D366; cursor: pointer; transition: transform 0.2s;">
+                                <img alt="whatsapp sharing button"
+                                     src="https://platform-cdn.sharethis.com/img/whatsapp.svg"
+                                     style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+                            </button>
+
+                            <!-- Facebook -->
+                            <button class="share-btn facebook-btn"
+                                    onclick="shareToFacebook('${certificateImage}', '${shareText}')"
+                                    style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #1877F2; cursor: pointer; transition: transform 0.2s;">
+                                <img alt="facebook sharing button"
+                                     src="https://platform-cdn.sharethis.com/img/facebook.svg"
+                                     style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+                            </button>
+
+                            <!-- Twitter -->
+                            <button class="share-btn twitter-btn"
+                                    onclick="shareToTwitter('${certificateImage}', '${shareText}')"
+                                    style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #1DA1F2; cursor: pointer; transition: transform 0.2s;">
+                                <img alt="twitter sharing button"
+                                     src="https://platform-cdn.sharethis.com/img/twitter.svg"
+                                     style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+                            </button>
+
+                            <!-- LinkedIn -->
+                            <button class="share-btn linkedin-btn"
+                                    onclick="shareToLinkedIn('${shareText}', '${shareUrl}')"
+                                    style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #0A66C2; cursor: pointer; transition: transform 0.2s;">
+                                <img alt="linkedin sharing button"
+                                     src="https://platform-cdn.sharethis.com/img/linkedin.svg"
+                                     style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+                            </button>
+
+                            <!-- Download Button -->
+                            <button onclick="downloadCertificate(
+                                        '${certificateImage}',
+                                        '${(result.testTitle || 'certificate').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${Date.now()}.png'
+                                    )"
+                                    class="download-btn"
+                                    style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #6c757d; cursor: pointer; transition: transform 0.2s; margin: 0;">
+                                <img alt="download certificate"
+                                     src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
+                                     style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <style>
-                .certifcate-box {
-                    width: 960px;
-                    min-height: 630px;
-                    background: url('${bgImage}') 0 0/100% no-repeat #f7e8eb;
-                    position: relative;
-                    font-family: 'Open Sans', sans-serif;
-                }
-                .certifcate-box .inner-box {
-                    padding: 210px 100px 0;
-                    text-align: center;
-                }
-                .certifcate-box h2 {
-                    text-transform: uppercase;
-                    font-size: 34px;
-                    line-height: 42px;
-                    font-weight: 600;
-                    letter-spacing: 1px;
-                    margin: 0 0 10px;
-                    color: #000;
-                }
-                .certifcate-box h3 {
-                    font-size: 24px;
-                    font-weight: 500;
-                    letter-spacing: 2px;
-                    text-transform: uppercase;
-                    line-height: 30px;
-                    margin: 0 0 20px 0;
-                    color: #000;
-                }
-                .name-certi {
-                    display: block;
-                    margin: 0 50px 20px;
-                    border-bottom: 2px solid #000;
-                }
-                .name-certi h1 {
-                    font-size: 70px;
-                    letter-spacing: 2px;
-                    text-transform: capitalize;
-                    font-family: 'Luxurious Script', cursive;
-                    margin: 0 0 5px 0;
-                    color: #000;
-                }
-                .marks-box {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0 0 10px 0;
-                }
-                .marks-box span {
-                    font-size: 20px;
-                    color: #000;
-                    text-align: left;
-                    line-height: 26px;
-                    font-weight: 500;
-                }
-                .marks-box span:first-child {
-                    font-size: 50px;
-                    padding: 0 20px;
-                    color: ${isPassed ? 'green' : 'red'};
-                }
-                .last-certi {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 5px 0 10px;
-                }
-                .last-certi .box {
-                    width: 32%;
-                }
-                .last-certi .box span {
-                    display: block;
-                    color: #000;
-                    font-size: 20px;
-                    line-height: 26px;
-                }
-                .last-certi .box em {
-                    color: #000;
-                    font-size: 16px;
-                    line-height: 26px;
-                    font-style: normal;
-                    display: inline-block;
-                    padding: 3px 25px 0;
-                    border-top: 1px solid #000;
-                    margin: 10px;
-                }
-                .last-certi .box img {
-                    height: 70px;
-                }
-            </style>
-        `;
+            `;
 
-        document.body.appendChild(tempContainer);
+            // Add hover effects
+            setTimeout(() => {
+                const shareButtons = modalContent.querySelectorAll('.share-btn, .download-btn');
+                shareButtons.forEach(btn => {
+                    btn.addEventListener('mouseenter', () => {
+                        btn.style.transform = 'scale(1.1)';
+                    });
+                    btn.addEventListener('mouseleave', () => {
+                        btn.style.transform = 'scale(1)';
+                    });
+                });
+            }, 100);
 
-        // Wait for fonts to load
-        await document.fonts.load('16px "Luxurious Script"');
-        await document.fonts.load('16px "Open Sans"');
-
-        try {
-            const canvas = await html2canvas(tempContainer.querySelector('#certificate-template'), {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: null,
-                width: 960,
-                height: 630,
-                logging: true,
-                imageTimeout: 30000
-            });
-
-            document.body.removeChild(tempContainer);
-            return canvas.toDataURL('image/png', 1.0);
-
-        } catch (error) {
-            if (document.body.contains(tempContainer)) {
-                document.body.removeChild(tempContainer);
-            }
-            throw error;
+            // Add Font Awesome if needed
+            addFontAwesome();
         }
-    }
 
-    // Function to create certificate HTML
-    function createCertificateHTML(result, includeImages = true) {
-        const isPassed = result.isPassed || false;
+        // Share functions
+        function shareToWhatsApp(imageUrl, text) {
+            const message = `${text}\n\n${imageUrl}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank', 'width=600,height=400');
+        }
 
-        // Use your background images
-        const bgImage = isPassed
-            ? 'https://www.ilmkidunya.com/images/certi/bg-certificates.jpg'
-            : 'https://www.ilmkidunya.com/images/certi/bg-certificates-fail.jpg';
+        function shareToFacebook(imageUrl, text) {
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&quote=${encodeURIComponent(text)}`;
+            window.open(facebookUrl, '_blank', 'width=600,height=400');
+        }
 
-        const badgeImage = isPassed
-            ? 'https://www.ilmkidunya.com/images/certi/high-scorrers.png'
-            : 'https://www.ilmkidunya.com/images/certi/img-fail.png';
+        function shareToTwitter(imageUrl, text) {
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(imageUrl)}`;
+            window.open(twitterUrl, '_blank', 'width=600,height=400');
+        }
 
-        return `
-            <div id="certificate-template" style="
-                width: 960px;
-                min-height: 630px;
-                position: relative;
-                font-family: 'Open Sans', sans-serif;
-                
-ow: hidden;
-            ">
-                <!-- Background image as img element -->
-                ${includeImages ? `
-                    <img src="${bgImage}"
-                         alt="Certificate Background"
-                         style="
-                             position: absolute;
-                             top: 0;
-                             left: 0;
-                             width: 100%;
-                             height: 100%;
-                             object-fit: cover;
-                             z-index: 1;
-                         " />
-                ` : ''}
+        function shareToLinkedIn(text, url) {
+            const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`;
+            window.open(linkedinUrl, '_blank', 'width=600,height=400');
+        }
 
-                <!-- Content overlay -->
-                <div style="
-                    position: relative;
-                    z-index: 2;
-                    background: transparent;
-                ">
-                    <div class="inner-box" style="
-                        padding: 210px 100px 0;
-                        text-align: center;
-                    ">
-                        <h2 style="
-                            text-transform: uppercase;
-                            font-size: 34px;
-                            line-height: 42px;
-                            font-weight: 600;
-                            letter-spacing: 1px;
-                            margin: 0 0 10px;
-                            color: #000;
-                        ">${result.testTitle || 'Test Certificate'}</h2>
+        // Alternative method using Web Share API for mobile devices
+        async function nativeShare(imageUrl, text) {
+            if (navigator.share) {
+                try {
+                    // First, fetch the image and convert to blob
+                    const response = await fetch(imageUrl);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'certificate.png', { type: blob.type });
 
-                        <h3 style="
-                            font-size: 24px;
-                            font-weight: 500;
-                            letter-spacing: 2px;
-                            text-transform: uppercase;
-                            line-height: 30px;
-                            margin: 0 0 20px 0;
-                            color: #000;
-                        ">${isPassed ? 'Congratulations!' : 'Better Luck Next Time'}</h3>
-
-                        <div class="name-certi" style="
-                            display: block;
-                            margin: 0 50px 20px;
-                            border-bottom: 2px solid #000;
-                        ">
-                            <h1 style="
-                                font-size: 70px;
-                                letter-spacing: 2px;
-                                text-transform: capitalize;
-                                font-family: 'Luxurious Script', cursive;
-                                margin: 0 0 5px 0;
-                                color: #000;
-                            ">${result.userName || 'Student'}</h1>
-                        </div>
-
-                        <div class="marks-box" style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            margin: 0 0 10px 0;
-                        ">
-                            <span style="
-                                font-size: 50px;
-                                padding: 0 20px;
-                                color: ${isPassed ? 'green' : 'red'};
-                            ">${result.correctAnswers || 0}</span>
-                            <span style="
-                                font-size: 20px;
-                                color: #000;
-                                text-align: left;
-                                line-height: 26px;
-                                font-weight: 500;
-                            ">Marks <br> Out of ${result.totalQuestions || 0}</span>
-                        </div>
-
-                        <div class="last-certi" style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            padding: 5px 0 10px;
-                        ">
-                            <div class="box" style="width: 32%;">
-                                ${includeImages ? `
-                                    <img src="https://www.ilmkidunya.com/images/certi/logo.svg"
-                                         alt="Logo"
-                                         style="height: 70px; max-width: 100%;" />
-                                ` : '<div style="height: 70px;"></div>'}
-                            </div>
-
-                            <div class="box" style="width: 32%; text-align: center;">
-                                ${includeImages ? `
-                                    <img src="${badgeImage}"
-                                         alt="${isPassed ? 'High Scorer' : 'Fail'}"
-                                         style="height: 70px; max-width: 100%;" />
-                                ` : '<div style="height: 70px;"></div>'}
-                            </div>
-
-                            <div class="box" style="width: 32%; text-align: right;">
-                                <span style="
-                                    display: block;
-                                    color: #000;
-                                    font-size: 20px;
-                                    line-height: 26px;
-                                ">${result.dated || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                                <em style="
-                                    color: #000;
-                                    font-size: 16px;
-                                    line-height: 26px;
-                                    font-style: normal;
-                                    display: inline-block;
-                                    padding: 3px 25px 0;
-                                    border-top: 1px solid #000;
-                                    margin: 10px 0 0 0;
-                                ">Issue date</em>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // Also update the modal display to match your style
-    function displayCertificateImage(modalContent, result, certificateImage) {
-        // Prepare share text
-        const shareText = `Check out my certificate for ${result.testTitle || 'the test'}!`;
-        const shareUrl = window.location.href;
-
-        modalContent.innerHTML = `
-            <button class="modal-close-btn" onclick="closeResultModal()">×</button>
-            <div style="text-align: center; padding: 20px;">
-                <div style="border-radius: 12px; overflow: hidden; background: white; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                    <img src="${certificateImage}"
-                         alt="Certificate"
-                         style="width: 100%; height: auto; display: block; border: 1px solid #eee; opacity: 1;"
-                         id="certificateImageToShare" />
-                </div>
-            </div>
-
-            <div class="modal-footer"
-                 style="padding: 20px; text-align: center; border-top: 1px solid #eceff5; background: #f9f9f9;">
-                <h3>Share Your Achievement</h3>
-                <div class="share-box">
-                    <!-- Custom Share Buttons -->
-                    <div class="share-buttons-container"
-                         style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
-
-                        <!-- WhatsApp -->
-                        <button class="share-btn whatsapp-btn"
-                                onclick="shareToWhatsApp('${certificateImage}', '${shareText}')"
-                                style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #25D366; cursor: pointer; transition: transform 0.2s;">
-                            <img alt="whatsapp sharing button"
-                                 src="https://platform-cdn.sharethis.com/img/whatsapp.svg"
-                                 style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
-                        </button>
-
-                        <!-- Facebook -->
-                        <button class="share-btn facebook-btn"
-                                onclick="shareToFacebook('${certificateImage}', '${shareText}')"
-                                style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #1877F2; cursor: pointer; transition: transform 0.2s;">
-                            <img alt="facebook sharing button"
-                                 src="https://platform-cdn.sharethis.com/img/facebook.svg"
-                                 style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
-                        </button>
-
-                        <!-- Twitter -->
-                        <button class="share-btn twitter-btn"
-                                onclick="shareToTwitter('${certificateImage}', '${shareText}')"
-                                style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #1DA1F2; cursor: pointer; transition: transform 0.2s;">
-                            <img alt="twitter sharing button"
-                                 src="https://platform-cdn.sharethis.com/img/twitter.svg"
-                                 style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
-                        </button>
-
-                        <!-- LinkedIn -->
-                        <button class="share-btn linkedin-btn"
-                                onclick="shareToLinkedIn('${shareText}', '${shareUrl}')"
-                                style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #0A66C2; cursor: pointer; transition: transform 0.2s;">
-                            <img alt="linkedin sharing button"
-                                 src="https://platform-cdn.sharethis.com/img/linkedin.svg"
-                                 style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
-                        </button>
-
-                        <!-- Download Button -->
-                        <button onclick="downloadCertificate(
-                                    '${certificateImage}',
-                                    '${(result.testTitle || 'certificate').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${Date.now()}.png'
-                                )"
-                                class="download-btn"
-                                style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; border: none; background: #6c757d; cursor: pointer; transition: transform 0.2s; margin: 0;">
-                            <img alt="download certificate"
-                                 src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
-                                 style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Add hover effects
-        setTimeout(() => {
-            const shareButtons = modalContent.querySelectorAll('.share-btn, .download-btn');
-            shareButtons.forEach(btn => {
-                btn.addEventListener('mouseenter', () => {
-                    btn.style.transform = 'scale(1.1)';
-                });
-                btn.addEventListener('mouseleave', () => {
-                    btn.style.transform = 'scale(1)';
-                });
-            });
-        }, 100);
-
-        // Add Font Awesome if needed
-        addFontAwesome();
-    }
-
-    // Share functions
-    function shareToWhatsApp(imageUrl, text) {
-        const message = `${text}\n\n${imageUrl}`;
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank', 'width=600,height=400');
-    }
-
-    function shareToFacebook(imageUrl, text) {
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&quote=${encodeURIComponent(text)}`;
-        window.open(facebookUrl, '_blank', 'width=600,height=400');
-    }
-
-    function shareToTwitter(imageUrl, text) {
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(imageUrl)}`;
-        window.open(twitterUrl, '_blank', 'width=600,height=400');
-    }
-
-    function shareToLinkedIn(text, url) {
-        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`;
-        window.open(linkedinUrl, '_blank', 'width=600,height=400');
-    }
-
-    // Alternative method using Web Share API for mobile devices
-    async function nativeShare(imageUrl, text) {
-        if (navigator.share) {
-            try {
-                // First, fetch the image and convert to blob
-                const response = await fetch(imageUrl);
-                const blob = await response.blob();
-                const file = new File([blob], 'certificate.png', { type: blob.type });
-
-                await navigator.share({
-                    title: 'My Certificate',
-                    text: text,
-                    files: [file]
-                });
-            } catch (error) {
-                console.log('Native sharing failed, falling back to URL sharing');
-                // Fallback: share just the URL
-                if (navigator.share) {
                     await navigator.share({
                         title: 'My Certificate',
                         text: text,
-                        url: imageUrl
+                        files: [file]
                     });
+                } catch (error) {
+                    console.log('Native sharing failed, falling back to URL sharing');
+                    // Fallback: share just the URL
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: 'My Certificate',
+                            text: text,
+                            url: imageUrl
+                        });
+                    }
                 }
+            } else {
+                // Fallback for desktop - copy to clipboard
+                const shareText = `${text}\n\n${imageUrl}`;
+                await navigator.clipboard.writeText(shareText);
+                alert('Share link copied to clipboard!');
             }
-        } else {
-            // Fallback for desktop - copy to clipboard
-            const shareText = `${text}\n\n${imageUrl}`;
-            await navigator.clipboard.writeText(shareText);
-            alert('Share link copied to clipboard!');
         }
-    }
 
-    // Download function
-    function downloadCertificate(imageUrl, fileName) {
-        // Create a temporary anchor element
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = fileName;
-        link.style.display = 'none';
-
-        // Append to body, click and remove
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // Function to display certificate as HTML (fallback)
-    function displayCertificateHTML(modalContent, result) {
-        modalContent.innerHTML = `
-            <button class="modal-close-btn" onclick="closeResultModal()">×</button>
-            <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
-
-                ${createCertificateHTML(result, true)}
-
-                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                    <p style="color: #666; font-size: 14px;">
-                        <i>This certificate can be printed using your browser's print function (Ctrl+P)</i>
-                    </p>
-                </div>
-            </div>
-
-            <div class="modal-footer" style="padding: 20px; text-align: center; border-top: 1px solid #eee; background: #f9f9f9;">
-                <button onclick="closeResultModal()"
-                        class="text-btn"
-                        style="margin-right: 10px; background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                    Close
-                </button>
-
-                <button onclick="window.print()"
-                        class="text-btn"
-                        style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                    <i class="fas fa-print"></i> Print Certificate
-                </button>
-            </div>
-        `;
-
-        // Add Font Awesome if needed
-        addFontAwesome();
-
-        // Add print styles
-        const style = document.createElement('style');
-        style.textContent = `
-            @@media print {
-                .modal-close-btn,
-                .modal-footer {
-                    display: none !important;
-                }
-                #resultModal {
-                    box-shadow: none !important;
-                    max-height: none !important;
-                    height: auto !important;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    // Helper function to add Font Awesome
-    function addFontAwesome() {
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const fontAwesome = document.createElement('link');
-            fontAwesome.rel = 'stylesheet';
-            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
-            document.head.appendChild(fontAwesome);
-        }
-    }
-
-    // Function to download certificate
-    function downloadCertificate(dataUrl, filename) {
-        try {
+        // Download function
+        function downloadCertificate(imageUrl, fileName) {
+            // Create a temporary anchor element
             const link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = filename;
+            link.href = imageUrl;
+            link.download = fileName;
             link.style.display = 'none';
+
+            // Append to body, click and remove
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        } catch (error) {
-            console.error('Download failed:', error);
-            alert('Download failed. Please try right-clicking on the image and selecting "Save Image As..."');
         }
-    }
 
-    // Function to print certificate image
-    function printCertificateImage(dataUrl) {
-        const printWindow = window.open('', '_blank', 'width=800,height=700');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Print Certificate</title>
-                <style>
-                    body {
-                        margin: 0;
-                        padding: 20px;
-                        text-align: center;
-                        background: #f5f5f5;
-                    }
-                    .container {
-                        max-width: 800px;
-                        margin: 0 auto;
-                        background: white;
-                        padding: 20px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    }
-                    img {
-                        max-width: 100%;
-                        height: auto;
-                        display: block;
-                        margin: 0 auto;
-                    }
-                    .buttons {
-                        margin-top: 20px;
-                    }
-                    button {
-                        padding: 10px 20px;
-                        background: #007bff;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        margin: 0 5px;
-                    }
-                    button:hover {
-                        background: #0056b3;
-                    }
-                    @@media print {
-                        body {
-                            padding: 0;
-                            background: white;
-                        }
-                        .container {
-                            box-shadow: none;
-                            padding: 0;
-                        }
-                        .buttons {
-                            display: none;
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <img src="${dataUrl}" alt="Certificate" onload="window.onImageLoad && window.onImageLoad()" />
-                    <div class="buttons">
-                        <button onclick="window.print()">Print Now</button>
-                        <button onclick="window.close()">Close</button>
+        // Function to display certificate as HTML (fallback)
+        function displayCertificateHTML(modalContent, result) {
+            modalContent.innerHTML = `
+                <button class="modal-close-btn" onclick="closeResultModal()">×</button>
+                <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
+
+                    ${createCertificateHTML(result, true)}
+
+                    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <p style="color: #666; font-size: 14px;">
+                            <i>This certificate can be printed using your browser's print function (Ctrl+P)</i>
+                        </p>
                     </div>
                 </div>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-    }
 
-    // Function to close the modal
-    function closeResultModal() {
-        const overlay = document.getElementById('resultModalOverlay');
-        overlay.style.display = 'none';
-        document.body.style.overflow = '';
-    }
+                <div class="modal-footer" style="padding: 20px; text-align: center; border-top: 1px solid #eee; background: #f9f9f9;">
+                    <button onclick="closeResultModal()"
+                            class="text-btn"
+                            style="margin-right: 10px; background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        Close
+                    </button>
 
-    // Close modal when clicking outside
-    document.getElementById('resultModalOverlay').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeResultModal();
+                    <button onclick="window.print()"
+                            class="text-btn"
+                            style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        <i class="fas fa-print"></i> Print Certificate
+                    </button>
+                </div>
+            `;
+
+            // Add Font Awesome if needed
+            addFontAwesome();
+
+            // Add print styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @@media print {
+                    .modal-close-btn,
+                    .modal-footer {
+                        display: none !important;
+                    }
+                    #resultModal {
+                        box-shadow: none !important;
+                        max-height: none !important;
+                        height: auto !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
         }
-    });
 
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeResultModal();
+        // Helper function to add Font Awesome
+        function addFontAwesome() {
+            if (!document.querySelector('link[href*="font-awesome"]')) {
+                const fontAwesome = document.createElement('link');
+                fontAwesome.rel = 'stylesheet';
+                fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+                document.head.appendChild(fontAwesome);
+            }
         }
-    });
 
-    // ==================== EXPORT FUNCTIONS TO GLOBAL SCOPE ====================
+        // Function to download certificate
+        function downloadCertificate(dataUrl, filename) {
+            try {
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = filename;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                console.error('Download failed:', error);
+                alert('Download failed. Please try right-clicking on the image and selecting "Save Image As..."');
+            }
+        }
 
-    window.loadResultInPopup = loadResultInPopup;
-    window.closeResultModal = closeResultModal;
-    window.downloadCertificate = downloadCertificate;
-    window.printCertificateImage = printCertificateImage;
-    window.saveTopicAnswer = saveTopicAnswer;
+        // Function to print certificate image
+        function printCertificateImage(dataUrl) {
+            const printWindow = window.open('', '_blank', 'width=800,height=700');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print Certificate</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px;
+                            text-align: center;
+                            background: #f5f5f5;
+                        }
+                        .container {
+                            max-width: 800px;
+                            margin: 0 auto;
+                            background: white;
+                            padding: 20px;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                        }
+                        img {
+                            max-width: 100%;
+                            height: auto;
+                            display: block;
+                            margin: 0 auto;
+                        }
+                        .buttons {
+                            margin-top: 20px;
+                        }
+                        button {
+                            padding: 10px 20px;
+                            background: #007bff;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            margin: 0 5px;
+                        }
+                        button:hover {
+                            background: #0056b3;
+                        }
+                        @@media print {
+                            body {
+                                padding: 0;
+                                background: white;
+                            }
+                            .container {
+                                box-shadow: none;
+                                padding: 0;
+                            }
+                            .buttons {
+                                display: none;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <img src="${dataUrl}" alt="Certificate" onload="window.onImageLoad && window.onImageLoad()" />
+                        <div class="buttons">
+                            <button onclick="window.print()">Print Now</button>
+                            <button onclick="window.close()">Close</button>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // Function to close the modal
+        function closeResultModal() {
+            const overlay = document.getElementById('resultModalOverlay');
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('resultModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeResultModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeResultModal();
+            }
+        });
+
+        // ==================== EXPORT FUNCTIONS TO GLOBAL SCOPE ====================
+
+        window.loadResultInPopup = loadResultInPopup;
+        window.closeResultModal = closeResultModal;
+        window.downloadCertificate = downloadCertificate;
+        window.printCertificateImage = printCertificateImage;
+        window.saveTopicAnswer = saveTopicAnswer;
 </script>
