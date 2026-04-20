@@ -194,7 +194,7 @@ namespace IKDFrontEnd.Controllers
 				//var cities = await _contextCollege.TblDefCities.AsNoTracking().ToListAsync();
 				//var categories = await _contextCollege.CourseCategories.AsNoTracking().ToListAsync();
 				//var levels = await _contextCollege.TblXcourseLevels.AsNoTracking().ToListAsync();
-				var cities = await _contextJobes.TblDefCities
+				var cities = await _contextCollege.TblDefCities
 					.OrderBy(c => c.CityName)
 					.Select(c => new DBCollege.TblDefCity
 					{
@@ -204,7 +204,7 @@ namespace IKDFrontEnd.Controllers
 					.AsNoTracking()
 					.ToListAsync();
 
-				var categories = await _context.CourseCategories
+				var categories = await _contextCollege.CourseCategories
 					.OrderBy(c => c.Name)
 					.Select(c => new DBCollege.CourseCategory
 					{
@@ -214,7 +214,7 @@ namespace IKDFrontEnd.Controllers
 					.AsNoTracking()
 					.ToListAsync();
 
-				var levels = await _context.TblXcourseLevels
+				var levels = await _contextCollege.TblXcourseLevels
 					.OrderBy(x => x.SortOrder)
 					.Select(x => new DBCollege.TblXcourseLevel
 					{

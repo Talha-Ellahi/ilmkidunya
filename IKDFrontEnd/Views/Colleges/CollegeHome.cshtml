@@ -146,18 +146,47 @@
                         <div class="ss-text-holder">
                             <h1>@Model.CollegeShortName</h1>
                             <ul>
-                                <li><span>Established</span><em>@(!string.IsNullOrWhiteSpace(Model?.EstablishedYear) ? Model.EstablishedYear : "N/A")</em></li>
-                                <li><span>Students</span><em>@(!string.IsNullOrWhiteSpace(Model?.StudentsCount) ? Model.StudentsCount : "N/A")</em></li>
+                                @if (!string.IsNullOrWhiteSpace(Model?.EstablishedYear) && Model.EstablishedYear != "Not Available")
+                                {
+                                    <li>
+                                        <span>Established</span>
+                                        <em>@Model.EstablishedYear</em>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model?.StudentsCount) && Model.StudentsCount != "0")
+                                {
+                                    <li>
+                                        <span>Students</span>
+                                        <em>@Model.EstablishedYear</em>
+                                    </li>
+                                }
+                               @*  <li><span>Established</span><em>@(!string.IsNullOrWhiteSpace(Model?.EstablishedYear) ? Model.EstablishedYear : "N/A")</em></li> *@
+                                @* <li><span>Students</span><em>@(!string.IsNullOrWhiteSpace(Model?.StudentsCount) ? Model.StudentsCount : "N/A")</em></li> *@
                                 <li><span>Recognition</span><em>HEC approved</em></li>
                             </ul>
                             <ul style="width: 65%;">
-                                <li>
-                                    <span>Contact # Address</span><em>
+                                @if (!string.IsNullOrWhiteSpace(Model?.ContactNumber) && Model.ContactNumber != "Not Available")
+                                {
+                                    <li>
+                                        <span>Contact</span>
+                                        <em>@Model.ContactNumber</em>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model?.Address) && Model.Address != "Not Available")
+                                {
+                                    <li>
+                                        <span>Address</span>
+                                        <em>@Model.Address</em>
+                                    </li>
+                                }
+                                @* <li>
+                                    <span>Contact # Address</span>
+                                    <em>
                                         @(!string.IsNullOrWhiteSpace(Model?.ContactNumber) ? Model.ContactNumber : "N/A")
                                         <br />
                                         @(!string.IsNullOrWhiteSpace(Model?.Address) ? Model.Address : "")
                                     </em>
-                                </li>
+                                </li> *@
                             </ul>
                         </div>
 

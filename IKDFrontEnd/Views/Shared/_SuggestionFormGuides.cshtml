@@ -22,7 +22,7 @@
             <label>I want to study in</label>
             <select name="cityId">
                 <option value="">-- Select City --</option>
-                @foreach (var city in (ViewBag.Cities as List<IKDFrontEnd.Models.TblDefCity>).OrderBy(c => c.CityName))
+                @foreach (var city in (ViewBag.Cities as List<IKDFrontEnd.DBCollege.TblDefCity>).OrderBy(c => c.CityName))
                 {
                     <option value="@city.CityId">
                         @city.CityName
