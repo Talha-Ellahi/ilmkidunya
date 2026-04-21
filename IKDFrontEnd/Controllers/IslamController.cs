@@ -1786,7 +1786,25 @@ namespace IKDFrontEnd.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("surah-{slug}")]
+        public async Task<IActionResult> SurahDetail(string slug)
+        {
+            ViewBag.Banners = await _bannerService.GetBannersAsync();
+            try
+            {
+                var cmsData = await _context.TblUrlcontents.Where(u => u.Url == $"https://www.ilmkidunya.com/islam/surah-{slug}").AsNoTracking().FirstOrDefaultAsync();
+                if (cmsData == null)
+                    return NotFound();
 
+                return View("QuranDetail", cmsData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error loading Surah page for slug: {slug}");
+                return RedirectToAction("ServerError", "Error", new { reason = $"Error loading Surah page: {ex.Message}" });
+            }
+        }
 
 
 
