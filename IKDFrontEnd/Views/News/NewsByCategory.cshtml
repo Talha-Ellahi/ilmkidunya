@@ -196,7 +196,7 @@
 							<li>
 								<div class="news-box">
 									<div class="img-holder">
-										<figure><img src="@news.PictureThumbnail" alt="" /></figure>
+										<figure><img src="@news.PictureThumbnail" alt="" onerror="this.onerror=null; this.src='/images/default.png';" />/></figure>
 									</div>
 									<div class="text-holder">
 										<span class="date">@news.Dated?.ToString("dd-MMM-yyyy")</span>
