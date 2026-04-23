@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.JobModels;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.Common;
@@ -7,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using System.Globalization;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Net.WebRequestMethods;
-using System.Globalization;
-using IKDFrontEnd.JobModels;
 
 namespace IKDFrontEnd.Controllers
 {
@@ -514,7 +515,9 @@ namespace IKDFrontEnd.Controllers
                 LastDate = mainJob?.LastDate ?? mainJobAd?.LastDate,
                 CompanyName = company?.Name,
                 CompanyUrl = company?.Url,
-                Dated = dated,
+				JobCity=mainJob.JobAdsCities,
+				JobType=jobType,
+				Dated = dated,
                 ImageName = !string.IsNullOrEmpty(mainJob?.ImageName)
                     ? $"https://jobs.ilmkidunya.com/jobs/Images/{year}/{month}/Large/" + mainJob.ImageName
                     : (!string.IsNullOrEmpty(mainJobAd?.ImageName) ? $"https://jobs.ilmkidunya.com/jobs/Images/{year}/{month}/Large/" + mainJobAd.ImageName : null),
@@ -670,10 +673,167 @@ namespace IKDFrontEnd.Controllers
 
             return PartialView("_JobAdListPartial", model);
         }
+		//LoadMoreJobsByYear
+		[Route("load-more-year-jobs")]
+		public async Task<IActionResult> LoadMoreJobsByYear(
+	int skip = 0,
+	int take = 10,
+	int loadclick = 1,
+	int? cityId = null,
+	string? profession = null,
+	int? companyId = null)
+		{
+			var year = DateTime.Now.Year;
 
+			IQueryable<Tbljobadslatest> baseQuery = _context.Tbljobadslatests
+				.Where(j => j.IsActive && j.CompanyId != null);
 
+			// 🔹 Filters
+			if (cityId.HasValue)
+			{
+				baseQuery = baseQuery.Where(j =>
+					j.JobAdsCitiesIds != null &&
+					j.JobAdsCitiesIds.Contains(cityId.Value.ToString()));
+			}
 
-        [Route("city-wise/jobs-in-{slug}")]// New route for fetching jobs by city ID
+			if (companyId.HasValue)
+			{
+				baseQuery = baseQuery.Where(j => j.CompanyId == companyId.Value);
+			}
+
+			if (!string.IsNullOrEmpty(profession))
+			{
+				var matchSlug = Slugify(profession);
+
+				var subCat = await _context.SubJobCategories
+					.AsNoTracking()
+					.FirstOrDefaultAsync(s => Slugify(s.Name) == matchSlug);
+
+				if (subCat != null)
+				{
+					int jobTypeId = subCat.JobTypeId;
+
+					baseQuery = baseQuery.Where(j => j.JobAdsTypesIds != null &&
+						(
+							j.JobAdsTypesIds == jobTypeId.ToString() ||
+							j.JobAdsTypesIds.StartsWith(jobTypeId + "{#-!-#}") ||
+							j.JobAdsTypesIds.EndsWith("{#-!-#}" + jobTypeId) ||
+							j.JobAdsTypesIds.Contains("{#-!-#}" + jobTypeId + "{#-!-#}")
+						));
+				}
+				else
+				{
+					string search = profession.Replace("-", " ").Trim();
+
+					baseQuery = baseQuery.Where(j =>
+						j.Name.Contains(search) ||
+						(j.MetaKeyword != null && j.MetaKeyword.Contains(search)));
+				}
+			}
+
+			List<Tbljobadslatest> jobAds = new();
+			jobAds = await baseQuery
+					.OrderByDescending(j => j.Dated)
+					.Take(500)
+					.ToListAsync();
+			List<Tbljobadslatest> jobAdsCount = new();
+			// 🔥 FIRST LOAD → YEAR LOGIC
+			if (loadclick == 1)
+			{
+				while (!jobAdsCount.Any() && year >= 2000)
+				{
+					jobAdsCount = await baseQuery
+						.Where(j => j.Dated.Year == year)
+						.OrderByDescending(j => j.Dated)
+						.Take(500)
+						.ToListAsync();
+
+					if (!jobAdsCount.Any())
+						year--;
+				}
+
+				if (!jobAdsCount.Any())
+				{
+					return PartialView("_JobAdListPartial", new JobListingPageViewModel
+					{
+						GroupedJobAds = new List<GroupedJobAdViewModel>()
+					});
+				}
+
+				// 🔴 Adjust skip ONLY for first load
+				if (skip == 0)
+				{
+					int count = jobAdsCount.Count;
+
+					if (count <= take)
+						skip = count;   // e.g. 5 → next skip 5
+					else
+						skip = take;    // e.g. 50 → next skip 10
+				}
+			}
+			else
+			{
+				// 🔥 NEXT LOADS → IGNORE YEAR LOGIC
+				jobAds = await baseQuery
+					.OrderByDescending(j => j.Dated)
+					.Take(500)
+					.ToListAsync();
+			}
+
+			// 🔹 Load Companies
+			var companyIds = jobAds
+				.Where(j => j.CompanyId.HasValue)
+				.Select(j => j.CompanyId.Value)
+				.Distinct()
+				.ToList();
+
+			var companiesDict = await _context.Companies
+				.Where(c => companyIds.Contains(c.Id))
+				.ToDictionaryAsync(c => c.Id, c => c);
+
+			// 🔹 Group + Pagination
+			var grouped = jobAds
+				.GroupBy(j => new { j.CompanyId, j.Dated })
+				.Select(g =>
+				{
+					var companyIdValue = g.Key.CompanyId ?? 0;
+
+					return new GroupedJobAdViewModel
+					{
+						Dated = g.Key.Dated,
+						CompanyName = companiesDict.ContainsKey(companyIdValue)
+							? companiesDict[companyIdValue].Name
+							: "Unknown",
+						CompanyUrl = companiesDict.ContainsKey(companyIdValue)
+							? companiesDict[companyIdValue].Url
+							: "#",
+						JobTitles = g.Select(x => x.Name ?? "Untitled").ToList(),
+						JobCounts = g.Where(x => x.NoofJobs.HasValue && x.NoofJobs > 0)
+									 .Select(x => x.NoofJobs ?? 0)
+									 .ToList(),
+						JobAdIds = g.Select(x => x.Id).ToList(),
+						LastDate = g.Max(x => x.LastDate) ?? DateTime.MinValue,
+						DetailUrl = g.Select(x => x.Url ?? "#").FirstOrDefault() ?? "#"
+					};
+				})
+				.OrderByDescending(g => g.Dated)
+				.Skip(skip)
+				.Take(take)
+				.ToList();
+
+			var model = new JobListingPageViewModel
+			{
+				GroupedJobAds = grouped
+			};
+
+			return Json(new
+			{
+				html = await this.RenderViewAsync("_JobAdListPartial", model, true),
+				nextSkip = skip + grouped.Count
+			});
+		}
+
+		[Route("city-wise/jobs-in-{slug}")]// New route for fetching jobs by city ID
         public async Task<IActionResult> CityJobs(string slug)
         {
             // === Banners ===
@@ -1158,8 +1318,8 @@ namespace IKDFrontEnd.Controllers
         {
             // === Banners ===
             ViewBag.Banners = await _bannerService.GetBannersAsync();
-
-            TblCmsDto cmsData = new TblCmsDto();
+			
+			TblCmsDto cmsData = new TblCmsDto();
 
             // === Resolve company ===
             var company = await _context.Companies
@@ -1488,34 +1648,90 @@ IMPORTANT: Follow all instructions exactly. Content must be SEO-optimized for jo
                     }
                 });
             }
+			var year = DateTime.Now.Year;
+			List<Tbljobadslatest> jobAds = new();
+			// === Load JOB ADS (this stays same) ===
+			while (!jobAds.Any() && year >= 2000) // safety limit
+			{
+				jobAds = await _context.Tbljobadslatests
+					.Where(j => j.IsActive
+							 && j.CompanyId == company.Id
+							 && j.Dated.Year == year)
+					.OrderByDescending(j => j.Dated)
+					.Take(10)
+					.ToListAsync();
 
+				year--; // go to previous year if empty
+			}
+			var grouped = jobAds
+	 .GroupBy(j => j.Dated)
+	 .Select(g =>
+	 {
+		 var first = g.FirstOrDefault();
+		 var groupJobIds = g.Select(x => x.Id).ToList();
 
-            // === Load JOB ADS (this stays same) ===
-            var jobAds = await _context.Tbljobadslatests
-                .Where(j => j.IsActive && j.CompanyId == company.Id)
-                .OrderByDescending(j => j.Dated)
-                .Take(100)
-                .ToListAsync();
+		 // Get vacancies for this group
+		 var groupVacancies = _context.JobVacancies
+			 .Where(v => groupJobIds.Contains(v.JobAdId))
+			 .ToList();
 
-            var grouped = jobAds
-                .GroupBy(j => j.Dated)
-                .Select(g => new GroupedJobAdViewModel
-                {
-                    Dated = g.Key,
-                    CompanyName = company.Name,
-                    CompanyUrl = company.Url,
-                    JobTitles = g.Select(x => x.Name ?? "Untitled").ToList(),
-                    JobCounts = g.Where(x => x.NoofJobs.HasValue && x.NoofJobs > 0)
-                                 .Select(x => x.NoofJobs.Value)
-                                 .ToList(),
-                    JobAdIds = g.Select(x => x.Id).ToList(),
-                    LastDate = g.Max(x => x.LastDate),
-                    DetailUrl = g.Select(x => x.Url).FirstOrDefault()
-                })
-                .OrderByDescending(g => g.Dated)
-                .ToList();
+		 // Get profession names (FIXED)
+		 var professionNames = groupVacancies
+			 .Where(v => v.ProfessionId.HasValue)
+			 .Select(v => v.ProfessionId.Value)
+			 .Distinct()
+			 .Join(_context.SubJobCategories,
+				   id => id,
+				   p => p.Id,
+				   (id, p) => p.Name)
+			 .ToList();
 
-            return View(new JobListingPageViewModel
+		 return new GroupedJobAdViewModel
+		 {
+			 Dated = g.Key,
+			 CompanyName = company.Name,
+			 CompanyUrl = company.Url,
+			 JobTitles = g.Select(x => x.Name ?? "Untitled").ToList(),
+
+			 JobNature = first?.JobNature switch
+			 {
+				 1 => "Permanent",
+				 2 => "Temporary/Contract",
+				 3 => "Internship",
+				 _ => "Unknown"
+			 },
+
+			 JobStatus = first?.JobTimeStatus switch
+			 {
+				 1 => "Full Time",
+				 2 => "Part Time",
+				 _ => "Unknown"
+			 },
+
+			 JobLocation = first?.JobAdsCities,
+
+			 JobCounts = g.Where(x => x.NoofJobs.HasValue && x.NoofJobs > 0)
+						  .Select(x => x.NoofJobs.Value)
+						  .ToList(),
+
+			 JobAdIds = groupJobIds,
+
+			 LastDate = g.Max(x => x.LastDate),
+
+			 JobImageURL = first != null
+				 ? $"https://jobs.ilmkidunya.com/jobs/Images/{g.Key.Year}/{g.Key.Month.ToString("D2")}/Large/{Path.GetFileName(first.ImageName)}"
+				 : null,
+
+			 DetailUrl = first?.Url,
+
+			 // ✅ NEW FIELD (from your second code)
+			 JobVacancy = professionNames
+		 };
+	 })
+	 .OrderByDescending(x => x.Dated)
+	 .ToList();
+
+			return View(new JobListingPageViewModel
             {
                 GroupedJobAds = grouped
             });

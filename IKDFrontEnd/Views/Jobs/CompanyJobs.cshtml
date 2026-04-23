@@ -3,8 +3,68 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var jobs = Model.GroupedJobAds.FirstOrDefault();
 }
+<style>
+    .jobs-add-wraper {
+        display: flex;
+        gap: 25px 50px;
+        margin: 25px 0 50px;
+        flex-wrap: wrap;
+    }
 
+        .jobs-add-wraper .img-holder {
+            max-width: 300px;
+            min-width: 250px;
+        }
+
+            .jobs-add-wraper .img-holder img {
+                width: 100%;
+            }
+
+    .text-holder-jobs {
+        min-width: 300px;
+        flex: 1;
+    }
+
+        .text-holder-jobs ul.news-date li {
+            display: flex;
+            gap: 20px;
+        }
+
+            .text-holder-jobs ul.news-date li span {
+                width: 25%
+            }
+
+            .text-holder-jobs ul.news-date li strong span {
+                display: block;
+                font-weight: 500;
+                width: 100%;
+            }
+
+        .text-holder-jobs ul.news-date {
+            margin: 0 0 15px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ececec;
+        }
+    @@media screen and (max-width: 980px) {
+        .jobs-add-wraper
+
+    {
+        margin-bottom: 0px;
+    }
+
+    .jobs-add-wraper .img-holder {
+        max-width: 100%;
+        flex: 1;
+    }
+
+    .text-holder-jobs ul.news-date li span {
+        width: 50%;
+    }
+
+    }
+</style>
 @section MetaData {
     @if (ViewBag.CmsData != null)
     {
@@ -56,12 +116,69 @@
 
 <!-- Main Start -->
 <div id="main">
-    <div class="main-content">
+    <div class="news-ad-sec">
         <div class="container">
             <div class="row">
+                @if (jobs != null)
+                {
+                    <div class="col-lg-12">
+                        <h2>@jobs.JobTitles.FirstOrDefault()</h2>
+                        <div class="jobs-add-wraper">
+                            <div class="img-holder">
+                                <figure>
+                                    <a href="@jobs.JobImageURL" target="_blank">
+                                        <img src="@jobs.JobImageURL" alt="Job Image" />
+                                    </a>
+                                </figure>
+                            </div>
+
+                            <div class="text-holder-jobs">
+                                <ul class="news-date">
+                                    <li><span>Job posted on</span> @jobs.Dated.ToString("yyyy-MM-dd")</li>
+                                    <li><span>Number of vacancies</span> @jobs.JobCounts.Count()</li>
+                                    <li><span>Last date to apply</span> @jobs.LastDate.Value.ToString("yyyy-MM-dd")</li>
+                                    <li><span>Job location</span> @jobs.JobLocation</li>
+                                    <li><span>Job type</span> @jobs.JobNature</li>
+                                    <li><span>Job status</span> @jobs.JobStatus</li>
+                                </ul>
+                                <ul class="news-date">
+                                    <li>
+                                        <span>Job Announced</span>
+                                        <strong>
+                                            @foreach (var vacany in jobs.JobVacancy)
+                                            {
+                                                <span>@vacany</span>
+                                            }
+                                            @* <span>SST Teacher</span>
+                                            <span>HeadMaster</span>
+                                            <span>Peon</span> *@
+                                        </strong>
+                                    </li>
+                                </ul>
+                                <div class="bottom-cont">
+                                    <p>
+                                        @jobs.MetaDesc
+                                    </p>
+                                    <ul class="list-bullet">
+                                        <li><a href="#">Apply for this job</a></li>
+                                        <li><a href="#">Prepare for this job</a></li>
+                                        <li><a href="#">Share this job</a></li>
+                                        <li>
+                                            Have a question about this job? <a href="#">
+                                                Ask in the discussion
+                                                area.
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <ul id="jobs-list" class="ss-jobs-list">
-                        @foreach (var job in Model.GroupedJobAds)
+                        @foreach (var job in Model.GroupedJobAds.Skip(1))
                         {
                             <li>
                                 <div class="box-left">
@@ -101,14 +218,59 @@
                                 </div>
                             </li>
                         }
+                    
                     </ul>
 
-
-
                     <div class="ss-loadmore">
-                        <a href="javascript:void(0)" class="button js-load-more" id="load-more-btn" data-skip="10">Load More</a>
+                        <a href="javascript:void(0)" class="button js-load-more" id="load-more-btn" data-skip="0">Load More</a>
                     </div>
                     <script>
+                        const btn = document.getElementById("load-more-btn");
+
+                        // 🔥 initialize state
+                        let loadclick = 1;
+
+                        btn.addEventListener("click", function () {
+
+                            let skip = parseInt(btn.getAttribute("data-skip")) || 0;
+
+                            const cityId = '@ViewBag.CityId';
+                            const companyId = '@ViewBag.CompanyId';
+
+                            // loading UI
+                            btn.classList.add("load-more");
+                            btn.innerHTML = 'Loading <span>.</span><span>.</span><span>.</span>';
+
+                            fetch(`/jobs/load-more-year-jobs?skip=${skip}&loadclick=${loadclick}&cityId=${cityId}&companyId=${companyId}`)
+                                .then(res => res.json())
+                                .then(data  => {
+
+                                        if (!data.html || data.html.trim() === '') {
+                                            btn.parentElement.remove();
+                                            return;
+                                        }
+
+                                                  // append HTML
+                                        document.getElementById("jobs-list")
+                                            .insertAdjacentHTML("beforeend", data.html);
+
+                                        // 🔥 UPDATE SKIP FROM SERVER (NOT DOM)
+                                        btn.setAttribute("data-skip", data.nextSkip);
+                                        // increment loadclick
+                                        loadclick++;
+
+                                        // reset UI
+                                        btn.classList.remove("load-more");
+                                        btn.textContent = "Load More";
+                                })
+                                .catch(err => {
+                                    console.error("LoadMore error:", err);
+                                    btn.classList.remove("load-more");
+                                    btn.textContent = "Load More";
+                                });
+                        });
+                    </script>
+                    @* <script>
                         document.getElementById("load-more-btn").addEventListener("click", function () {
                             const btn = this;
                             const skip = parseInt(btn.getAttribute("data-skip"));
@@ -120,12 +282,12 @@
                             btn.classList.add("load-more");
                             btn.innerHTML = 'Loading <span>.</span><span>.</span><span>.</span>';
 
-                            fetch(`/jobs/load-more-jobs?skip=${skip}&cityId=${cityId}&companyId=${companyId}`)
+                            fetch(`/jobs/load-more-year-jobs?skip=${skip}&cityId=${cityId}&companyId=${companyId}`)
 
                                 .then(res => res.text())
                                 .then(html => {
                                     document.getElementById("jobs-list").insertAdjacentHTML("beforeend", html);
-                                    const newSkip = skip + 20;
+                                    const newSkip = skip + 10;
                                     btn.setAttribute("data-skip", newSkip);
                                     if (html.trim() === '') {
                                         btn.parentElement.remove(); // No more tutors
@@ -140,19 +302,8 @@
                                     btn.textContent = "Load More";
                                 });
                         });
-                    </script>
-                    <div class="ss-content ">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    @if (ViewBag.CmsData != null)
-                                    {
-                                        @Html.Raw(ViewBag.CmsData.Desc1)
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </script> *@
+                   
 @*                     <div class="ss-content">
                         <div class="container">
                             <div class="row">
@@ -166,10 +317,41 @@
                         </div>
                     </div> *@
                 </div>
+                <div class="col-lg-12">
+                    <div class="google-ad-bx ad-slot">
+
+                        <ins class="adsbygoogle"
+                             style="display:block; min-height:90px;"
+                             data-ad-client="ca-pub-8866825487085085"
+                             data-ad-slot="9990874736"
+                             data-ad-format="auto"
+                             data-ad-layout="image"
+                             data-full-width-responsive="true"></ins>
+
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+
+                    </div>
+                </div>
+           
             </div>
         </div>
 
         <!-- Main End -->
+    </div>
+   
+    <div class="contact-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @if (ViewBag.CmsData != null)
+                    {
+                        @Html.Raw(ViewBag.CmsData.Desc1)
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

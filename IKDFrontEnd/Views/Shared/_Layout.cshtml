@@ -8917,7 +8917,8 @@
             }
 
                 .question-box .top-box .close-btn {
-                    width: 15%
+                    width: 15%; 
+                    z-index: 2;
                 }
 
                 .question-box .top-box h2 {
@@ -9054,8 +9055,17 @@
 
             .see-also-sub {
                 flex-basis: 90px;
-                height: 90px
             }
+            .see-also-sub p:last-child{
+                display:none
+            }
+           #main .content-sec .see-also-sub h3 {
+    font-size: 16px !important;
+    line-height: 20px;
+    margin: 4px 0 !important;
+   text-align: center !important;
+}
+
 
             .bNotice .see-also {
                 justify-content: space-between
@@ -11599,6 +11609,7 @@
 
         .see-also .col-lg-3.see-also-sub {
             width: calc(14% - 4px);
+            min-width: 80px;
             height: 140px
         }
 
@@ -19920,8 +19931,8 @@
             }
 
             .see-also-sub {
-                flex-basis: calc(34.5% - 10px);
-                height: 90px
+            flex-basis: calc(49% - 2px);
+            min-height: 95px !important;
             }
 
             .mega-menu-icons .icobox {

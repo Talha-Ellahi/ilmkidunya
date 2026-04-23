@@ -18,11 +18,37 @@
  *@        <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title>@ViewBag.CmsData.MetaTitle</title>
+        <script type="application/ld+json">
+             {
+              "@@context": "https://schema.org",
+              "@@type": "JobPosting",
+              "title": "@ViewBag.CmsData.MetaTitle",
+              "description": "@ViewBag.CmsData.MetaDesc",
+              "datePosted": "@Model.Dated.Value.ToString("yyyy-MM-dd")",
+              "validThrough": "@Model.LastDate.Value.ToString("yyyy-MM-dd")",
+              "employmentType": "@Model.JobType",
+              "hiringOrganization": {
+                "@@type": "Organization",
+                "name": "@Model.CompanyName",
+                "logo": "@Model.ImageName"
+              },
+
+              "jobLocation": {
+                "@@type": "Place",
+                "address": {
+                  "@@type": "PostalAddress",
+                  "addressLocality": "@Model.JobCity",
+                  "addressCountry": "PK"
+                }
+              }
+            }
+        </script>
     }
 }
 
 
 @section header {
+    
     <!-- Header Start -->
     <div class="col-lg-11">
         <partial name="_JobsNavBar" />

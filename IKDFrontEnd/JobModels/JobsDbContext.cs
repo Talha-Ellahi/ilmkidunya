@@ -21,6 +21,8 @@ public partial class JobsDbContext : DbContext
 
     public virtual DbSet<JobType> JobTypes { get; set; }
 
+    public virtual DbSet<JobVacancy> JobVacancies { get; set; }
+
     public virtual DbSet<Qualification> Qualifications { get; set; }
 
     public virtual DbSet<SubJobCategory> SubJobCategories { get; set; }
@@ -33,7 +35,7 @@ public partial class JobsDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=69.10.38.62;Database=dbjobsikd;User Id=userdbjobsikd;Password=L1cg1T@Dlag%woz2;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=69.10.38.62;Initial Catalog=dbjobsikd;User Id=userdbjobsikd;Password=L1cg1T@Dlag%woz2;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -168,6 +170,24 @@ public partial class JobsDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Url)
                 .HasMaxLength(200)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<JobVacancy>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__JobVacan__3214EC074ADD86C4");
+
+            entity.ToTable("JobVacancy", "dbo");
+
+            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Experience)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.Gender)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Qualification)
+                .HasMaxLength(255)
                 .IsUnicode(false);
         });
 
