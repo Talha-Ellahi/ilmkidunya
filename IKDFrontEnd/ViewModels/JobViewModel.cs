@@ -56,8 +56,14 @@
         public List<long> JobAdIds { get; set; } 
         public DateTime Dated { get; set; }
         public string? CompanyName { get; set; }
-        public List<string> JobTitles { get; set; } = new();
-        public List<int> JobCounts { get; set; } = new();
+		public string? JobNature { get; set; }
+		public string? JobStatus { get; set; }
+		public string? JobLocation { get; set; }
+		public string? JobImageURL { get; set; }
+		public string? MetaDesc { get; set; }
+		public List<string> JobTitles { get; set; } = new();
+		public List<string> JobVacancy { get; set; } = new();
+		public List<int> JobCounts { get; set; } = new();
 		public int JobCount { get; set; } = new();
 		public DateTime? LastDate { get; set; }
         public string? DetailUrl { get; set; }
@@ -83,6 +89,8 @@
 		public bool? IsMale { get; set; }
 		public string? AgeLimit { get; set; }
 		public string? Experience { get; set; }
+		public string? JobCity { get; set; }
+		public string? JobType { get; set; }
 		public DateTime? LastDate { get; set; }
 		public string? CompanyName { get; set; }
 		public DateTime? Dated { get; set; }
