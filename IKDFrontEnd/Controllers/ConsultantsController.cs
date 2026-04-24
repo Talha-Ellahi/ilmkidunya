@@ -92,7 +92,7 @@ namespace IKDFrontEnd.Controllers
 
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
-            return View("Home", viewModel);
+            return View(viewModel);
         }
         [HttpGet("consultants/{detailSlug}")]
         [HttpGet("consultants/education-consultants-in-{detailSlug}.aspx")]
