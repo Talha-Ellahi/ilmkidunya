@@ -192,18 +192,18 @@
 											url += consultant.Id; // Add Id if not present
 										}
 
-										<a href="/consultants/@(url).aspx" class="consultan-icon-bx box-cnslt1">
+<a href="/consultants/@(url).aspx" class="consultan-icon-bx box-cnslt1">
+    @if (consultant.PremiumMember == true)
+    {
+        <img class="premium-consltn"
+             src="https://ikddata.ilmkidunya.com/images/img-consultant-premimum.png" />
+    }
 
-											@if (consultant.PremiumMember == true)
-											{
-												<img class="premium-consltn"
-													 src="https://ikddata.ilmkidunya.com/images/img-consultant-premimum.png" />
-											}
-
-
-											<img src="@consultant.Image" alt="">
-											<span>@consultant.Name</span>
-										</a>
+    <img src="@(string.IsNullOrEmpty(consultant.Image) ? "https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg" : consultant.Image)" 
+         alt=""
+         onerror="this.onerror=null; this.src='https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg'" />
+    <span>@consultant.Name</span>
+</a>
 									}
 								}
 								else
