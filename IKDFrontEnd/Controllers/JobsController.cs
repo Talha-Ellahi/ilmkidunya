@@ -247,8 +247,8 @@ namespace IKDFrontEnd.Controllers
                     CompanyName = c.Name,
 
                     CompanyUrl = c.Url,
-
-                })
+					TotalJobs=0
+				})
 
                 .OrderBy(c => c.CompanyName)
 
@@ -265,54 +265,118 @@ namespace IKDFrontEnd.Controllers
         {
 
             ViewBag.Banners = await _bannerService.GetBannersAsync();
-            //var cmsData = await _context.TblCms
-            //   .Where(c => c.Url == "https://www.ilmkidunya.com/jobs/company-wise-jobs")
-            //   .FirstOrDefaultAsync();
-            var cmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/jobs/company-wise-jobs");
+			var cities = await _context.TblDefCities.ToListAsync();
+			ViewBag.Cities = cities;
+			CompanySearchViewModel obj_Company=new CompanySearchViewModel();
+			obj_Company.Companies = await _context.Companies
+	                                .Where(x => x.IsGovt == true && x.IsActive == true)
+	                                .Select(c => new CompanyListItemViewModel
+	                                {
+		                                Id = c.Id,
+		                                CompanyName = c.Name,
+		                                CompanyUrl = c.Url,
+
+		                                TotalJobs = _context.Tbljobadslatests.Count(j => j.CompanyId == c.Id)
+	                                })
+	                                .OrderBy(c => c.CompanyName)
+	                                .ToListAsync();
+            obj_Company.Type = "Government";
+			obj_Company.CityId = "";
+			//var cmsData = await _context.TblCms
+			//   .Where(c => c.Url == "https://www.ilmkidunya.com/jobs/company-wise-jobs")
+			//   .FirstOrDefaultAsync();
+			var cmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/jobs/company-wise-jobs");
             ViewBag.CmsData = cmsData;
 
             var today = DateTime.Today;
 
-            // Step 1: Get all active jobs that are not expired
+            //// Step 1: Get all active jobs that are not expired
 
-            var activeJobCompanyIds = await _context.Tbljobadslatests
+            //var activeJobCompanyIds = await _context.Tbljobadslatests
 
-                .Where(j => j.IsActive && j.CompanyId != null)
+            //    .Where(j => j.IsActive && j.CompanyId != null)
 
-                .Select(j => j.CompanyId.Value)
+            //    .Select(j => j.CompanyId.Value)
 
-                .Distinct()
+            //    .Distinct()
 
-                .ToListAsync();
+            //    .ToListAsync();
 
-            // Step 2: Get active, non-govt companies that have at least one valid job
+            //// Step 2: Get active, non-govt companies that have at least one valid job
 
-            var companies = await _context.Companies
+            //var companies = await _context.Companies
 
-                .Where(c => activeJobCompanyIds.Contains(c.Id) && c.IsActive == true && !c.IsGovt == true)
+            //    .Where(c => activeJobCompanyIds.Contains(c.Id) && c.IsActive == true && !c.IsGovt == true)
 
-                .Select(c => new CompanyListItemViewModel
+            //    .Select(c => new CompanyListItemViewModel
 
-                {
+            //    {
 
-                    Id = c.Id,
+            //        Id = c.Id,
 
-                    CompanyName = c.Name,
+            //        CompanyName = c.Name,
 
-                    CompanyUrl = c.Url
+            //        CompanyUrl = c.Url
 
-                })
+            //    })
 
-                .OrderBy(c => c.CompanyName)
+            //    .OrderBy(c => c.CompanyName)
 
-                .ToListAsync();
+            //    .ToListAsync();
 
-            return View(companies);
+            return View(obj_Company);
 
 
         }
+		[HttpGet("search")]
+		public async Task<ActionResult> Search(string type, string city)
+        {
+            var query = _context.Companies.Where(x => x.IsActive == true);
+            // Filter by type
+            string companyType = "";
+            string cityName = "";
+            if (type == "Government") // Government
+            {
+                query = query.Where(x => x.IsGovt == true);
+                companyType = "Government";
+            }
+            else if (type == "Private") // Private
+            {
+                query = query.Where(x => x.IsGovt == false);
+                companyType = "Private";
+            }
+            
+            // Filter by city (only if provided)
+            if (city!="all")
+            {
+                //query = query.Where(x => x.CityId == city);
 
-
+                //cityName = await _context.TblDefCities
+                //    .Where(c => c.CityId == city)
+                //    .Select(c => c.CityName)
+                //    .FirstOrDefaultAsync() ?? "Unknown";
+                var cityEntity = await _context.TblDefCities.FirstOrDefaultAsync(c => c.CityName.ToLower().Replace(" ", "-") == city);
+                if (cityEntity != null)
+                {
+                    query = query.Where(x => x.CityId == cityEntity.CityId);
+                }
+                cityName ="in " +cityEntity.CityName;
+            }
+            CompanySearchViewModel obj_Company = new CompanySearchViewModel();
+            obj_Company.Companies = await query
+                .Select(c => new CompanyListItemViewModel
+                {
+                    Id = c.Id,
+                    CompanyName = c.Name,
+                    CompanyUrl = c.Url,
+                    TotalJobs = _context.Tbljobadslatests.Count(j => j.CompanyId == c.Id)
+                })
+                .OrderBy(c => c.CompanyName)
+                .ToListAsync();
+            obj_Company.Type = companyType;
+            obj_Company.CityId = cityName;
+            return PartialView("_JobList", obj_Company);
+        }
         [Route("industry")]
         public async Task<IActionResult> Industry()
         {
@@ -1311,7 +1375,8 @@ namespace IKDFrontEnd.Controllers
         //}
 
         [Route("{slug}")]
-        public async Task<IActionResult> CompanyJobs(
+		//[HttpGet("{slug:regex(^(?!search$).*)}")]
+		public async Task<IActionResult> CompanyJobs(
             string slug,
             [FromServices] IBackgroundTaskQueue backgroundQueue
         )
@@ -1692,7 +1757,7 @@ IMPORTANT: Follow all instructions exactly. Content must be SEO-optimized for jo
 			 CompanyName = company.Name,
 			 CompanyUrl = company.Url,
 			 JobTitles = g.Select(x => x.Name ?? "Untitled").ToList(),
-
+			 JobDesc=first?.JobDescription,
 			 JobNature = first?.JobNature switch
 			 {
 				 1 => "Permanent",

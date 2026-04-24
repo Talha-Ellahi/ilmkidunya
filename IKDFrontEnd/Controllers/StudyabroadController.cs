@@ -85,8 +85,8 @@ namespace IKDFrontEnd.Controllers
 			// 4. Country logic (unchanged but safer)
 			var countryUrl = detailSlug
 				.Replace("study-abroad-in-", "")
-				.Replace(".aspx", "")
-				.Split('-')[0];
+				.Replace(".aspx", "");
+				
 
 			var country = await _context.TblDefCountries
 				.Where(c => c.Url == countryUrl)

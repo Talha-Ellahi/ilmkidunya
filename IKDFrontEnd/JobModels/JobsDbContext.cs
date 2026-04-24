@@ -324,6 +324,7 @@ public partial class JobsDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("JobAdsTypesIDs");
+            entity.Property(e => e.JobDescription).HasMaxLength(1000);
             entity.Property(e => e.JobScaleId).HasColumnName("JobScaleID");
             entity.Property(e => e.JobSkills)
                 .HasMaxLength(2000)

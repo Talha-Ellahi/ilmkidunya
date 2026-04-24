@@ -61,6 +61,7 @@
 		public string? JobLocation { get; set; }
 		public string? JobImageURL { get; set; }
 		public string? MetaDesc { get; set; }
+		public string? JobDesc { get; set; }
 		public List<string> JobTitles { get; set; } = new();
 		public List<string> JobVacancy { get; set; } = new();
 		public List<int> JobCounts { get; set; } = new();
@@ -146,8 +147,15 @@
 
         public string CompanyName { get; set; }
         public string? CompanyUrl { get; internal set; }
-    }
+		public int? TotalJobs { get; set; }
 
+	}
+	public class CompanySearchViewModel
+	{
+		public List<CompanyListItemViewModel> Companies { get; set; }
+		public string Type { get; set; }
+		public string? CityId { get; set; }
+	}
 	public class IndustryViewModel
 
 	{

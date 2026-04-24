@@ -4,6 +4,11 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var jobs = Model.GroupedJobAds.FirstOrDefault();
+    var jobCompany1 = jobs.CompanyName?.ToLower().Replace(" ", "-");
+    var jobTitle1 = jobs.JobTitles[0].ToLower().Replace(" ", "-");
+    var jobId1 = jobs.JobAdIds.FirstOrDefault(); // Assuming at least one ID
+    var fullSlug1 = $"{jobTitle1}-jobs-in-{jobCompany1}-{jobId1}";
+    var newTitle = "New Jobs in " + jobs.CompanyName;
 }
 <style>
     .jobs-add-wraper {
@@ -122,7 +127,7 @@
                 @if (jobs != null)
                 {
                     <div class="col-lg-12">
-                        <h2>@jobs.JobTitles.FirstOrDefault()</h2>
+                        <a href="/jobs/@fullSlug1" style="display:block"><h2>@newTitle</h2></a>
                         <div class="jobs-add-wraper">
                             <div class="img-holder">
                                 <figure>
@@ -134,9 +139,13 @@
 
                             <div class="text-holder-jobs">
                                 <ul class="news-date">
-                                    <li><span>Job posted on</span> @jobs.Dated.ToString("yyyy-MM-dd")</li>
+                                    <li><span>Job posted on</span> @jobs.Dated.ToString("dd-MMM-yyyy")</li>
                                     <li><span>Number of vacancies</span> @jobs.JobCounts.Count()</li>
-                                    <li><span>Last date to apply</span> @jobs.LastDate.Value.ToString("yyyy-MM-dd")</li>
+                                    <li>
+                                        <span>Last date to apply</span> @(jobs.LastDate.HasValue
+                                                                            ? jobs.LastDate.Value.ToString("dd-MMM-yyyy")
+                                                                        : "N/A")
+                                    </li>
                                     <li><span>Job location</span> @jobs.JobLocation</li>
                                     <li><span>Job type</span> @jobs.JobNature</li>
                                     <li><span>Job status</span> @jobs.JobStatus</li>
@@ -145,24 +154,25 @@
                                     <li>
                                         <span>Job Announced</span>
                                         <strong>
-                                            @foreach (var vacany in jobs.JobVacancy)
+                                            @if (jobs.JobVacancy != null && jobs.JobVacancy.Any())
                                             {
-                                                <span>@vacany</span>
+                                                @foreach (var vacany in jobs.JobVacancy)
+                                                {
+                                                    <span>@vacany</span>
+                                                }
                                             }
-                                            @* <span>SST Teacher</span>
-                                            <span>HeadMaster</span>
-                                            <span>Peon</span> *@
                                         </strong>
                                     </li>
                                 </ul>
                                 <div class="bottom-cont">
                                     <p>
-                                        @jobs.MetaDesc
+                                        @jobs.JobDesc
                                     </p>
                                     <ul class="list-bullet">
-                                        <li><a href="#">Apply for this job</a></li>
-                                        <li><a href="#">Prepare for this job</a></li>
-                                        <li><a href="#">Share this job</a></li>
+                                        @* <a href="/jobs/@fullSlug">View</a> *@
+                                        <li><a href="/jobs/@fullSlug1">Apply for this job</a></li>
+                                        <li><a href="https://www.ilmkidunya.com/online-test/jobs-tests">Prepare for this job</a></li>
+                                        <li><a href="#" id="shareLink">Share this job</a></li>
                                         <li>
                                             Have a question about this job? <a href="#">
                                                 Ask in the discussion
@@ -355,4 +365,15 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("shareLink").addEventListener("click", function(e) {
+            e.preventDefault();
 
+            const target = document.querySelector(".share-box");
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    });
+</script>

@@ -589,7 +589,8 @@ namespace IKDFrontEnd.Controllers
         }
 
         [ResponseCache(NoStore = true)]
-        public async Task<IActionResult> CollegeAmissions(string collegeUrl)
+		//[HttpGet("colleges/{collegeUrl}-admission.aspx")]
+		public async Task<IActionResult> CollegeAmissions(string collegeUrl)
         {
             if (string.IsNullOrWhiteSpace(collegeUrl))
                 return NotFound("Invalid college URL.");
@@ -605,7 +606,8 @@ namespace IKDFrontEnd.Controllers
                 {
                     Id = c.Id,
                     Name = c.Name ?? "",
-                    Logo = c.Logo ?? "",
+					ShortName = c.ShortName ?? "",
+					Logo = c.Logo ?? "",
                     Address = c.Address ?? "",
                     ContactNumber = c.ContactNumber ?? ""
                 })
@@ -640,7 +642,8 @@ namespace IKDFrontEnd.Controllers
                 .GroupBy(x => x.Id)
                 .Select(g => new CourseGroupedData
                 {
-                    AdmissionDate = g.Select(x => x.Dated).FirstOrDefault(),
+					Id=g.Select(x => x.Id).FirstOrDefault(),
+					AdmissionDate = g.Select(x => x.Dated).FirstOrDefault(),
                     LastDate = g.Select(x => x.LastDate).FirstOrDefault() == new DateTime(1800, 1, 21)
                                 ? (DateTime?)null
                                 : g.Select(x => x.LastDate).FirstOrDefault(),
@@ -673,7 +676,8 @@ namespace IKDFrontEnd.Controllers
                 CollegeName = college.Name,
                 CollegeImage = college.Logo,
                 Address = college.Address,
-                ContactNumber = college.ContactNumber,
+				CollegeShortName=college.ShortName,
+				ContactNumber = college.ContactNumber,
                 Addmissions = groupedAdmissions.Select(ad => new DBCollege.TblAdmission
                 {
                     Dated = ad.AdmissionDate ?? DateTime.Now,
