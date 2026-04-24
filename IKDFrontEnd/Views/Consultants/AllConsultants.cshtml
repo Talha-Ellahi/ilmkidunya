@@ -103,7 +103,8 @@
 										}
 
 										<img src="https://cdn.ilmkidunya.com/StudyAbroad/Images/@(consultant?.Image ?? "default.png")"
-											 alt="@((consultant?.Name ?? "Consultant") + " Image")" />
+											 alt="@((consultant?.Name ?? "Consultant") + " Image")"
+											 onerror="this.onerror=null; this.src='https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg'" />
 
 										<span>@(consultant?.Name ?? "Unknown Consultant")</span>
 									</a>
