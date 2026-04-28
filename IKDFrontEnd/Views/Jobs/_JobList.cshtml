@@ -1,0 +1,20 @@
+﻿@using IKDFrontEnd.ViewModels
+@* @model List<YourNamespace.Company> *@
+@model CompanySearchViewModel
+
+<h2>List of @Model.Type Departments with Job Opportunities @Model.CityId</h2>
+<ul class="list-bullet jobs-search-links">
+@foreach (var company in Model.Companies)
+{
+    var maxLength = 50;
+    var displayName = company.CompanyName?.Length > maxLength
+        ? company.CompanyName.Substring(0, maxLength) + "...."
+        : company.CompanyName;
+
+    <li>
+        <a href="/jobs/@company.CompanyUrl">
+            @displayName (@company.TotalJobs Jobs)
+        </a>
+    </li>
+}
+</ul>

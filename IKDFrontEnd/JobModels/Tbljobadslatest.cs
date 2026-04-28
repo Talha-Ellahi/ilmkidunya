@@ -13,6 +13,8 @@ public partial class Tbljobadslatest
 
     public string? Detail { get; set; }
 
+    public string? JobDescription { get; set; }
+
     public int JobNature { get; set; }
 
     public int JobTimeStatus { get; set; }

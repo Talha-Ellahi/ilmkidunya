@@ -1,5 +1,6 @@
-﻿@model List<IKDFrontEnd.ViewModels.CompanyListItemViewModel>
-
+﻿@using IKDFrontEnd.ViewModels
+@* @model List<IKDFrontEnd.ViewModels.CompanyListItemViewModel> *@
+@model CompanySearchViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,7 +22,24 @@
     }
 }
 
+<style>
+    ul.jobs-search-links {
+                               display: flex !important;
+                               flex-wrap: wrap;
+                               gap: 0 30px;
 
+    }
+
+                        ul.jobs-search-links li {
+                               min-width: 300px;
+                               width: calc(50% - 30px);
+
+    }
+
+                        ul.list-bullet li:nth-last-child(2)::before {
+                                display: none;
+    }
+</style>
 @section header {
     <!-- Header Start -->
     <div class="col-lg-11">
@@ -41,6 +59,39 @@
                         }
                     </div>
                 </div>
+                <div class="ss-col-lg-12">
+                    <div class="banner-form" style="margin: 0 20%;">
+                        <div class="input-holder" style="width: 90%;">
+                            <div style="width: 50%; position: relative; ">
+                                <select aria-label="State" style="width: 100%; border-left: 0;" id="typeDropdown">
+                                    <option value="1">Government</option>
+                                    <option value="0">Private</option>
+                                </select>
+                            </div>
+                            <div style="width: 50%; position: relative; ">
+                                <select name="cityId" id="cityDropdown">
+                                    <option value="">-- Select City --</option>
+                                    @if (ViewBag.Cities != null)
+                                    {
+                                        @foreach (var city in ViewBag.Cities as List<IKDFrontEnd.JobModels.TblDefCity>)
+                                        {
+                                            <option value="@city.CityId">
+                                                @city.CityName
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="btn-holder">
+                            <button type="button" id="searchBtn">
+                                <img src="https://images.ishallwin.com/search-icon.webp" alt="Search">
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -50,6 +101,34 @@
 }
 <!-- Main Start -->
 <div id="main">
+    <div class="news-ad-sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12" id="jobResults">
+                    <h2>List of @Model.Type Departments with Job Opportunities</h2>
+                    <ul class="list-bullet jobs-search-links">
+                         @foreach (var company in Model.Companies)
+                        {
+                            var jobCompany = company.CompanyName?.ToLower().Replace(" ", "-");
+                            <li>
+                                <a href="/jobs/@company.CompanyUrl">
+                                    @{
+                                        var maxLength = 50; // 55
+                                        var displayName = company.CompanyName?.Length > maxLength
+                                        ? company.CompanyName.Substring(0, maxLength) + "...."
+                                        : company.CompanyName;
+                                    }
+                                    @displayName (@company.TotalJobs Jobs)
+                                </a>
+                            </li>
+                            
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="main-content">
         <div class="ss-content">
             <div class="container">
@@ -80,7 +159,7 @@
                         <div class="share-box" style="padding-top: 20px;">
                         </div>
                     </div> *@
-                    <div class="page-content pp-sec">
+                    @* <div class="page-content pp-sec">
                         <div class="flex-container job-pro">
 
                             <div class="col-lg-12">
@@ -91,7 +170,7 @@
 
 
                                     <ul class="ss-company-list jb-comp">
-                                        @foreach (var company in Model)
+                                        @foreach (var company in Model.Companies)
                                         {
                                             var jobCompany = company.CompanyName?.ToLower().Replace(" ", "-");
 
@@ -115,9 +194,70 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('searchBtn').addEventListener('click', function () {
+        debugger;
+        var cityId = $("#cityDropdown").val();
+        var cityName = $("#cityDropdown option:selected").text().trim();
+        if (!cityId) {
+            cityName = "all";
+        }
+        var typeName = $("#typeDropdown option:selected").text().trim();
+        // ✅ Add this to update URL without reloading the page
+        const newUrl = `/Jobs/Search?type=${typeName}&city=${cityName}`;
+        window.history.pushState({}, '', newUrl);
+
+        // 🔥 Fetch search results
+        fetch(newUrl, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('jobResults').innerHTML = html;
+            bindSearchLoadMore(levelUrl, cityUrl); // rebind after new content
+        })
+        .catch(error => {
+            console.error("Error loading search results:", error);
+        });
+    });
+
+
+</script>
+<script>
+    //     document.getElementById("searchBtn").addEventListener("click", function () {
+
+    //     let type = document.getElementById("cityDropdown").value;
+    //     let cityId = document.querySelector("select[name='cityId']").value;
+
+    //     fetch(`/Jobs/SearchCompany?type=${type}&cityId=${cityId}`)
+    //         .then(r => r.text())
+    //         .then(html => {
+    //             document.getElementById("jobResults").innerHTML = html;
+    //         });
+
+    // });
+    // $("#searchBtn").click(function () {
+    //     alert("ok")
+    //     var type = $("#cityDropdown").val(); // Government / Private
+    //     var cityId = $("select[name='cityId']").val();
+
+    //     $.ajax({
+    //         url: '/Jobs/SearchCompany',   // your controller action
+    //         type: 'GET',
+    //         data: { type: type, cityId: cityId },
+    //         success: function (response) {
+    //             $("#jobResults").html(response);
+    //         },
+    //         error: function () {
+    //             alert("Something went wrong");
+    //         }
+    //     });
+
+    // });
+</script>

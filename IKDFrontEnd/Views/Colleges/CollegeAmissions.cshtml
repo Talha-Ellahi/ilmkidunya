@@ -147,7 +147,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Admissions in @Model.CollegeShortName</h2>
+                    <h2>Admissions in @Model.CollegeName</h2>
                 </div>
 
                 <div class="col-lg-12">
@@ -212,7 +212,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>@Model.CollegeShortName Admission Details</h2>
+                    <h2> Latest Admissions in @Model.CollegeShortName</h2>
                     <div class="responsive-table" style="margin-bottom: 30px;">
                         <table class="table mid">
                             <thead>
@@ -234,7 +234,7 @@
                                             <ul>
                                                 @foreach (var course in group.Courses)
                                                 {
-                                                    <li><a href="#" aria-label="link">@course.Name</a></li>
+                                                    <li>@course.Name</li>
                                                 }
                                             </ul>
                                         </td>
@@ -244,9 +244,27 @@
                                             {
                                                 foreach (var logo in group.AddmissionLogoList)
                                                 {
+                                                    var name = Model.CollegeName;
+                                                    var id = group.Id;
+                                                    string ToSlug(string value)
+                                                    {
+                                                        if (string.IsNullOrWhiteSpace(value)) return "";
+
+                                                        value = value.Trim().ToLower();
+                                                        value = System.Text.RegularExpressions.Regex.Replace(value, @"\s+", "-");
+                                                        value = System.Text.RegularExpressions.Regex.Replace(value, @"[^a-z0-9\-]", "");
+                                                        value = System.Text.RegularExpressions.Regex.Replace(value, @"-+", "-");
+
+                                                        return value;
+                                                    }
+                                                    var slug = ToSlug(name);
+                                                    var imageLink = $"/admissions/Admission-Open-in-{slug}-{id}.aspx";
+
+                                                    <a href="@imageLink">
                                                     <img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@logo"
                                                          alt="Admission Image"
                                                          style="max-height:80px; max-width:80px;" />
+                                                    </a>
                                                 }
                                             }
                                             else

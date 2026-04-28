@@ -232,11 +232,19 @@
                                 <li>
                                     <a href="/scholarships/scholarships-in-@(country?.Url ?? "unknown").aspx">
                                         <img alt="@country?.Name"
-                                             src="https://ishallwin.com/images/Flags/Thumb/@(country?.ImageName ?? "no-flag.png")"
+                                             src="https://cdn.ilmkidunya.com/images/studyflags/@(country?.NewImageUrl ?? "no-pictures.png")"
                                              style="width: 50px; height: auto;">
                                         <span>@(country?.Name ?? "Unknown Country")</span>
                                     </a>
                                 </li>
+                               @*  <li>
+                                    <a href="/scholarships/scholarships-in-@(country?.Url ?? "unknown").aspx">
+                                        <img alt="@country?.Name"
+                                             src="https://ishallwin.com/images/Flags/Thumb/@(country?.ImageName ?? "no-flag.png")"
+                                             style="width: 50px; height: auto;">
+                                        <span>@(country?.Name ?? "Unknown Country")</span>
+                                    </a>
+                                </li> *@
                             }
                         }
                         else

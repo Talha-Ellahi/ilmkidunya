@@ -61,6 +61,7 @@
 		public string? JobLocation { get; set; }
 		public string? JobImageURL { get; set; }
 		public string? MetaDesc { get; set; }
+		public string? JobDesc { get; set; }
 		public List<string> JobTitles { get; set; } = new();
 		public List<string> JobVacancy { get; set; } = new();
 		public List<int> JobCounts { get; set; } = new();
@@ -91,6 +92,11 @@
 		public string? Experience { get; set; }
 		public string? JobCity { get; set; }
 		public string? JobType { get; set; }
+
+		public string? Province { get; set; }
+		public string? PostalCode { get; set; }
+		public decimal? MinSalary { get; set; }
+		public decimal? MaxSalary { get; set; }
 		public DateTime? LastDate { get; set; }
 		public string? CompanyName { get; set; }
 		public DateTime? Dated { get; set; }
@@ -146,8 +152,15 @@
 
         public string CompanyName { get; set; }
         public string? CompanyUrl { get; internal set; }
-    }
+		public int? TotalJobs { get; set; }
 
+	}
+	public class CompanySearchViewModel
+	{
+		public List<CompanyListItemViewModel> Companies { get; set; }
+		public string Type { get; set; }
+		public string? CityId { get; set; }
+	}
 	public class IndustryViewModel
 
 	{

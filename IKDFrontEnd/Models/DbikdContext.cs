@@ -431,7 +431,7 @@ public partial class DbikdContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=66.23.236.70;Database=dbed;User Id=userdbed;Password=sHEzRtoc3!jv@37j;TrustServerCertificate=True;MultipleActiveResultSets=true;Connection Timeout=30;");
+        => optionsBuilder.UseSqlServer("Server=66.23.236.70;Initial Catalog=dbed;User Id=userdbed;Password=sHEzRtoc3!jv@37j;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -2585,6 +2585,7 @@ public partial class DbikdContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("country_name");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.NewImageUrl).HasMaxLength(100);
             entity.Property(e => e.Url).HasColumnName("url");
         });
 
@@ -3618,6 +3619,7 @@ public partial class DbikdContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Ikdurl).HasColumnName("IKDUrl");
+            entity.Property(e => e.NewImageUrl).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblPpboardClass>(entity =>
