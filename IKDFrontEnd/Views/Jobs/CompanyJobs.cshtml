@@ -38,7 +38,12 @@
         }
 
             .text-holder-jobs ul.news-date li span {
-                width: 25%
+                min-width: 200px
+            }
+
+            .text-holder-jobs ul.news-date li p{
+                margin:0;
+                word-wrap: break-word;
             }
 
             .text-holder-jobs ul.news-date li strong span {
@@ -65,8 +70,14 @@
     }
 
     .text-holder-jobs ul.news-date li span {
-        width: 50%;
+        min-width: 40%;
+        width: 40%;
     }
+
+        .text-holder-jobs ul.news-date li p {
+            max-width: calc(60% - 20px);
+            word-wrap: break-word;
+        }
 
     }
 </style>
@@ -139,16 +150,20 @@
 
                             <div class="text-holder-jobs">
                                 <ul class="news-date">
-                                    <li><span>Job posted on</span> @jobs.Dated.ToString("dd-MMM-yyyy")</li>
-                                    <li><span>Number of vacancies</span> @jobs.JobCounts.Count()</li>
+                                    <li><span>Job posted on</span> <p>@jobs.Dated.ToString("dd-MMM-yyyy")</p></li>
+                                    <li><span>Number of vacancies</span> <p>@jobs.JobCounts.Count()</p></li>
                                     <li>
-                                        <span>Last date to apply</span> @(jobs.LastDate.HasValue
-                                                                            ? jobs.LastDate.Value.ToString("dd-MMM-yyyy")
-                                                                        : "N/A")
+                                        <span>Last date to apply</span> 
+                                        <p>
+                                            @(jobs.LastDate.HasValue  ? jobs.LastDate.Value.ToString("dd-MMM-yyyy")
+                                                                                    : "N/A")
+                                        </p>
                                     </li>
-                                    <li><span>Job location</span> @jobs.JobLocation</li>
-                                    <li><span>Job type</span> @jobs.JobNature</li>
-                                    <li><span>Job status</span> @jobs.JobStatus</li>
+                                    <li><span>Job location</span><p>
+                                        @jobs.JobLocation
+                                    </p></li>
+                                <li><span>Job type</span><p> @jobs.JobNature</p></li>
+                                <li><span>Job status</span><p> @jobs.JobStatus</p></li>
                                 </ul>
                                 <ul class="news-date">
                                     <li>

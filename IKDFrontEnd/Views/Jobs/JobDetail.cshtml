@@ -37,11 +37,24 @@
                 "@@type": "Place",
                 "address": {
                   "@@type": "PostalAddress",
-                  "addressLocality": "@Model.JobCity",
+                   "streetAddress": "10-C PIA Society Civic Center, PIA Main Boulevard",
+                   "addressLocality": "@Model.JobCity",
+                   "addressRegion": "@Model.Province",
+                   "postalCode": "@Model.PostalCode",
                   "addressCountry": "PK"
                 }
+              },
+              "baseSalary": {
+                  "@@type": "MonetaryAmount",
+                  "currency": "PKR",
+                  "value": {
+                    "@@type": "QuantitativeValue",
+                    "minValue": @Model.MinSalary,
+                    "maxValue": @Model.MaxSalary,
+                    "unitText": "MONTH"
+                  }
               }
-            }
+        }
         </script>
     }
 }

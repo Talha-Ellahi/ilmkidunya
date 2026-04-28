@@ -22,4 +22,6 @@ public partial class TblPlaceOfStudy
     public string? ImageName { get; set; }
 
     public string? Ikdurl { get; set; }
+
+    public string? NewImageUrl { get; set; }
 }

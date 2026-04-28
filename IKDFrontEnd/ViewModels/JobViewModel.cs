@@ -92,6 +92,11 @@
 		public string? Experience { get; set; }
 		public string? JobCity { get; set; }
 		public string? JobType { get; set; }
+
+		public string? Province { get; set; }
+		public string? PostalCode { get; set; }
+		public decimal? MinSalary { get; set; }
+		public decimal? MaxSalary { get; set; }
 		public DateTime? LastDate { get; set; }
 		public string? CompanyName { get; set; }
 		public DateTime? Dated { get; set; }

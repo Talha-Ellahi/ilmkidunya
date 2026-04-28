@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IKDFrontEnd.Models;
@@ -33,25 +32,12 @@ public partial class TblDefComment
 
     public string? PageUrlNoSlash { get; set; }
 
-    // Navigation properties for likes (FIXED)
-    [InverseProperty("Comment")]
     public virtual ICollection<TblDefCommentLike> TblDefCommentLikes { get; set; } = new List<TblDefCommentLike>();
 
-    // Navigation to user
-    [ForeignKey("UserId")]
-    public virtual TblDefMemberInfoikd? User { get; set; }
+	public virtual ICollection<TblDefComment> Replies { get; set; } = new List<TblDefComment>();
+	[NotMapped]
+	public int LikeCount { get; set; }
 
-    // Navigation to parent comment (FIXED)
-    [ForeignKey("ParentCommentId")]
-    [InverseProperty("Replies")]
-    public virtual TblDefComment? ParentComment { get; set; }
-
-    // Navigation to replies (FIXED - this is the inverse property)
-    [InverseProperty("ParentComment")]
-    public virtual ICollection<TblDefComment> Replies { get; set; } = new List<TblDefComment>();
-    [NotMapped]
-    public int LikeCount { get; set; }
-
-    [NotMapped]
-    public bool HasLiked { get; set; }
+	[NotMapped]
+	public bool HasLiked { get; set; }
 }

@@ -486,9 +486,29 @@ namespace IKDFrontEnd.Controllers
             var city = await _context.TblDefCities
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.CityId == cityId);
+            var province = "";
+            if (city?.ProvinceId == 1)
+            {
+                province = "Punjab";
 
-            // === Same Company Jobs on Same Date ===
-            var sameCompanyJobs = await _context.Tbljobadslatests
+			}
+			if (city?.ProvinceId == 2)
+			{
+				province = "Khyber Pakhtunkhwa";
+
+			}
+			if (city?.ProvinceId == 3)
+			{
+				province = "Sindh";
+
+			}
+			if (city?.ProvinceId == 4)
+			{
+				province = "Balochistan";
+
+			}
+			// === Same Company Jobs on Same Date ===
+			var sameCompanyJobs = await _context.Tbljobadslatests
                 .AsNoTracking()
                 .Where(j => j.CompanyId == companyId && j.Dated == dated)
                 .ToListAsync();
@@ -582,7 +602,13 @@ namespace IKDFrontEnd.Controllers
 				JobCity=mainJob.JobAdsCities,
 				JobType=jobType,
 				Dated = dated,
-                ImageName = !string.IsNullOrEmpty(mainJob?.ImageName)
+				Province= province,
+				PostalCode= city.PostalCode,
+				//MinSalary= mainJob.MinSalary ?? 0,
+				//MaxSalary= mainJob.MaxSalary ?? 0,
+				MinSalary = mainJob.MinSalary.HasValue ? mainJob.MinSalary.Value : 0,
+				MaxSalary = mainJob.MaxSalary.HasValue ? mainJob.MaxSalary.Value : 0,
+				ImageName = !string.IsNullOrEmpty(mainJob?.ImageName)
                     ? $"https://jobs.ilmkidunya.com/jobs/Images/{year}/{month}/Large/" + mainJob.ImageName
                     : (!string.IsNullOrEmpty(mainJobAd?.ImageName) ? $"https://jobs.ilmkidunya.com/jobs/Images/{year}/{month}/Large/" + mainJobAd.ImageName : null),
                 JobPositions = positions,

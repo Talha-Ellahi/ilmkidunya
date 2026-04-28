@@ -14,4 +14,6 @@ public partial class TblDefCountry
     public string? ImageUrl { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public string? NewImageUrl { get; set; }
 }
