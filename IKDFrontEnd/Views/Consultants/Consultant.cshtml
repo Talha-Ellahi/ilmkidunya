@@ -8,7 +8,7 @@
 		var metaTitle = Model?.MetaData?.MetaTitle ?? "Default Title";
 		var metaDesc = Model?.MetaData?.MetaDesc ?? "Default description for this page.";
 		var metaKeyword = Model?.MetaData?.MetaKeyword ?? "default, keywords, here";
-		
+
 	}
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -159,61 +159,76 @@
 			</div>
 		</div>
 	</div>
-	<div class="content-sec" style="padding:0 0 20px;">
+
+	<!-- Updated Consultant List Section with Table Layout -->
+	<div class="content-sec" style="padding: 30px 0 20px;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="std-consultant">
+
 						<div class="consultant-numb-row">
 							<div class="cnsltant-numbers">
-								<span class="cn-numbs">319</span>
+								<span class="cn-numbs">@(Model?.Consultants?.Count ?? 0)</span>
 								Consultants in Pakistan
 							</div>
 							<div class="cnsltant-btn-bx cnsltant-numbers">
 								<a href="#" class="bcme-tp-consultant-btn">Register as Consultant</a>
 							</div>
 						</div>
-						<div class="tp-consultant-list-wrapper">
-							
 
-
-							<div class="tp-consultant-list">
-								@if (Model?.Consultants != null && Model.Consultants.Any())
-								{
-									foreach (var consultant in Model.Consultants)
+						<!-- Updated Table Layout -->
+						<div class="responsive-table consultant-table">
+							<table class="table mid">
+								<thead>
+									<tr>
+										<th>Consultant Name</th>
+										<th>Address</th>
+										<th>Phone</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									@if (Model?.Consultants != null && Model.Consultants.Any())
 									{
-										var url = consultant.Url ?? string.Empty;
-
-										// Check if last character is digit (id already present)
-										bool hasIdAtEnd = !string.IsNullOrEmpty(url) && char.IsDigit(url.Last());
-
-										if (!hasIdAtEnd)
+										foreach (var consultant in Model.Consultants)
 										{
-											url += consultant.Id; // Add Id if not present
+											var url = consultant.Url ?? string.Empty;
+											bool hasIdAtEnd = !string.IsNullOrEmpty(url) && char.IsDigit(url.Last());
+											if (!hasIdAtEnd)
+											{
+												url += consultant.Id;
+											}
+											<tr>
+												<td>
+													<a href="/consultants/@(url).aspx" target="_blank">
+														<span>
+															<img src="@(string.IsNullOrEmpty(consultant.Image) ? "https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg" : consultant.Image)"
+																 alt="consultant-logo"
+																 style="width: 30px; height: 30px; margin-right: 10px;"
+																 onerror="this.onerror=null; this.src='https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg'">
+															@consultant.Name
+														</span>
+													</a>
+												</td>
+												<td><span>@consultant.Address</span></td>
+												<td><span>@consultant.Phone</span></td>
+												<td class="consultant-lable">
+													@if (consultant.PremiumMember == true)
+													{
+														<img src="https://cdn.ilmkidunya.com//files/customfiles/2026/04/premium-logo.png" alt="premium" width="80px">
+													}
+												</td>
+											</tr>
 										}
-
-<a href="/consultants/@(url).aspx" class="consultan-icon-bx box-cnslt1">
-    @if (consultant.PremiumMember == true)
-    {
-        <img class="premium-consltn"
-             src="https://ikddata.ilmkidunya.com/images/img-consultant-premimum.png" />
-    }
-
-    <img src="@(string.IsNullOrEmpty(consultant.Image) ? "https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg" : consultant.Image)" 
-         alt=""
-         onerror="this.onerror=null; this.src='https://cdn.ilmkidunya.com/StudyAbroad/Images/default.jpg'" />
-    <span>@consultant.Name</span>
-</a>
 									}
-								}
-								else
-								{
-									<p>No consultants found.</p>
-								}
-							</div>
-
-
-
+									else
+									{
+										<tr>
+											<td colspan="4" style="text-align: center;">No consultants found.</td>
+										</tr>
+									}
+								</tbody>
+							</table>
 						</div>
 
 						<div class="cnslt-view-all-btn">
@@ -223,17 +238,11 @@
 								View All Consultants
 							</a>
 						</div>
-					</div>
-
 
 				</div>
-
 			</div>
 		</div>
 	</div>
-
-
-
 </div>
 
 
@@ -249,5 +258,3 @@
 		}
 	});
 </script>
-
-

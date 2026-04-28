@@ -22,8 +22,6 @@ namespace IKDFrontEnd.Controllers
 
         [Route("/consultants/")]
         public async Task<IActionResult> Consultant()
-
-
         {
             var sectionData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/consultants");
 
@@ -51,13 +49,14 @@ namespace IKDFrontEnd.Controllers
                         {
                             Name = c.CompanyName,
                             Url = c.RewriteUrl,
-                            Image = "https://cdn.ilmkidunya.com/StudyAbroad/Images/" + c.Logo, // concatenate
+                            Image = "https://cdn.ilmkidunya.com/StudyAbroad/Images/" + c.Logo,
                             PremiumMember = c.PremiumMember,
+                            Phone = c.Phone,
+                            Address = c.MaillingAddress,
                             Id = c.CompanyId
                         })
                         .Take(12)
                         .ToListAsync();
-
 
             if (premiumConsultants.Count < 12)
             {
@@ -69,8 +68,10 @@ namespace IKDFrontEnd.Controllers
                     {
                         Name = c.CompanyName,
                         Url = c.RewriteUrl,
-                        Image = c.Logo,
+                        Image = "https://cdn.ilmkidunya.com/StudyAbroad/Images/" + c.Logo, // Fixed
                         PremiumMember = c.PremiumMember,
+                        Phone = c.Phone,        // Added
+                        Address = c.MaillingAddress, // Added
                         Id = c.CompanyId,
                     })
                     .Take(remainingCount)
@@ -81,19 +82,22 @@ namespace IKDFrontEnd.Controllers
 
             var allConsultants = premiumConsultants;
 
-
             var viewModel = new ConsultantHomeViewModel
             {
                 Consultants = allConsultants,
                 MetaData = guideDetail
             };
+
             var cities = await _context.TblDefCities.ToListAsync();
             ViewBag.CityList = cities;
 
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
+
             return View(viewModel);
         }
+
+
         [HttpGet("consultants/{detailSlug}")]
         [HttpGet("consultants/education-consultants-in-{detailSlug}.aspx")]
         public async Task<IActionResult> ConsultantsInCity(string detailSlug)

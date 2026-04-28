@@ -378,19 +378,19 @@ namespace IKDFrontEnd.Controllers
             string publicUrl = _ftpService.GetPublicUrl(remoteFilePath); // not used for redirect, but for logging
 
             // Check if file exists on FTP
-            bool fileExists = await _ftpService.FileExistsAsync(remoteFilePath);
-            if (fileExists)
-            {
-                try
-                {
-                    string existingHtml = await _ftpService.DownloadFileAsync(remoteFilePath);
-                    return Content(existingHtml, "text/html");
-                }
-                catch (Exception ex)
-                {
-                    // Log and fall through to regeneration
-                }
-            }
+            //bool fileExists = await _ftpService.FileExistsAsync(remoteFilePath);
+            //if (fileExists)
+            //{
+            //    try
+            //    {
+            //        string existingHtml = await _ftpService.DownloadFileAsync(remoteFilePath);
+            //        return Content(existingHtml, "text/html");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // Log and fall through to regeneration
+            //    }
+            //}
 
             // --- Existing logic to build the view model ---
             ViewBag.HideHeaderLowerBanner = true;
@@ -1034,7 +1034,7 @@ namespace IKDFrontEnd.Controllers
     <div class=""container"">
         <div class=""row"">
             <div class=""col-lg-12"">
-                <h2>Universities in {city.Replace("-", " ").ToUpper()} offering {(guide != null ? guide.Abrevation : course)}</h2>
+                <h2>Universities/Colleges in {city.Replace("-", " ").ToUpper()} offering {(guide != null ? guide.Abrevation : course)}</h2>
                 
                 <!-- Desktop View -->
                 <div class=""responsive-table desktop-view"" style=""margin-bottom:30px;"">
@@ -1294,13 +1294,23 @@ namespace IKDFrontEnd.Controllers
 
         public List<CollegeWithCourseViewModel> GetCollegesWithCourses(string course, int page = 1, int pageSize = 10, string? city = null)
         {
+            // First check if this is an educational level using the mapping helper
+            var (levelId, levelName) = GetLevelFromUrl(course);
+
+            if (levelId.HasValue)
+            {
+                // This is an educational level (like 11th-class maps to Intermediate, 9th-class maps to Matric, etc.)
+                return GetCollegesByLevel(levelId.Value, page, pageSize, city);
+            }
+
+            // Otherwise, treat as regular course (like bs-chemistry, ba, etc.)
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                     .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                     .FirstOrDefault() ?? course;
 
             course = course.ToLower().Replace("-", " ");
 
-           DBCollege.TblDefCity City = new DBCollege.TblDefCity();
+            DBCollege.TblDefCity City = new DBCollege.TblDefCity();
             if (!string.IsNullOrEmpty(city))
             {
                 City = _context.TblDefCities
@@ -1314,7 +1324,7 @@ namespace IKDFrontEnd.Controllers
             {
                 query = (from c in _context.TblColleges
                          join cs in _context.Courses on c.Id equals cs.CollegeId
-                         where cs.Name.ToLower().Contains(course) && c.CityId == City.CityId
+                         where cs.Name.ToLower().Contains(course) && c.CityId == City.CityId && c.IsActive == true
                          group new { c, cs } by c.Id into g
                          select new CollegeWithCourseViewModel
                          {
@@ -1323,7 +1333,6 @@ namespace IKDFrontEnd.Controllers
                              CollegeUrl = g.First().c.Url,
                              CollegeAddress = g.First().c.Address,
                              CollegeLogo = g.First().c.Logo,
-
                              CourseId = g.First().cs.Id,
                              CourseName = g.First().cs.Name,
                              Duration = g.First().cs.Duration,
@@ -1338,7 +1347,7 @@ namespace IKDFrontEnd.Controllers
             {
                 query = (from c in _context.TblColleges
                          join cs in _context.Courses on c.Id equals cs.CollegeId
-                         where cs.Name.ToLower().Contains(course)
+                         where cs.Name.ToLower().Contains(course) && c.IsActive == true
                          group new { c, cs } by c.Id into g
                          select new CollegeWithCourseViewModel
                          {
@@ -1347,7 +1356,6 @@ namespace IKDFrontEnd.Controllers
                              CollegeUrl = g.First().c.Url,
                              CollegeAddress = g.First().c.Address,
                              CollegeLogo = g.First().c.Logo,
-
                              CourseId = g.First().cs.Id,
                              CourseName = g.First().cs.Name,
                              Duration = g.First().cs.Duration,
@@ -1362,15 +1370,78 @@ namespace IKDFrontEnd.Controllers
             return query;
         }
 
+        // New method to get colleges by educational level
+        private List<CollegeWithCourseViewModel> GetCollegesByLevel(int levelId, int page = 1, int pageSize = 10, string? city = null)
+        {
+            // Get all college IDs that offer courses at this level
+            var collegeIdsWithLevel = _context.Courses
+                .Where(c => c.EducationLevelId == levelId && c.IsActive == true)
+                .Select(c => c.CollegeId)
+                .Distinct()
+                .ToList();
+
+            var query = _context.TblColleges
+                .Where(c => collegeIdsWithLevel.Contains(c.Id) && c.IsActive == true);
+
+            // Filter by city if specified
+            if (!string.IsNullOrEmpty(city))
+            {
+                var cityEntity = _context.TblDefCities
+                    .Where(c => c.CityName.ToLower() == city.ToLower())
+                    .FirstOrDefault();
+
+                if (cityEntity != null)
+                {
+                    query = query.Where(c => c.CityId == cityEntity.CityId);
+                }
+            }
+
+            // Get courses for these colleges at this level
+            var pagedColleges = query
+                .OrderBy(c => c.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var pagedCollegeIds = pagedColleges.Select(c => c.Id).ToList();
+
+            var courses = _context.Courses
+                .Where(c => pagedCollegeIds.Contains(c.CollegeId ?? 0) && c.EducationLevelId == levelId && c.IsActive == true)
+                .ToList();
+
+            var result = pagedColleges.Select(college => new CollegeWithCourseViewModel
+            {
+                CollegeId = (int)college.Id,
+                CollegeName = college.Name,
+                CollegeUrl = college.Url,
+                CollegeAddress = college.Address,
+                CollegeLogo = college.Logo,
+                CourseId = courses.FirstOrDefault(c => c.CollegeId == college.Id)?.Id ?? 0,
+                CourseName = courses.FirstOrDefault(c => c.CollegeId == college.Id)?.Name ?? "Multiple Programs",
+                Duration = courses.FirstOrDefault(c => c.CollegeId == college.Id)?.Duration,
+                Fee = courses.FirstOrDefault(c => c.CollegeId == college.Id)?.Fee
+            }).ToList();
+
+            return result;
+        }
         public List<ViewModels.AllGuidesViewModel.MeritListViewModel> GetMeritLists(string course, int page = 1, int pageSize = 10)
         {
+            // Check if this is an educational level
+            var (levelId, levelName) = GetLevelFromUrl(course);
+
+            if (levelId.HasValue)
+            {
+                return GetMeritListsByLevel(levelId.Value, page, pageSize);
+            }
+
+            // Original logic for regular courses
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                     .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                     .FirstOrDefault() ?? course;
             course = course.ToLower().Replace("-", " ");
 
             var courses = _context.Courses
-                .Where(c => c.Name.ToLower().Contains(course))
+                .Where(c => c.Name.ToLower().Contains(course) && c.IsActive == true)
                 .AsNoTracking()
                 .ToList();
 
@@ -1383,7 +1454,47 @@ namespace IKDFrontEnd.Controllers
                                          join c in _context.TblColleges
                                              on m.CollegeId equals c.Id
                                          join co in _context.Courses on m.CourseId equals co.Id
-                                         where courseIds.Contains((int)m.CourseId)
+                                         where courseIds.Contains((int)m.CourseId) && c.IsActive == true
+                                         orderby m.AddedDate descending
+                                         select new ViewModels.AllGuidesViewModel.MeritListViewModel
+                                         {
+                                             MeritAddedDate = m.DateOfIssue,
+                                             MeritListId = m.Id,
+                                             MeritListName = m.MeritListName,
+                                             MeritValue = m.MeritValue,
+                                             MeritFileName = m.FileName,
+                                             Year = m.Year,
+                                             CourseName = co.Name,
+                                             CollegeId = c.Id,
+                                             CollegeName = c.Name,
+                                             CollegeUrl = c.Url,
+                                             CollegeLogo = c.Logo,
+                                             CollegeAddress = c.Address
+                                         })
+                                         .Skip((page - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToList();
+
+            return meritListWithColleges;
+        }
+
+        private List<ViewModels.AllGuidesViewModel.MeritListViewModel> GetMeritListsByLevel(int levelId, int page = 1, int pageSize = 10)
+        {
+            // Get all course IDs for this level
+            var courseIds = _context.Courses
+                .Where(c => c.EducationLevelId == levelId && c.IsActive == true)
+                .Select(c => c.Id)
+                .Distinct()
+                .ToList();
+
+            if (!courseIds.Any())
+                return new List<ViewModels.AllGuidesViewModel.MeritListViewModel>();
+
+            var meritListWithColleges = (from m in _context.TblMeritLists
+                                         join c in _context.TblColleges
+                                             on m.CollegeId equals c.Id
+                                         join co in _context.Courses on m.CourseId equals co.Id
+                                         where courseIds.Contains((int)m.CourseId) && c.IsActive == true
                                          orderby m.AddedDate descending
                                          select new ViewModels.AllGuidesViewModel.MeritListViewModel
                                          {
@@ -1409,6 +1520,15 @@ namespace IKDFrontEnd.Controllers
 
         public List<CollegeCourseFeeViewModel> GetCollegesWithCourseFees(string course, int page = 1, int pageSize = 10)
         {
+            // Check if this is an educational level
+            var (levelId, levelName) = GetLevelFromUrl(course);
+
+            if (levelId.HasValue)
+            {
+                return GetCollegeFeesByLevel(levelId.Value, page, pageSize);
+            }
+
+            // Original logic for regular courses
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                   .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                   .FirstOrDefault() ?? course;
@@ -1416,7 +1536,7 @@ namespace IKDFrontEnd.Controllers
             course = course.ToLower().Replace("-", " ");
 
             var courses = _context.Courses
-                .Where(c => c.Name.ToLower().Contains(course))
+                .Where(c => c.Name.ToLower().Contains(course) && c.IsActive == true)
                 .ToList();
 
             if (!courses.Any())
@@ -1424,7 +1544,7 @@ namespace IKDFrontEnd.Controllers
 
             var query = (from c in _context.TblColleges
                          join cs in _context.Courses on c.Id equals cs.CollegeId
-                         where courses.Select(x => x.Id).Contains(cs.Id) && cs.Fee != null
+                         where courses.Select(x => x.Id).Contains(cs.Id) && cs.Fee != null && c.IsActive == true
                          select new CollegeCourseFeeViewModel
                          {
                              CollegeId = (int)c.Id,
@@ -1432,7 +1552,6 @@ namespace IKDFrontEnd.Controllers
                              CollegeUrl = c.Url,
                              CollegeLogo = c.Logo,
                              CollegeAddress = c.Address,
-
                              CourseId = cs.Id,
                              CourseName = cs.Name,
                              Duration = cs.Duration,
@@ -1446,15 +1565,49 @@ namespace IKDFrontEnd.Controllers
             return query;
         }
 
+        private List<CollegeCourseFeeViewModel> GetCollegeFeesByLevel(int levelId, int page = 1, int pageSize = 10)
+        {
+            var coursesWithFees = (from c in _context.TblColleges
+                                   join cs in _context.Courses on c.Id equals cs.CollegeId
+                                   where cs.EducationLevelId == levelId && cs.IsActive == true && cs.Fee != null && c.IsActive == true
+                                   select new CollegeCourseFeeViewModel
+                                   {
+                                       CollegeId = (int)c.Id,
+                                       CollegeName = c.Name,
+                                       CollegeUrl = c.Url,
+                                       CollegeLogo = c.Logo,
+                                       CollegeAddress = c.Address,
+                                       CourseId = cs.Id,
+                                       CourseName = cs.Name,
+                                       Duration = cs.Duration,
+                                       Fee = cs.Fee
+                                   })
+                                  .OrderByDescending(x => x.CourseId)
+                                  .Skip((page - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToList();
+
+            return coursesWithFees;
+        }
+
         public List<AdmissionWithCollegeViewModel> GetAdmissions(string course, int page = 1, int pageSize = 10, string? city = null)
         {
+            // Check if this is an educational level
+            var (levelId, levelName) = GetLevelFromUrl(course);
+
+            if (levelId.HasValue)
+            {
+                return GetAdmissionsByLevel(levelId.Value, page, pageSize, city);
+            }
+
+            // Original logic for regular courses
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                   .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                   .FirstOrDefault() ?? course;
             course = course.ToLower().Replace("-", " ");
 
             var courses = _context.Courses
-                .Where(c => c.Name.ToLower().Contains(course))
+                .Where(c => c.Name.ToLower().Contains(course) && c.IsActive == true)
                 .Select(c => c.Id)
                 .ToList();
 
@@ -1467,17 +1620,16 @@ namespace IKDFrontEnd.Controllers
                 City = _context.TblDefCities
                     .Where(c => c.CityName.ToLower() == city.ToLower().Replace("-", " "))
                     .FirstOrDefault();
-
             }
 
             var query = new List<AdmissionWithCollegeViewModel>();
-            if (City.CityId != 0)
+            if (City != null && City.CityId != 0)
             {
                 query = (from ac in _context.TblAdmissionCourses
                          join a in _context.TblAdmissions on ac.NoticeId equals a.Id
                          join col in _context.TblColleges on a.CollegeId equals col.Id
                          join c in _context.Courses on ac.CourseId equals c.Id
-                         where courses.Contains((int)ac.CourseId) && (col.CityId == City.CityId)
+                         where courses.Contains((int)ac.CourseId) && (col.CityId == City.CityId) && col.IsActive == true
                          select new AdmissionWithCollegeViewModel
                          {
                              AdmissionId = a.Id,
@@ -1495,7 +1647,7 @@ namespace IKDFrontEnd.Controllers
                              CollegeLogo = col.Logo,
                              CollegeAddress = col.Address,
                              CityId = col.CityId,
-                             CityName = City != null ? City.CityName : ""
+                             CityName = City.CityName
                          })
                        .AsEnumerable()
                        .DistinctBy(a => a.AdmissionId)
@@ -1512,7 +1664,7 @@ namespace IKDFrontEnd.Controllers
                          join a in _context.TblAdmissions on ac.NoticeId equals a.Id
                          join col in _context.TblColleges on a.CollegeId equals col.Id
                          join c in _context.Courses on ac.CourseId equals c.Id
-                         where courses.Contains((int)ac.CourseId)
+                         where courses.Contains((int)ac.CourseId) && col.IsActive == true
                          select new AdmissionWithCollegeViewModel
                          {
                              AdmissionId = a.Id,
@@ -1530,7 +1682,6 @@ namespace IKDFrontEnd.Controllers
                              CollegeLogo = col.Logo,
                              CollegeAddress = col.Address,
                              CityId = col.CityId,
-                             CityName = City != null ? City.CityName : ""
                          })
                          .AsEnumerable()
                          .DistinctBy(a => a.AdmissionId)
@@ -1542,9 +1693,6 @@ namespace IKDFrontEnd.Controllers
                          .ToList();
             }
 
-
-
-
             foreach (var admission in query)
             {
                 admission.NoticeImageThumb = GetAdmissionLogoPath(admission.NoticeImageThumb, admission.Dated);
@@ -1553,10 +1701,112 @@ namespace IKDFrontEnd.Controllers
             return query;
         }
 
+        private List<AdmissionWithCollegeViewModel> GetAdmissionsByLevel(int levelId, int page = 1, int pageSize = 10, string? city = null)
+        {
+            // Get all course IDs for this level
+            var courseIds = _context.Courses
+                .Where(c => c.EducationLevelId == levelId && c.IsActive == true)
+                .Select(c => c.Id)
+                .ToList();
+
+            if (!courseIds.Any())
+                return new List<AdmissionWithCollegeViewModel>();
+
+            DBCollege.TblDefCity City = null;
+            if (!string.IsNullOrEmpty(city))
+            {
+                City = _context.TblDefCities
+                    .Where(c => c.CityName.ToLower() == city.ToLower().Replace("-", " "))
+                    .FirstOrDefault();
+            }
+
+            var query = (from ac in _context.TblAdmissionCourses
+                         join a in _context.TblAdmissions on ac.NoticeId equals a.Id
+                         join col in _context.TblColleges on a.CollegeId equals col.Id
+                         join c in _context.Courses on ac.CourseId equals c.Id
+                         where courseIds.Contains((int)ac.CourseId) && col.IsActive == true
+                         select new AdmissionWithCollegeViewModel
+                         {
+                             AdmissionId = a.Id,
+                             AdmissionTitle = a.AdmissionTitle,
+                             Dated = a.Dated,
+                             courseId = ac.CourseId,
+                             LastDate = a.LastDate,
+                             NoticeImageThumb = a.NoticeImageThumb,
+                             NoticeImageLarge = a.NoticeImageLarge,
+                             Url = a.Url,
+                             CourseName = c.Name,
+                             CollegeId = col.Id,
+                             CollegeName = col.Name,
+                             CollegeUrl = col.Url,
+                             CollegeLogo = col.Logo,
+                             CollegeAddress = col.Address,
+                             CityId = col.CityId,
+                         });
+
+            if (City != null && City.CityId != 0)
+            {
+                query = query.Where(x => x.CityId == City.CityId);
+            }
+
+            var result = query.AsEnumerable()
+                .DistinctBy(a => a.AdmissionId)
+                .GroupBy(x => new { x.CollegeId, x.courseId })
+                .Select(g => g.OrderByDescending(x => x.Dated).First())
+                .OrderByDescending(x => x.Dated)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var admission in result)
+            {
+                admission.NoticeImageThumb = GetAdmissionLogoPath(admission.NoticeImageThumb, admission.Dated);
+            }
+
+            return result;
+        }
 
         public List<CitywithAdmissionAndCollegeCountViewModel> GetCitiesWithAdmissions(string course, int minAdmissions = 5)
         {
+            // Check if this is an educational level
+            var (levelId, levelName) = GetLevelFromUrl(course);
 
+            if (levelId.HasValue)
+            {
+                var courseIdsForLevel = _context.Courses
+                    .Where(c => c.EducationLevelId == levelId.Value && c.IsActive == true)
+                    .Select(c => c.Id)
+                    .ToList();
+
+                if (!courseIdsForLevel.Any())
+                    return new List<CitywithAdmissionAndCollegeCountViewModel>();
+
+                var citiesWithAdmissionss = (from ac in _context.TblAdmissionCourses
+                                            join a in _context.TblAdmissions on ac.NoticeId equals a.Id
+                                            join col in _context.TblColleges on a.CollegeId equals col.Id
+                                            join city in _context.TblDefCities on col.CityId equals city.CityId
+                                            where courseIdsForLevel.Contains((int)ac.CourseId) && col.IsActive == true
+                                            select new { a, col, city, ac })
+                                          .AsEnumerable()
+                                          .DistinctBy(x => x.a.Id)
+                                          .GroupBy(x => new { x.col.Id, x.ac.CourseId })
+                                          .Select(g => g.OrderByDescending(x => x.a.Dated).First())
+                                          .GroupBy(x => new { x.city.CityId, x.city.CityName })
+                                          .Select(g => new CitywithAdmissionAndCollegeCountViewModel
+                                          {
+                                              CityId = g.Key.CityId,
+                                              CityName = g.Key.CityName,
+                                              ItemCount = g.Count(),
+                                              ItemType = "Admissions"
+                                          })
+                                          .Where(c => c.ItemCount >= minAdmissions)
+                                          .OrderBy(c => c.CityName)
+                                          .ToList();
+
+                return citiesWithAdmissionss;
+            }
+
+            // Original logic for regular courses
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                 .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                 .FirstOrDefault() ?? course;
@@ -1564,8 +1814,8 @@ namespace IKDFrontEnd.Controllers
             course = course.ToLower().Replace("-", " ");
 
             var courses = _context.Courses
-                .Where(c => c.Name.ToLower().Contains(course))
-                .Select(c => c.Id).Take(10)
+                .Where(c => c.Name.ToLower().Contains(course) && c.IsActive == true)
+                .Select(c => c.Id)
                 .ToList();
 
             if (!courses.Any())
@@ -1576,13 +1826,13 @@ namespace IKDFrontEnd.Controllers
                                         join col in _context.TblColleges on a.CollegeId equals col.Id
                                         join city in _context.TblDefCities on col.CityId equals city.CityId
                                         join c in _context.Courses on ac.CourseId equals c.Id
-                                        where courses.Contains((int)ac.CourseId)
+                                        where courses.Contains((int)ac.CourseId) && col.IsActive == true
                                         select new { a, col, city, ac })
                                       .AsEnumerable()
-                                      .DistinctBy(x => x.a.Id) // Remove duplicate admissions
-                                      .GroupBy(x => new { x.col.Id, x.ac.CourseId }) // Same grouping as second query
-                                      .Select(g => g.OrderByDescending(x => x.a.Dated).First()) // Take latest per group
-                                      .GroupBy(x => new { x.city.CityId, x.city.CityName }) // Now group by city
+                                      .DistinctBy(x => x.a.Id)
+                                      .GroupBy(x => new { x.col.Id, x.ac.CourseId })
+                                      .Select(g => g.OrderByDescending(x => x.a.Dated).First())
+                                      .GroupBy(x => new { x.city.CityId, x.city.CityName })
                                       .Select(g => new CitywithAdmissionAndCollegeCountViewModel
                                       {
                                           CityId = g.Key.CityId,
@@ -1596,9 +1846,6 @@ namespace IKDFrontEnd.Controllers
 
             return citiesWithAdmissions;
         }
-
-
-
         // ViewModel for city with admission count
         public class CitywithAdmissionAndCollegeCountViewModel
         {
@@ -1612,14 +1859,38 @@ namespace IKDFrontEnd.Controllers
 
         public List<CitywithAdmissionAndCollegeCountViewModel> GetCitiesWithColleges(string course, int minColleges = 5)
         {
+            // Check if this is an educational level
+            var (levelId, levelName) = GetLevelFromUrl(course);
+
+            if (levelId.HasValue)
+            {
+                // Get cities with colleges for this level
+                var citiesWithCollegess = (from c in _context.TblColleges
+                                          join cs in _context.Courses on c.Id equals cs.CollegeId
+                                          join city in _context.TblDefCities on c.CityId equals city.CityId
+                                          where cs.EducationLevelId == levelId.Value && cs.IsActive == true
+                                          group new { c, cs, city } by new { city.CityId, city.CityName } into g
+                                          where g.Count() >= minColleges
+                                          select new CitywithAdmissionAndCollegeCountViewModel
+                                          {
+                                              CityId = g.Key.CityId,
+                                              CityName = g.Key.CityName,
+                                              ItemCount = g.Count(),
+                                              ItemType = "Universities"
+                                          })
+                                        .OrderBy(c => c.CityName)
+                                        .ToList();
+
+                return citiesWithCollegess;
+            }
+
+            // Original logic for regular courses
             course = _context.TblGuidesDefinations.Where(g => g.GuideMainUrl.ToLower().Contains(course.ToLower()))
                     .Select(g => g.Abrevation.ToLower().Replace("-", " "))
                     .FirstOrDefault() ?? course;
 
             course = course.ToLower().Replace("-", " ");
 
-
-            // Get cities with college count for the specified course
             var citiesWithColleges = (from c in _context.TblColleges
                                       join cs in _context.Courses on c.Id equals cs.CollegeId
                                       join city in _context.TblDefCities on c.CityId equals city.CityId
@@ -1638,8 +1909,6 @@ namespace IKDFrontEnd.Controllers
 
             return citiesWithColleges;
         }
-
-        // ViewModel for city with college count
 
 
         public string ReplacePlaceholders(string inputHtml, string[] pathSegment, DBCollege.TblGuidesDefination guide)
@@ -3678,6 +3947,8 @@ namespace IKDFrontEnd.Controllers
 
             public string? Layout { get; set; }
         }
+
+
         private string GetAdmissionLogoPath(string fileName, DateTime? dated)
         {
             if (string.IsNullOrEmpty(fileName) || dated == null)
@@ -3687,6 +3958,50 @@ namespace IKDFrontEnd.Controllers
             var month = dated.Value.Month.ToString(); // e.g. 03 for March
 
             return $"{year}/{month}/thumb/{fileName}";
+        }
+
+
+        private (int? LevelId, string LevelName) GetLevelFromUrl(string url)
+        {
+            // Mapping of URL patterns to level names
+            var levelMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "5th-class", "Primary" },
+        { "6th-class", "Elementary" },
+        { "7th-class", "Middle" },
+        { "8th-class", "Middle" },
+        { "9th-class", "Matric" },
+        { "10th-class", "Matric" },
+        { "11th-class", "Intermediate" },
+        { "12th-class", "Intermediate" },
+    };
+
+            string normalizedUrl = url?.ToLower().Replace(" ", "-") ?? "";
+
+            if (levelMapping.ContainsKey(normalizedUrl))
+            {
+                string levelName = levelMapping[normalizedUrl];
+                var level = _context.TblXcourseLevels
+                    .Where(l => l.Name.ToLower() == levelName.ToLower() || l.Url.ToLower() == levelName.ToLower())
+                    .FirstOrDefault();
+
+                if (level != null)
+                {
+                    return (level.Id, level.Name);
+                }
+            }
+
+            // Try direct match with URL
+            var directLevel = _context.TblXcourseLevels
+                .Where(l => l.Url == normalizedUrl)
+                .FirstOrDefault();
+
+            if (directLevel != null)
+            {
+                return (directLevel.Id, directLevel.Name);
+            }
+
+            return (null, null);
         }
     }
 }
