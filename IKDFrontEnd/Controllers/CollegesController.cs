@@ -1172,6 +1172,8 @@ namespace IKDFrontEnd.Controllers
 
 
 
+
+        //[Route("/colleges/{levelUrl:regex(^[[a-zA-Z0-9]]+$)}-institutes-{CatUrl}")]
         [Route("/colleges/{LevelUrl}-institutes-{CatUrl}")]
         public async Task<IActionResult> CategoryAndLevelWiseColleges(string LevelUrl, string CatUrl, int page, int pageSize = 1)
         {
@@ -2363,8 +2365,9 @@ namespace IKDFrontEnd.Controllers
 			return $"{year}/{month}/large/{fileName}";
 		}
 
-		[Route("colleges/{levelUrl:regex(^[[a-zA-Z0-9\\-]]+$)}")]
-        public async Task<IActionResult> LevelWiseCollegesDetails(string levelUrl, string cityName = "All Cities", int page = 1, string viewType = "desktop")
+		//[Route("colleges/{levelUrl:regex(^[[a-zA-Z0-9\\-]]+$)}")]
+		[Route("colleges/{levelUrl}")]
+		public async Task<IActionResult> LevelWiseCollegesDetails(string levelUrl, string cityName = "All Cities", int page = 1, string viewType = "desktop")
         {
 
 

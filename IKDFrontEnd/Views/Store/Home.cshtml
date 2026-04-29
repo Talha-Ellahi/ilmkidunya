@@ -163,7 +163,7 @@
                                     <ul>
                                         @foreach (var child in Model.Categories.Where(c => c.ParentCategoryId == parent.cat.Id))
                                         {
-                                            var name = child.CategoryName.ToLower().Replace(" ", "-");
+                                            var name = child.CategoryName.Trim().ToLower().Replace(" ", "-");
                                             <li><a href="/store/category/@name">@child.CategoryName</a></li>
                                         }
                                     </ul>

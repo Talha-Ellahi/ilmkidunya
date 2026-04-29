@@ -1157,29 +1157,29 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-                    //if (url2.Contains("universities-in") || url2.Contains("colleges-in"))
-                    //{
-                    //    // Extract city name from url2
-                    //    string cityName = url2;
-                    //    if (url2.Contains("universities-in-"))
-                    //    {
-                    //        cityName = url2.Replace("universities-in-", "");
-                    //    }
-                    //    else if (url2.Contains("colleges-in-"))
-                    //    {
-                    //        cityName = url2.Replace("colleges-in-", "");
-                    //    }
+                    if (url2.Contains("universities-in") || url2.Contains("colleges-in"))
+                    {
+                        // Extract city name from url2
+                        string cityName = url2;
+                        if (url2.Contains("universities-in-"))
+                        {
+                            cityName = url2.Replace("universities-in-", "");
+                        }
+                        else if (url2.Contains("colleges-in-"))
+                        {
+                            cityName = url2.Replace("colleges-in-", "");
+                        }
 
-                    //    // Clean up any trailing slashes or other characters
-                    //    cityName = cityName.Trim().ToLower();
+                        // Clean up any trailing slashes or other characters
+                        cityName = cityName.Trim().ToLower();
 
-                    //    // Redirect to the specific colleges page for this city with .aspx extension
-                    //    string redirectUrl = $"/colleges/colleges-in-{cityName}.aspx";
-                    //    return Redirect(redirectUrl);
-                    //}
+                        // Redirect to the specific colleges page for this city with .aspx extension
+                        string redirectUrl = $"/colleges/colleges-in-{cityName}.aspx";
+                        return Redirect(redirectUrl);
+                    }
 
                     // If not a universities/colleges URL, return NotFound
-                    return NotFound();
+                    //return NotFound();
                 }
             }
 
