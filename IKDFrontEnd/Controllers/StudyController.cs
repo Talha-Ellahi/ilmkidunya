@@ -345,8 +345,5 @@ namespace IKDFrontEnd.Controllers
             return View(model);
         }
 
-
-
-
     }
 }
