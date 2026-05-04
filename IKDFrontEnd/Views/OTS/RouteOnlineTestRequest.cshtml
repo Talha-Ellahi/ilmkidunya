@@ -536,6 +536,48 @@
                         </div>
                     </div>
                 }
+
+
+                @if (Model.BoardTestSets != null && Model.BoardTestSets.Any())
+                {
+                    <div class="col-lg-12">
+                        <div class="all-test-box">
+                            @if (Model.OtschNo.HasValue)
+                            {
+                                if (hideChapter)
+                                {
+                                    <h2>Prepare Complete Set Wise @Model.Test.TestName MCQs Online With Answers</h2>
+                                }
+                                else
+                                {
+                                    <h2>Prepare Complete Set Wise Chapter @Model.OtschNo "@Model.Test.TestName" MCQs Online With Answers</h2>
+                                }
+                            }
+                            else
+                            {
+                                <h2>Prepare Board @Model.Test.TestName MCQs With Answers</h2>
+                            }
+
+                            <ul>
+                                @{
+                                    foreach (var set in Model.BoardTestSets.OrderByDescending(x=>x.Year))
+                                    {
+                                        <li>
+                                            <h3>@set.YearName @set.subjectName</h3>
+                                            <p>@set.myclassName @set.boardName</p>
+                                            <a href="javascript:void(0)"
+                                               onclick="openBoardAnsMode('/online-test/board/@Model.Test.Url.Replace(".aspx", "")-mcqs-with-answers?year=@set.Year&board=@set.board&myclass=@set.myclass&subject=@set.subject')"
+                                               class="text-btn">
+                                                Start
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+
             </div>
         </div>
     </div>
@@ -1003,6 +1045,54 @@
         const closeBtn = document.getElementById("close-ans");
         const targetBox = document.getElementById("pol-answer-mode");
         const holder = document.getElementById("quest-holder");
+
+        // Function for Set-wise tests (openBoardAnsMode)
+        function openBoardAnsMode(apiUrl){
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Fetched Questions:", data);
+                    holder.innerHTML = "";
+
+                    const baseImgPath = "https://cdn.ilmkidunya.com/images/ots/mcqs/";
+
+                    data.forEach((q, index) => {
+                        let correctIndex = q.correctAnswer - 1;
+
+                        let questionImgHtml = q.questionImage
+                            ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+                            : "";
+
+                        let choicesHtml = q.choices
+                            .filter(c => c.text || c.img)
+                            .map((c, i) => `
+                                <li class="${i === correctIndex ? "correct" : ""}">
+                                    <label class="radio-container">
+                                        <span class="q-detiel">
+                                            ${c.text ? c.text : ""}
+                                            ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+                                        </span>
+                                        <input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
+                                        <span class="label">${c.value}</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                            `).join("");
+
+                        holder.innerHTML += `
+                            <div class="mid-box1 ans-bx-visible">
+                                <strong>Question # ${index + 1}</strong>
+                                <h3>${q.question}</h3>
+                                ${questionImgHtml}
+                                <ul>${choicesHtml}</ul>
+                            </div>
+                        `;
+                    });
+
+                    setupNavigation();
+                    targetBox.classList.add("visible");
+                });
+        }
 
         // Function for Set-wise tests (openAnsMode)
         function openAnsMode(apiUrl){

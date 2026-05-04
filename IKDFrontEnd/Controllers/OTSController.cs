@@ -2,6 +2,7 @@
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using HtmlAgilityPack;
+using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -32,18 +33,20 @@ namespace IKDFrontEnd.Controllers
         private readonly ILogger<OTSController> _logger;
         private readonly CmsRepository _cmsRepo;
         private readonly IConfiguration _configuration;
+		private readonly DbCollegeContext _contextCollege;
 
-        public OTSController(DbikdContext context, BannerService bannerService, IConverter converter, ILogger<OTSController> logger, CmsRepository cmsRepo, IConfiguration configuration)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _converter = converter;
-            _logger = logger;
-            _cmsRepo = cmsRepo;
-            _configuration = configuration;
-        }
+		public OTSController(DbikdContext context, BannerService bannerService, IConverter converter, ILogger<OTSController> logger, CmsRepository cmsRepo, IConfiguration configuration, DbCollegeContext contextCollege)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_converter = converter;
+			_logger = logger;
+			_cmsRepo = cmsRepo;
+			_configuration = configuration;
+			_contextCollege = contextCollege;
+		}
 
-        public static string? ExtractFirstTagContentFromBoth(string html1, string html2, string tagName)
+		public static string? ExtractFirstTagContentFromBoth(string html1, string html2, string tagName)
         {
             var doc1 = new HtmlDocument();
             var doc2 = new HtmlDocument();
@@ -335,6 +338,55 @@ namespace IKDFrontEnd.Controllers
                 .Where(o => !string.IsNullOrWhiteSpace(o.OptionText) || !string.IsNullOrWhiteSpace(o.OptionImageUrl))
                 .ToList()
             }).ToList();
+            
+      //      List<BoardTestSetViewModel> boardPaper = new List<BoardTestSetViewModel>();
+      //      var years = _contextCollege.Years.ToList();
+      //      var boards = _context.Boards.ToList();
+      //      foreach (var year in years.OrderByDescending(y => y.YearId)) // latest first
+      //      {
+      //          foreach (var b in boards)
+      //          {
+      //              var sampleMcqs = await _contextCollege.BoardOtsmcqs
+      //                  .Where(q =>
+      //                      q.BoardId == b.Id &&
+      //                      q.ClassId == testDetail.ClassId &&
+      //                      q.SubjectId == testDetail.SubjectId &&
+      //                      q.YearId == year.YearId
+      //                  )
+      //                  .OrderBy(q => Guid.NewGuid())
+      //                  .Take(10) // sample questions
+      //                  .Select(q => new McqQuestionViewModel
+      //                  {
+      //                      Question = q.Question,
+						//	Choice1 = q.Choice1,
+						//	Choice2 = q.Choice2,
+						//	Choice3 = q.Choice3,
+						//	Choice4 = q.Choice4,
+						//	Choice5 = q.Choice5,
+						//	CorrectAnswer = q.CorrectAnswer
+      //                  })
+      //                  .ToListAsync();
+
+      //              // Skip empty sets (important)
+      //              if (!sampleMcqs.Any())
+      //                  continue;
+
+      //              boardPaper.Add(new BoardTestSetViewModel
+      //              {
+      //                  Year = year.YearId, // 2025 etc
+      //                  YearName= year.YearName, // "Set 1" etc
+						//board = b.Id,
+      //                  boardName = b.Name,
+						//myclass = Class.Id,
+      //                  myclassName = Class != null ? Class.OtsclassName : "",
+						//subject = subject.Id,
+      //                  subjectName = subject != null ? subject.OtsSubjectName : "",
+						//TotalQuestions = sampleMcqs.Count,
+      //                  StartUrl = $"/online-test/board/{b.Id}/{year.YearName}/{test.Url}",
+      //                  SampleMcqs = sampleMcqs
+      //              });
+      //          }
+      //      }
 
             var viewModel = new OnlineTestChapterListViewModel
             {
@@ -364,8 +416,78 @@ namespace IKDFrontEnd.Controllers
             // CONDITION 2: Multiple or null → Load Chapters
             else
             {
-                viewModel.Chapters = await GetChapterTestsBySubject(testDetail.SubjectId, test.Url);
-            }
+				//int actualBoardQuestionCount = await _contextCollege.BoardOtsmcqs.CountAsync(q => q.ClassId== Class.Id && q.SubjectId==subject.Id);
+				//var uniqueSets = await _contextCollege.BoardOtsmcqs
+				//             .Where(q => q.ClassId == Class.Id && q.SubjectId == subject.Id)
+				//             .Select(q => new
+				//             {
+				//              q.ClassId,
+				//              q.SubjectId,
+				//              q.BoardId,
+				//              q.YearId
+				//             })
+				//             .Distinct()
+				//             .ToListAsync();
+
+				//  var testSets = new List<BoardTestSetViewModel>();
+
+				//  foreach (var item in uniqueSets)
+				//  {
+				//   int questionCount = await _contextCollege.BoardOtsmcqs
+				//    .CountAsync(q =>
+				//	    q.ClassId == item.ClassId &&
+				//	    q.SubjectId == item.SubjectId &&
+				//	    q.BoardId == item.BoardId &&
+				//	    q.YearId == item.YearId
+				//    );
+
+				//   testSets.Add(new BoardTestSetViewModel
+				//{
+				//	Year= item.YearId,
+				//                      YearName= _contextCollege.Years.Where(y => y.YearId == item.YearId).Select(y => y.YearName).FirstOrDefault() ?? "",
+				//	board=item.BoardId,
+				//                      boardName = _contextCollege.Boards.Where(b => b.Id == item.BoardId).Select(b => b.Name).FirstOrDefault() ?? "",
+				//	myclass=item.ClassId,
+				//                      myclassName = Class != null ? Class.OtsclassName : "",
+				//	subject=item.SubjectId,
+				//                      subjectName = subject != null ? subject.OtsSubjectName : "",
+				//	//SetName = $"{item.YearId} - Board {item.BoardId}",
+				//    TotalQuestions = questionCount,
+				//    StartUrl = $"/online-test/board/start/{url}?class={item.ClassId}&subject={item.SubjectId}&board={item.BoardId}&year={item.YearId}"
+				//   });
+				//  }
+				var testSets = await _contextCollege.BoardOtsmcqs
+                      .Where(q => q.ClassId == Class.Id && q.SubjectId == subject.Id)
+                      .GroupBy(q => new { q.ClassId, q.SubjectId, q.BoardId, q.YearId })
+                      .Select(g => new BoardTestSetViewModel
+                      {
+	                      Year = g.Key.YearId,
+	                      YearName = _contextCollege.Years
+		                      .Where(y => y.YearId == g.Key.YearId)
+		                      .Select(y => y.YearName)
+		                      .FirstOrDefault() ?? "",
+
+	                      board = g.Key.BoardId,
+	                      boardName = _contextCollege.Boards
+		                      .Where(b => b.Id == g.Key.BoardId)
+		                      .Select(b => b.Name)
+		                      .FirstOrDefault() ?? "",
+
+	                      myclass = g.Key.ClassId,
+	                      myclassName = Class.OtsclassName,
+
+	                      subject = g.Key.SubjectId,
+	                      subjectName = subject.OtsSubjectName,
+
+	                      TotalQuestions = g.Count(),
+
+	                      StartUrl = $"/online-test/board/start/{url}?class={g.Key.ClassId}&subject={g.Key.SubjectId}&board={g.Key.BoardId}&year={g.Key.YearId}"
+                      })
+                      .ToListAsync();
+				viewModel.Chapters = await GetChapterTestsBySubject(testDetail.SubjectId, test.Url);
+				viewModel.BoardTestSets = testSets;
+				//viewModel.TestSets = GenerateTestSets(url, actualQuestionCount, testDetail.TotalQuestions);
+			}
 
             // CMS and Banners
             //var cmsData = await _context.TblCms
@@ -1005,8 +1127,29 @@ namespace IKDFrontEnd.Controllers
             return testSets;
         }
 
+		private List<TestSetViewModel> BoardGenerateTestSets(string testUrl, int actualQuestionCount, int questionsPerSet)
+		{
+			var totalSets = (int)Math.Ceiling((double)actualQuestionCount / questionsPerSet);
+			var testSets = new List<TestSetViewModel>();
 
-        public async Task<List<TestTopScorerDto>> GetTopScorersForTestAsync(int testId)
+			for (int i = 1; i <= totalSets; i++)
+			{
+				// Calculate remaining questions
+				int startIndex = (i - 1) * questionsPerSet;
+				int remainingQuestions = actualQuestionCount - startIndex;
+				int currentSetQuestions = Math.Min(questionsPerSet, remainingQuestions);
+
+				testSets.Add(new TestSetViewModel
+				{
+					SetName = $"Set {i}",
+					TotalQuestions = currentSetQuestions, // ✅ Fix here
+					StartUrl = $"/online-test/start/{testUrl}?set={i}"
+				});
+			}
+
+			return testSets;
+		}
+		public async Task<List<TestTopScorerDto>> GetTopScorersForTestAsync(int testId)
         {
             var latestTests = await _context.TblTests
         .Where(t => t.TestId == testId && t.MemberId != null)
@@ -1833,10 +1976,69 @@ namespace IKDFrontEnd.Controllers
 
 		}
 
+		[Route("online-test/board/{testUrl}-mcqs-with-answers")]
+		public async Task<IActionResult> BoardTestPreparationWithAnswers(string testUrl, int year = 0, int board = 0, int myclass = 0, int subject = 0)
+		{
+			var questions = await _contextCollege.BoardOtsmcqs
+	   .Where(q => q.BoardId==board && q.YearId==year && q.SubjectId==subject && q.ClassId==myclass)
+	   .OrderByDescending(q => q.BoardOtsid)
+	   .Select(q => new
+	   {
+		   q.BoardOtsid,
+		   q.Question,
+		   QuestionImage = !string.IsNullOrEmpty(q.QuestionImage)
+			   ? $"{q.QuestionImage}"
+			   : null,
+
+		   Choices = new[] {
+			new {
+				Text = q.Choice1,
+				Img = string.IsNullOrEmpty(q.Choice1) && !string.IsNullOrEmpty(q.Choice1img)
+					? $"{q.Choice1img}"
+					: null,
+				Value = "A"
+			},
+			new {
+				Text = q.Choice2,
+				Img = string.IsNullOrEmpty(q.Choice2) && !string.IsNullOrEmpty(q.Choice2img)
+					? $"{q.Choice2img}"
+					: null,
+				Value = "B"
+			},
+			new {
+				Text = q.Choice3,
+				Img = string.IsNullOrEmpty(q.Choice3) && !string.IsNullOrEmpty(q.Choice3img)
+					? $"{q.Choice3img}"
+					: null,
+				Value = "C"
+			},
+			new {
+				Text = q.Choice4,
+				Img = string.IsNullOrEmpty(q.Choice4) && !string.IsNullOrEmpty(q.Choice4img)
+					? $"{q.Choice4img}"
+					: null,
+				Value = "D"
+			},
+			new {
+				Text = q.Choice5,
+				Img = string.IsNullOrEmpty(q.Choice5) && !string.IsNullOrEmpty(q.Choice5img)
+					? $"{q.Choice5img}"
+					: null,
+				Value = "E"
+			}
+		   },
+		   q.CorrectAnswer
+	   })
+	   .ToListAsync();
 
 
 
-        [Route("online-test/{testUrl}-mcqs-with-answersold")]
+			return Ok(questions);
+
+		}
+
+
+		[Route("online-test/{testUrl}-mcqs-with-answersold")]
         public async Task<IActionResult> TestPreparationWithAnswersold(string testUrl, int startfrom = 0, int last = 10)
         {
             var test = await _context.TblOtsTestCriteria.FirstOrDefaultAsync(x => x.Url.Replace(".aspx", "") == testUrl.Replace(".aspx", ""));

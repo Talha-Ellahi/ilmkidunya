@@ -17,6 +17,8 @@ public partial class DbCollegeContext : DbContext
 
     public virtual DbSet<Board> Boards { get; set; }
 
+    public virtual DbSet<BoardOtsmcq> BoardOtsmcqs { get; set; }
+
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<CourseCategory> CourseCategories { get; set; }
@@ -53,6 +55,8 @@ public partial class DbCollegeContext : DbContext
 
     public virtual DbSet<TblXcourseLevel> TblXcourseLevels { get; set; }
 
+    public virtual DbSet<Year> Years { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=66.23.236.70;Initial Catalog=dbcolleges;User Id=userdbcolleges;Password=Hw0ST9t^nbou!ly6;TrustServerCertificate=True;");
@@ -77,6 +81,34 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<BoardOtsmcq>(entity =>
+        {
+            entity.HasKey(e => e.BoardOtsid);
+
+            entity.ToTable("BoardOTSMCQ", "dbo");
+
+            entity.Property(e => e.BoardOtsid)
+                .ValueGeneratedNever()
+                .HasColumnName("BoardOTSID");
+            entity.Property(e => e.BoardId).HasColumnName("BoardID");
+            entity.Property(e => e.Choice1img).HasMaxLength(255);
+            entity.Property(e => e.Choice2img).HasMaxLength(255);
+            entity.Property(e => e.Choice3img).HasMaxLength(255);
+            entity.Property(e => e.Choice4img).HasMaxLength(255);
+            entity.Property(e => e.Choice5img).HasMaxLength(255);
+            entity.Property(e => e.ClassId).HasColumnName("ClassID");
+            entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.QuestionImage).HasMaxLength(255);
+            entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+            entity.Property(e => e.YearId).HasColumnName("YearID");
+
+            entity.HasOne(d => d.Year).WithMany(p => p.BoardOtsmcqs)
+                .HasForeignKey(d => d.YearId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BoardOTSMCQ_Years");
         });
 
         modelBuilder.Entity<Course>(entity =>
@@ -208,7 +240,6 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("TblAllGuidesCms", "dbikduser");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.HeaderIcon).HasMaxLength(255);
             entity.Property(e => e.HeaderName).HasMaxLength(255);
@@ -366,7 +397,6 @@ public partial class DbCollegeContext : DbContext
         {
             entity.ToTable("TblWhatsAppGroups", "dbikduser");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.GroupLink).HasMaxLength(500);
             entity.Property(e => e.GuideName).HasMaxLength(100);
@@ -390,6 +420,16 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.Url)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Year>(entity =>
+        {
+            entity.ToTable("Years", "dbo");
+
+            entity.Property(e => e.YearId)
+                .ValueGeneratedNever()
+                .HasColumnName("YearID");
+            entity.Property(e => e.YearName).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);
