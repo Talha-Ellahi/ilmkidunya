@@ -30,7 +30,8 @@ namespace IKDFrontEnd.ViewModels
     {
         public List<McqQuestionViewModel> SampleMcqs { get; set; }
         public List<TestSetViewModel> TestSets { get; set; }
-        public TblOtsTestCriterion? Test { get; set; }
+		public List<BoardTestSetViewModel> BoardTestSets { get; set; }
+		public TblOtsTestCriterion? Test { get; set; }
         public TblOtsTestCriteriaDetail? TestDetail { get; set; }
         public List<ChapterListItemViewModel> Chapters { get; set; }
         public List<TestQuestionViewModel> Questions { get; set; } = new();
@@ -81,11 +82,13 @@ namespace IKDFrontEnd.ViewModels
         public string? Choice2 { get; set; }
         public string? Choice3 { get; set; }
         public string? Choice4 { get; set; }
-        public int? CorrectAnswer { get; set; }
+		public string? Choice5 { get; set; }
+		public int? CorrectAnswer { get; set; }
         public string? Choice1Img { get;  set; }
         public string? Choice2Img { get;  set; }
         public string? Choice3Img { get;  set; }
         public string? Choice4Img { get;  set; }
+        public string? Choice5Img { get;  set; }
         public int Id { get; internal set; }
     }
     public class HtmlContentElement
@@ -111,7 +114,28 @@ namespace IKDFrontEnd.ViewModels
         public string StartUrl { get; set; }
     }
 
-    public class CustomTestHomeViewModel
+    //public class BoardTestSetViewModel
+    //{
+    //    public string SetName { get; set; } // Example: "Set 1"
+    //    public int TotalQuestions { get; set; }
+    //    public string StartUrl { get; set; }
+    //}
+
+    public class BoardTestSetViewModel
+	{
+		public int Year { get; set; } // Example: "Set 1"
+		public string YearName { get; set; }
+		public int board { get; set; }
+		public string boardName { get; set; }
+		public int myclass { get; set; }
+		public string myclassName { get; set; }
+		public int subject { get; set; }
+		public string subjectName { get; set; }
+		public int TotalQuestions { get; set; }
+		public string StartUrl { get; set; }
+	}
+
+	public class CustomTestHomeViewModel
     {
         public string TestTitle { get; set; }
         public int TestId { get; set; }
