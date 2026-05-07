@@ -31,8 +31,8 @@ namespace IKDFrontEnd.Controllers
 
     public class AllGuidesController : Controller
     {
-		//private readonly DbikdContext _context;
-		private readonly DbCollegeContext _context;
+        private readonly DbikdContext _ikdContext;
+        private readonly DbCollegeContext _context;
 		private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
 
@@ -41,7 +41,7 @@ namespace IKDFrontEnd.Controllers
         private readonly ICompositeViewEngine _viewEngine;
 
         public AllGuidesController(
-			//DbikdContext context,
+			DbikdContext ikdContext,
 			DbCollegeContext context,
 			BannerService bannerService,
             CmsRepository cmsRepo,
@@ -53,6 +53,7 @@ namespace IKDFrontEnd.Controllers
             _cmsRepo = cmsRepo;
             _ftpService = ftpService;
             _viewEngine = viewEngine;
+            _ikdContext = ikdContext;
         }
 
         protected ICompositeViewEngine ViewEngine => _viewEngine;
@@ -802,8 +803,23 @@ namespace IKDFrontEnd.Controllers
                      HeaderName = g.HeaderName!
                  })
                  .ToListAsync();
-            //var banners = await _bannerService.GetBannersAsync();
-            //ViewBag.Banners = banners;
+
+
+            var allCities = await _ikdContext.TblDefCities
+                           .Where(c => _ikdContext.TblHostels.Any(h => h.CityId == c.CityId && h.IsActive == true && h.IsApproved == true))
+                           .ToListAsync();
+            var citiesWithImages = allCities
+                          .Where(c => !string.IsNullOrEmpty(c.ImageName) && c.IsImageAvailable == true)
+                          .Select(c => new CityWithImage
+                          {
+                              CityId = c.CityId,
+                              CityName = c.CityName,
+                              ImagePath = "https://images.ishallwin.com/bs-chem/" + c.ImageName.Replace(".png", ".webp"),
+                          }).ToList();
+
+
+
+            ViewBag.CitiesWithImages = citiesWithImages;
             ViewBag.HomeUrl = url1;
             ViewBag.Levels = await _context.TblXcourseLevels.AsNoTracking().ToListAsync();
             ViewBag.Cities = await _context.TblDefCities.AsNoTracking().ToListAsync();
@@ -1188,21 +1204,6 @@ namespace IKDFrontEnd.Controllers
                 detail.Detail = ReplacePlaceholders(detail.Detail, pathSegments, guide);
             }
 
-            //var menuItems = await _context.TblAllGuidesCms
-            //       .Where(g => g.ShowInMenu == true && g.IsActive == true
-            //           && g.Url.StartsWith("/" + url1 + "/")
-            //           && !string.IsNullOrEmpty(g.Url)
-            //           && !string.IsNullOrEmpty(g.HeaderIcon)
-            //           && !string.IsNullOrEmpty(g.HeaderName))
-            //       .OrderBy(g => g.SortOrder)
-            //       .Select(g => new MenuItemViewModel
-            //       {
-            //           Url = g.Url!,
-            //           HeaderIcon = g.HeaderIcon!,
-            //           HeaderName = g.HeaderName!
-            //       })
-            //       .ToListAsync();
-
             var viewModel = new GuidePageViewModel
             {
                 Guide = guide,
@@ -1210,9 +1211,6 @@ namespace IKDFrontEnd.Controllers
                 MenuItems = menuItems,
                 CityList = cityList
             };
-
-
-            // ... after all existing logic, where the method originally returned View(viewModel) ...
 
             var viewResult = View("GuidesDetailView", viewModel);
             string htmlContent = await RenderViewToStringAsync(viewResult);
@@ -4001,6 +3999,24 @@ namespace IKDFrontEnd.Controllers
             }
 
             return (null, null);
+        }
+
+
+
+
+        private (bool IsHostelPage, string CityName) IsHostelUrl(string url2)
+        {
+            if (string.IsNullOrEmpty(url2))
+                return (false, null);
+
+            // Check for hostels-in-{city} pattern
+            if (url2.StartsWith("hostels-in-", StringComparison.OrdinalIgnoreCase))
+            {
+                var cityName = url2.Substring("hostels-in-".Length);
+                return (true, cityName);
+            }
+
+            return (false, null);
         }
     }
 }

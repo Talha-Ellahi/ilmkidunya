@@ -667,4 +667,3 @@ namespace IKDFrontEnd.Controllers
 
     }
 }
-//Scaffold - DbContext "Server=69.10.38.62;Database=dbbookstore;User Id=userdbbookstore;Password=Dr56m0d7?;TrustServerCertificate=True;MultipleActiveResultSets=true"Microsoft.EntityFrameworkCore.SqlServer - OutputDir BookModels - Context BookDbikdContext

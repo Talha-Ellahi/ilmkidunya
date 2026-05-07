@@ -12,6 +12,8 @@
     var courseName = ViewBag.Course != null
         ? ViewBag.Course.ToString().Replace("-", " ")
         : "Course";
+
+    var citiesWithImages = ViewBag.CitiesWithImages;
 }
 <style>
     .ss-banner-inner {
@@ -169,6 +171,33 @@
             </div>
         </div>
     </div>
+
+    <div class="content-sec level-wise">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Click on any city to view hostels and rooms</h2>
+                    <div class="row">
+                        <ul class="admission-nav">
+                            @foreach (var city in citiesWithImages)
+                            {
+                                var cityName = city.CityName.ToLower().Replace(" ", "-");
+                                <li>
+                                    <a href="/hostels/hostels-in-@cityName">
+                                        <figure><img src="@city.ImagePath" alt="@city.CityName"></figure>
+                                        <span>@city.CityName</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="content-sec" style="padding: 30px 0 20px;">
         <div class="container">
             <div class="row">
