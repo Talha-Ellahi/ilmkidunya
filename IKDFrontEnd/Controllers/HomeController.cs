@@ -58,49 +58,49 @@ namespace IKDFrontEnd.Controllers
             var banneres = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banneres;
 
-			//// TRY REDIS CACHE FIRST
-			//try
-			//{
-			//	var cachedData = await _distributedCache.GetStringAsync(cacheKey);
-			//	if (!string.IsNullOrEmpty(cachedData))
-			//	{
-			//		// Use Newtonsoft JsonConvert instead of System.Text.Json
-			//		var cachedModel = JsonConvert.DeserializeObject<HomePageViewModel3>(cachedData);
-			//		if (cachedModel != null)
-			//		{
-			//			// Verify WebStorySliders are properly deserialized
-			//			if (cachedModel.WebStorySliders != null)
-			//			{
-			//				_logger.LogInformation("Redis cache: WebStorySliders count: {Count}",
-			//					cachedModel.WebStorySliders.Count);
+			// TRY REDIS CACHE FIRST
+			try
+			{
+				var cachedData = await _distributedCache.GetStringAsync(cacheKey);
+				if (!string.IsNullOrEmpty(cachedData))
+				{
+					// Use Newtonsoft JsonConvert instead of System.Text.Json
+					var cachedModel = JsonConvert.DeserializeObject<HomePageViewModel3>(cachedData);
+					if (cachedModel != null)
+					{
+						// Verify WebStorySliders are properly deserialized
+						if (cachedModel.WebStorySliders != null)
+						{
+							_logger.LogInformation("Redis cache: WebStorySliders count: {Count}",
+								cachedModel.WebStorySliders.Count);
 
-			//				// Log first item to verify data
-			//				var firstSlider = cachedModel.WebStorySliders.FirstOrDefault();
-			//				if (firstSlider != null)
-			//				{
-			//					_logger.LogInformation("First slider - Title: {Title}, Image: {Image}",
-			//						firstSlider.Slidertitle, firstSlider.Image);
-			//				}
-			//			}
+							// Log first item to verify data
+							var firstSlider = cachedModel.WebStorySliders.FirstOrDefault();
+							if (firstSlider != null)
+							{
+								_logger.LogInformation("First slider - Title: {Title}, Image: {Image}",
+									firstSlider.Slidertitle, firstSlider.Image);
+							}
+						}
 
-			//			ViewBag.HideHeaderLowerBanner = true;
-			//			ViewBag.CacheSource = "Redis";
-			//			return View("Index", cachedModel);
-			//		}
-			//	}
-			//}
-			//catch (Exception ex)
-			//{
-			//	_logger.LogWarning(ex, "Redis cache read failed");
-			//}
+						ViewBag.HideHeaderLowerBanner = true;
+						ViewBag.CacheSource = "Redis";
+						return View("Index", cachedModel);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogWarning(ex, "Redis cache read failed");
+			}
 
-			//// TRY MEMORY CACHE NEXT (as fallback)
-			//if (_memoryCache.TryGetValue(cacheKey, out HomePageViewModel3 memoryCachedModel))
-			//{
-			//	ViewBag.HideHeaderLowerBanner = true;
-			//	ViewBag.CacheSource = "Memory";
-			//	return View("Index", memoryCachedModel);
-			//}
+			// TRY MEMORY CACHE NEXT (as fallback)
+			if (_memoryCache.TryGetValue(cacheKey, out HomePageViewModel3 memoryCachedModel))
+			{
+				ViewBag.HideHeaderLowerBanner = true;
+				ViewBag.CacheSource = "Memory";
+				return View("Index", memoryCachedModel);
+			}
 
 			try
             {
