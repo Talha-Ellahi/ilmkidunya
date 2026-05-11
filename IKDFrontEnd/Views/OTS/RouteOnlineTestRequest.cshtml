@@ -3,6 +3,13 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var email = "";
+    var id = "";
+    if (User.Identity.IsAuthenticated)
+    {
+        email = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+        id = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    }
 }
 
 <style>
@@ -96,6 +103,14 @@
             background-color: #36e57c;
         }
 
+    .radio-container:hover {
+        cursor: pointer;
+    }
+
+        .radio-container:hover span.checkmark {
+            background: #36e57c !important;
+        }
+
     .question-box .mid-box1 {
         padding: 30px 0 0 30px;
     }
@@ -124,7 +139,7 @@
     div.correct-ans p {
         color: #15a18d;
     }
-
+    
     /* Topic popup animation - slides from right to left */
     #topic-pol {
         position: fixed;
@@ -193,6 +208,18 @@
         transform: rotate(90deg);
     }
 
+    /* .question-side .last-box-board a img {
+        transition: transform 0.3s ease;
+    }
+
+    .question-side .last-box-board .next img {
+        transform: rotate(-90deg);
+    }
+
+    .question-side .last-box-board .prev img {
+        transform: rotate(90deg);
+    } */
+
     /* Topic navigation buttons */
     #topic-pol .topic-next img {
         transform: rotate(-90deg) !important;
@@ -213,6 +240,15 @@
         cursor: not-allowed;
     }
 
+   /*  .last-box-board a.active {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .last-box-board a:not(.active) {
+        opacity: 0.5;
+        cursor: not-allowed;
+    } */
 
     /* Result Modal Styles */
     .modal-overlay {
@@ -240,6 +276,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
+   
     @@keyframes fadeIn {
         from {
             opacity: 0;
@@ -564,11 +601,18 @@
                                     {
                                         <li>
                                             <h3>@set.YearName @set.subjectName</h3>
-                                            <p>@set.myclassName @set.boardName</p>
-                                            <a href="javascript:void(0)"
+                                            <p>@set.myclassName</p>
+                                            <p>@set.boardName</p>
+                                            <p>Total Question:@set.TotalQuestions</p>
+                                           @* <a href="javascript:void(0)"
                                                onclick="openBoardAnsMode('/online-test/board/@Model.Test.Url.Replace(".aspx", "")-mcqs-with-answers?year=@set.Year&board=@set.board&myclass=@set.myclass&subject=@set.subject')"
                                                class="text-btn">
-                                                Start
+                                                Start Test
+                                            </a>*@
+                                            <a href="javascript:void(0)"
+                                               onclick="openTopicBoardTest('/online-test/board/@Model.Test.Url.Replace(".aspx", "")-mcqs-with-answers?year=@set.Year&board=@set.board&myclass=@set.myclass&subject=@set.subject')"
+                                               class="text-btn">
+                                                Start Test
                                             </a>
                                         </li>
                                     }
@@ -657,6 +701,8 @@
                     <div class="last-box">
                         <a href="javascript:void(0)" class="topic-prev"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
                         <a href="javascript:void(0)" class="topic-next"><img src="https://images.ishallwin.com/ot-images/arrow-down.webp" alt="" /></a>
+                       @*  <p>Email: @email</p>
+                        <p>Id: @id</p> *@
                     </div>
                     <div class="last-box-btns">
                         <!-- Fake Submit -->
@@ -674,7 +720,7 @@
                             <!-- JavaScript yahan questions insert karega -->
                         </div>
                         <div class="last-box-btns">
-                            <a href="javascript:void(0)" id="topic-download-result" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a>
+                            @* <a href="javascript:void(0)" id="topic-download-result" class="text-btn" style="margin: 30px 0 0 30px;">Download Result</a> *@
                         </div>
                     </div>
                 </div>
@@ -1007,7 +1053,8 @@
         let Marks = @Html.Raw(Json.Serialize(Model.TotalMarks));
         let startTime;
         let autoStartAfterLogin = false;
-
+        let autoSubmitTopicAfterLogin = false;
+        const userID = "@(id ?? "")";
         // Global result IDs
         window.savedTestResultId = null;
         window.topicTestResultId = null;
@@ -1046,53 +1093,7 @@
         const targetBox = document.getElementById("pol-answer-mode");
         const holder = document.getElementById("quest-holder");
 
-        // Function for Set-wise tests (openBoardAnsMode)
-        function openBoardAnsMode(apiUrl){
-            fetch(apiUrl)
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Fetched Questions:", data);
-                    holder.innerHTML = "";
-
-                    const baseImgPath = "https://cdn.ilmkidunya.com/images/ots/mcqs/";
-
-                    data.forEach((q, index) => {
-                        let correctIndex = q.correctAnswer - 1;
-
-                        let questionImgHtml = q.questionImage
-                            ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
-                            : "";
-
-                        let choicesHtml = q.choices
-                            .filter(c => c.text || c.img)
-                            .map((c, i) => `
-                                <li class="${i === correctIndex ? "correct" : ""}">
-                                    <label class="radio-container">
-                                        <span class="q-detiel">
-                                            ${c.text ? c.text : ""}
-                                            ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
-                                        </span>
-                                        <input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
-                                        <span class="label">${c.value}</span>
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </li>
-                            `).join("");
-
-                        holder.innerHTML += `
-                            <div class="mid-box1 ans-bx-visible">
-                                <strong>Question # ${index + 1}</strong>
-                                <h3>${q.question}</h3>
-                                ${questionImgHtml}
-                                <ul>${choicesHtml}</ul>
-                            </div>
-                        `;
-                    });
-
-                    setupNavigation();
-                    targetBox.classList.add("visible");
-                });
-        }
+       
 
         // Function for Set-wise tests (openAnsMode)
         function openAnsMode(apiUrl){
@@ -2026,6 +2027,15 @@
                 });
             }
 
+
+             // Show appropriate submit button based on login status
+             if (!isUserLoggedIn) {
+                  document.querySelector(".topic-real-submit").style.display = "none";
+                  document.querySelector(".topic-fake-submit").style.display = "inline-block";
+             } else {
+                  document.querySelector(".topic-fake-submit").style.display = "none";
+                  document.querySelector(".topic-real-submit").style.display = "inline-block";
+             }
             // MODIFIED: Topic fake submit button with progress saving
             const topicFakeSubmit = document.querySelector('.topic-fake-submit');
             if (topicFakeSubmit) {
@@ -2039,6 +2049,7 @@
                     saveTopicTestProgress();
 
                     topicFinalDuration = getTopicDurationInSeconds();
+                    autoSubmitTopicAfterLogin = true;
                     if (topicTimer) {
                         clearInterval(topicTimer);
                         topicIsRunning = false;
@@ -2062,7 +2073,7 @@
                     document.querySelectorAll(".last-box").forEach(el => {
                        el.style.display = "none";
                     });
-                    submitTopicTest();
+                     submitTopicTest();
                 });
             }
 
@@ -2220,6 +2231,18 @@
                         }, 2000);
                     }
                     autoStartAfterLogin = false;
+                }
+                //For Topic pOPUP
+                 if (autoSubmitTopicAfterLogin) {
+                   const container = document.getElementById("topic-pol");
+                     if (container) {
+                      container.classList.add("visible");
+                        setTimeout(() => {
+                             const submitBtn = document.querySelector(".topic-real-submit");
+                            if (submitBtn) submitBtn.click();
+                        }, 2000);
+                    }
+                     autoSubmitTopicAfterLogin = false;
                 }
             }
         });
@@ -2986,6 +3009,460 @@
             }
         });
 
+        //=====Board Test=======
+         // Function for Set-wise tests (openBoardAnsMode)
+        function openBoardAnsMode(apiUrl){
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Fetched Questions:", data);
+                    holder.innerHTML = "";
+
+                    const baseImgPath = "https://cdn.ilmkidunya.com/images/ots/mcqs/";
+
+                    data.forEach((q, index) => {
+                        let correctIndex = q.correctAnswer - 1;
+
+                        let questionImgHtml = q.questionImage
+                            ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" alt="Question Image" /></div>`
+                            : "";
+
+                        let choicesHtml = q.choices
+                            .filter(c => c.text || c.img)
+                            .map((c, i) => `
+                                <li class="${i === correctIndex ? "correct" : ""}">
+                                    <label class="radio-container">
+                                        <span class="q-detiel">
+                                            ${c.text ? c.text : ""}
+                                            ${c.img ? `<img src="${baseImgPath + c.img}" alt="Option ${c.value}" class="opt-img" />` : ""}
+                                        </span>
+                                        <input type="radio" disabled value="${c.value}" data-correct="${i === correctIndex}">
+                                        <span class="label">${c.value}</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                            `).join("");
+
+                        holder.innerHTML += `
+                            <div class="mid-box1 ans-bx-visible">
+                                <strong>Question # ${index + 1}</strong>
+                                <h3>${q.question}</h3>
+                                ${questionImgHtml}
+                                <ul>${choicesHtml}</ul>
+                            </div>
+                        `;
+                    });
+
+                    setupNavigation();
+                    targetBox.classList.add("visible");
+                });
+        }
+
+             let topicBoardQuestions = [];
+    let topicBoardIndex = 0;
+    let topicBoardAnswers = {};
+    let topicBoardStartTime;
+    let topicBoardTimerInterval;
+    let topicBoardTestTitle = "";
+    let topicBoardTestUrl = "";
+    /* =========================
+       MODE SWITCH
+    ========================= */
+           function setMode(mode) {
+
+        const container = document.getElementById("topic-pol");
+
+        const holder = container.querySelector("#topic-holder");
+        const answers = container.querySelector("#topic-answers");
+
+        const nav = container.querySelector(".last-box");
+        const btns = container.querySelector(".last-box-btns");
+
+        if (mode === "quiz") {
+
+            holder.style.display = "block";
+            answers.style.display = "none";
+
+            if (nav) nav.style.display = "flex";
+            if (btns) btns.style.display = "block";
+
+        } else {
+
+            holder.style.display = "none";
+            answers.style.display = "block";
+
+            if (nav) nav.style.display = "none";
+            if (btns) btns.style.display = "none";
+        }
+
+        container.scrollTop = 0;
+    }
+
+    /* =========================
+       RESET EVERYTHING
+    ========================= */
+                function resetTopicBoardUI() {
+
+        if (topicBoardTimerInterval) {
+            clearInterval(topicBoardTimerInterval);
+        }
+
+        topicBoardQuestions = [];
+        topicBoardAnswers = {};
+        topicBoardIndex = 0;
+
+        const container = document.getElementById("topic-pol");
+
+        container.querySelector("#topic-holder").innerHTML = "<p>Loading...</p>";
+        container.querySelector("#topic-ans-box").innerHTML = "";
+        container.querySelector("#topic-display").innerText = "00:00";
+
+        const nav = container.querySelector(".last-box");
+        const btns = container.querySelector(".last-box-btns");
+        const answers = container.querySelector("#topic-answers");
+        const holder = container.querySelector("#topic-holder");
+
+        // ✅ FORCE SHOW
+        nav.style.display = "flex";
+        btns.style.display = "block";
+        holder.style.display = "block";
+        answers.style.display = "none";
+          // Show login/submit buttons based on user status
+            const topicFakeSubmit = document.querySelector('.topic-fake-submit');
+            const topicRealSubmit = document.querySelector('.topic-real-submit');
+
+            if (window.isUserLoggedIn) {
+                if (topicFakeSubmit) topicFakeSubmit.style.display = 'none';
+                if (topicRealSubmit) topicRealSubmit.style.display = 'inline-block';
+            } else {
+                if (topicFakeSubmit) topicFakeSubmit.style.display = 'inline-block';
+                if (topicRealSubmit) topicRealSubmit.style.display = 'none';
+            }
+        // 🔥 IMPORTANT: REMOVE ANY OLD INLINE HIDING
+        nav.style.removeProperty("display");
+        btns.style.removeProperty("display");
+
+        // 🔥 RESET BUTTON STATES
+        const prev = container.querySelector(".topic-prev");
+        const next = container.querySelector(".topic-next");
+
+        prev.classList.remove("active");
+        next.classList.remove("active");
+
+        prev.style.opacity = "0.5";
+        prev.style.pointerEvents = "none";
+
+        next.style.opacity = "1";
+        next.style.pointerEvents = "auto";
+    }
+
+    /* =========================
+       OPEN QUIZ
+    ========================= */
+    function openTopicBoardTest(apiUrl) {
+
+        resetTopicBoardUI();
+        // ✅ SAVE TEST URL
+       topicBoardTestUrl = apiUrl;
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+
+                @* topicBoardQuestions = data; *@
+                // ✅ SAVE TITLE
+                topicBoardTestTitle = data.title || "Topic Test";
+                topicBoardQuestions = data.questions || [];
+                document.getElementById("topic-test-title").innerText = data.title || "Topic Test";
+                topicBoardIndex = 0;
+                topicBoardAnswers = {};
+
+                topicBoardStartTime = new Date();
+                startTopicBoardTimer();
+
+                const container = document.getElementById("topic-pol");
+               // 🔥 FORCE POPUP OPEN + RESET STATE
+            container.classList.add("visible");
+
+                // 🔴 FORCE QUIZ MODE UI
+                setMode("quiz");
+
+                renderTopicBoardQuestion();
+                updateTopicBoardNavButtons();
+            });
+    }
+
+    /* =========================
+       RENDER QUESTION
+    ========================= */
+    function renderTopicBoardQuestion() {
+
+        if (!topicBoardQuestions.length) return;
+
+        const q = topicBoardQuestions[topicBoardIndex];
+        const baseImgPath = "https://cdn.ilmkidunya.com/images/ots/mcqs/";
+        let selected = topicBoardAnswers[topicBoardIndex];
+
+        let questionImg = q.questionImage
+            ? `<div class="q-img"><img src="${baseImgPath + q.questionImage}" /></div>`
+            : "";
+
+        @* let choicesHtml = (q.choices || []).map((c) => { *@
+            let choicesHtml = (q.choices || [])
+    .filter(c => c && c.text) // remove null/empty options
+    .map((c) => {
+            let isSelected = selected === c.value;
+
+            return `
+                <li class="${isSelected ? 'correct' : ''}">
+                    <label class="radio-container d-flex align-items-start">
+
+                        <span class="q-detiel">
+                            ${c.text || ""}
+                            ${c.img ? `<img src="${baseImgPath + c.img}" class="opt-img" />` : ""}
+                        </span>
+
+                        <input type="radio"
+                               name="topicBoard_q${topicBoardIndex}"
+                               value="${c.value}"
+                               ${isSelected ? "checked" : ""}
+                               onchange="saveTopicBoardAnswer(${topicBoardIndex}, '${c.value}', this)">
+
+                        <span class="label">${c.value}</span>
+                        <span class="checkmark"></span>
+
+                    </label>
+                </li>
+            `;
+        }).join("");
+
+        document.getElementById("topic-holder").innerHTML = `
+            <div class="mid-box1">
+                <strong>Question # ${topicBoardIndex + 1}</strong>
+                <h3>${q.question}</h3>
+                ${questionImg}
+                <ul>${choicesHtml}</ul>
+            </div>
+        `;
+
+        updateTopicBoardNavButtons();
+    }
+
+    /* =========================
+       SAVE ANSWER
+    ========================= */
+    function saveTopicBoardAnswer(index, value, el) {
+        topicBoardAnswers[index] = value;
+
+        document.querySelectorAll(`[name="topicBoard_q${index}"]`)
+            .forEach(r => r.closest("li").classList.remove("correct"));
+
+        el.closest("li").classList.add("correct");
+    }
+
+    /* =========================
+       NAV BUTTONS
+    ========================= */
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const container = document.getElementById("topic-pol");
+
+        container.querySelector(".topic-next").addEventListener("click", function () {
+            if (topicBoardIndex < topicBoardQuestions.length - 1) {
+                topicBoardIndex++;
+                renderTopicBoardQuestion();
+            }
+        });
+
+        container.querySelector(".topic-prev").addEventListener("click", function () {
+            if (topicBoardIndex > 0) {
+                topicBoardIndex--;
+                renderTopicBoardQuestion();
+            }
+        });
+
+        container.querySelector(".topic-real-submit")
+            .addEventListener("click", submitTopicBoardTest);
+    });
+
+    /* =========================
+       UPDATE NAV STATE
+    ========================= */
+        function updateTopicBoardNavButtons() {
+
+        const container = document.getElementById("topic-pol");
+
+        const prev = container.querySelector(".topic-prev");
+        const next = container.querySelector(".topic-next");
+
+        if (!topicBoardQuestions.length) return;
+
+        prev.classList.toggle("active", topicBoardIndex > 0);
+        next.classList.toggle("active", topicBoardIndex < topicBoardQuestions.length - 1);
+    }
+
+    /* =========================
+       TIMER
+    ========================= */
+    function startTopicBoardTimer() {
+
+        const el = document.getElementById("topic-display");
+
+        topicBoardTimerInterval = setInterval(() => {
+
+            let diff = Math.floor((new Date() - topicBoardStartTime) / 1000);
+            let min = Math.floor(diff / 60);
+            let sec = diff % 60;
+
+            el.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+        }, 1000);
+    }
+
+    /* =========================
+       SUBMIT
+    ========================= */
+
+        function submitTopicBoardTest() {
+
+        // ✅ exact end time when user clicks submit
+        let topicBoardEndTime = new Date();
+
+        // ✅ stop timer immediately
+        clearInterval(topicBoardTimerInterval);
+
+        /* =========================
+           COLLECT QUIZ INFO
+        ========================= */
+
+        let totalQuestions = topicBoardQuestions.length;
+
+        let totalCorrect = 0;
+
+        topicBoardQuestions.forEach((q, i) => {
+
+            let userAnswer = topicBoardAnswers[i] || null;
+
+            let correctAns = ["A","B","C","D","E"][q.correctAnswer - 1];
+
+            if (userAnswer === correctAns) {
+                totalCorrect++;
+            }
+        });
+
+        // ✅ duration in seconds
+        let totalSeconds = Math.floor(
+            (topicBoardEndTime - topicBoardStartTime) / 1000
+        );
+
+        // ✅ FINAL QUIZ OBJECT
+        let quizInfo = {
+             TestTitle: topicBoardTestTitle,
+             TestUrl: window.location.href,
+             TotalQuestions: totalQuestions,
+             CorrectAnswers: totalCorrect,
+            wrongAnswers: totalQuestions - totalCorrect,
+            attemptedQuestions: Object.keys(topicBoardAnswers).length,
+            duration: totalSeconds,
+            MemberId:userID,
+             TestId: testId,
+               TotalMarks:totalQuestions
+        };
+
+         
+        @* console.log("Quiz Info:", quizInfo); *@
+
+        // ✅ SAVE QUIZ INFO FIRST
+          fetch("/OTS/SaveQuizResult", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(quizInfo)
+        })
+        .then(res => res.json())
+        .then(response => {
+
+            console.log("Saved Successfully", response);
+
+            /* =========================
+               SHOW RESULT
+            ========================= */
+
+             let html = "";
+
+              const baseImgPath = "https://cdn.ilmkidunya.com/images/ots/mcqs/";
+
+              topicBoardQuestions.forEach((q, i) => {
+
+                  let user = topicBoardAnswers[i] || null;
+
+                  let correctAns = ["A","B","C","D","E"][q.correctAnswer - 1];
+
+                  let choicesHtml = (q.choices || []).map((c) => {
+
+                      let className = "";
+
+                      if (c.value === correctAns)
+                          className = "correct";
+                      else if (c.value === user)
+                          className = "wrong";
+
+                      return `
+                          <li class="${className}">
+                              <label class="radio-container d-flex align-items-start">
+
+                                  <span class="q-detiel">
+                                      ${c.text || ""}
+                                      ${c.img ? `<img src="${baseImgPath + c.img}" class="opt-img" />` : ""}
+                                  </span>
+
+                                  <input type="radio"
+                                         disabled
+                                         ${c.value === user ? "checked" : ""}>
+
+                                  <span class="label">${c.value}</span>
+                                  <span class="checkmark"></span>
+
+                              </label>
+                          </li>
+                      `;
+                  }).join("");
+
+                  html += `
+                      <div class="mid-box1">
+
+                           <strong>Question # ${i + 1}</strong>
+                               ${
+                                     !user
+                                         ? `<strong class="text-danger">(Not Selected)</strong>`
+                                         : user === correctAns
+                                             ? `<strong class="text-success">(Correct)</strong>`
+                                             : `<strong class="text-danger">(Wrong)</strong>`
+                                 }
+                          @*  ${!user ? `<strong class="text-danger"> (Not Selected) </strong>` : ""} *@
+
+                          <h3>${q.question || ""}</h3>
+
+                          <ul>${choicesHtml}</ul>
+
+                      </div>
+                  `;
+              });
+
+              document.getElementById("topic-ans-box").innerHTML = html;
+
+              setMode("result");
+        })
+        .catch(err => {
+
+            console.error("Save Error:", err);
+
+            alert("Error saving quiz result");
+        });
+    }
+
+         
+
         // ==================== EXPORT FUNCTIONS TO GLOBAL SCOPE ====================
 
         window.loadResultInPopup = loadResultInPopup;
@@ -2993,4 +3470,7 @@
         window.downloadCertificate = downloadCertificate;
         window.printCertificateImage = printCertificateImage;
         window.saveTopicAnswer = saveTopicAnswer;
+
+        
+        
 </script>

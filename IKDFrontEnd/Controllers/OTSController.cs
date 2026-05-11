@@ -2,6 +2,7 @@
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using HtmlAgilityPack;
+using IKDFrontEnd.BookModels;
 using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
@@ -18,9 +19,6 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
-
-
-
 
 
 namespace IKDFrontEnd.Controllers
@@ -1838,7 +1836,53 @@ namespace IKDFrontEnd.Controllers
         }
 
 
-        [Route("online-test/api/get-test-result/{id}")]
+		[HttpPost]
+		public async Task<IActionResult> SaveQuizResult([FromBody] TestResultViewModel model)
+		{
+            int? studenid= null;
+			if (model.MemberId == null || model.MemberId <= 0 || model.MemberId.ToString() == "")
+            {
+                var userIdClaim = User.FindFirst("UserId")?.Value;
+                int? userId = null;
+
+                if (int.TryParse(userIdClaim, out int parsedUserId))
+                {
+                    userId = parsedUserId;
+                }
+                studenid= userId ?? 0;
+			}
+            else
+            {
+				studenid=model.MemberId ?? 0;
+
+			}
+                string url = model.TestUrl;
+			string lastPart = url.Split('/').Last();
+			//int marksPerQuestion = model.TotalMarks / model.TotalQuestions;
+			//decimal obtainedMarks = model.CorrectAnswers * marksPerQuestion;
+			bool isPassed = model.CorrectAnswers >= (model.TotalMarks / 2);
+			var testResult = new TblTest
+			{
+				TestType = 1,
+				ObtainedMarks = model.CorrectAnswers,
+				TotalMarks = model.TotalMarks,
+				Dated = DateTime.Now,
+				IsPassed = isPassed,
+				Url = lastPart,
+				TestId = model.TestId,
+				MemberId = studenid ?? 0,
+				TestTime = model.Duration,
+				IsBrowser = true,
+			};
+
+			_context.TblTests.Add(testResult);
+			await _context.SaveChangesAsync();
+
+			return Ok(new { success = true, message = "Quiz saved successfully" });
+		}
+
+
+		[Route("online-test/api/get-test-result/{id}")]
         public async Task<IActionResult> GetTestResultJson(int id)
         {
             var result = await _context.TblTests.FirstOrDefaultAsync(t => t.Id == id);
@@ -1993,35 +2037,35 @@ namespace IKDFrontEnd.Controllers
 		   Choices = new[] {
 			new {
 				Text = q.Choice1,
-				Img = string.IsNullOrEmpty(q.Choice1) && !string.IsNullOrEmpty(q.Choice1img)
+				Img = !string.IsNullOrEmpty(q.Choice1img)
 					? $"{q.Choice1img}"
 					: null,
 				Value = "A"
 			},
 			new {
 				Text = q.Choice2,
-				Img = string.IsNullOrEmpty(q.Choice2) && !string.IsNullOrEmpty(q.Choice2img)
+				Img = !string.IsNullOrEmpty(q.Choice2img)
 					? $"{q.Choice2img}"
 					: null,
 				Value = "B"
 			},
 			new {
 				Text = q.Choice3,
-				Img = string.IsNullOrEmpty(q.Choice3) && !string.IsNullOrEmpty(q.Choice3img)
+				Img = !string.IsNullOrEmpty(q.Choice3img)
 					? $"{q.Choice3img}"
 					: null,
 				Value = "C"
 			},
 			new {
 				Text = q.Choice4,
-				Img = string.IsNullOrEmpty(q.Choice4) && !string.IsNullOrEmpty(q.Choice4img)
+				Img = !string.IsNullOrEmpty(q.Choice4img)
 					? $"{q.Choice4img}"
 					: null,
 				Value = "D"
 			},
 			new {
 				Text = q.Choice5,
-				Img = string.IsNullOrEmpty(q.Choice5) && !string.IsNullOrEmpty(q.Choice5img)
+				Img = !string.IsNullOrEmpty(q.Choice5img)
 					? $"{q.Choice5img}"
 					: null,
 				Value = "E"
@@ -2031,9 +2075,33 @@ namespace IKDFrontEnd.Controllers
 	   })
 	   .ToListAsync();
 
+			var boardName = await _context.Boards
+	                                .Where(x => x.Id == board)
+	                                .Select(x => x.Name)
+	                                .FirstOrDefaultAsync();
 
+			var subjectName = await _context.TblOtssubjects
+				.Where(x => x.Id == subject)
+				.Select(x => x.OtsSubjectName)
+				.FirstOrDefaultAsync();
 
-			return Ok(questions);
+			var className = await _context.TblOtsclasses
+				.Where(x => x.Id == myclass)
+				.Select(x => x.OtsclassName)
+				.FirstOrDefaultAsync();
+
+			var yearName = await _contextCollege.Years
+				.Where(x => x.YearId == year)
+				.Select(x => x.YearName)
+				.FirstOrDefaultAsync();
+
+			var result = new
+			{
+				Title = $"{boardName} - {className} - {subjectName} - {yearName}",
+				Questions = questions
+			};
+
+			return Ok(result);
 
 		}
 
