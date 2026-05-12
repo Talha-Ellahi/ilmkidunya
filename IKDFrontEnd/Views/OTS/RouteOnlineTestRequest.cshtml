@@ -600,7 +600,13 @@
                                     foreach (var set in Model.BoardTestSets.OrderByDescending(x=>x.Year))
                                     {
                                         <li>
-                                            <h3>@set.YearName @set.subjectName</h3>
+                                            <h3>@set.YearName
+                                                @if (!string.IsNullOrEmpty(set.GroupName) && (set.GroupName == "First Group" || set.GroupName == "Second Group"))
+                                                {
+                                                    @set.GroupName
+                                                }
+                                            </h3>
+                                            <p>@set.subjectName</p>
                                             <p>@set.myclassName</p>
                                             <p>@set.boardName</p>
                                             <p>Total Question:@set.TotalQuestions</p>
@@ -610,7 +616,7 @@
                                                 Start Test
                                             </a>*@
                                             <a href="javascript:void(0)"
-                                               onclick="openTopicBoardTest('/online-test/board/@Model.Test.Url.Replace(".aspx", "")-mcqs-with-answers?year=@set.Year&board=@set.board&myclass=@set.myclass&subject=@set.subject')"
+                                               onclick="openTopicBoardTest('/online-test/board/@Model.Test.Url.Replace(".aspx", "")-mcqs-with-answers?year=@set.Year&board=@set.board&myclass=@set.myclass&subject=@set.subject&group=@set.GroupId')"
                                                class="text-btn">
                                                 Start Test
                                             </a>

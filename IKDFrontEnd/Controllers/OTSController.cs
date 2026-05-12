@@ -189,8 +189,8 @@ namespace IKDFrontEnd.Controllers
 
             var Class = await _context.TblOtsclasses.Where(c => c.Id == testDetail.ClassId).FirstOrDefaultAsync();
 
-            // Parse chapter IDs (if available)
-            var chapterIds = testDetail.ChapterIds?
+			// Parse chapter IDs (if available)
+			var chapterIds = testDetail.ChapterIds?
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(id => int.TryParse(id.Trim(), out var cid) ? cid : -1)
                 .Where(cid => cid > 0)
@@ -337,55 +337,6 @@ namespace IKDFrontEnd.Controllers
                 .ToList()
             }).ToList();
             
-      //      List<BoardTestSetViewModel> boardPaper = new List<BoardTestSetViewModel>();
-      //      var years = _contextCollege.Years.ToList();
-      //      var boards = _context.Boards.ToList();
-      //      foreach (var year in years.OrderByDescending(y => y.YearId)) // latest first
-      //      {
-      //          foreach (var b in boards)
-      //          {
-      //              var sampleMcqs = await _contextCollege.BoardOtsmcqs
-      //                  .Where(q =>
-      //                      q.BoardId == b.Id &&
-      //                      q.ClassId == testDetail.ClassId &&
-      //                      q.SubjectId == testDetail.SubjectId &&
-      //                      q.YearId == year.YearId
-      //                  )
-      //                  .OrderBy(q => Guid.NewGuid())
-      //                  .Take(10) // sample questions
-      //                  .Select(q => new McqQuestionViewModel
-      //                  {
-      //                      Question = q.Question,
-						//	Choice1 = q.Choice1,
-						//	Choice2 = q.Choice2,
-						//	Choice3 = q.Choice3,
-						//	Choice4 = q.Choice4,
-						//	Choice5 = q.Choice5,
-						//	CorrectAnswer = q.CorrectAnswer
-      //                  })
-      //                  .ToListAsync();
-
-      //              // Skip empty sets (important)
-      //              if (!sampleMcqs.Any())
-      //                  continue;
-
-      //              boardPaper.Add(new BoardTestSetViewModel
-      //              {
-      //                  Year = year.YearId, // 2025 etc
-      //                  YearName= year.YearName, // "Set 1" etc
-						//board = b.Id,
-      //                  boardName = b.Name,
-						//myclass = Class.Id,
-      //                  myclassName = Class != null ? Class.OtsclassName : "",
-						//subject = subject.Id,
-      //                  subjectName = subject != null ? subject.OtsSubjectName : "",
-						//TotalQuestions = sampleMcqs.Count,
-      //                  StartUrl = $"/online-test/board/{b.Id}/{year.YearName}/{test.Url}",
-      //                  SampleMcqs = sampleMcqs
-      //              });
-      //          }
-      //      }
-
             var viewModel = new OnlineTestChapterListViewModel
             {
                 Test = test,
@@ -414,49 +365,10 @@ namespace IKDFrontEnd.Controllers
             // CONDITION 2: Multiple or null → Load Chapters
             else
             {
-				//int actualBoardQuestionCount = await _contextCollege.BoardOtsmcqs.CountAsync(q => q.ClassId== Class.Id && q.SubjectId==subject.Id);
-				//var uniqueSets = await _contextCollege.BoardOtsmcqs
-				//             .Where(q => q.ClassId == Class.Id && q.SubjectId == subject.Id)
-				//             .Select(q => new
-				//             {
-				//              q.ClassId,
-				//              q.SubjectId,
-				//              q.BoardId,
-				//              q.YearId
-				//             })
-				//             .Distinct()
-				//             .ToListAsync();
-
-				//  var testSets = new List<BoardTestSetViewModel>();
-
-				//  foreach (var item in uniqueSets)
-				//  {
-				//   int questionCount = await _contextCollege.BoardOtsmcqs
-				//    .CountAsync(q =>
-				//	    q.ClassId == item.ClassId &&
-				//	    q.SubjectId == item.SubjectId &&
-				//	    q.BoardId == item.BoardId &&
-				//	    q.YearId == item.YearId
-				//    );
-
-				//   testSets.Add(new BoardTestSetViewModel
-				//{
-				//	Year= item.YearId,
-				//                      YearName= _contextCollege.Years.Where(y => y.YearId == item.YearId).Select(y => y.YearName).FirstOrDefault() ?? "",
-				//	board=item.BoardId,
-				//                      boardName = _contextCollege.Boards.Where(b => b.Id == item.BoardId).Select(b => b.Name).FirstOrDefault() ?? "",
-				//	myclass=item.ClassId,
-				//                      myclassName = Class != null ? Class.OtsclassName : "",
-				//	subject=item.SubjectId,
-				//                      subjectName = subject != null ? subject.OtsSubjectName : "",
-				//	//SetName = $"{item.YearId} - Board {item.BoardId}",
-				//    TotalQuestions = questionCount,
-				//    StartUrl = $"/online-test/board/start/{url}?class={item.ClassId}&subject={item.SubjectId}&board={item.BoardId}&year={item.YearId}"
-				//   });
-				//  }
+				//Board OTS Test
 				var testSets = await _contextCollege.BoardOtsmcqs
                       .Where(q => q.ClassId == Class.Id && q.SubjectId == subject.Id)
-                      .GroupBy(q => new { q.ClassId, q.SubjectId, q.BoardId, q.YearId })
+                      .GroupBy(q => new { q.ClassId, q.SubjectId, q.BoardId, q.YearId,q.PaperGroupId })
                       .Select(g => new BoardTestSetViewModel
                       {
 	                      Year = g.Key.YearId,
@@ -464,8 +376,12 @@ namespace IKDFrontEnd.Controllers
 		                      .Where(y => y.YearId == g.Key.YearId)
 		                      .Select(y => y.YearName)
 		                      .FirstOrDefault() ?? "",
-
-	                      board = g.Key.BoardId,
+						  GroupId = g.Key.PaperGroupId,
+						  GroupName = _contextCollege.PaperGroups
+							  .Where(pg => pg.PaperGroupId == g.Key.PaperGroupId)
+							  .Select(pg => pg.PaperGroupName)
+							  .FirstOrDefault() ?? "",
+						  board = g.Key.BoardId,
 	                      boardName = _contextCollege.Boards
 		                      .Where(b => b.Id == g.Key.BoardId)
 		                      .Select(b => b.Name)
@@ -2021,10 +1937,10 @@ namespace IKDFrontEnd.Controllers
 		}
 
 		[Route("online-test/board/{testUrl}-mcqs-with-answers")]
-		public async Task<IActionResult> BoardTestPreparationWithAnswers(string testUrl, int year = 0, int board = 0, int myclass = 0, int subject = 0)
+		public async Task<IActionResult> BoardTestPreparationWithAnswers(string testUrl, int year = 0, int board = 0, int myclass = 0, int subject = 0, byte group = 0)
 		{
 			var questions = await _contextCollege.BoardOtsmcqs
-	   .Where(q => q.BoardId==board && q.YearId==year && q.SubjectId==subject && q.ClassId==myclass)
+	   .Where(q => q.BoardId==board && q.YearId==year && q.SubjectId==subject && q.ClassId==myclass && q.PaperGroupId==group)
 	   .OrderByDescending(q => q.BoardOtsid)
 	   .Select(q => new
 	   {
@@ -2095,9 +2011,14 @@ namespace IKDFrontEnd.Controllers
 				.Select(x => x.YearName)
 				.FirstOrDefaultAsync();
 
+			var groupName = await _contextCollege.PaperGroups
+				.Where(x => x.PaperGroupId == group)
+				.Select(x => x.PaperGroupName)
+				.FirstOrDefaultAsync();
+
 			var result = new
 			{
-				Title = $"{boardName} - {className} - {subjectName} - {yearName}",
+				Title = $"{boardName} - {className} - {subjectName} - {yearName} - {groupName}",
 				Questions = questions
 			};
 

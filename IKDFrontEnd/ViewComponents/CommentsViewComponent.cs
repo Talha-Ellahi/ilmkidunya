@@ -70,39 +70,76 @@ namespace IKDFrontEnd.ViewComponents
                 replyUserLikeStatuses = await _commentService.GetUserLikeStatusesAsync(replyIds, userId);
             }
 
-            // Apply the data to comments
-            foreach (var comment in comments)
-            {
-                comment.LikeCount = likeCounts.ContainsKey(comment.CommentId) ? likeCounts[comment.CommentId] : 0;
+			// Apply the data to comments
+			//foreach (var comment in comments)
+			//{
+			//    comment.LikeCount = likeCounts.ContainsKey(comment.CommentId) ? likeCounts[comment.CommentId] : 0;
 
-                if (isAuthenticated)
-                {
-                    comment.HasLiked = userLikeStatuses.ContainsKey(comment.CommentId) && userLikeStatuses[comment.CommentId];
-                }
+			//    if (isAuthenticated)
+			//    {
+			//        comment.HasLiked = userLikeStatuses.ContainsKey(comment.CommentId) && userLikeStatuses[comment.CommentId];
+			//    }
 
-                // Get and set replies
-                if (repliesDict.TryGetValue(comment.CommentId, out var replies))
-                {
-                    comment.Replies = replies;
+			//    // Get and set replies
+			//    if (repliesDict.TryGetValue(comment.CommentId, out var replies))
+			//    {
+			//        comment.Replies = replies;
 
-                    // Set like data for replies
-                    foreach (var reply in replies)
-                    {
-                        reply.LikeCount = replyLikeCounts.ContainsKey(reply.CommentId) ? replyLikeCounts[reply.CommentId] : 0;
+			//        // Set like data for replies
+			//        foreach (var reply in replies)
+			//        {
+			//            reply.LikeCount = replyLikeCounts.ContainsKey(reply.CommentId) ? replyLikeCounts[reply.CommentId] : 0;
 
-                        if (isAuthenticated)
-                        {
-                            reply.HasLiked = replyUserLikeStatuses.ContainsKey(reply.CommentId) && replyUserLikeStatuses[reply.CommentId];
-                        }
-                    }
-                }
-                else
-                {
-                    comment.Replies = new List<TblDefComment>();
-                }
-            }
+			//            if (isAuthenticated)
+			//            {
+			//                reply.HasLiked = replyUserLikeStatuses.ContainsKey(reply.CommentId) && replyUserLikeStatuses[reply.CommentId];
+			//            }
+			//        }
+			//    }
+			//    else
+			//    {
+			//        comment.Replies = new List<TblDefComment>();
+			//    }
+			//}
+			foreach (var comment in comments)
+			{
+				comment.LikeCount =
+					likeCounts.TryGetValue(comment.CommentId, out var count)
+					? count
+					: 0;
 
-            var model = new CommentViewModel
+				if (isAuthenticated)
+				{
+					comment.HasLiked =
+						userLikeStatuses.TryGetValue(comment.CommentId, out var liked)
+						&& liked;
+				}
+
+				if (repliesDict.TryGetValue(comment.CommentId, out var replies))
+				{
+					comment.Replies = replies ?? new List<TblDefComment>();
+
+					foreach (var reply in comment.Replies)
+					{
+						reply.LikeCount =
+							replyLikeCounts.TryGetValue(reply.CommentId, out var rCount)
+							? rCount
+							: 0;
+
+						if (isAuthenticated)
+						{
+							reply.HasLiked =
+								replyUserLikeStatuses.TryGetValue(reply.CommentId, out var rLiked)
+								&& rLiked;
+						}
+					}
+				}
+				else
+				{
+					comment.Replies = new List<TblDefComment>();
+				}
+			}
+			var model = new CommentViewModel
             {
                 PageUrl = pageUrl,
                 PageTitle = pageTitle,

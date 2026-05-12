@@ -1,5 +1,8 @@
 ﻿@using IKDFrontEnd.ViewModels
 @model CollegesViewModel
+@using System.Text.Json
+@using System.Collections.Generic
+
 <style>
     .contact-admin {
         display: flex;
@@ -81,6 +84,52 @@
 
     <title>@(!string.IsNullOrWhiteSpace(Model?.MetaTitle) ? Model.MetaTitle : "College Details")</title>
 }
+@{
+    var jsonLdObject = new Dictionary<string, object>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "CollegeOrUniversity",
+
+        ["name"] = Model.CollegeName,
+        ["url"] = Model.Url,
+        ["description"] = Model.MetaDesc?.Replace("&#x2013;", "").Replace("&amp;", "&"),
+
+        ["logo"] = Model.CollegeImage, // optional but important for SEO
+
+        ["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = Model.Address,   // FIX: don’t repeat college name here
+            ["addressLocality"] = Model.City,
+            ["addressRegion"] = "Punjab",
+            ["postalCode"] = "54000",
+            ["addressCountry"] = "PK"
+        },
+
+        ["contactPoint"] = new Dictionary<string, object>
+        {
+            ["@type"] = "ContactPoint",
+            ["telephone"] = Model.ContactNumber,
+            ["contactType"] = "admissions",
+            ["areaServed"] = "PK",
+            ["availableLanguage"] = new[] { "English", "Urdu" }
+        },
+
+        // ["sameAs"] = new[]
+        // {
+        //     Model.FacebookUrl,
+        //     Model.InstagramUrl
+        // },
+
+        ["foundingDate"] = Model.EstablishedYear // optional but strong signal
+    };
+
+    var jsonLd = JsonSerializer.Serialize(jsonLdObject);
+}
+
+<script type="application/ld+json">
+    @Html.Raw(jsonLd)
+</script>
 @section header {
 
     <div class="col-lg-11">

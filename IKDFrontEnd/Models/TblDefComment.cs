@@ -34,10 +34,17 @@ public partial class TblDefComment
 
     public virtual ICollection<TblDefCommentLike> TblDefCommentLikes { get; set; } = new List<TblDefCommentLike>();
 
+	//public virtual ICollection<TblDefComment> Replies { get; set; } = new List<TblDefComment>();
+	// Parent comment
+	[ForeignKey("ParentCommentId")]
+	public virtual TblDefComment? ParentComment { get; set; }
+
+	// Child replies
+	[InverseProperty("ParentComment")]
 	public virtual ICollection<TblDefComment> Replies { get; set; } = new List<TblDefComment>();
 	[NotMapped]
-	public int LikeCount { get; set; }
+    public int LikeCount { get; set; }
 
-	[NotMapped]
-	public bool HasLiked { get; set; }
+    [NotMapped]
+    public bool HasLiked { get; set; }
 }

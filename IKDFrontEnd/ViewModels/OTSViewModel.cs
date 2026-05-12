@@ -125,6 +125,8 @@ namespace IKDFrontEnd.ViewModels
 	{
 		public int Year { get; set; } // Example: "Set 1"
 		public string YearName { get; set; }
+		public byte? GroupId { get; set; } // Example: "Set 1"
+		public string GroupName { get; set; }
 		public int board { get; set; }
 		public string boardName { get; set; }
 		public int myclass { get; set; }

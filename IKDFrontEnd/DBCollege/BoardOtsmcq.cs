@@ -15,6 +15,8 @@ public partial class BoardOtsmcq
 
     public int SubjectId { get; set; }
 
+    public byte? PaperGroupId { get; set; }
+
     public string? Question { get; set; }
 
     public string? QuestionImage { get; set; }
@@ -48,6 +50,8 @@ public partial class BoardOtsmcq
     public DateTime? UpdateDate { get; set; }
 
     public int? UpDateName { get; set; }
+
+    public virtual PaperGroup? PaperGroup { get; set; }
 
     public virtual Year Year { get; set; } = null!;
 }
