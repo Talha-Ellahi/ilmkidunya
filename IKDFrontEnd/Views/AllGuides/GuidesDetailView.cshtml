@@ -176,7 +176,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Click on any city to view hostels and rooms</h2>
+                    <h2>City-Wise Hostels For Inter Students</h2>
                     <div class="row">
                         <ul class="admission-nav">
                             @foreach (var city in citiesWithImages)
@@ -302,115 +302,7 @@
             cursor: pointer;
         }
 </style>
-@* 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Handle form submission
-        $("#PageUrl").val(window.location.href);
-        $("#suggestion-form").submit(function(event) {
-            event.preventDefault(); // Prevent the form from submitting the usual way
 
-            var formData = $(this).serialize(); // Serialize form data to send it
-
-            // Make the AJAX request
-            $.ajax({
-                url: '/submitform/colleges',
-                type: 'POST',
-                data: formData, // The form data to send
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message); // Success message
-                        $("#suggestion-form")[0].reset(); // Clear the form
-                    } else {
-                        alert(response.message); // Show error message
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("There was an error submitting the form.");
-                }
-            });
-        });
-    });
-</script>
-<script>
-    // Load More functionality
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('load-more-btn')) {
-            const button = e.target;
-            const type = button.getAttribute('data-type');
-            const course = button.getAttribute('data-course');
-            const page = parseInt(button.getAttribute('data-page'));
-            const layout = button.getAttribute('data-layout');
-            const city = button.getAttribute('data-city');
-
-            console.log('Load More Clicked:', { type, course, page, layout, city });
-
-            // Disable button and show loading
-            button.disabled = true;
-            button.textContent = 'Loading...';
-
-            fetch('/AllGuides/LoadMoreData', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    type: type,
-                    course: course,
-                    page: page,
-                    City: city,
-                    layout: layout
-                })
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                return response.text();
-            })
-            .then(html => {
-                console.log('HTML received:', html);
-                if (html.trim() !== '') {
-                    if (layout === 'table') {
-                        const table = button.closest('.responsive-table').querySelector('table tbody');
-                        console.log('Table found:', table);
-                        table.insertAdjacentHTML('beforeend', html);
-                    } else if (layout === 'list') {
-                        // FIXED: Insert the new list items INSIDE the ul element, not before the container
-                        const list = document.getElementById('mobileCollegesList');
-                        if (list) {
-                            list.insertAdjacentHTML('beforeend', html);
-                            console.log('List items added INSIDE mobileCollegesList');
-                        } else {
-                            console.error('Mobile list container not found');
-                        }
-                    }
-
-                    button.setAttribute('data-page', page + 1);
-                    button.textContent = 'Load More';
-                    button.disabled = false;
-                } else {
-                    console.log('No more data');
-                    button.textContent = 'No More Data';
-                    button.style.display = 'none';
-
-                    // Show "no more" message for mobile
-                    if (layout === 'list') {
-                        const noMoreElement = document.getElementById('noMoreMobileColleges');
-                        if (noMoreElement) {
-                            noMoreElement.textContent = 'No more universities available.';
-                            noMoreElement.style.display = 'block';
-                        }
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                button.textContent = 'Error Loading';
-                button.disabled = false;
-            });
-        }
-    });
-</script> *@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
