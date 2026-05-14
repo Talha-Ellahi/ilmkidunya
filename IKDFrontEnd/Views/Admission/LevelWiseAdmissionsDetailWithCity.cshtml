@@ -3,6 +3,7 @@
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
  @section MetaData {
 	@if (ViewBag.CmsData != null)
 	{
@@ -35,6 +36,45 @@
 		<title>@category Admission @DateTime.Now.Year in @city in Public and Private Colleges;</title>
 	}
 }
+<script type="application/ld+json">
+		 {
+	  "@@context": "https://schema.org",
+	  "@@type": "EducationEvent",
+	  "name": "@ViewBag.CmsData.MetaTitle",
+	  "description": "@ViewBag.CmsData.MetaDesc",
+	  "startDate": "2026-07-15T10:00:00+05:00",
+	  "endDate": "2026-07-15T14:00:00+05:00",
+	  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+	  "eventStatus": "https://schema.org/EventScheduled",
+	  "location": {
+		"@@type": "Place",
+		"name": "ABC University Main Campus",
+		"address": {
+		  "@@type": "PostalAddress",
+		  "streetAddress": "123 University Road",
+		  "addressLocality": "Lahore",
+		  "addressRegion": "Punjab",
+		  "addressCountry": "PK"
+		}
+	  },
+	  "organizer": {
+		"@@type": "CollegeOrUniversity",
+		"name": "ABC University",
+		"url": "https://www.abcuniversity.edu"
+	  },
+	  "audience": {
+		"@@type": "EducationalAudience",
+		"educationalRole": "student"
+	  },
+	  "offers": {
+		"@@type": "Offer",
+		"price": "0",
+		"priceCurrency": "PKR",
+		"availability": "https://schema.org/InStock",
+		"url": "https://www.abcuniversity.edu/admissions/open-house"
+	  }
+	}
+</script>
 @section header {
 	<div class="col-lg-11">
 		<ul class="navigation">

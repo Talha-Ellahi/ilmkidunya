@@ -20210,13 +20210,14 @@ height:100%;
         {
             @if (ViewBag.DisableComments != true)
             {
-               /*  @await Component.InvokeAsync("Comments") */
+                @await Component.InvokeAsync("Comments")
             }
-
         }
-        catch
+        catch(Exception ex)
         {
-
+              <div style="color:red">
+                    Error: @ex.Message
+                </div>
         }
         <div id="loginPartialContainer"></div>
 

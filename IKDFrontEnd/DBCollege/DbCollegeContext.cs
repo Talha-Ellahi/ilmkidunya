@@ -27,6 +27,8 @@ public partial class DbCollegeContext : DbContext
 
     public virtual DbSet<InstituteType> InstituteTypes { get; set; }
 
+    public virtual DbSet<PaperGroup> PaperGroups { get; set; }
+
     public virtual DbSet<SectionContentImport> SectionContentImports { get; set; }
 
     public virtual DbSet<SectionTypeImport> SectionTypeImports { get; set; }
@@ -100,10 +102,15 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.Choice5img).HasMaxLength(255);
             entity.Property(e => e.ClassId).HasColumnName("ClassID");
             entity.Property(e => e.Dated).HasColumnType("datetime");
+            entity.Property(e => e.PaperGroupId).HasColumnName("PaperGroupID");
             entity.Property(e => e.QuestionImage).HasMaxLength(255);
             entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
             entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             entity.Property(e => e.YearId).HasColumnName("YearID");
+
+            entity.HasOne(d => d.PaperGroup).WithMany(p => p.BoardOtsmcqs)
+                .HasForeignKey(d => d.PaperGroupId)
+                .HasConstraintName("FK_BoardOTSMCQ_PaperGroups");
 
             entity.HasOne(d => d.Year).WithMany(p => p.BoardOtsmcqs)
                 .HasForeignKey(d => d.YearId)
@@ -162,6 +169,14 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.Url)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<PaperGroup>(entity =>
+        {
+            entity.ToTable("PaperGroups", "dbo");
+
+            entity.Property(e => e.PaperGroupId).HasColumnName("PaperGroupID");
+            entity.Property(e => e.PaperGroupName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<SectionContentImport>(entity =>
