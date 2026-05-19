@@ -1,9 +1,11 @@
-﻿using System;
+﻿//using IKDFrontEnd.DBComment;
+using IKDFrontEnd.Models;
+//using IKDFrontEnd.DBComment2;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IKDFrontEnd.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace IKDFrontEnd.Services
 {
@@ -26,7 +28,7 @@ namespace IKDFrontEnd.Services
     public class CommentService : ICommentService
     {
         private readonly DbikdContext _context;
-
+        //private readonly DbComment2Context _context;
         public CommentService(DbikdContext context)
         {
             _context = context;
