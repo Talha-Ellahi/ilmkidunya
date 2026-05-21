@@ -323,7 +323,7 @@ namespace IKDFrontEnd.Controllers
             var banners = await _bannerService.GetBannersAsync();
             ViewBag.Banners = banners;
             var category = await _context.TblNewsCategories
-                .FirstOrDefaultAsync(c => c.RewriteUrl == categorySlug.Replace(" ", "-"));
+                .FirstOrDefaultAsync(c => c.RewriteUrl == categorySlug.ToLower().Replace(" ", "-"));
 
             if (category == null)
             {
@@ -495,74 +495,6 @@ namespace IKDFrontEnd.Controllers
             return View(model);
         }
 
-
-
-
-
-        //	[HttpPost]
-        //	public async Task<IActionResult> PostComment(string newsslug, TblNewsComment comment, IFormFile CommentImage)
-        //      {
-        //          var banners = await _bannerService.GetBannersAsync();
-        //          ViewBag.Banners = banners;
-        //          if (comment == null || string.IsNullOrEmpty(comment.Comments))
-        //		{
-        //			return RedirectToAction("NewsDetails", new { newsslug = newsslug });
-        //		}
-
-        //		var news = await _context.TblMainNews
-        //			.Where(n => n.RewriteUrl.Contains(newsslug) && n.Approve == true)
-        //			.FirstOrDefaultAsync();
-
-        //		if (news == null)
-        //		{
-        //			return NotFound();
-        //		}
-
-        //		if (CommentImage != null && CommentImage.Length > 0)
-        //		{
-        //			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/comments", CommentImage.FileName);
-
-        //			using (var stream = new FileStream(filePath, FileMode.Create))
-        //			{
-        //				await CommentImage.CopyToAsync(stream);
-        //			}
-        //			comment.MemberImage = "/images/comments/" + CommentImage.FileName;
-        //		}
-
-        //		comment.NewsId = news.NewsId;
-        //		comment.DatePosted = DateTime.Now;
-        //		comment.IsApproved = false;
-        //		comment.PageUrl = "https://www.ilmkidunya.com/edunews/" + newsslug;
-
-        //		_context.TblNewsComments.Add(comment);
-        //		await _context.SaveChangesAsync();
-
-        //		return RedirectToAction("NewsDetails", new { newsslug = newsslug });
-        //	}
-        //[HttpPost]
-        //public async Task<IActionResult> PostReply([FromBody] PostReplyDto reply)
-        //{
-        //	if (reply == null || string.IsNullOrWhiteSpace(reply.Comment))
-        //		return BadRequest("Invalid data.");
-
-        //	var newReply = new TblCommentsChild
-        //	{
-        //		CId = reply.ParentCommentId,
-        //		Comment = reply.Comment,
-        //		Username = reply.Username,
-        //		Email = reply.Email,
-        //		Posteddate = DateTime.Now.ToString("dd MMM yyyy"),
-        //		IsAdminReply = false,
-        //		Abused = 0,
-        //		Source = reply.Source,
-        //		Ipaddress = reply.IpAddress
-        //	};
-
-        //	_context.TblCommentsChildren.Add(newReply);
-        //	await _context.SaveChangesAsync();
-
-        //	return Ok();
-        //}
 
 
 

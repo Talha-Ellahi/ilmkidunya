@@ -416,6 +416,7 @@ namespace IKDFrontEnd.Controllers
                         IconPath = "/images/hostel-features/" + f.FeatureName.ToLower().Replace(" ", "-") + ".png"
                     })
                     .ToListAsync();
+
                 ViewBag.Cities = model.Cities;
                 ViewBag.Genders = new List<SelectListItem>
                               {

@@ -748,19 +748,19 @@ namespace IKDFrontEnd.Controllers
             string remoteFilePath = $"files/guides/{fullPath}.html";
 
             // Check if file exists on FTP
-            bool fileExists = await _ftpService.FileExistsAsync(remoteFilePath);
-            if (fileExists)
-            {
-                try
-                {
-                    string existingHtml = await _ftpService.DownloadFileAsync(remoteFilePath);
-                    return Content(existingHtml, "text/html");
-                }
-                catch (Exception ex)
-                {
-                    // Log and fall through
-                }
-            }
+            //bool fileExists = await _ftpService.FileExistsAsync(remoteFilePath);
+            //if (fileExists)
+            //{
+            //    try
+            //    {
+            //        string existingHtml = await _ftpService.DownloadFileAsync(remoteFilePath);
+            //        return Content(existingHtml, "text/html");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // Log and fall through
+            //    }
+            //}
 
             // Check for cache-busting parameters
             bool shouldBypassCache = HttpContext.Request.Query.ContainsKey("remove_cache") ||
@@ -781,6 +781,7 @@ namespace IKDFrontEnd.Controllers
             //    Response.Headers["Cache-Control"] = "public, max-age=300";
             //}
 
+            
             var url1 = pathSegments != null && pathSegments.Length > 0 ? pathSegments[0] : "";
             var Url = url3 != null
                         ? $"/{url1}/{url2}/{url3}"
@@ -959,7 +960,7 @@ namespace IKDFrontEnd.Controllers
                             {
                                 admissionSbInCity.AppendLine($@"
 <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-<img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}""
+<img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}""
                          alt=""Admission notice for {admission.CollegeName}""
                          style=""max-height:80px; max-width:80px;"" />
 </a>");
@@ -1855,6 +1856,7 @@ namespace IKDFrontEnd.Controllers
 
 
         public List<CitywithAdmissionAndCollegeCountViewModel> GetCitiesWithColleges(string course, int minColleges = 5)
+        
         {
             // Check if this is an educational level
             var (levelId, levelName) = GetLevelFromUrl(course);
@@ -2364,7 +2366,7 @@ namespace IKDFrontEnd.Controllers
                             {
                                 admissionSb.AppendLine($@"
         <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-            <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+            <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                  alt=""Admission notice for {admission.CollegeName}"" 
                  style=""max-height:80px; max-width:80px;"" />
         </a>");
@@ -2501,7 +2503,7 @@ namespace IKDFrontEnd.Controllers
                             {
                                 admissionSbInCity.AppendLine($@"
         <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-            <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+            <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                  alt=""Admission notice for {admission.CollegeName}"" 
                  style=""max-height:80px; max-width:80px;"" />
         </a>");
@@ -3215,7 +3217,7 @@ namespace IKDFrontEnd.Controllers
                 //                         {
                 //                             admissionSb.AppendLine($@"
                 //     <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-                //         <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+                //         <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                 //              alt=""Admission notice for {admission.CollegeName}"" 
                 //              style=""max-height:80px; max-width:80px;"" />
                 //     </a>");
@@ -3307,7 +3309,7 @@ namespace IKDFrontEnd.Controllers
                 //                         {
                 //                             admissionSbInCity.AppendLine($@"
                 //     <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-                //         <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+                //         <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                 //              alt=""Admission notice for {admission.CollegeName}"" 
                 //              style=""max-height:80px; max-width:80px;"" />
                 //     </a>");
@@ -3733,7 +3735,7 @@ namespace IKDFrontEnd.Controllers
                             {
                                 admissionSb.AppendLine($@"
                 <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-                    <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+                    <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                          alt=""Admission notice for {admission.CollegeName}"" 
                          style=""max-height:80px; max-width:80px;"" />
                 </a>");
@@ -3813,7 +3815,7 @@ namespace IKDFrontEnd.Controllers
                             {
                                 admissionSbInCity.AppendLine($@"
                 <a href=""/colleges/{admission.CollegeUrl}-admission.aspx"" target=""_blank"">
-                    <img src=""https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/{admission.NoticeImageThumb}"" 
+                    <img src=""https://admissions.ilmkidunya.com/admission_notices/images/NoticeAds/{admission.NoticeImageThumb}"" 
                          alt=""Admission notice for {admission.CollegeName}"" 
                          style=""max-height:80px; max-width:80px;"" />
                 </a>");
