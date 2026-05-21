@@ -228,7 +228,7 @@ namespace IKDFrontEnd.Controllers
                 Url = college.Url ?? "Not Available",
                 CollegeImage = college.Logo ?? "Not Available",
                 EstablishedYear = college.EstablishedYear?.ToString() ?? "Not Available",
-                StudentsCount = college.StudentsCount?.ToString() ?? "Not Available",
+                StudentsCount = college.StudentsCount?.ToString() ?? "0",
                 Recognition = college.AffiliationStatus ?? "Not Available",
                 ContactNumber = college.ContactNumber ?? "Not Available",
                 Address = college.Address ?? "Not Available",

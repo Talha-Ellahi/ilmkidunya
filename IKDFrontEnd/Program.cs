@@ -5,6 +5,8 @@ using IKDFrontEnd.BackupModel2;
 using IKDFrontEnd.BackupModel3;
 using IKDFrontEnd.BookModels;
 using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.DBComment;
+using IKDFrontEnd.DBComment2;
 using IKDFrontEnd.DictionaryModels;
 using IKDFrontEnd.Helpers;
 using IKDFrontEnd.Interfaces;
@@ -134,6 +136,26 @@ builder.Services.AddDbContext<DbikdContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorNumbersToAdd: null);
     }));
+//builder.Services.AddDbContext<DbCommentContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DbComment"),
+//    sqlOptions =>
+//    {
+//        sqlOptions.CommandTimeout(60); // 60 seconds timeout
+//        sqlOptions.EnableRetryOnFailure(
+//            maxRetryCount: 3,
+//            maxRetryDelay: TimeSpan.FromSeconds(5),
+//            errorNumbersToAdd: null);
+//    }));
+builder.Services.AddDbContext<DbComment2Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbComment2"),
+    sqlOptions =>
+    {
+        sqlOptions.CommandTimeout(60); // 60 seconds timeout
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    }));
 builder.Services.AddDbContext<JobsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("JobsDbConnectionString"),
     sqlOptions => {
@@ -163,6 +185,9 @@ builder.Services.AddDbContext<Dbikd2Context>(options =>
     }));
 builder.Services.AddDbContext<DbCollegeContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DbCollege")));
+
+//builder.Services.AddDbContext<DbCommentContext>(options =>
+//	options.UseSqlServer(builder.Configuration.GetConnectionString("DbComment")));
 builder.Services.AddDbContext<PastPaperDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("PastPaperDbConnectionString")));
 //builder.Services.AddDbContext<Dbikd3Context>(options =>

@@ -43,6 +43,8 @@
   <ItemGroup>
     <Folder Include="BackupModels\" />
     <Folder Include="Models\Db3\" />
+    <Folder Include="DBComment\" />
+    <Folder Include="DBComment2\" />
     <Folder Include="Views\LongQuestions\" />
     <Folder Include="wwwroot\images\comments\" />
     <Folder Include="wwwroot\generated-html\dictionary\" />

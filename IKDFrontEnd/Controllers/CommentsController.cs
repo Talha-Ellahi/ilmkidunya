@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿
+//using IKDFrontEnd.DBComment;
+//using IKDFrontEnd.DBComment2;
 using IKDFrontEnd.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 public class CommentsController : Controller
 {
     private readonly DbikdContext _context;
+    //private readonly DbComment2Context _context;
 
     public CommentsController(DbikdContext context)
     {

@@ -1,5 +1,7 @@
 ﻿// ViewComponents/CommentsViewComponent.cs
 using IKDFrontEnd.Models;
+//using IKDFrontEnd.DBComment;
+//using IKDFrontEnd.DBComment2;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;

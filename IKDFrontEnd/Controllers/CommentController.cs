@@ -1,5 +1,7 @@
 ﻿// Controllers/CommentController.cs
 using IKDFrontEnd.Models;
+//using IKDFrontEnd.DBComment;
+//using IKDFrontEnd.DBComment2;
 using IKDFrontEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
