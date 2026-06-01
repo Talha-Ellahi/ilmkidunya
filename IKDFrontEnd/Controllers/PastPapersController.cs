@@ -106,10 +106,10 @@ namespace IKDFrontEnd.Controllers
                 }).FirstOrDefaultAsync();
 
                 model.CmsData = sectionContent;
-
-                // Get initial boards data
-                var initialBoards = await _pastPaperDbContext.Boards
-                    .Where(b => b.IsActive == true)
+				//c => !c.IsDelete.HasValue || !c.IsDelete.Value
+				// Get initial boards data
+				var initialBoards = await _pastPaperDbContext.Boards
+                    .Where(b => b.IsActive.HasValue == true && b.IsActive.Value && b.TblPastPapers.Any(p=>p.BoardId==b.Id))
                     .Select(b => new { id = b.Id, name = b.Name })
                     .OrderBy(b => b.name)
                     .ToListAsync();
@@ -520,7 +520,6 @@ namespace IKDFrontEnd.Controllers
                     .Select(b => new { id = b.Id, name = b.Name })
                     .OrderBy(b => b.name)
                     .ToListAsync();
-
                 return Json(boards);
             }
             catch (Exception ex)
