@@ -136,16 +136,7 @@ builder.Services.AddDbContext<DbikdContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorNumbersToAdd: null);
     }));
-//builder.Services.AddDbContext<DbCommentContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DbComment"),
-//    sqlOptions =>
-//    {
-//        sqlOptions.CommandTimeout(60); // 60 seconds timeout
-//        sqlOptions.EnableRetryOnFailure(
-//            maxRetryCount: 3,
-//            maxRetryDelay: TimeSpan.FromSeconds(5),
-//            errorNumbersToAdd: null);
-//    }));
+
 builder.Services.AddDbContext<DbComment2Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbComment2"),
     sqlOptions =>
