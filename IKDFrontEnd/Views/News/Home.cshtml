@@ -87,6 +87,11 @@
         </div>
     </div>
 }
+<style>
+    .mian-hide{
+        display: none;
+    }
+ </style>
 <div id="main">
     <div class="college-news-sec">
         <div class="container">
@@ -362,7 +367,7 @@
 </script>
 
 <style>
-    .main-hide{
+    .mian-hide{
         display: none;
     }
     .spinner-border {
@@ -401,3 +406,38 @@
         border: 0 !important;
     }
 </style>
+<script>
+
+    (function () {
+          const section = document.querySelector('.mian-hide');
+          if (!section) alert('Script Loaded');
+          console.log('Section found:', section);
+
+          let shown = false;
+
+          function showSection() {
+              if (shown) return;
+              shown = true;
+              section.style.display = 'block';
+
+              events.forEach(eventName => {
+                  window.removeEventListener(eventName, showSection);
+              });
+          }
+
+          const events = [
+              'scroll',
+              'mousemove',
+              'mousedown',
+              'touchstart',
+              'keydown',
+              'wheel'
+          ];
+
+          events.forEach(eventName => {
+              window.addEventListener(eventName, showSection, { once: true, passive: true });
+          });
+
+          setTimeout(showSection, 5000);
+      })();
+</script>
