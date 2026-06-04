@@ -410,7 +410,6 @@ namespace IKDFrontEnd.Controllers
                         QuestionType = p.QuestionType,
                         Language = p.Language,
                         Description = p.Description,
-                        PdfUrl = p.Pdf,
                         ImageName = p.Image,
                         year = p.Year
                     })
@@ -456,6 +455,7 @@ namespace IKDFrontEnd.Controllers
                     Id = p.Id,
                     PaperName = p.Pnname,
                     ImageName = p.Image,
+                    PdfName = p.Pdf,
                     Dated = p.Date ?? DateTime.MinValue,
                     Heading = p.Pnname,
                     Description = p.Description

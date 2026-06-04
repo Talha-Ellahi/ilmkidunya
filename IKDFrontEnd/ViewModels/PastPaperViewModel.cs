@@ -14,8 +14,9 @@ namespace IKDFrontEnd.ViewModels
         public string SubjectName { get; set; }
         public string? QuestionType { get; set; }
         public string? Language { get; set; }
-        public string? PdfUrl { get; set; }
+       
         public string? ImageName { get; set; } 
+        public string? PdfName { get; set; }
         public DateTime Dated { get; set; } 
 
         List<SectionTypeImport> SectionTypeImports { get; set; }
@@ -39,6 +40,16 @@ namespace IKDFrontEnd.ViewModels
                 string year = Dated.ToString("yyyy");
                 string month = Dated.ToString("MM").TrimStart('0'); // Remove leading zero
                 return $"https://pastpapers.ilmkidunya.com/past_papers/Images/{year}/{month}/large/{ImageName}";
+            }
+        }
+
+        public string PdfUrl
+        {
+            get
+            {
+                string year = Dated.ToString("yyyy");
+                string month = Dated.ToString("MM").TrimStart('0'); // Remove leading zero
+                return $"https://pastpapers.ilmkidunya.com/past_papers/pdf/{year}/{month}/{PdfName}";
             }
         }
 
