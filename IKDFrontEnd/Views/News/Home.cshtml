@@ -87,6 +87,11 @@
         </div>
     </div>
 }
+<style>
+    .mian-hide{
+        display: none;
+    }
+</style>
 <div id="main">
     <div class="college-news-sec">
         <div class="container">
@@ -97,49 +102,49 @@
                         <ul class="admission-nav" style="border: 0; justify-content: flex-start;">
                             <li>
                                 <a href="/edunews/news-categories/national-news.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-national.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-national.webp" alt="image" />
                                     <span>National</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/international-news.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-world.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-world.webp" alt="image" />
                                     <span>International</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/announcements.aspx">
-                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="image" />
                                     <span>Announcements</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/merit-lists.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-meritlist.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-meritlist.webp" alt="image" />
                                     <span>Merit List</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/date-sheets.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-datesheet.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-datesheet.webp" alt="image" />
                                     <span>Date Sheets</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/results.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-result.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-result.webp" alt="image" />
                                     <span>Results</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/admissions.aspx">
-                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/list-icon.webp" alt="image" />
                                     <span>Admissions</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/edunews/news-categories/study-abroad-events.aspx">
-                                    <img src="https://images.ishallwin.com/news/ico-studyabroad.webp" alt="" />
+                                    <img src="https://images.ishallwin.com/news/ico-studyabroad.webp" alt="image" />
                                     <span>Study Abroad</span>
                                 </a>
                             </li>
@@ -163,7 +168,7 @@
                                     <div class="news-box">
                                         <div class="img-holder">
                                             <figure>
-                                                <img src="@news.PictureThumbnail" alt="@news.MainHeading" width="250" height="209" />
+                                                <img src="@news.PictureThumbnail" alt="@news.MainHeading" width="250" height="209"  loading="lazy" decoding="async"/>
                                             </figure>
                                         </div>
                                         <div class="text-holder">
@@ -362,7 +367,7 @@
 </script>
 
 <style>
-    .main-hide{
+    .mian-hide{
         display: none;
     }
     .spinner-border {
@@ -401,3 +406,38 @@
         border: 0 !important;
     }
 </style>
+<script>
+
+    (function () {
+          const section = document.querySelector('.mian-hide');
+          if (!section) alert('Script Loaded');
+          console.log('Section found:', section);
+
+          let shown = false;
+
+          function showSection() {
+              if (shown) return;
+              shown = true;
+              section.style.display = 'block';
+
+              events.forEach(eventName => {
+                  window.removeEventListener(eventName, showSection);
+              });
+          }
+
+          const events = [
+              'scroll',
+              'mousemove',
+              'mousedown',
+              'touchstart',
+              'keydown',
+              'wheel'
+          ];
+
+          events.forEach(eventName => {
+              window.addEventListener(eventName, showSection, { once: true, passive: true });
+          });
+
+          setTimeout(showSection, 5000);
+      })();
+</script>
