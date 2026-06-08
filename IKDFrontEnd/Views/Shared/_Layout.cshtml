@@ -35,7 +35,7 @@
     }
 
     <!-- ✅ INSTANT GOOGLE ANALYTICS LOADING -->
-    @* <script async src="https://www.googletagmanager.com/gtag/js?id=G-245RQY719C"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-245RQY719C"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -44,7 +44,7 @@
             transport_type: 'beacon',
             page_visibility: true
         });
-    </script> *@
+    </script>
 
     <!-- ✅ INSTANT ADS LOADING -->
     @if (ViewBag.HideGoogleAds != true)
@@ -56,8 +56,15 @@
         </script>
     }
      @* <script async src="https://c.amazon-adsystem.com/aax2/apstag.js"></script> *@
-    <script async src="//anymind360.com/js/3995/ats.js"></script>  
-   
+    @* <script async src="//anymind360.com/js/3995/ats.js"></script>   *@
+   <script>
+window.addEventListener('load', function () {
+    var s = document.createElement('script');
+    s.src = '//anymind360.com/js/3995/ats.js';
+    s.async = true;
+    document.body.appendChild(s);
+});
+</script>
     
     <style>
          
@@ -20348,7 +20355,7 @@ height:100%;
     <script defer src="/js-files/js/responsive.menu.js"></script>
     <script defer src="/js-files/js/functions.js"></script>
 
-    <script>
+   @*  <script>
         (function() {
             // ✅ MINIMAL SYNCHRONOUS WORK ONLY
             var yearEl = document.getElementById('year');
@@ -20557,7 +20564,9 @@ height:100%;
                 }
             });
         })();
-    </script>
+    </script> *@
+
+
    <style>
         .only-footer-fixed {
             display: none;
