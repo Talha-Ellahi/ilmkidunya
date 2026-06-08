@@ -35,7 +35,7 @@
     }
 
     <!-- ✅ INSTANT GOOGLE ANALYTICS LOADING -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-245RQY719C"></script>
+    @* <script async src="https://www.googletagmanager.com/gtag/js?id=G-245RQY719C"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -44,7 +44,7 @@
             transport_type: 'beacon',
             page_visibility: true
         });
-    </script>
+    </script> *@
 
     <!-- ✅ INSTANT ADS LOADING -->
     @if (ViewBag.HideGoogleAds != true)
@@ -20340,8 +20340,10 @@ height:100%;
     </div>
 
     <!-- ✅ DEFERRED/NON-CRITICAL SCRIPTS -->
-    <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> *@
+    <script defer src="/js-files/jquery-3.6.0.min.js"></script>
+    <script defer src="/js-files/bootstrap.bundle.min.js"></script>
     <script defer src="/js-files/combine.js"></script>
     <script defer src="/js-files/js/responsive.menu.js"></script>
     <script defer src="/js-files/js/functions.js"></script>
