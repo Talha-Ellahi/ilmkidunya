@@ -122,27 +122,6 @@
             </div>
         </div>
     </div>
-    <div class="content-sec" style="padding:0 0 20px;">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
-                    {
-                        <p>@Html.Raw(ViewBag.CmsData.Desc2)</p>
-                    }
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="g-add-sec" style="padding: 30px 0 0 0;">
-        <div class="container">
-            <div class="row">
-                @await Html.PartialAsync("_GoogleAd")
-            </div>
-        </div>
-    </div>
     <div class="news-ad-sec">
         <div class="container">
             <div class="row">
@@ -167,13 +146,13 @@
                                         foreach (var logo in admission.AddmissionLogoList)
                                         {
                                             <img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@logo"
-                                                 alt="Admission Image"/>
+                                                 alt="Admission Image" />
                                         }
                                     }
                                     else
                                     {
                                         var fallbackUrl = "https://cdn.traliv.com/wwwroot/images/not-available.png";
-                                        <img src="@fallbackUrl" alt="No Image Available"/>
+                                        <img src="@fallbackUrl" alt="No Image Available" />
                                     }
                                 </figure>
                             </div>
@@ -184,7 +163,7 @@
                                     @foreach (var course in admission.Courses)
                                     {
                                         <span>@course.Name</span>
-                                
+
                                         <br />
                                     }
                                 </p>
@@ -261,9 +240,9 @@
                                                     var imageLink = $"/admissions/Admission-Open-in-{slug}-{id}.aspx";
 
                                                     <a href="@imageLink">
-                                                    <img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@logo"
-                                                         alt="Admission Image"
-                                                         style="max-height:80px; max-width:80px;" />
+                                                        <img src="https://admissions.ilmkidunya.com/admission_notices/Images/NoticeAds/@logo"
+                                                             alt="Admission Image"
+                                                             style="max-height:80px; max-width:80px;" />
                                                     </a>
                                                 }
                                             }
@@ -285,6 +264,28 @@
 
 
 
+            </div>
+        </div>
+    </div>
+   
+    <div class="g-add-sec" style="padding: 30px 0 0 0;">
+        <div class="container">
+            <div class="row">
+                @await Html.PartialAsync("_GoogleAd")
+            </div>
+        </div>
+    </div>
+    <div class="content-sec" style="padding:0 0 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (ViewBag.CmsData != null && ViewBag.CmsData.Desc2 != null)
+                    {
+                        <p>@Html.Raw(ViewBag.CmsData.Desc2)</p>
+                    }
+
+
+                </div>
             </div>
         </div>
     </div>

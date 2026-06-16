@@ -79,14 +79,14 @@
 						{
 							var paper = Model.PastPapers.First();
 
-							if (paper.PdfName != null)
-							{
-								<iframe src="@paper.PdfUrl"
-										height="600px"
-										width="100%"
-										style="border:none;">
-								</iframe>
-							}
+						@if (!string.IsNullOrWhiteSpace(paper.PdfName))
+						{
+							<iframe src="@paper.PdfUrl"
+									height="600px"
+									width="100%"
+									style="border:none;">
+							</iframe>
+						}
 						<p class="dwn-img">
 							@if (paper.ImageName != null)
 							{
