@@ -143,8 +143,8 @@ namespace IKDFrontEnd.Controllers
 
             if (lectureClass == null)
             {
-				string path = $"https://www.ilmkidunya.com/study/{classSlug}.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/study/{classSlug}.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 
@@ -257,8 +257,8 @@ namespace IKDFrontEnd.Controllers
             }
             else
             {
-				string path = $"https://www.ilmkidunya.com/study/{classSlugSubjectSlug}/{chapterSlug}.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/study/{classSlugSubjectSlug}/{chapterSlug}.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 

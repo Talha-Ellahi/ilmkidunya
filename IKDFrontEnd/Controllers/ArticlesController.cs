@@ -119,8 +119,8 @@ namespace IKDFrontEnd.Controllers
 
             if (category == null)
             {
-				string path = "https://www.ilmkidunya.com/articles/article-categories/" + categorySlug+".aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/articles/article-categories/" + categorySlug+".aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 
@@ -187,8 +187,8 @@ namespace IKDFrontEnd.Controllers
 
             if (articles == null) 
             {
-				string path = "https://www.ilmkidunya.com/articles/" + articlesslug;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/articles/" + articlesslug;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 

@@ -160,8 +160,8 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-					string path = "https://www.ilmkidunya.com/colleges/"+ collegeUrl;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/colleges/"+ collegeUrl;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
 				}
             }
@@ -175,8 +175,8 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
 				}
             }
@@ -190,8 +190,8 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
 				}
             }
@@ -205,8 +205,8 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
 				}
             }
@@ -545,8 +545,8 @@ namespace IKDFrontEnd.Controllers
 
             if (college == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -572,8 +572,8 @@ namespace IKDFrontEnd.Controllers
                      .ToListAsync();
             if (courses == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var groupedCourses = courses
@@ -653,8 +653,8 @@ namespace IKDFrontEnd.Controllers
 
             if (college == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound("College not found.");
 			}
               
@@ -772,8 +772,8 @@ namespace IKDFrontEnd.Controllers
 
             if (college == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound("College not found");
             }
 
@@ -899,8 +899,8 @@ namespace IKDFrontEnd.Controllers
                                             .ToListAsync();
             if (levelData == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/level-wise-colleges.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/level-wise-colleges.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var cmsData = await _cmsRepo.GetByUrlAsync($"/colleges/level-wise-colleges.aspx");
@@ -995,8 +995,8 @@ namespace IKDFrontEnd.Controllers
                                          .FirstOrDefaultAsync();
             if (categoryData == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/category/"+ catUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/category/"+ catUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             ViewBag.CatUrl = catUrl;
@@ -1108,8 +1108,8 @@ namespace IKDFrontEnd.Controllers
                                  .ToListAsync();
             if (fcolleges == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/featured-listing-of-colleges.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/featured-listing-of-colleges.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             //ViewBag.CmsData = await _context.TblCms
@@ -1251,8 +1251,8 @@ namespace IKDFrontEnd.Controllers
             }).ToList();
             if (topCourseList == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/"+ LevelUrl+ "-institutes-"+ CatUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/"+ LevelUrl+ "-institutes-"+ CatUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -1387,8 +1387,8 @@ namespace IKDFrontEnd.Controllers
                                  .ToListAsync();
             if (reviews == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/reviews/" + colUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/reviews/" + colUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var viewModel = new CollegeReviewsViewModel
@@ -1492,8 +1492,8 @@ namespace IKDFrontEnd.Controllers
 
             if (sectionContent == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/testing/" + urlSlug;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/testing/" + urlSlug;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -1934,8 +1934,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (course == null)
                 {
-					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl + "/" + courseUrl + ".aspx";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl + "/" + courseUrl + ".aspx";
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound("Course not found");
 				}
                     
@@ -2301,8 +2301,8 @@ namespace IKDFrontEnd.Controllers
 
             if (city == null)
             {
-				string path = "https://www.ilmkidunya.com/colleges/colleges-in-" + cityName;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/colleges/colleges-in-" + cityName;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound("City Not Found");
                 //return RedirectToAction("CollegeHome", cityName);
             }

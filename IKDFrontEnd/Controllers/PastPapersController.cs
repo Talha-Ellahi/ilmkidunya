@@ -325,8 +325,8 @@ namespace IKDFrontEnd.Controllers
 
             if (content == null)
             {
-				string path = $"https://www.ilmkidunya.com/past_papers/{urlSlug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/past_papers/{urlSlug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var PanelDescription = await (from pd in _pastPaperDbContext.PastPaperPageDescriptions
@@ -449,8 +449,8 @@ namespace IKDFrontEnd.Controllers
             // Validate ID
             if (id <= 0)
             {
-				string path = $"https://www.ilmkidunya.com/past_papers/{slug}-{id}.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/past_papers/{slug}-{id}.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 

@@ -106,8 +106,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionContent == null)
                 {
-					string path = "https://www.ilmkidunya.com/roll-number-slips" + url+".aspx";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/roll-number-slips" + url+".aspx";
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
                 }
 
@@ -418,8 +418,8 @@ namespace IKDFrontEnd.Controllers
 
             if (detail == null) 
             {
-				string path = "https://www.ilmkidunya.com/" + Url;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/" + Url;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound(); 
             }
 
@@ -800,8 +800,8 @@ namespace IKDFrontEnd.Controllers
 
             if (string.IsNullOrEmpty(url1) || string.IsNullOrEmpty(url2))
             {
-				string path = "https://www.ilmkidunya.com/" + Url;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/" + Url;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 

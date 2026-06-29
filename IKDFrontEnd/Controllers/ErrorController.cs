@@ -1,4 +1,6 @@
-﻿using IKDFrontEnd.Services;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKDFrontEnd.Controllers
@@ -7,15 +9,25 @@ namespace IKDFrontEnd.Controllers
     public class ErrorController : Controller
     {
         private readonly BannerService _bannerService;
+        private readonly IErrorLogService _errorLogService;
 
-        public ErrorController (BannerService bannerService)
+        public ErrorController(BannerService bannerService, IErrorLogService errorLogService)
         {
             _bannerService = bannerService;
+            _errorLogService = errorLogService;
         }
 
         [Route("Error/404")]
         public async Task<IActionResult> Error404()
         {
+            var feature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            if (feature != null)
+            {
+                var path = feature.OriginalPath + feature.OriginalQueryString;
+                if (!string.IsNullOrWhiteSpace(path))
+                    await _errorLogService.LogErrorAsync(path);
+            }
+
             ViewBag.HideGoogleAds = true;
             ViewBag.Banners = await _bannerService.GetBannersAsync();
             return View("Error404");
@@ -34,10 +46,10 @@ namespace IKDFrontEnd.Controllers
 
 
         [Route("Error/{code}")]
-        public IActionResult General(int code)
+        public async Task<IActionResult> General(int code)
         {
             if (code == 404)
-                return View("Error404");
+                return await Error404();
             else
                 return View("Error500");
         }

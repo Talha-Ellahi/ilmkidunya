@@ -29,8 +29,8 @@ namespace IKDFrontEnd.Controllers
 
             if (sectionData == null)
             {
-				string path = "https://www.ilmkidunya.com/consultants";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/consultants";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -125,8 +125,8 @@ namespace IKDFrontEnd.Controllers
                 }
                 else
                 {
-					string path = "https://www.ilmkidunya.com/consultants/education-consultants-in-" + detailSlug + ".aspx";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/consultants/education-consultants-in-" + detailSlug + ".aspx";
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
 				}
 

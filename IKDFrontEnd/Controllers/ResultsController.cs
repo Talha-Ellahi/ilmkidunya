@@ -40,8 +40,8 @@ namespace IKDFrontEnd.Controllers
             var section = await _cmsRepo.GetByUrlAsync($"/results/{url}");
             if (section == null)
             {
-				string path = $"https://www.ilmkidunya.com/results/{url}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/results/{url}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 

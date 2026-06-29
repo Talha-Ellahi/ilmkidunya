@@ -35,8 +35,8 @@ namespace IKDFrontEnd.Controllers
 
             if (sectionData == null)
             {
-				string path = $"https://www.ilmkidunya.com/studyabroad";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/studyabroad";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -65,8 +65,8 @@ namespace IKDFrontEnd.Controllers
 				.FirstOrDefaultAsync(x => x.Url.Contains(detailSlug));
 			if (sectionType == null)
 			{
-				string path = $"https://www.ilmkidunya.com/studyabroad/{detailSlug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/studyabroad/{detailSlug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
 			// 2. Use its Id to fetch SectionContentImport
@@ -192,8 +192,8 @@ namespace IKDFrontEnd.Controllers
             var sectionData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/studyabroad/country-guides.aspx");
             if (sectionData == null)
             {
-				string path = $"https://www.ilmkidunya.com/studyabroad/country-guides.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/studyabroad/country-guides.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 

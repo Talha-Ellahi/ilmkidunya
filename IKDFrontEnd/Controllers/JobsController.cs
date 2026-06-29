@@ -943,8 +943,8 @@ namespace IKDFrontEnd.Controllers
 
             if (city == null)
             {
-				string path = $"https://www.ilmkidunya.com/city-wise/jobs-in-{slug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/city-wise/jobs-in-{slug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -1056,8 +1056,8 @@ namespace IKDFrontEnd.Controllers
 
             if (jobType == null)
             {
-				string path = $"https://www.ilmkidunya.com/industry/{slug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/industry/{slug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             if (cmsData == null)
@@ -1232,8 +1232,8 @@ namespace IKDFrontEnd.Controllers
             }
             if (ads == null || ads.Count() == 0 || !ads.Any())
             {
-				string path = $"https://www.ilmkidunya.com/jobs/professions/{slug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/jobs/professions/{slug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             // 7. Group job ads and return to view
@@ -1279,8 +1279,8 @@ namespace IKDFrontEnd.Controllers
 
             if (company == null)
             {
-				string path = $"https://www.ilmkidunya.com/{companyUrl}"+ "-jobs-in-"+ cityName;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/{companyUrl}"+ "-jobs-in-"+ cityName;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound("Company not found.");
             }
 

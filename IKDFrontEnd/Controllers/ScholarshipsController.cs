@@ -167,8 +167,8 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync();
             if (country == null)
             {
-				string path = $"https://www.ilmkidunya.com/scholarships/scholarships-in-{urlSlug}.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/scholarships/scholarships-in-{urlSlug}.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             };
             ViewBag.CountryName = country.Name;

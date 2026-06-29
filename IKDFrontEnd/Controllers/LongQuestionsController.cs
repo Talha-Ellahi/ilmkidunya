@@ -76,8 +76,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (cmsData == null)
                 {
-					string path = $"https://www.ilmkidunya.com/questions/{Class}th-class-online-preparation.aspx";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = $"https://www.ilmkidunya.com/questions/{Class}th-class-online-preparation.aspx";
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
                 }
 
@@ -134,8 +134,8 @@ namespace IKDFrontEnd.Controllers
 
             if (criteriaResult == null)
             {
-				string path = $"https://www.ilmkidunya.com/questions/{url}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/questions/{url}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound("No criteria found for given URL");
 			}
                 

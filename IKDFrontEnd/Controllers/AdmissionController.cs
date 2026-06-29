@@ -311,8 +311,8 @@ namespace IKDFrontEnd.Controllers
 
             if (cities == null)
             {
-				string path = "https://www.ilmkidunya.com/" + "admissions/city-wise-admission.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/" + "admissions/city-wise-admission.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				//await _errorLogService.LogErrorAsync(Request.Path);
 				return NotFound();
             }
@@ -362,8 +362,8 @@ namespace IKDFrontEnd.Controllers
 
             if (admissions == null)
             {
-				string path = "https://www.ilmkidunya.com/admissions/admissions-in-" + cityName + ".aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/admissions/admissions-in-" + cityName + ".aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var admissionIds = admissions.Select(x => x.Id).ToList();
@@ -406,7 +406,7 @@ namespace IKDFrontEnd.Controllers
             var cmsData = await _cmsRepo.GetByUrlAsync($"/admissions/level-wise-admissions.aspx");
             if (cmsData == null)
             {
-				await _errorLogService.LogErrorAsync(Request.Path);
+				//await _errorLogService.LogErrorAsync(Request.Path);
 				return NotFound();
             }
             ViewBag.CmsData = cmsData;
@@ -571,8 +571,8 @@ namespace IKDFrontEnd.Controllers
                                 .ToListAsync();
             if (admissions == null)
             {
-				string path = "https://www.ilmkidunya.com/admissions/" + levelUrl + "-admissions-in-" + cityUrl +".aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/admissions/" + levelUrl + "-admissions-in-" + cityUrl +".aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var admissionIds = admissions.Select(x => x.Id).ToList();

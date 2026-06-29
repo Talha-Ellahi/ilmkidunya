@@ -108,8 +108,8 @@ namespace IKDFrontEnd.Controllers
                     }
                     else
                     {
-						string path = "https://www.ilmkidunya.com/" + guideSlug;
-						await _errorLogService.LogErrorAsync(path);
+						//string path = "https://www.ilmkidunya.com/" + guideSlug;
+						//await _errorLogService.LogErrorAsync(path);
 						return NotFound();
 					}
 
@@ -123,8 +123,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionData == null)
                 {
-					string path = "https://www.ilmkidunya.com/" + guideSlug;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/" + guideSlug;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
                 }
 
@@ -240,8 +240,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (!sectionIdMapping.TryGetValue(guideSlug, out int sectionTypeId))
                 {
-					string path = "https://www.ilmkidunya.com/" + guideSlug;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/" + guideSlug;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
                 }
 
@@ -253,8 +253,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionData == null)
                 {
-					string path = "https://www.ilmkidunya.com/" + guideSlug;
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/" + guideSlug;
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound();
                 }
 
@@ -280,8 +280,8 @@ namespace IKDFrontEnd.Controllers
 
             if (guideDetailFallback == null)
             {
-				string path = "https://www.ilmkidunya.com/" + guideSlug;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/" + guideSlug;
+				//await _errorLogService.LogErrorAsync(path);
                 return NotFound("Detail not found.");
             }
 

@@ -330,8 +330,8 @@ namespace IKDFrontEnd.Controllers
 
             if (category == null)
             {
-				string path = $"https://www.ilmkidunya.com/edunews/news-categories/{categorySlug}.aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/edunews/news-categories/{categorySlug}.aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -398,8 +398,8 @@ namespace IKDFrontEnd.Controllers
 
             if (news == null)
             {
-				string path = $"https://www.ilmkidunya.com/edunews/{newsslug}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/edunews/{newsslug}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 

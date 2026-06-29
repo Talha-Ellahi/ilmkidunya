@@ -443,8 +443,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (topic == null)
                 {
-					string path = $"https://www.ilmkidunya.com/online-test/api/topic-questions/{topicId}";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = $"https://www.ilmkidunya.com/online-test/api/topic-questions/{topicId}";
+					//await _errorLogService.LogErrorAsync(path);
 					return NotFound(new { error = "Topic not found" });
 				}
                     

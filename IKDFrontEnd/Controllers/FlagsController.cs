@@ -89,8 +89,8 @@ namespace IKDFrontEnd.Controllers
 
             if (flag == null)
             {
-				string path = $"https://www.ilmkidunya.com/flags/{countryUrl}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/flags/{countryUrl}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             if (flag != null && !string.IsNullOrEmpty(flag.Neighbour))

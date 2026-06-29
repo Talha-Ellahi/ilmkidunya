@@ -311,8 +311,8 @@ namespace IKDFrontEnd.Controllers
 
             if (level == null)
             {
-				string path = "https://www.ilmkidunya.com/courses/" + levelUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/courses/" + levelUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 
@@ -422,8 +422,8 @@ namespace IKDFrontEnd.Controllers
 
             if (cat == null)
             {
-				string path = "https://www.ilmkidunya.com/courses/" + catUrl + ".aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/courses/" + catUrl + ".aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
 

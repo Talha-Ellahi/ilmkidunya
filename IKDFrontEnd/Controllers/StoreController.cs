@@ -286,8 +286,8 @@ namespace IKDFrontEnd.Controllers
 
             if (aut == null)
             {
-				string path = $"https://www.ilmkidunya.com/author/{Url}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/author/{Url}";
+				//await _errorLogService.LogErrorAsync(path);
                 return NotFound(); // 404 if no author found
             }
 
@@ -340,8 +340,8 @@ namespace IKDFrontEnd.Controllers
 
             if (category == null)
             {
-				string path = $"https://www.ilmkidunya.com/category/{url}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/category/{url}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 
@@ -503,8 +503,8 @@ namespace IKDFrontEnd.Controllers
 
             if (book == null)
             {
-				string path = $"https://www.ilmkidunya.com/store/{url}";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/store/{url}";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
               
