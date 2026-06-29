@@ -26,20 +26,21 @@ namespace IKDFrontEnd.Controllers
         private readonly ITezMateService _tezMateService;
         private readonly IConfiguration _config;
         private readonly IServiceProvider _serviceProvider;
+		private readonly IErrorLogService _errorLogService;
+		public JobsController(JobsDbContext context, BannerService bannerService, CmsRepository cmsRepo, ITezMateService tezMateService, IConfiguration config, IServiceProvider serviceProvider, IErrorLogService errorLogService)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_tezMateService = tezMateService;
+			_config = config;
+			_serviceProvider = serviceProvider;
+			_errorLogService = errorLogService;
+		}
 
-        public JobsController(JobsDbContext context, BannerService bannerService, CmsRepository cmsRepo, ITezMateService tezMateService, IConfiguration config, IServiceProvider serviceProvider)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-            _tezMateService = tezMateService;
-            _config = config;
-            _serviceProvider = serviceProvider;
-        }
 
 
-
-        [HttpGet("")]
+		[HttpGet("")]
         public async Task<IActionResult> Home()
         {
             // === Banners ===
@@ -942,7 +943,9 @@ namespace IKDFrontEnd.Controllers
 
             if (city == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/city-wise/jobs-in-{slug}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             ViewBag.CityId = city.CityId;
@@ -1053,7 +1056,9 @@ namespace IKDFrontEnd.Controllers
 
             if (jobType == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/industry/{slug}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             if (cmsData == null)
             {
@@ -1227,7 +1232,9 @@ namespace IKDFrontEnd.Controllers
             }
             if (ads == null || ads.Count() == 0 || !ads.Any())
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/jobs/professions/{slug}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             // 7. Group job ads and return to view
             var grouped = BuildGroupedJobListings(ads);
@@ -1272,7 +1279,9 @@ namespace IKDFrontEnd.Controllers
 
             if (company == null)
             {
-                return NotFound("Company not found.");
+				string path = $"https://www.ilmkidunya.com/{companyUrl}"+ "-jobs-in-"+ cityName;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound("Company not found.");
             }
 
             // === Get City Info ===

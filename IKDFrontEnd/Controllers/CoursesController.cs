@@ -1,5 +1,6 @@
 ﻿//using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -21,18 +22,21 @@ namespace IKDFrontEnd.Controllers
         private readonly CmsRepository _cmsRepo;
         private readonly IDistributedCache _distributedCache;
         private readonly DbCollegeContext _context;
+		private readonly IErrorLogService _errorLogService;
 		public CoursesController(
 			//DbCollegeContext context,
 			BannerService bannerService,
 			CmsRepository cmsRepo,
 			IDistributedCache distributedCache,
-			DbCollegeContext context)  // Added distributed cache parameter
+			DbCollegeContext context,
+			IErrorLogService errorLogService)  // Added distributed cache parameter
 		{
 			//_context = context;
 			_bannerService = bannerService;
 			_cmsRepo = cmsRepo;
 			_distributedCache = distributedCache;
 			_context = context;
+			_errorLogService = errorLogService;
 			//_contextCollege = contextCollege;
 		}
 
@@ -307,7 +311,9 @@ namespace IKDFrontEnd.Controllers
 
             if (level == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/courses/" + levelUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             ViewBag.LevelUrl = levelUrl;
@@ -416,7 +422,9 @@ namespace IKDFrontEnd.Controllers
 
             if (cat == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/courses/" + catUrl + ".aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             ViewBag.CatUrl = catUrl;

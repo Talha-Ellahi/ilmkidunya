@@ -1,9 +1,11 @@
 ﻿using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Security.Policy;
 
 namespace IKDFrontEnd.Controllers
@@ -14,12 +16,14 @@ namespace IKDFrontEnd.Controllers
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
 		private readonly DbCollegeContext _contextCollege;
-		public StudyabroadController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, DbCollegeContext contextCollege)
+		private readonly IErrorLogService _errorLogService;
+		public StudyabroadController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, DbCollegeContext contextCollege, IErrorLogService errorLogService = null)
 		{
 			_context = context;
 			_bannerService = bannerService;
 			_cmsRepo = cmsRepo;
 			_contextCollege = contextCollege;
+			_errorLogService = errorLogService;
 		}
 
 		[HttpGet("studyabroad")]
@@ -31,7 +35,9 @@ namespace IKDFrontEnd.Controllers
 
             if (sectionData == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/studyabroad";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var guideDetail = new GuideDetailViewModel
@@ -59,6 +65,8 @@ namespace IKDFrontEnd.Controllers
 				.FirstOrDefaultAsync(x => x.Url.Contains(detailSlug));
 			if (sectionType == null)
 			{
+				string path = $"https://www.ilmkidunya.com/studyabroad/{detailSlug}";
+				await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
 			// 2. Use its Id to fetch SectionContentImport
@@ -184,7 +192,9 @@ namespace IKDFrontEnd.Controllers
             var sectionData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/studyabroad/country-guides.aspx");
             if (sectionData == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/studyabroad/country-guides.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var guideDetail = new GuideDetailViewModel

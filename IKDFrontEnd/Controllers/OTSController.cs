@@ -4,6 +4,7 @@ using DinkToPdf.Contracts;
 using HtmlAgilityPack;
 using IKDFrontEnd.BookModels;
 using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -32,8 +33,8 @@ namespace IKDFrontEnd.Controllers
         private readonly CmsRepository _cmsRepo;
         private readonly IConfiguration _configuration;
 		private readonly DbCollegeContext _contextCollege;
-
-		public OTSController(DbikdContext context, BannerService bannerService, IConverter converter, ILogger<OTSController> logger, CmsRepository cmsRepo, IConfiguration configuration, DbCollegeContext contextCollege)
+		private readonly IErrorLogService _errorLogService;
+		public OTSController(DbikdContext context, BannerService bannerService, IConverter converter, ILogger<OTSController> logger, CmsRepository cmsRepo, IConfiguration configuration, DbCollegeContext contextCollege, IErrorLogService errorLogService)
 		{
 			_context = context;
 			_bannerService = bannerService;
@@ -42,6 +43,7 @@ namespace IKDFrontEnd.Controllers
 			_cmsRepo = cmsRepo;
 			_configuration = configuration;
 			_contextCollege = contextCollege;
+			_errorLogService = errorLogService;
 		}
 
 		public static string? ExtractFirstTagContentFromBoth(string html1, string html2, string tagName)
@@ -440,7 +442,12 @@ namespace IKDFrontEnd.Controllers
                     .FirstOrDefaultAsync(t => t.TopicId == topicId);
 
                 if (topic == null)
-                    return NotFound(new { error = "Topic not found" });
+                {
+					string path = $"https://www.ilmkidunya.com/online-test/api/topic-questions/{topicId}";
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound(new { error = "Topic not found" });
+				}
+                    
 
                 // Get chapter info
                 var chapter = await _context.TblOtsChapters
@@ -1619,7 +1626,12 @@ namespace IKDFrontEnd.Controllers
             // Get Test by URL
             var test = await _context.TblOtsTestCriteria.FirstOrDefaultAsync(x => x.Url.Replace(".aspx", "") == testUrl);
             if (test == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-test-form";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+               
 
             // Get Test Details
             var testDetail = await _context.TblOtsTestCriteriaDetails.FirstOrDefaultAsync(x => x.TestId == test.Id);
@@ -1859,7 +1871,12 @@ namespace IKDFrontEnd.Controllers
             var test = await _context.TblOtsTestCriteria
                 .FirstOrDefaultAsync(x => x.Url.Replace(".aspx", "") == testUrl.Replace(".aspx", ""));
             if (test == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answers";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             var testDetail = await _context.TblOtsTestCriteriaDetails
                 .FirstOrDefaultAsync(x => x.TestId == test.Id);
@@ -2037,7 +2054,12 @@ namespace IKDFrontEnd.Controllers
             ViewBag.TestUrl = test.Url;
             var testDetail = await _context.TblOtsTestCriteriaDetails.FirstOrDefaultAsync(x => x.TestId == test.Id);
             if (testDetail == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answersold";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             var chapterIds = testDetail.ChapterIds
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)

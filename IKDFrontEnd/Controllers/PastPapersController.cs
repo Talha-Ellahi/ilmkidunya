@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.PastPaperModels;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.PastPaperModels;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Drawing;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using static NuGet.Packaging.PackagingConstants;
@@ -24,16 +26,18 @@ namespace IKDFrontEnd.Controllers
         private readonly IDistributedCache _distributedCache;
         private readonly IMemoryCache _memoryCache;
         private readonly ILogger<PastPapersController> _logger;
-        public PastPapersController(BannerService bannerService, PastPaperDbContext pastPaperDbContext, IDistributedCache distributedCache, IMemoryCache memoryCache, ILogger<PastPapersController> logger)
-        {
-            _bannerService = bannerService;
-            _pastPaperDbContext = pastPaperDbContext;
-            _distributedCache = distributedCache;
-            _memoryCache = memoryCache;
-            _logger = logger;
-        }
+		private readonly IErrorLogService _errorLogService;
+		public PastPapersController(BannerService bannerService, PastPaperDbContext pastPaperDbContext, IDistributedCache distributedCache, IMemoryCache memoryCache, ILogger<PastPapersController> logger, IErrorLogService errorLogService = null)
+		{
+			_bannerService = bannerService;
+			_pastPaperDbContext = pastPaperDbContext;
+			_distributedCache = distributedCache;
+			_memoryCache = memoryCache;
+			_logger = logger;
+			_errorLogService = errorLogService;
+		}
 
-	
+
 
 		[OutputCache(Duration = 60)]
 		[Route("past_papers")]
@@ -321,9 +325,9 @@ namespace IKDFrontEnd.Controllers
 
             if (content == null)
             {
-                //var redirectSlug = $"{urlSlug}".ToLower().Replace(" ", "-");
-                //return await PaperDetails(redirectSlug);
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/past_papers/{urlSlug}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             var PanelDescription = await (from pd in _pastPaperDbContext.PastPaperPageDescriptions
                                           join sc in _pastPaperDbContext.SectionContentImports
@@ -444,7 +448,12 @@ namespace IKDFrontEnd.Controllers
 
             // Validate ID
             if (id <= 0)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/past_papers/{slug}-{id}.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             // Try to get the paper by ID first (most efficient)
             var paper = await _pastPaperDbContext.TblPastPapers

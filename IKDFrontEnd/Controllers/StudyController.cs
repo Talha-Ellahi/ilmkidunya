@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
+using IKDFrontEnd.Services;
+using IKDFrontEnd.ViewModels;
+using IKDFrontEnd.ViewModels.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Linq;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
-using IKDFrontEnd.Models;
-using IKDFrontEnd.ViewModels;
-using IKDFrontEnd.Services;
-using IKDFrontEnd.ViewModels.Common;
 
 namespace IKDFrontEnd.Controllers
 {
@@ -17,20 +19,22 @@ namespace IKDFrontEnd.Controllers
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
         private readonly IDistributedCache _distributedCache;
+		private readonly IErrorLogService _errorLogService;
+		public StudyController(
+			DbikdContext context,
+			BannerService bannerService,
+			CmsRepository cmsRepo,
+			IDistributedCache distributedCache,
+			IErrorLogService errorLogService = null)  // Added distributed cache parameter
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_distributedCache = distributedCache;
+			_errorLogService = errorLogService;
+		}
 
-        public StudyController(
-            DbikdContext context,
-            BannerService bannerService,
-            CmsRepository cmsRepo,
-            IDistributedCache distributedCache)  // Added distributed cache parameter
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-            _distributedCache = distributedCache;
-        }
-
-        [Route("study")]
+		[Route("study")]
         public async Task<IActionResult> Index()
         {
             string cacheKey = "study_all_classes";
@@ -138,7 +142,12 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync(c => c.ClassUrl == classSlugWithoutSubject);
 
             if (lectureClass == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/study/{classSlug}.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
 
             if (!string.IsNullOrEmpty(modifiedClassSlug))
@@ -248,7 +257,9 @@ namespace IKDFrontEnd.Controllers
             }
             else
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/study/{classSlugSubjectSlug}/{chapterSlug}.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var banners = await _bannerService.GetBannersAsync();

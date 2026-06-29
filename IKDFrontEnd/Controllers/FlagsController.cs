@@ -1,8 +1,10 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 using System.Text.Json;
 
 
@@ -15,19 +17,19 @@ namespace IKDFrontEnd.Controllers
     {
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
+		private readonly IErrorLogService _errorLogService;
+
+		public FlagsController(DbikdContext context, BannerService bannerService, IErrorLogService errorLogService)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_errorLogService = errorLogService;
+		}
 
 
-        public FlagsController(DbikdContext context, BannerService bannerService)
-        {
-            _context = context;
-            _bannerService = bannerService;
-
-        }
 
 
-
-
-        [Route("flags/")]
+		[Route("flags/")]
         public async Task<IActionResult> FlagsHome()
         {
             var flags = await (from f in _context.TblFlags
@@ -87,7 +89,9 @@ namespace IKDFrontEnd.Controllers
 
             if (flag == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/flags/{countryUrl}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             if (flag != null && !string.IsNullOrEmpty(flag.Neighbour))
             {

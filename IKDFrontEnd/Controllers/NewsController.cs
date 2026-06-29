@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using IKDFrontEnd.ViewModels.Common;
@@ -25,24 +26,26 @@ namespace IKDFrontEnd.Controllers
         private readonly IDistributedCache _distributedCache;
         private readonly IMemoryCache _memoryCache;
         private readonly ILogger<NewsController> _logger;
+		private readonly IErrorLogService _errorLogService;
+		public NewsController(
+			DbikdContext context,
+			BannerService bannerService,
+			CmsRepository cmsRepo,
+			IDistributedCache distributedCache,
+			IMemoryCache memoryCache,
+			ILogger<NewsController> logger,
+			IErrorLogService errorLogService = null)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_distributedCache = distributedCache;
+			_memoryCache = memoryCache;
+			_logger = logger;
+			_errorLogService = errorLogService;
+		}
 
-        public NewsController(
-            DbikdContext context,
-            BannerService bannerService,
-            CmsRepository cmsRepo,
-            IDistributedCache distributedCache,
-            IMemoryCache memoryCache,
-            ILogger<NewsController> logger)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-            _distributedCache = distributedCache;
-            _memoryCache = memoryCache;
-            _logger = logger;
-        }
-
-        [Route("edunews")]
+		[Route("edunews")]
         public async Task<IActionResult> Home(int page = 1)
         {
             const int pageSize = 50;
@@ -327,7 +330,9 @@ namespace IKDFrontEnd.Controllers
 
             if (category == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/edunews/news-categories/{categorySlug}.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var newsIds = await _context.TblNewsMultiCategories
@@ -392,7 +397,12 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync();
 
             if (news == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/edunews/{newsslug}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             // ✅ Increment views
             news.Views = (news.Views ?? 0) + 1;

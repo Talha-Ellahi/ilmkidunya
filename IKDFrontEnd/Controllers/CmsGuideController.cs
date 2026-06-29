@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +13,25 @@ namespace IKDFrontEnd.Controllers
     {
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
+		private readonly IErrorLogService _errorLogService;
+		public CmsGuideController(DbikdContext context, BannerService bannerService, IErrorLogService errorLogService)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_errorLogService = errorLogService;
+		}
 
-        public CmsGuideController(DbikdContext context, BannerService bannerService)
-        {
-            _context = context;
-            _bannerService = bannerService;
-        }
-
-     
 
 
-        //[HttpGet("")]
-        public async Task<IActionResult> Index(string guideSlug)
+
+		//[HttpGet("")]
+		public async Task<IActionResult> Index(string guideSlug)
         {
             if (string.IsNullOrEmpty(guideSlug))
-                return NotFound();
+            {
+				return NotFound();
+			}
+                
 
             GuideDetailViewModel? guideDetail = null;
 
@@ -101,8 +106,14 @@ namespace IKDFrontEnd.Controllers
                         ViewBag.HomeUrl = guideSlug;
                         return View("UrlContentHome", guideDetail); // ✅ Render separate view
                     }
+                    else
+                    {
+						string path = "https://www.ilmkidunya.com/" + guideSlug;
+						await _errorLogService.LogErrorAsync(path);
+						return NotFound();
+					}
 
-                    return NotFound();
+                        
                 }
 
                 // ✅ Load from Tblpagewisecontents if section mapping found
@@ -112,7 +123,9 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionData == null)
                 {
-                    return NotFound();
+					string path = "https://www.ilmkidunya.com/" + guideSlug;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
                 }
 
                 guideDetail = new GuideDetailViewModel
@@ -227,7 +240,9 @@ namespace IKDFrontEnd.Controllers
 
                 if (!sectionIdMapping.TryGetValue(guideSlug, out int sectionTypeId))
                 {
-                    return NotFound();
+					string path = "https://www.ilmkidunya.com/" + guideSlug;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
                 }
 
                 var sectionData = await _context.SectionTypeImports
@@ -238,7 +253,9 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionData == null)
                 {
-                    return NotFound();
+					string path = "https://www.ilmkidunya.com/" + guideSlug;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
                 }
 
                 var sectionContent = await _context.SectionContentImports
@@ -263,6 +280,8 @@ namespace IKDFrontEnd.Controllers
 
             if (guideDetailFallback == null)
             {
+				string path = "https://www.ilmkidunya.com/" + guideSlug;
+				await _errorLogService.LogErrorAsync(path);
                 return NotFound("Detail not found.");
             }
 

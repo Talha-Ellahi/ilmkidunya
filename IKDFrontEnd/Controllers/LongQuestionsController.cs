@@ -1,5 +1,6 @@
 ﻿using DinkToPdf;
 using DinkToPdf.Contracts;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -23,15 +24,17 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
-        public LongQuestionsController(DbikdContext context, BannerService bannerService , CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            QuestPDF.Settings.License = LicenseType.Community;
-            _cmsRepo = cmsRepo;
-        }
+		private readonly IErrorLogService _errorLogService;
+		public LongQuestionsController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, IErrorLogService errorLogService)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			QuestPDF.Settings.License = LicenseType.Community;
+			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
+		}
 
-        [HttpGet("")]
+		[HttpGet("")]
         public async Task<IActionResult> Home()
         {             // === Banners ===
             ViewBag.Banners = await _bannerService.GetBannersAsync();
@@ -73,7 +76,9 @@ namespace IKDFrontEnd.Controllers
 
                 if (cmsData == null)
                 {
-                    return NotFound();
+					string path = $"https://www.ilmkidunya.com/questions/{Class}th-class-online-preparation.aspx";
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
                 }
 
                 ViewBag.CmsData = cmsData;
@@ -128,7 +133,12 @@ namespace IKDFrontEnd.Controllers
                                 .FirstOrDefault();
 
             if (criteriaResult == null)
-                return NotFound("No criteria found for given URL");
+            {
+				string path = $"https://www.ilmkidunya.com/questions/{url}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound("No criteria found for given URL");
+			}
+                
 
             // Check if ChapterIds has more than one chapter
             var chapterIds = criteriaResult.CriteriaDetail.ChapterIds;

@@ -939,7 +939,22 @@ namespace IKDFrontEnd.Controllers
 
             return Ok(new { success = true, message = "Feedback saved successfully" });
         }
-    }
+
+
+		public IActionResult LoadScrollContent()
+		{
+			if (ViewBag.HideGoogleAds == true)
+				return Content("");
+			return PartialView("_ScrollContent");
+		}
+		public IActionResult LoadExtras()
+		{
+			if (ViewBag.HideGoogleAds == true)
+				return Content("");
+
+			return PartialView("_ScrollContent");
+		}
+	}
 }
 
 

@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,22 +13,25 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
+		private readonly IErrorLogService _errorLogService;
+		public ConsultantsController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, IErrorLogService errorLogService = null)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
+		}
 
-        public ConsultantsController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-        }
-
-        [Route("/consultants/")]
+		[Route("/consultants/")]
         public async Task<IActionResult> Consultant()
         {
             var sectionData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/consultants");
 
             if (sectionData == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/consultants";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var guideDetail = new GuideDetailViewModel
@@ -116,11 +120,17 @@ namespace IKDFrontEnd.Controllers
                 if (int.TryParse(idPart, out int consultantId))
                 {
                     return await ConsultantDetail(consultantId);
-                    
+
 
                 }
+                else
+                {
+					string path = "https://www.ilmkidunya.com/consultants/education-consultants-in-" + detailSlug + ".aspx";
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
+				}
 
-                return NotFound();
+                   
             }
 
             var city = await _context.TblDefCities

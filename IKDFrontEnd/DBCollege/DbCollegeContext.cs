@@ -25,6 +25,12 @@ public partial class DbCollegeContext : DbContext
 
     public virtual DbSet<CourseCategoryJoin> CourseCategoryJoins { get; set; }
 
+    public virtual DbSet<CreatedHistory> CreatedHistories { get; set; }
+
+    public virtual DbSet<ErrorList> ErrorLists { get; set; }
+
+    public virtual DbSet<HistoryList> HistoryLists { get; set; }
+
     public virtual DbSet<InstituteType> InstituteTypes { get; set; }
 
     public virtual DbSet<PaperGroup> PaperGroups { get; set; }
@@ -56,6 +62,10 @@ public partial class DbCollegeContext : DbContext
     public virtual DbSet<TblWhatsAppGroup> TblWhatsAppGroups { get; set; }
 
     public virtual DbSet<TblXcourseLevel> TblXcourseLevels { get; set; }
+
+    public virtual DbSet<UpdatedHistory> UpdatedHistories { get; set; }
+
+    public virtual DbSet<UpdatedHistoryDetail> UpdatedHistoryDetails { get; set; }
 
     public virtual DbSet<Year> Years { get; set; }
 
@@ -151,6 +161,50 @@ public partial class DbCollegeContext : DbContext
         modelBuilder.Entity<CourseCategoryJoin>(entity =>
         {
             entity.ToTable("CourseCategoryJoin", "dbo");
+        });
+
+        modelBuilder.Entity<CreatedHistory>(entity =>
+        {
+            entity.ToTable("CreatedHistories", "dbo");
+
+            entity.Property(e => e.CreatedHistoryId)
+                .ValueGeneratedNever()
+                .HasColumnName("CreatedHistoryID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Heading).HasMaxLength(500);
+            entity.Property(e => e.HistoryListId).HasColumnName("HistoryListID");
+            entity.Property(e => e.Url).HasColumnName("URL");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.WordCount).HasMaxLength(500);
+
+            entity.HasOne(d => d.HistoryList).WithMany(p => p.CreatedHistories)
+                .HasForeignKey(d => d.HistoryListId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CreatedHistories_HistoryLists");
+        });
+
+        modelBuilder.Entity<ErrorList>(entity =>
+        {
+            entity.HasKey(e => e.ErrorId);
+
+            entity.ToTable("ErrorLists", "dbo");
+
+            entity.Property(e => e.ErrorId)
+                .ValueGeneratedNever()
+                .HasColumnName("ErrorID");
+            entity.Property(e => e.ErrorUrl)
+                .HasMaxLength(500)
+                .HasColumnName("ErrorURL");
+        });
+
+        modelBuilder.Entity<HistoryList>(entity =>
+        {
+            entity.ToTable("HistoryLists", "dbo");
+
+            entity.Property(e => e.HistoryListId)
+                .ValueGeneratedNever()
+                .HasColumnName("HistoryListID");
+            entity.Property(e => e.HistoryListName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<InstituteType>(entity =>
@@ -435,6 +489,42 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.Url)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<UpdatedHistory>(entity =>
+        {
+            entity.ToTable("UpdatedHistories", "dbo");
+
+            entity.Property(e => e.UpdatedHistoryId)
+                .ValueGeneratedNever()
+                .HasColumnName("UpdatedHistoryID");
+            entity.Property(e => e.Heading).HasMaxLength(500);
+            entity.Property(e => e.HistoryListId).HasColumnName("HistoryListID");
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Url).HasColumnName("URL");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.HistoryList).WithMany(p => p.UpdatedHistories)
+                .HasForeignKey(d => d.HistoryListId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UpdatedHistories_HistoryLists");
+        });
+
+        modelBuilder.Entity<UpdatedHistoryDetail>(entity =>
+        {
+            entity.ToTable("UpdatedHistoryDetails", "dbo");
+
+            entity.Property(e => e.UpdatedHistoryDetailId)
+                .ValueGeneratedNever()
+                .HasColumnName("UpdatedHistoryDetailID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedHistoryId).HasColumnName("UpdatedHistoryID");
+            entity.Property(e => e.WordCount).HasMaxLength(500);
+
+            entity.HasOne(d => d.UpdatedHistory).WithMany(p => p.UpdatedHistoryDetails)
+                .HasForeignKey(d => d.UpdatedHistoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UpdatedHistoryDetails_UpdatedHistories");
         });
 
         modelBuilder.Entity<Year>(entity =>

@@ -29,6 +29,7 @@ using System;
 using System.IO.Compression;
 using System.Security.Claims;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ---------------- Services ----------------
@@ -56,7 +57,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
-
+builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
 // Custom exception logging
 //builder.Services.AddSingleton<ILogger>(provider =>
 //    provider.GetService<ILoggerFactory>().CreateLogger("GlobalLogger"));

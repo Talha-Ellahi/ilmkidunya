@@ -15,12 +15,12 @@ public class AccountController : Controller
         _context = context;
     }
 
-    [HttpGet]
-    public IActionResult Login(string? returnUrl = null)
-    {
-        ViewBag.ReturnUrl = returnUrl;
-        return View();
-    }
+    //[HttpGet]
+    //public IActionResult Login(string? returnUrl = null)
+    //{
+    //    ViewBag.ReturnUrl = returnUrl;
+    //    return View();
+    //}
 
     // ---------------- GOOGLE LOGIN ----------------
     [Route("google-login")]

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
-using Microsoft.EntityFrameworkCore;
+using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
-using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
-using IKDFrontEnd.Services;
+using System.Text.RegularExpressions;
 
 
 namespace IKDFrontEnd.Controllers
@@ -15,15 +16,17 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
-        public DateSheetController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-        }
+		private readonly IErrorLogService _errorLogService;
+		public DateSheetController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, IErrorLogService errorLogService = null)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
+		}
 
 
-        [Route("date_sheets")]
+		[Route("date_sheets")]
         public async Task<IActionResult> Home()
         {
             var banners = await _bannerService.GetBannersAsync();
@@ -39,7 +42,9 @@ namespace IKDFrontEnd.Controllers
             var section = await _cmsRepo.GetByUrlAsync($"/date_sheets/{url}");
             if (section == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/date_sheets/{url}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             };
 
             result.Heading = section.Heading;

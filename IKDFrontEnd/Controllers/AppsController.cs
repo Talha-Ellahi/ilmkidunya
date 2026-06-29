@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Services;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@ namespace IKDFrontEnd.Controllers
 		private readonly RandomCmsService _randomCms;
 		private readonly BannerService _bannerService;
 		private readonly CmsRepository _cmsRepo;
-		public AppsController(RandomCmsService randomCms, BannerService bannerService, CmsRepository cmsRepo = null)
+		private readonly IErrorLogService _errorLogService;
+		public AppsController(RandomCmsService randomCms, BannerService bannerService, CmsRepository cmsRepo = null, IErrorLogService errorLogService = null)
 		{
 			_randomCms = randomCms;
 			_bannerService = bannerService;
 			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
 		}
 
 
@@ -32,7 +35,12 @@ namespace IKDFrontEnd.Controllers
 
 			var section = await _cmsRepo.GetByUrlAsync($"/apps/{url}");
 			if (section == null)
+			{
+				string path = "https://www.ilmkidunya.com/apps/" + url;
+				await _errorLogService.LogErrorAsync(path);
 				return NotFound();
+			}
+				
 
 			var result = new DateSheetCriteria
 			{

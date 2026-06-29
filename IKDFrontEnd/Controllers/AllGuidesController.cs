@@ -2,6 +2,7 @@
 using DinkToPdf.Contracts;
 using HtmlAgilityPack;
 using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 
 //using IKDFrontEnd.Models;
@@ -35,28 +36,30 @@ namespace IKDFrontEnd.Controllers
         private readonly DbCollegeContext _context;
 		private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
-
-        private readonly IFtpService _ftpService;
+		private readonly IErrorLogService _errorLogService;
+		private readonly IFtpService _ftpService;
 
         private readonly ICompositeViewEngine _viewEngine;
 
-        public AllGuidesController(
+		public AllGuidesController(
 			DbikdContext ikdContext,
 			DbCollegeContext context,
 			BannerService bannerService,
-            CmsRepository cmsRepo,
-            ICompositeViewEngine viewEngine, // new
-            IFtpService ftpService)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-            _ftpService = ftpService;
-            _viewEngine = viewEngine;
-            _ikdContext = ikdContext;
-        }
+			CmsRepository cmsRepo,
+			ICompositeViewEngine viewEngine, // new
+			IFtpService ftpService,
+			IErrorLogService errorLogService)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_ftpService = ftpService;
+			_viewEngine = viewEngine;
+			_ikdContext = ikdContext;
+			_errorLogService = errorLogService;
+		}
 
-        protected ICompositeViewEngine ViewEngine => _viewEngine;
+		protected ICompositeViewEngine ViewEngine => _viewEngine;
 
         [HttpGet("roll-number-slips")]
         [HttpGet("roll-number-slips/{url}")]
@@ -103,7 +106,9 @@ namespace IKDFrontEnd.Controllers
 
                 if (sectionContent == null)
                 {
-                    return NotFound();
+					string path = "https://www.ilmkidunya.com/roll-number-slips" + url+".aspx";
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
                 }
 
                 cmsData = new TblCmsDto
@@ -411,7 +416,12 @@ namespace IKDFrontEnd.Controllers
                 })
                 .FirstOrDefaultAsync();
 
-            if (detail == null) return NotFound();
+            if (detail == null) 
+            {
+				string path = "https://www.ilmkidunya.com/" + Url;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound(); 
+            }
 
             var menuItems = await _context.TblAllGuidesCms
                 .Where(g => g.ShowInMenu == true && g.IsActive == true
@@ -789,7 +799,12 @@ namespace IKDFrontEnd.Controllers
 
 
             if (string.IsNullOrEmpty(url1) || string.IsNullOrEmpty(url2))
-                return NotFound();
+            {
+				string path = "https://www.ilmkidunya.com/" + Url;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
             var menuItems = await _context.TblAllGuidesCms
                  .Where(g => g.ShowInMenu == true && g.IsActive == true
                      && g.Url.StartsWith("/" + url1 + "/")

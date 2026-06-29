@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,18 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _context;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
+		private readonly IErrorLogService _errorLogService;
+		public ScholarshipsController(DbikdContext context, BannerService bannerService, CmsRepository cmsRepo, IErrorLogService errorLogService = null)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
+		}
 
-        public ScholarshipsController(DbikdContext context, BannerService bannerService , CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _cmsRepo = cmsRepo;
-        }
 
 
-
-        [HttpGet]
+		[HttpGet]
         [Route("scholarships")]
         public async Task<IActionResult> Index()
         {
@@ -165,7 +167,9 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync();
             if (country == null)
             {
-                return NotFound();
+				string path = $"https://www.ilmkidunya.com/scholarships/scholarships-in-{urlSlug}.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             };
             ViewBag.CountryName = country.Name;
             var cmsData = await _cmsRepo.GetByUrlAsync($"https://www.ilmkidunya.com/scholarships/scholarships-in-{urlSlug}.aspx");

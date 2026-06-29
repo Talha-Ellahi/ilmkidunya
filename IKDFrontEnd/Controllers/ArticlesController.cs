@@ -1,4 +1,5 @@
-﻿using IKDFrontEnd.Models;
+﻿using IKDFrontEnd.Interfaces;
+using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -17,20 +19,23 @@ namespace IKDFrontEnd.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly BannerService _bannerService;
         private readonly IDistributedCache _distributedCache;
+		private readonly IErrorLogService _errorLogService;
 
-        public ArticlesController(
-            DbikdContext context,
-            IWebHostEnvironment env,
-            BannerService bannerService,
-            IDistributedCache distributedCache)  // Added distributed cache parameter
-        {
-            _context = context;
-            _env = env;
-            _bannerService = bannerService;
-            _distributedCache = distributedCache;
-        }
+		public ArticlesController(
+			DbikdContext context,
+			IWebHostEnvironment env,
+			BannerService bannerService,
+			IDistributedCache distributedCache,
+			IErrorLogService errorLogService)  // Added distributed cache parameter
+		{
+			_context = context;
+			_env = env;
+			_bannerService = bannerService;
+			_distributedCache = distributedCache;
+			_errorLogService = errorLogService;
+		}
 
-        [Route("/articles/")]
+		[Route("/articles/")]
         public async Task<IActionResult> Home(int page = 1)
         {
             const int pageSize = 48;
@@ -113,7 +118,12 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync(x => x.RewriteUrl == categorySlug.Replace(" ", "-"));
 
             if (category == null)
-                return NotFound();
+            {
+				string path = "https://www.ilmkidunya.com/articles/article-categories/" + categorySlug+".aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             var metadata = await _context.Tblarticlestypemetadata
                 .AsNoTracking()
@@ -175,7 +185,12 @@ namespace IKDFrontEnd.Controllers
                 .Where(n => n.RewriteUrl == articlesslug && n.Approve == true)
                 .FirstOrDefaultAsync();
 
-            if (articles == null) return NotFound();
+            if (articles == null) 
+            {
+				string path = "https://www.ilmkidunya.com/articles/" + articlesslug;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+            }
 
             articles.Viewed = (articles.Viewed ?? 0) + 1;
             await _context.SaveChangesAsync();

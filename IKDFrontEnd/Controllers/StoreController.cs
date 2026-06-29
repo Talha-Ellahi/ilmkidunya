@@ -1,4 +1,5 @@
 ﻿using IKDFrontEnd.BookModels;
+using IKDFrontEnd.Interfaces;
 using IKDFrontEnd.Models;
 using IKDFrontEnd.Services;
 using IKDFrontEnd.ViewModels;
@@ -16,15 +17,17 @@ namespace IKDFrontEnd.Controllers
         private readonly DbikdContext _dbikdContext;
         private readonly BannerService _bannerService;
         private readonly CmsRepository _cmsRepo;
-        public StoreController(BookDbikdContext context, BannerService bannerService, DbikdContext dbikdContext, CmsRepository cmsRepo)
-        {
-            _context = context;
-            _bannerService = bannerService;
-            _dbikdContext = dbikdContext;
-            _cmsRepo = cmsRepo;
-        }
+		private readonly IErrorLogService _errorLogService;
+		public StoreController(BookDbikdContext context, BannerService bannerService, DbikdContext dbikdContext, CmsRepository cmsRepo, IErrorLogService errorLogService = null)
+		{
+			_context = context;
+			_bannerService = bannerService;
+			_dbikdContext = dbikdContext;
+			_cmsRepo = cmsRepo;
+			_errorLogService = errorLogService;
+		}
 
-        [HttpGet("")]
+		[HttpGet("")]
         public async Task<IActionResult> Home()
         {
             ViewBag.Banners = await _bannerService.GetBannersAsync();
@@ -283,6 +286,8 @@ namespace IKDFrontEnd.Controllers
 
             if (aut == null)
             {
+				string path = $"https://www.ilmkidunya.com/author/{Url}";
+				await _errorLogService.LogErrorAsync(path);
                 return NotFound(); // 404 if no author found
             }
 
@@ -334,7 +339,12 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefault(c => c.CategoryName.Trim().Replace(" ", "-").ToLower() == url);
 
             if (category == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/category/{url}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+                
 
             viewModel.BookCategory = category;
 
@@ -492,7 +502,12 @@ namespace IKDFrontEnd.Controllers
                     .FirstOrDefaultAsync();
 
             if (book == null)
-                return NotFound();
+            {
+				string path = $"https://www.ilmkidunya.com/store/{url}";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
+			}
+              
 
             // Update view count separately to avoid tracking issues
             _context.Books

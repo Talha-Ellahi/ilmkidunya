@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using IKDFrontEnd.DBCollege;
+using IKDFrontEnd.Interfaces;
+
 
 //using IKDFrontEnd.DBCollege;
 using IKDFrontEnd.Models;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using System;
 using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
@@ -31,19 +34,21 @@ namespace IKDFrontEnd.Controllers
         private readonly ILogger<CollegesController> _logger;
         private readonly CmsRepository _cmsRepo;
         private readonly IDistributedCache _distributedCache;
-
+		private readonly IErrorLogService _errorLogService;
 		public CollegesController(
 			DbCollegeContext context,
-            BannerService bannerService,
+			BannerService bannerService,
 			ILogger<CollegesController> logger,
 			CmsRepository cmsRepo,
-			IDistributedCache distributedCache)  // Added distributed cache parameter
+			IDistributedCache distributedCache,
+			IErrorLogService errorLogService)  // Added distributed cache parameter
 		{
-            _context = context;
-            _bannerService = bannerService;
+			_context = context;
+			_bannerService = bannerService;
 			_logger = logger;
 			_cmsRepo = cmsRepo;
 			_distributedCache = distributedCache;
+			_errorLogService = errorLogService;
 			//_contextCollege = contextCollege;
 		}
 
@@ -150,32 +155,60 @@ namespace IKDFrontEnd.Controllers
             {
                 var result = await CollegeReviews(collegeUrl) as ViewResult;
                 if (result != null)
-                    return View("CollegeReviews", result.Model);
-                return NotFound();
+                {
+					return View("CollegeReviews", result.Model);
+                }
+                else
+                {
+					string path = "https://www.ilmkidunya.com/colleges/"+ collegeUrl;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
+				}
             }
 
             if (collegeUrl.Contains("fee-structure"))
             {
                 var result = await CollegeFee(collegeUrl) as ViewResult;
                 if (result != null)
-                    return View("CollegeFee", result.Model);
-                return NotFound();
+                {
+					return View("CollegeFee", result.Model);
+                }
+                else
+                {
+					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
+				}
             }
 
             if (collegeUrl.Contains("-admission"))
             {
                 var result = await CollegeAmissions(collegeUrl) as ViewResult;
                 if (result != null)
-                    return View("CollegeAmissions", result.Model);
-                return NotFound();
+                {
+					return View("CollegeAmissions", result.Model);
+                }
+                else
+                {
+					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
+				}
             }
 
             if (collegeUrl.Contains("-merit-list"))
             {
                 var result = await CollegeMeritLists(collegeUrl) as ViewResult;
                 if (result != null)
-                    return View("CollegeMeritLists", result.Model);
-                return NotFound();
+                {
+					return View("CollegeMeritLists", result.Model);
+                }
+                else
+                {
+					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound();
+				}
             }
 
             // Remove unwanted suffix
@@ -512,7 +545,9 @@ namespace IKDFrontEnd.Controllers
 
             if (college == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
 
@@ -537,7 +572,9 @@ namespace IKDFrontEnd.Controllers
                      .ToListAsync();
             if (courses == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             var groupedCourses = courses
                 .GroupBy(c => c.CourseLevel)
@@ -615,7 +652,12 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync();
 
             if (college == null)
-                return NotFound("College not found.");
+            {
+				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound("College not found.");
+			}
+              
 
             var admissions = await (from a in _context.TblAdmissions
                                     join ac in _context.TblAdmissionCourses on a.Id equals ac.NoticeId
@@ -635,10 +677,10 @@ namespace IKDFrontEnd.Controllers
                                     .AsNoTracking()
                                     .ToListAsync();
 
-            if (admissions == null || !admissions.Any())
-                return NotFound();
-
-            var groupedAdmissions = admissions
+			//if (admissions == null || !admissions.Any())
+			//    return NotFound();
+			
+			var groupedAdmissions = admissions
                 .GroupBy(x => x.Id)
                 .Select(g => new CourseGroupedData
                 {
@@ -730,7 +772,9 @@ namespace IKDFrontEnd.Controllers
 
             if (college == null)
             {
-                return NotFound("College not found");
+				string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound("College not found");
             }
 
             // Single query to get all required data
@@ -855,8 +899,9 @@ namespace IKDFrontEnd.Controllers
                                             .ToListAsync();
             if (levelData == null)
             {
-
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/level-wise-colleges.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             var cmsData = await _cmsRepo.GetByUrlAsync($"/colleges/level-wise-colleges.aspx");
             ViewBag.CmsData = cmsData;
@@ -950,7 +995,9 @@ namespace IKDFrontEnd.Controllers
                                          .FirstOrDefaultAsync();
             if (categoryData == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/category/"+ catUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             ViewBag.CatUrl = catUrl;
             ViewBag.CatName = categoryData?.Name;
@@ -1061,7 +1108,9 @@ namespace IKDFrontEnd.Controllers
                                  .ToListAsync();
             if (fcolleges == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/featured-listing-of-colleges.aspx";
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             //ViewBag.CmsData = await _context.TblCms
             //                       .Where(c => c.Url.Contains("/colleges/featured-listing-of-colleges.aspx"))
@@ -1202,7 +1251,9 @@ namespace IKDFrontEnd.Controllers
             }).ToList();
             if (topCourseList == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/"+ LevelUrl+ "-institutes-"+ CatUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             var viewModel = await GetCCollegesByCityAsync(cat.Id, level.Id, page);
@@ -1336,7 +1387,9 @@ namespace IKDFrontEnd.Controllers
                                  .ToListAsync();
             if (reviews == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/reviews/" + colUrl;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
             var viewModel = new CollegeReviewsViewModel
             {
@@ -1439,7 +1492,9 @@ namespace IKDFrontEnd.Controllers
 
             if (sectionContent == null)
             {
-                return NotFound();
+				string path = "https://www.ilmkidunya.com/colleges/testing/" + urlSlug;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound();
             }
 
             IQueryable<DBCollege.TblCollege> collegesQuery = _context.TblColleges.OrderByDescending(c => c.Views);
@@ -1878,7 +1933,12 @@ namespace IKDFrontEnd.Controllers
                                             && c.Name.ToLower().Contains(normalizedCourseName));
 
                 if (course == null)
-                    return NotFound("Course not found");
+                {
+					string path = "https://www.ilmkidunya.com/colleges/" + collegeUrl + "/" + courseUrl + ".aspx";
+					await _errorLogService.LogErrorAsync(path);
+					return NotFound("Course not found");
+				}
+                    
 
                 // Get all course-related College IDs
                 var courseCollegeIds = await _context.Courses
@@ -2241,7 +2301,9 @@ namespace IKDFrontEnd.Controllers
 
             if (city == null)
             {
-                return NotFound("City Not Found");
+				string path = "https://www.ilmkidunya.com/colleges/colleges-in-" + cityName;
+				await _errorLogService.LogErrorAsync(path);
+				return NotFound("City Not Found");
                 //return RedirectToAction("CollegeHome", cityName);
             }
 
