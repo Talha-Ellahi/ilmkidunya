@@ -288,8 +288,9 @@ namespace IKDFrontEnd.Controllers
             {
 				//string path = $"https://www.ilmkidunya.com/author/{Url}";
 				//await _errorLogService.LogErrorAsync(path);
-                return NotFound(); // 404 if no author found
-            }
+                //return NotFound(); // 404 if no author found
+				return RedirectPermanent("/store");
+			}
 
             var book = new BookStoreAuthor
             {
@@ -342,7 +343,8 @@ namespace IKDFrontEnd.Controllers
             {
 				//string path = $"https://www.ilmkidunya.com/category/{url}";
 				//await _errorLogService.LogErrorAsync(path);
-				return NotFound();
+				//return NotFound();
+				return RedirectPermanent("/store");
 			}
                 
 
@@ -505,7 +507,8 @@ namespace IKDFrontEnd.Controllers
             {
 				//string path = $"https://www.ilmkidunya.com/store/{url}";
 				//await _errorLogService.LogErrorAsync(path);
-				return NotFound();
+				//return NotFound();
+				return RedirectPermanent("/store");
 			}
               
 

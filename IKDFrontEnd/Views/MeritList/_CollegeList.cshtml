@@ -1,0 +1,14 @@
+﻿@model IEnumerable<IKDFrontEnd.DBCollege.TblCollege>
+
+@foreach (var college in Model)
+{
+    var jobCompany = "https://www.ilmkidunya.com/colleges/" + college.Url + "-merit-lists.aspx";
+    var imgUrl = "https://cdn.ilmkidunya.com/Inst/logos/" + college.Logo;
+
+    <li>
+        <a href="@jobCompany">
+            <img src="@imgUrl" alt="@college.Name" />
+            <span>@college.Name</span>
+        </a>
+    </li>
+}

@@ -24,8 +24,14 @@ namespace IKDFrontEnd.Controllers
             if (feature != null)
             {
                 var path = feature.OriginalPath + feature.OriginalQueryString;
-                if (!string.IsNullOrWhiteSpace(path))
-                    await _errorLogService.LogErrorAsync(path);
+
+				// Page where user clicked the broken link
+				var referrer = Request.Headers["Referer"].ToString();
+				// Client IP
+				var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+
+				if (!string.IsNullOrWhiteSpace(path))
+                    await _errorLogService.LogErrorAsync(path, referrer, ipAddress);
             }
 
             ViewBag.HideGoogleAds = true;

@@ -1023,7 +1023,17 @@ namespace IKDFrontEnd.Controllers
             }
         }
 
-        private string GenerateBucketKey(string word, string languageCode)
+
+		[HttpPost("update-complete-word-data")]
+		public JsonResult UpdateCompleteWordData([FromBody] WordDataRequest model)
+		{
+			return Json(new
+			{
+				success = false,
+				message = "Saving is currently disabled."
+			});
+		}
+		private string GenerateBucketKey(string word, string languageCode)
         {
             if (string.IsNullOrEmpty(word) || string.IsNullOrEmpty(languageCode))
                 return "default";

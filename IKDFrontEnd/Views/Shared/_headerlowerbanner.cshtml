@@ -14,8 +14,7 @@
                     {
                         var url3 = bannerSortOrder3.Url;
 
-                        <a aria-label="link"
-                        class="banner-link decode-banner-url"
+                        <a aria-label="link" data-advertiseid="@bannerSortOrder3.Id" class="banner-link decode-banner-url" onclick="handleBannerClick(this); return false;"
                         @if (url3.StartsWith("aHR0"))
                         {
                             <text>data-url='@url3'</text>
@@ -34,8 +33,7 @@
                     {
                         var url4 = bannerSortOrder4.Url;
 
-                        <a aria-label="link"
-                        class="banner-link decode-banner-url"
+                        <a aria-label="link" data-advertiseid="@bannerSortOrder4.Id" class="banner-link decode-banner-url" onclick="handleBannerClick(this); return false;"
                         @if (url4.StartsWith("aHR0"))
                         {
                             <text>data-url='@url4'</text>
@@ -54,8 +52,7 @@
                     {
                         var url5 = bannerSortOrder5.Url;
 
-                        <a aria-label="link"
-                        class="banner-link decode-banner-url"
+                        <a aria-label="link" data-advertiseid="@bannerSortOrder5.Id" class="banner-link decode-banner-url" onclick="handleBannerClick(this); return false;"
                         @if (url5.StartsWith("aHR0"))
                         {
                             <text>data-url='@url5'</text>
@@ -97,3 +94,65 @@
 
 
 }
+<script>
+    function getDeviceType() {
+        return window.innerWidth <= 780 ? "Mobile" : "Desktop";
+    }
+
+     document.addEventListener("DOMContentLoaded", function () {
+
+            const observer = new IntersectionObserver(function(entries){
+
+                entries.forEach(function(entry){
+
+                    if(entry.isIntersecting){
+
+                        $.post('/Banner/CountImpression',{
+
+                            advertiseId: entry.target.dataset.advertiseid,
+
+                            device: getDeviceType()
+
+                        });
+
+                        observer.unobserve(entry.target);
+
+                    }
+
+                });
+
+            },{
+
+                threshold:0.5
+
+            });
+
+                    document.querySelectorAll(".banner-link").forEach(function(item){
+
+                observer.observe(item);
+
+            });
+
+            });
+
+      function handleBannerClick(element) {
+            var url = element.dataset.url;
+
+            if (url.startsWith("aHR0"))
+                url = atob(url);
+
+            $.post('/Banner/CountClick', {
+
+                advertiseId: element.dataset.advertiseid,
+
+                device: getDeviceType()
+
+            }, function () {
+
+                window.open(url, "_blank");
+
+            });
+
+            return false;
+        }
+</script>

@@ -15,6 +15,8 @@ public partial class DbCollegeContext : DbContext
     {
     }
 
+    public virtual DbSet<BannerStatistic> BannerStatistics { get; set; }
+
     public virtual DbSet<Board> Boards { get; set; }
 
     public virtual DbSet<BoardOtsmcq> BoardOtsmcqs { get; set; }
@@ -76,6 +78,18 @@ public partial class DbCollegeContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("userdbcolleges");
+
+        modelBuilder.Entity<BannerStatistic>(entity =>
+        {
+            entity.HasKey(e => e.BannerStatId);
+
+            entity.ToTable("BannerStatistics", "dbo");
+
+            entity.Property(e => e.BannerStatId)
+                .ValueGeneratedNever()
+                .HasColumnName("BannerStatID");
+            entity.Property(e => e.AdvertisId).HasColumnName("AdvertisID");
+        });
 
         modelBuilder.Entity<Board>(entity =>
         {
@@ -195,6 +209,10 @@ public partial class DbCollegeContext : DbContext
             entity.Property(e => e.ErrorUrl)
                 .HasMaxLength(500)
                 .HasColumnName("ErrorURL");
+            entity.Property(e => e.Ip)
+                .HasMaxLength(50)
+                .HasColumnName("IP");
+            entity.Property(e => e.ReferrerUrl).HasMaxLength(500);
         });
 
         modelBuilder.Entity<HistoryList>(entity =>

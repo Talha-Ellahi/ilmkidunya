@@ -9,6 +9,10 @@ public partial class ErrorList
 
     public string ErrorUrl { get; set; } = null!;
 
+    public string? ReferrerUrl { get; set; }
+
+    public string? Ip { get; set; }
+
     public DateOnly CreatedDate { get; set; }
 
     public DateOnly? UpdatedDate { get; set; }

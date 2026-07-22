@@ -20,79 +20,158 @@
                         @await Html.PartialAsync("_LoginNavbar")
                     </ul>
                   <div class="header-top">
-    <div class="logo">
-        <a href="/" aria-label="Ilmkidunya Home">
-            <img src="https://www.ilmkidunya.com/ikd-logo.jpg"
-                 alt="Ilmkidunya logo" />
-        </a>
-    </div>
+                        <div class="logo">
+                            <a href="/" aria-label="Ilmkidunya Home">
+                                <img src="https://www.ilmkidunya.com/ikd-logo.jpg"
+                                     alt="Ilmkidunya logo" />
+                            </a>
+                        </div>
 
-    <div class="client-banner">
-        @if (bannerSortOrder1 != null)
-        {
-            var url1 = bannerSortOrder1.Url;
+                        <div class="client-banner">
+                            @if (bannerSortOrder1 != null)
+                            {
+                                var url1 = bannerSortOrder1.Url;
 
-            <!-- Desktop Banner -->
-            <a aria-label="link"
-               class="dsk-ad banner-link decode-banner-url"
-               data-url='@url1'
-               onclick="handleBannerClick(this); return false;"
-               onmouseover="clearStatusBar()"
-               target="_blank">
-                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
-                                         alt="banner-1" loading="lazy" decoding="async" />
-            </a>
+                                <!-- Desktop Banner -->
+                                <a aria-label="link"
+                                   class="dsk-ad banner-link decode-banner-url"
+                                   data-advertiseid="@bannerSortOrder1.Id"
+                                   data-device="Desktop"
+                                   data-url='@url1'
+                                   onclick="handleBannerClick(this); return false;"
+                                   onmouseover="clearStatusBar()"
+                                   target="_blank">
+                                    <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
+                                                             alt="banner-1" loading="lazy" decoding="async" />
+                                </a>
 
-            <!-- Mobile Banner -->
-            <a aria-label="link"
-               class="mob-ad decode-banner-url"
-               data-url='@url1'
-               onclick="handleBannerClick(this); return false;"
-               onmouseover="clearStatusBar()"
-               target="_blank">
-                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
-                                         width="90" height="36" loading="lazy" decoding="async"
-                     alt="banner-1-mobile" />
-            </a>
-        }
-    </div>
+                                <!-- Mobile Banner -->
+                                <a aria-label="link"
+                                   class="mob-ad banner-link decode-banner-url"
+                                    data-advertiseid="@bannerSortOrder1.Id"
+                                    data-device="Mobile"
+                                   data-url='@url1'
+                                   onclick="handleBannerClick(this); return false;"
+                                   onmouseover="clearStatusBar()"
+                                   target="_blank">
+                                    <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder1.Image"
+                                                             width="90" height="36" loading="lazy" decoding="async"
+                                         alt="banner-1-mobile" />
+                                </a>
+                            }
+                        </div>
 
-    @if (bannerSortOrder2 != null)
-    {
-        var url2 = bannerSortOrder2.Url;
+                        @if (bannerSortOrder2 != null)
+                        {
+                            var url2 = bannerSortOrder2.Url;
 
-        <div class="header-add">
-            <a aria-label="link" 
-               class="banner-link-2"
-               data-url='@url2'
-               onclick="handleBannerClick(this); return false;"
-               onmouseover="clearStatusBar()"
-               target="_blank">
-                <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder2.Image"
+                            <div class="header-add desktop">
+                                <a aria-label="link" 
+                                   class="banner-link-2"
+                                   data-advertiseid="@bannerSortOrder2.Id"
+                                    data-device="Desktop"
+                                   data-url='@url2'
+                                   onclick="handleBannerClick(this); return false;"
+                                   onmouseover="clearStatusBar()"
+                                   target="_blank">
+                                    <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder2.Image"
+                                                             loading="lazy" decoding="async"
+                                                             alt="image" />
+                                </a>
+                            </div>
+                            <div class="header-add mobile">
+                                <a aria-label="link"
+                                   class="banner-link-2"
+                                   data-advertiseid="@bannerSortOrder2.Id"
+                                   data-device="Mobile"
+                                   data-url='@url2'
+                                   onclick="handleBannerClick(this); return false;"
+                                   onmouseover="clearStatusBar()"
+                                   target="_blank">
+                                    <img src="https://cdn.ilmkidunya.com/images/Banners/@bannerSortOrder2.Image"
                                          loading="lazy" decoding="async"
                                          alt="image" />
-            </a>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="header-add" style="width:728px;height:90px;overflow:hidden;position:relative;">
+                                <ins class="adsbygoogle"
+                                     style="display:inline-block;width:728px;height:90px"
+                                     data-ad-client="ca-pub-8866825487085085"
+                                     data-ad-slot="9990874736"
+                                     data-full-width-responsive="false"></ins>
+
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-    }
-    else
-    {
-        <div class="header-add" style="width:728px;height:90px;overflow:hidden;position:relative;">
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-8866825487085085"
-                 data-ad-slot="9990874736"
-                 data-full-width-responsive="false"></ins>
+    </div>
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
 
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    }
+            const observer = new IntersectionObserver(function(entries){
 
+                entries.forEach(function(entry){
 
-<script>
-// Function to handle banner clicks
-function handleBannerClick(element) {
+                    if(entry.isIntersecting){
+
+                        $.post('/Banner/CountImpression',{
+
+                            advertiseId: entry.target.dataset.advertiseid,
+
+                            device: entry.target.dataset.device
+
+                        });
+
+                        observer.unobserve(entry.target);
+
+                    }
+
+                });
+
+            },{
+
+                threshold:0.5
+
+            });
+
+                    document.querySelectorAll(".banner-link, .banner-link-2").forEach(function(item){
+
+                observer.observe(item);
+
+            });
+
+            });
+        // Function to handle banner clicks
+        function handleBannerClick(element) {
+
+            var url = element.dataset.url;
+
+            if (url.startsWith("aHR0"))
+                url = atob(url);
+
+            $.post('/Banner/CountClick', {
+
+                advertiseId: element.dataset.advertiseid,
+
+                device: element.dataset.device
+
+            }, function () {
+
+                window.open(url, "_blank");
+
+            });
+
+            return false;
+        }
+        @* function handleBannerClick(element) {
     var url = element.getAttribute('data-url');
     
     // If URL is base64 encoded, decode it
@@ -112,73 +191,80 @@ function handleBannerClick(element) {
     }
     
     return false; // Prevent default link behavior
-}
+} *@
 
-// Function to clear status bar on hover
-function clearStatusBar() {
-    window.status = '';
-    return true;
-}
-
-// Alternative: Add event listeners for all banner links
-document.addEventListener('DOMContentLoaded', function() {
-    // Clear status bar on mouseover for all banner links
-    var bannerLinks = document.querySelectorAll('.decode-banner-url, .banner-link-2');
-    bannerLinks.forEach(function(link) {
-        link.addEventListener('mouseover', function() {
+        // Function to clear status bar on hover
+        function clearStatusBar() {
             window.status = '';
+            return true;
+        }
+
+        // Alternative: Add event listeners for all banner links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clear status bar on mouseover for all banner links
+            var bannerLinks = document.querySelectorAll('.decode-banner-url, .banner-link-2');
+            bannerLinks.forEach(function(link) {
+                link.addEventListener('mouseover', function() {
+                    window.status = '';
+                });
+
+                // Add hover effect for visual feedback
+                link.style.cursor = 'pointer';
+
+                // Add title/aria-label for accessibility
+                if (!link.getAttribute('title')) {
+
+                }
+            });
         });
-        
-        // Add hover effect for visual feedback
-        link.style.cursor = 'pointer';
-        
-        // Add title/aria-label for accessibility
-        if (!link.getAttribute('title')) {
+
+        // Prevent middle-click and right-click context menu from showing URL
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.closest('.decode-banner-url, .banner-link-2')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <style>
+        .decode-banner-url:hover,
+        .banner-link-2:hover {
+            opacity: 0.9;
+            transition: opacity 0.2s ease;
+        }
+
+        /* Ensure links look clickable */
+        .decode-banner-url,
+        .banner-link-2 {
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            outline: none;
+        }
+
+            /* Hide focus outline for better appearance (but keep accessibility) */
+            .decode-banner-url:focus,
+            .banner-link-2:focus {
+                outline: 2px solid #4a90e2;
+                outline-offset: 2px;
+            }
+
+        .header-add.mobile {
+            display: none;
+        }
+
+        @@media screen and (max-width: 980px) {
+            .header-add.mobile {
+                display: block !important;
+        }
+
+            .header-add.desktop {
+                display: none
+            }
 
         }
-    });
-});
-
-// Prevent middle-click and right-click context menu from showing URL
-document.addEventListener('contextmenu', function(e) {
-    if (e.target.closest('.decode-banner-url, .banner-link-2')) {
-        e.preventDefault();
-        return false;
-    }
-});
-</script>
-
-<style>
-.decode-banner-url:hover,
-.banner-link-2:hover {
-    opacity: 0.9;
-    transition: opacity 0.2s ease;
-}
-
-/* Ensure links look clickable */
-.decode-banner-url,
-.banner-link-2 {
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    outline: none;
-}
-
-/* Hide focus outline for better appearance (but keep accessibility) */
-.decode-banner-url:focus,
-.banner-link-2:focus {
-    outline: 2px solid #4a90e2;
-    outline-offset: 2px;
-}
-</style>
-
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </style>
 }
 
 

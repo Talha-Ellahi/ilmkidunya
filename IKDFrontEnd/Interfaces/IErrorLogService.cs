@@ -2,6 +2,6 @@
 {
 	public interface IErrorLogService
 	{
-		Task LogErrorAsync(string errorUrl);
+		Task LogErrorAsync(string errorUrl, string? referrerUrl, string? ipAddress);
 	}
 }

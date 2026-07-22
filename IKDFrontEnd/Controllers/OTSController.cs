@@ -1627,8 +1627,8 @@ namespace IKDFrontEnd.Controllers
             var test = await _context.TblOtsTestCriteria.FirstOrDefaultAsync(x => x.Url.Replace(".aspx", "") == testUrl);
             if (test == null)
             {
-				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-test-form";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-test-form";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                
@@ -1872,8 +1872,8 @@ namespace IKDFrontEnd.Controllers
                 .FirstOrDefaultAsync(x => x.Url.Replace(".aspx", "") == testUrl.Replace(".aspx", ""));
             if (test == null)
             {
-				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answers";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answers";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 
@@ -2055,8 +2055,8 @@ namespace IKDFrontEnd.Controllers
             var testDetail = await _context.TblOtsTestCriteriaDetails.FirstOrDefaultAsync(x => x.TestId == test.Id);
             if (testDetail == null)
             {
-				string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answersold";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = $"https://www.ilmkidunya.com/online-test/{testUrl}-mcqs-with-answersold";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
 			}
                 

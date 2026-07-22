@@ -463,8 +463,8 @@ namespace IKDFrontEnd.Controllers
 
                 if (admission == null)
                 {
-					string path = "https://www.ilmkidunya.com/admissions/"+ levelUrl + "-admissions-in-" + cityUrl +"-"+ id+ ".aspx";
-					await _errorLogService.LogErrorAsync(path);
+					//string path = "https://www.ilmkidunya.com/admissions/"+ levelUrl + "-admissions-in-" + cityUrl +"-"+ id+ ".aspx";
+					//await _errorLogService.LogErrorAsync(path);
 					//await _errorLogService.LogErrorAsync(Request.Path);
 					return NotFound();
 				}
@@ -687,8 +687,8 @@ namespace IKDFrontEnd.Controllers
 
             if (admissions == null)
             {
-				string path = "https://www.ilmkidunya.com/admissions/admissions-inter-" + cityUrl + ".aspx";
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/admissions/admissions-inter-" + cityUrl + ".aspx";
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var admissionIds = admissions.Select(x => x.Id).ToList();
@@ -901,8 +901,8 @@ namespace IKDFrontEnd.Controllers
 
             if (admissions == null)
             {
-				string path = "https://www.ilmkidunya.com/admissions/testing/" + catUrl + "-admissions-in-"+ cityUrl;
-				await _errorLogService.LogErrorAsync(path);
+				//string path = "https://www.ilmkidunya.com/admissions/testing/" + catUrl + "-admissions-in-"+ cityUrl;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound();
             }
             var admissionIds = admissions.Select(x => x.Id).ToList();
@@ -1117,8 +1117,8 @@ namespace IKDFrontEnd.Controllers
             }
             if (content == null)
             {
-                string path= "https://www.ilmkidunya.com/"+ fullPath;
-				await _errorLogService.LogErrorAsync(path);
+    //            string path= "https://www.ilmkidunya.com/"+ fullPath;
+				//await _errorLogService.LogErrorAsync(path);
 				return NotFound(); // Optional: show custom 404
 			}
                

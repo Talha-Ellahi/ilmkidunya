@@ -12,7 +12,7 @@ namespace IKDFrontEnd.Services
 		{
 			_contextCollege = contextCollege;
 		}
-		public async Task LogErrorAsync(string errorUrl)
+		public async Task LogErrorAsync(string errorUrl, string? referrerUrl, string? ipAddress)
 		{
 			if (string.IsNullOrWhiteSpace(errorUrl))
 				return;
@@ -24,6 +24,9 @@ namespace IKDFrontEnd.Services
 			{
 				error.ErrorCount++;
 				error.UpdatedDate = DateOnly.FromDateTime(DateTime.Now);
+				// Optionally update referrer if you want the latest one
+				if (!string.IsNullOrWhiteSpace(referrerUrl))
+					error.ReferrerUrl = referrerUrl;
 			}
 			else
 			{
@@ -34,6 +37,8 @@ namespace IKDFrontEnd.Services
 				{
 					ErrorId = nextId,
 					ErrorUrl = errorUrl,
+					ReferrerUrl = referrerUrl,
+					Ip = ipAddress,
 					CreatedDate = DateOnly.FromDateTime(DateTime.Now),
 					UpdatedDate = null,
 					ErrorCount = 1

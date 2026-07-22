@@ -121,11 +121,26 @@ namespace IKDFrontEnd.Controllers
 						Image = s.Image
 					}).ToListAsync();
 
-				// =====================
-				// LATEST NEWS
-				// =====================
+				//// =====================
+				//// LATEST NEWS
+				//// =====================
+				//model.LatestNews = await _context.TblMainNews
+				//	.AsNoTracking()
+				//	.OrderByDescending(n => n.Dated)
+				//	.Take(10)
+				//	.Select(n => new NewsViewModel
+				//	{
+				//		RewriteUrl = n.RewriteUrl,
+				//		PictureThumbnail = n.PictureThumbnail,
+				//		MainHeading = n.MainHeading,
+				//		Dated = n.Dated
+				//	}).ToListAsync();
+				var targetDate = new DateTime(2026, 7, 20);
+				var nextDay = targetDate.AddDays(1);
+
 				model.LatestNews = await _context.TblMainNews
 					.AsNoTracking()
+					.Where(n => n.Dated.HasValue && n.Dated.Value < nextDay)
 					.OrderByDescending(n => n.Dated)
 					.Take(10)
 					.Select(n => new NewsViewModel
@@ -134,8 +149,8 @@ namespace IKDFrontEnd.Controllers
 						PictureThumbnail = n.PictureThumbnail,
 						MainHeading = n.MainHeading,
 						Dated = n.Dated
-					}).ToListAsync();
-
+					})
+					.ToListAsync();
 
 				// =====================
 				// SLIDER NEWS
@@ -155,12 +170,26 @@ namespace IKDFrontEnd.Controllers
 					}).ToListAsync();
 
 
-				// =====================
-				// ARTICLES
-				// =====================
+				//// =====================
+				//// ARTICLES
+				//// =====================
+				//model.Articles = await _context.TblArticles
+				//	.AsNoTracking()
+				//	.Where(a => a.Approve == true)
+				//	.OrderByDescending(a => a.Dated)
+				//	.Take(3)
+				//	.Select(a => new ArticleViewModel
+				//	{
+				//		RewriteUrl = a.RewriteUrl,
+				//		PictureThumbnail = a.PictureThumbnail,
+				//		Title = a.Title,
+				//		Dated = a.Dated
+				//	}).ToListAsync();
 				model.Articles = await _context.TblArticles
 					.AsNoTracking()
-					.Where(a => a.Approve == true)
+					.Where(a => a.Approve == true
+							 && a.Dated.HasValue
+							 && a.Dated.Value < nextDay)
 					.OrderByDescending(a => a.Dated)
 					.Take(3)
 					.Select(a => new ArticleViewModel
@@ -169,8 +198,8 @@ namespace IKDFrontEnd.Controllers
 						PictureThumbnail = a.PictureThumbnail,
 						Title = a.Title,
 						Dated = a.Dated
-					}).ToListAsync();
-
+					})
+					.ToListAsync();
 				// =====================
 				// ADMISSIONS
 				// =====================
@@ -954,6 +983,9 @@ namespace IKDFrontEnd.Controllers
 
 			return PartialView("_ScrollContent");
 		}
+
+
+		
 	}
 }
 

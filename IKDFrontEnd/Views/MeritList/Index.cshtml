@@ -1,0 +1,100 @@
+﻿@model IEnumerable<IKDFrontEnd.DBCollege.TblCollege>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section MetaData {
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:title" content="Merit List - Class 9th,10th,11th,12th CSS Exams, Nat, IQ, GAT" />
+	<meta property="og:description" content="Merit List of Matric, Inter, Bachelors, Masters, CSS, MDCAT, ECAT, IELTS, TOEFL, GMAT, GRE and SAT for the Pakistani Students by ilmkidunya." />
+	<meta property="og:image" content="" />
+	<meta name="description" content="Merit List of Matric, Inter, Bachelors, Masters, CSS, MDCAT, ECAT, IELTS, TOEFL, GMAT, GRE and SAT for the Pakistani Students by ilmkidunya.">
+	<meta name="keywords" content="Merit List in pakistan, pakistani students online tests, online test free for pakistani students">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Merit List Class Matric, Inter, Bachelors, Masters, CSS, MDCAT, ECAT, IELTS, TOEFL, GMAT, GRE and SAT for the Pakistani Students by ilmkidunya.</title>
+}
+@section header {
+	<div class="col-lg-11">
+		<partial name="_NavBarPartial" />
+	</div>
+}
+@section innerbanner {
+	<div class="ss-banner-inner">
+		<div class="ss-container">
+			<div class="ss-row">
+				<div class="ss-col-lg-12">
+					<div class="ss-text-holder">
+						<h1>Merit List</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+<div id="main">
+	<div class="content-sec" style="padding: 30px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<p>
+						Universities located in Pakistan open admissions round the year. The time same, there are universities that offer admissions twice a year i.e. spring session and fall session. The merit is, somehow, higher for the spring intake than that of fall intake. The biggest Universities in the major subjects like medical and engineering subjects offer admission through the entrance exams system. The entrance exams system is highly competitive and shortlisted students selected due to high coopetition and merit base. It does not matter whether the institute is of public sector level or private sector level, Admissions Criteria in medical and engineering faculties are highly competitive and totally on merit base.
+					</p>
+					<p>
+						For other Study Faculties like Business studies, Marketing Studies and Humanities Studies etc. the competition is, somehow, lower than that of medical and engineering faculties but students also go through a merit base system and only talented and well performed students get admission every year in the top rated universities. Merit system is a good policy of the higher education system in Pakistan. This is because due to merit system only the students with highly academic excellence allow to take the admission and this is due to merit system that a nation or country gets highly qualified Doctors, Engineers, Scholars and other professionals.
+					</p>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ss-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					@await Html.PartialAsync("_maincontenttopbanner")
+
+
+					<h3>Merit Lists</h3>
+					<ul class="ss-company-list" id="collegeList">
+						@foreach (var college in Model)
+						{
+
+							var jobCompany = "https://www.ilmkidunya.com/colleges/"+college.Url+"-merit-lists.aspx";
+							var imgUrl = "https://cdn.ilmkidunya.com/Inst/logos/" + college.Logo;
+							<li>
+								<a href="@jobCompany">
+									<img src="@imgUrl" alt="@college.Name" />
+									<span>@college.Name</span>
+								</a>
+							</li>
+						}
+					</ul>
+					<div class="text-center mt-3">
+						<button id="loadMoreListBtn" class="btn btn-primary">
+							Load More
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+			let skip = 50;
+
+		document.getElementById("loadMoreListBtn").addEventListener("click", function () {
+
+			fetch(`/MeritList/loadmore?skip=${skip}`)
+				.then(response => response.text())
+				.then(html => {
+
+					document.getElementById("collegeList")
+						.insertAdjacentHTML("beforeend", html);
+
+					skip += 50;
+				});
+
+		});
+		
+	</script>
